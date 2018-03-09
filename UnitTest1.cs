@@ -8,7 +8,6 @@ namespace seatsio_dotnet
         [Fact]
         public void Test1()
         {
-
         }
     }
 }

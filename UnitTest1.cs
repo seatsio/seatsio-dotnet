@@ -1,4 +1,4 @@
-using System;
+using RestSharp;
 using Xunit;
 
 namespace seatsio_dotnet
@@ -8,7 +8,9 @@ namespace seatsio_dotnet
         [Fact]
         public void Test1()
         {
-            Console.WriteLine("jaja");
+            var client = new RestClient("http://www.google.be");
+            IRestResponse response = client.Execute(new RestRequest("", Method.GET));
+            Assert.Contains("Google", response.Content);
         }
     }
 }

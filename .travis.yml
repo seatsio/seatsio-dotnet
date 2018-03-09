@@ -2,3 +2,7 @@ language: csharp
 solution: seatsio-dotnet.sln
 mono: none
 dotnet: 2.0.0
+install:
+    - nuget restore $TRAVIS_SOLUTION
+script:
+    - xbuild /p:Configuration=Release $TRAVIS_SOLUTION

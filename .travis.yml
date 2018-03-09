@@ -1,4 +1,4 @@
 language: csharp
-solution: seatsio-dotnet
+solution: seatsio-dotnet.sln
 mono: none
 dotnet: 2.0.0

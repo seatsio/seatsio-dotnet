@@ -17,12 +17,33 @@ namespace SeatsioDotNet.Subaccounts
             var restRequest = new RestRequest("/subaccounts", Method.POST)
                 .AddJsonBody(new {name});
             return AssertOk(_restClient.Execute<Subaccount>(restRequest));
+        } 
+        
+        public Subaccount Retrieve(long id)
+        {
+            var restRequest = new RestRequest("/subaccounts/{id}", Method.GET)
+                .AddUrlSegment("id", id);
+            return AssertOk(_restClient.Execute<Subaccount>(restRequest));
         }
 
         public Subaccount Create()
         {
             var restRequest = new RestRequest("/subaccounts", Method.POST);
             return AssertOk(_restClient.Execute<Subaccount>(restRequest));
+        }
+        
+        public void Activate(long id)
+        {
+            var restRequest = new RestRequest("/subaccounts/{id}/actions/activate", Method.POST)
+                .AddUrlSegment("id", id);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }  
+        
+        public void Deactivate(long id)
+        {
+            var restRequest = new RestRequest("/subaccounts/{id}/actions/deactivate", Method.POST)
+                .AddUrlSegment("id", id);
+            AssertOk(_restClient.Execute<object>(restRequest));
         }
 
         private static T AssertOk<T>(IRestResponse<T> response)
@@ -34,5 +55,6 @@ namespace SeatsioDotNet.Subaccounts
 
             return response.Data;
         }
+
     }
 }

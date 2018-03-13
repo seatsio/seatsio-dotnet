@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace SeatsioDotNet.Test
+namespace SeatsioDotNet.Test.Subaccounts
 {
     public class DeactivateSubaccountTest : SeatsioClientTest
     {

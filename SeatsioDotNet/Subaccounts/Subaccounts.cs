@@ -45,6 +45,20 @@ namespace SeatsioDotNet.Subaccounts
                 .AddUrlSegment("id", id);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
+        
+        public void RegenerateSecretKey(long id)
+        {
+            var restRequest = new RestRequest("/subaccounts/{id}/secret-key/actions/regenerate", Method.POST)
+                .AddUrlSegment("id", id);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }   
+        
+        public void RegenerateDesignerKey(long id)
+        {
+            var restRequest = new RestRequest("/subaccounts/{id}/designer-key/actions/regenerate", Method.POST)
+                .AddUrlSegment("id", id);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }
 
         private static T AssertOk<T>(IRestResponse<T> response)
         {

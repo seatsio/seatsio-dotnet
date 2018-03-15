@@ -9,11 +9,11 @@ namespace SeatsioDotNet.Test.Subaccounts
         [Fact]
         public void WithPreviousPage()
         {
-            var subaccount1 = client.Subaccounts().Create();
-            var subaccount2 = client.Subaccounts().Create();
-            var subaccount3 = client.Subaccounts().Create();
+            var subaccount1 = Client.Subaccounts().Create();
+            var subaccount2 = Client.Subaccounts().Create();
+            var subaccount3 = Client.Subaccounts().Create();
 
-            var page = client.Subaccounts().List().PageAfter(subaccount3.Id);
+            var page = Client.Subaccounts().List().PageAfter(subaccount3.Id);
 
             Assert.Equal(new[] {subaccount2.Id, subaccount1.Id}, page.Items.Select(s => s.Id));
             Assert.Null(page.NextPageStartsAfter);
@@ -23,11 +23,11 @@ namespace SeatsioDotNet.Test.Subaccounts
         [Fact]
         public void WithNextAndPreviousPages()
         {
-            var subaccount1 = client.Subaccounts().Create();
-            var subaccount2 = client.Subaccounts().Create();
-            var subaccount3 = client.Subaccounts().Create();
+            var subaccount1 = Client.Subaccounts().Create();
+            var subaccount2 = Client.Subaccounts().Create();
+            var subaccount3 = Client.Subaccounts().Create();
 
-            var page = client.Subaccounts().List().PageAfter(subaccount3.Id, new ListParams().SetPageSize(1));
+            var page = Client.Subaccounts().List().PageAfter(subaccount3.Id, new ListParams().SetPageSize(1));
 
             Assert.Equal(new[] {subaccount2.Id}, page.Items.Select(s => s.Id));
             Assert.Equal(subaccount2.Id, page.NextPageStartsAfter);

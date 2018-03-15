@@ -5,13 +5,13 @@ namespace SeatsioDotNet.Test.Subaccounts
     public class RegenerateDesignerKeyTest : SeatsioClientTest
     {
         [Fact]
-        public void test()
+        public void Test()
         {
-            var subaccount = client.Subaccounts().Create();
+            var subaccount = Client.Subaccounts().Create();
             
-            client.Subaccounts().RegenerateDesignerKey(subaccount.Id);
+            Client.Subaccounts().RegenerateDesignerKey(subaccount.Id);
 
-            var retrievedSubaccount = client.Subaccounts().Retrieve(subaccount.Id);
+            var retrievedSubaccount = Client.Subaccounts().Retrieve(subaccount.Id);
             Assert.NotNull(retrievedSubaccount.DesignerKey);
             Assert.NotEqual(subaccount.DesignerKey, retrievedSubaccount.DesignerKey);
         }

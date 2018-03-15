@@ -8,11 +8,11 @@ namespace SeatsioDotNet.Test.Subaccounts
         [Fact]
         public void OnePage()
         {
-            var subaccount1 = client.Subaccounts().Create();
-            var subaccount2 = client.Subaccounts().Create();
-            var subaccount3 = client.Subaccounts().Create();
+            var subaccount1 = Client.Subaccounts().Create();
+            var subaccount2 = Client.Subaccounts().Create();
+            var subaccount3 = Client.Subaccounts().Create();
 
-            var subaccounts = client.Subaccounts().List().All();
+            var subaccounts = Client.Subaccounts().List().All();
 
             Assert.Equal(new[] {subaccount3.Id, subaccount2.Id, subaccount1.Id}, subaccounts.Select(s => s.Id));
         }  
@@ -20,11 +20,11 @@ namespace SeatsioDotNet.Test.Subaccounts
         [Fact]
         public void MultiplePages()
         {
-            var subaccount1 = client.Subaccounts().Create();
-            var subaccount2 = client.Subaccounts().Create();
-            var subaccount3 = client.Subaccounts().Create();
+            var subaccount1 = Client.Subaccounts().Create();
+            var subaccount2 = Client.Subaccounts().Create();
+            var subaccount3 = Client.Subaccounts().Create();
 
-            var subaccounts = client.Subaccounts().List().All(new Util.ListParams().SetPageSize(1));
+            var subaccounts = Client.Subaccounts().List().All(new Util.ListParams().SetPageSize(1));
 
             Assert.Equal(new[] {subaccount3.Id, subaccount2.Id, subaccount1.Id}, subaccounts.Select(s => s.Id));
         }

@@ -5,13 +5,13 @@ namespace SeatsioDotNet.Test.Subaccounts
     public class DeactivateSubaccountTest : SeatsioClientTest
     {
         [Fact]
-        public void test()
+        public void Test()
         {
-            var subaccount = client.Subaccounts().Create("joske");
+            var subaccount = Client.Subaccounts().Create("joske");
 
-            client.Subaccounts().Deactivate(subaccount.Id);
+            Client.Subaccounts().Deactivate(subaccount.Id);
 
-            var retrievedSubaccount = client.Subaccounts().Retrieve(subaccount.Id);
+            var retrievedSubaccount = Client.Subaccounts().Retrieve(subaccount.Id);
             Assert.False(retrievedSubaccount.Active);
         }
     }

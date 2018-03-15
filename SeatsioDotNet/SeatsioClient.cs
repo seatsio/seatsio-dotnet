@@ -12,14 +12,20 @@ namespace SeatsioDotNet
         {
             _secretKey = secretKey;
             _baseUrl = baseUrl;
+        }  
+        
+        public SeatsioClient(string secretKey)
+        {
+            _secretKey = secretKey;
+            _baseUrl = "https://api.seats.io";
         }
 
         public Subaccounts.Subaccounts Subaccounts()
         {
-            return new Subaccounts.Subaccounts(createRestClient());
+            return new Subaccounts.Subaccounts(CreateRestClient());
         }
 
-        private RestClient createRestClient()
+        private RestClient CreateRestClient()
         {
             var client = new RestClient(_baseUrl);
             client.Authenticator = new HttpBasicAuthenticator(_secretKey, null);

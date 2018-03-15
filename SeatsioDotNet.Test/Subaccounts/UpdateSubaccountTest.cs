@@ -5,13 +5,13 @@ namespace SeatsioDotNet.Test.Subaccounts
     public class UpdateSubaccountTest : SeatsioClientTest
     {
         [Fact]
-        public void test()
+        public void Test()
         {
-            var subaccount = client.Subaccounts().Create("joske");
+            var subaccount = Client.Subaccounts().Create("joske");
             
-            client.Subaccounts().Update(subaccount.Id, "jefke");
+            Client.Subaccounts().Update(subaccount.Id, "jefke");
 
-            var retrievedSubaccount = client.Subaccounts().Retrieve(subaccount.Id);
+            var retrievedSubaccount = Client.Subaccounts().Retrieve(subaccount.Id);
             Assert.Equal("jefke", retrievedSubaccount.Name);
         }
     }

@@ -14,7 +14,7 @@ namespace SeatsioDotNet
             _baseUrl = baseUrl;
         }
 
-        public Subaccounts.Subaccounts subaccounts()
+        public Subaccounts.Subaccounts Subaccounts()
         {
             return new Subaccounts.Subaccounts(createRestClient());
         }

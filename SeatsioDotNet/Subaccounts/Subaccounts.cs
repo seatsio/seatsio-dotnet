@@ -1,5 +1,7 @@
 ﻿using System;
 using RestSharp;
+using SeatsioDotNet.Util;
+using static SeatsioDotNet.Util.RestUtil;
 
 namespace SeatsioDotNet.Subaccounts
 {
@@ -68,14 +70,9 @@ namespace SeatsioDotNet.Subaccounts
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
-        private static T AssertOk<T>(IRestResponse<T> response)
+        public Lister<Subaccount> List()
         {
-            if ((int) response.StatusCode < 200 || (int) response.StatusCode >= 300)
-            {
-                throw new Exception(response.StatusCode + "-" + response.Content);
-            }
-
-            return response.Data;
+            return new Lister<Subaccount>(new PageFetcher<Subaccount>(_restClient, "/subaccounts"));
         }
     }
 }

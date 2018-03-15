@@ -7,12 +7,12 @@ namespace SeatsioDotNet.Test.Subaccounts
         [Fact]
         public void test()
         {
-            var subaccount = client.subaccounts().Create("joske");
-            client.subaccounts().Deactivate(subaccount.Id);
+            var subaccount = client.Subaccounts().Create("joske");
+            client.Subaccounts().Deactivate(subaccount.Id);
 
-            client.subaccounts().Activate(subaccount.Id);
+            client.Subaccounts().Activate(subaccount.Id);
 
-            var retrievedSubaccount = client.subaccounts().Retrieve(subaccount.Id);
+            var retrievedSubaccount = client.Subaccounts().Retrieve(subaccount.Id);
             Assert.True(retrievedSubaccount.Active);
         }
     }

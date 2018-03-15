@@ -25,6 +25,11 @@ namespace SeatsioDotNet
             return new Subaccounts.Subaccounts(CreateRestClient());
         }
 
+        public Events.Events Events()
+        {
+            return new Events.Events(CreateRestClient());
+        }
+        
         private RestClient CreateRestClient()
         {
             var client = new RestClient(_baseUrl);

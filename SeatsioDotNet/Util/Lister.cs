@@ -23,5 +23,35 @@ namespace SeatsioDotNet.Util
         {
             return new PagedEnumerable<T>(_pageFetcher, listParams);
         }
+
+        public Page<T> FirstPage()
+        {
+            return FirstPage(new ListParams());
+        }
+
+        public Page<T> FirstPage(ListParams listParams)
+        {
+            return _pageFetcher.FetchFirstPage(listParams);
+        }
+
+        public Page<T> PageAfter(long id)
+        {
+            return PageAfter(id, new ListParams());
+        }
+
+        public Page<T> PageAfter(long id, ListParams listParams)
+        {
+            return _pageFetcher.FetchAfter(id, listParams);
+        }
+
+        public Page<T> PageBefore(long id)
+        {
+            return PageBefore(id, new ListParams());
+        }
+
+        public Page<T> PageBefore(long id, ListParams listParams)
+        {
+            return _pageFetcher.FetchBefore(id, listParams);
+        }
     }
 }

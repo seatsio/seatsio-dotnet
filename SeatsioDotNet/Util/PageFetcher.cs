@@ -21,9 +21,15 @@ namespace SeatsioDotNet.Util
             return AssertOk(_restClient.Execute<Page<T>>(restRequest));
         }
 
-        public Page<T> FetchAfter(int id, ListParams listParams)
+        public Page<T> FetchAfter(long id, ListParams listParams)
         {
             var restRequest = BuildRequest(listParams).AddQueryParameter("start_after_id", id.ToString());
+            return AssertOk(_restClient.Execute<Page<T>>(restRequest));
+        }
+
+        public Page<T> FetchBefore(long id, ListParams listParams)
+        {
+            var restRequest = BuildRequest(listParams).AddQueryParameter("end_before_id", id.ToString());
             return AssertOk(_restClient.Execute<Page<T>>(restRequest));
         }
 

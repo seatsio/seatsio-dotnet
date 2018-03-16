@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using RestSharp;
 using SeatsioDotNet.Test.Events;
 using static SeatsioDotNet.Util.RestUtil;
@@ -29,15 +30,43 @@ namespace SeatsioDotNet.Events
             return AssertOk(_restClient.Execute<ObjectStatus>(restRequest));
         }
 
-        public void Book(string eventKey, IEnumerable<string> objectLabels)
+        public void Book(string eventKey, IEnumerable<string> objectLabels, string holdToken = null,
+            string orderId = null)
         {
+            ChangeObjectStatus(eventKey, objectLabels, ObjectStatus.Booked, holdToken, orderId);
+        }  
+        
+        public void Release(string eventKey, IEnumerable<string> objectLabels, string holdToken = null,
+            string orderId = null)
+        {
+            ChangeObjectStatus(eventKey, objectLabels, ObjectStatus.Free, holdToken, orderId);
+        }
+
+        public void Hold(string eventKey, IEnumerable<string> objectLabels, string holdToken, string orderId = null)
+        {
+            ChangeObjectStatus(eventKey, objectLabels, ObjectStatus.Held, holdToken, orderId);
+        }
+
+        private void ChangeObjectStatus(string eventKey, IEnumerable<string> objectLabels, string status,
+            string holdToken, string orderId)
+        {
+            var requestBody = new Dictionary<string, object>()
+            {
+                {"status", status},
+                {"objects", objectLabels},
+                {"events", new[] {eventKey}}
+            };
+            if (holdToken != null)
+            {
+                requestBody.Add("holdToken", holdToken);
+            }
+            if (orderId != null)
+            {
+                requestBody.Add("orderId", orderId);
+            }
+
             var restRequest = new RestRequest("/seasons/actions/change-object-status", Method.POST)
-                .AddJsonBody(new
-                {
-                    status = ObjectStatus.Booked,
-                    objects = objectLabels,
-                    events = new [] {eventKey}
-                });
+                .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
     }

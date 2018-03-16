@@ -12,8 +12,8 @@ namespace SeatsioDotNet
         {
             _secretKey = secretKey;
             _baseUrl = baseUrl;
-        }  
-        
+        }
+
         public SeatsioClient(string secretKey)
         {
             _secretKey = secretKey;
@@ -29,7 +29,12 @@ namespace SeatsioDotNet
         {
             return new Events.Events(CreateRestClient());
         }
-        
+
+        public HoldTokens.HoldTokens HoldTokens()
+        {
+            return new HoldTokens.HoldTokens(CreateRestClient());
+        }
+
         private RestClient CreateRestClient()
         {
             var client = new RestClient(_baseUrl);

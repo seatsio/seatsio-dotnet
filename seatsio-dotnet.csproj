@@ -3,7 +3,7 @@
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
     <Version>3</Version>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />

@@ -9,7 +9,7 @@ namespace SeatsioDotNet.Util
         {
             if ((int) response.StatusCode < 200 || (int) response.StatusCode >= 300)
             {
-                throw new Exception(response.StatusCode + "-" + response.Content);
+                throw SeatsioException.From(response);
             }
 
             return response.Data;

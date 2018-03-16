@@ -1,6 +1,2 @@
 language: csharp
 solution: seatsio-dotnet.sln
-mono: none
-dotnet: 2.0.0
-script:
-    - dotnet restore

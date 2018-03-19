@@ -11,5 +11,6 @@ namespace SeatsioDotNet.Test.Events
         public string Status { get; set; }
         public string HoldToken { get; set; }
         public string OrderId { get; set; }
+        public Dictionary<string, object> ExtraData { get; set; }
     }
 }

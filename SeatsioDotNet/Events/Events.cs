@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
 using RestSharp;
 using SeatsioDotNet.Test.Events;
 using static SeatsioDotNet.Util.RestUtil;
@@ -34,8 +33,8 @@ namespace SeatsioDotNet.Events
             string orderId = null)
         {
             ChangeObjectStatus(eventKey, objectLabels, ObjectStatus.Booked, holdToken, orderId);
-        }  
-        
+        }
+
         public void Release(string eventKey, IEnumerable<string> objectLabels, string holdToken = null,
             string orderId = null)
         {
@@ -47,8 +46,21 @@ namespace SeatsioDotNet.Events
             ChangeObjectStatus(eventKey, objectLabels, ObjectStatus.Held, holdToken, orderId);
         }
 
-        private void ChangeObjectStatus(string eventKey, IEnumerable<string> objectLabels, string status,
-            string holdToken, string orderId)
+        public BestAvailableResult ChangeObjectStatus(string eventKey, BestAvailable bestAvailable, string status)
+        {
+            var requestBody = new Dictionary<string, object>()
+            {
+                {"status", status},
+                {"bestAvailable", bestAvailable.AsDictionary()}
+            };
+
+            var restRequest = new RestRequest("/events/{key}/actions/change-object-status", Method.POST)
+                .AddUrlSegment("key", eventKey)
+                .AddJsonBody(requestBody);
+            return AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
+        }
+
+        private void ChangeObjectStatus(string eventKey, IEnumerable<string> objectLabels, string status, string holdToken, string orderId)
         {
             var requestBody = new Dictionary<string, object>()
             {
@@ -60,6 +72,7 @@ namespace SeatsioDotNet.Events
             {
                 requestBody.Add("holdToken", holdToken);
             }
+
             if (orderId != null)
             {
                 requestBody.Add("orderId", orderId);

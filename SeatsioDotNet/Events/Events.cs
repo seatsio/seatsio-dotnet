@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Cache;
 using RestSharp;
 using SeatsioDotNet.Test.Events;
 using SeatsioDotNet.Util;
@@ -49,6 +48,13 @@ namespace SeatsioDotNet.Events
         {
             var restRequest = new RestRequest("/events", Method.POST)
                 .AddJsonBody(new {chartKey});
+            return AssertOk(_restClient.Execute<Event>(restRequest));
+        }
+
+        public Event Retrieve(string eventKey)
+        {
+            var restRequest = new RestRequest("/events/{key}", Method.GET)
+                .AddUrlSegment("key", eventKey);
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }
 
@@ -170,6 +176,48 @@ namespace SeatsioDotNet.Events
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
+        }
+
+        public void MarkAsForSale(string eventKey, IEnumerable<string> objects, IEnumerable<string> categories)
+        {
+            var requestBody = ForSaleRequest(objects, categories);
+            var restRequest = new RestRequest("/events/{key}/actions/mark-as-for-sale", Method.POST)
+                .AddUrlSegment("key", eventKey)
+                .AddJsonBody(requestBody);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }  
+        
+        public void MarkAsNotForSale(string eventKey, IEnumerable<string> objects, IEnumerable<string> categories)
+        {
+            var requestBody = ForSaleRequest(objects, categories);
+            var restRequest = new RestRequest("/events/{key}/actions/mark-as-not-for-sale", Method.POST)
+                .AddUrlSegment("key", eventKey)
+                .AddJsonBody(requestBody);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }
+
+        public void MarkEverythingAsForSale(string eventKey)
+        {
+            var restRequest = new RestRequest("/events/{key}/actions/mark-everything-as-for-sale", Method.POST)
+                .AddUrlSegment("key", eventKey);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }
+
+        private Dictionary<string, object> ForSaleRequest(IEnumerable<string> objects, IEnumerable<string> categories)
+        {
+            var request = new Dictionary<string, object>();
+
+            if (objects != null)
+            {
+                request.Add("objects", objects);
+            }
+
+            if (categories != null)
+            {
+                request.Add("categories", categories);
+            }
+
+            return request;
         }
     }
 }

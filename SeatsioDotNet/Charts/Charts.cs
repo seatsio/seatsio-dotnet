@@ -41,6 +41,26 @@ namespace SeatsioDotNet.Charts
             return AssertOk(_restClient.Execute<Chart>(restRequest));
         }
 
+        public void Update(string chartKey, string name = null, IEnumerable<Category> categories = null)
+        {
+            var requestBody = new Dictionary<string, object>();
+
+            if (name != null)
+            {
+                requestBody.Add("name", name);
+            }
+
+            if (categories != null)
+            {
+                requestBody.Add("categories", categories.Select(c => c.AsDictionary()));
+            }
+
+            var restRequest = new RestRequest("/charts/{key}", Method.POST)
+                .AddUrlSegment("key", chartKey)
+                .AddJsonBody(requestBody);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }
+
         public void AddTag(string chartKey, string tag)
         {
             var restRequest = new RestRequest("/charts/{key}/tags/{tag}", Method.POST)
@@ -104,6 +124,20 @@ namespace SeatsioDotNet.Charts
                 .AddUrlSegment("key", chartKey);
             return AssertOk(_restClient.ExecuteDynamic(restRequest));
         }
+        
+        public void PublishDraftVersion(string chartKey)
+        {
+            var restRequest = new RestRequest("/charts/{key}/version/draft/actions/publish", Method.POST)
+                .AddUrlSegment("key", chartKey);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }   
+        
+        public void DiscardDraftVersion(string chartKey)
+        {
+            var restRequest = new RestRequest("/charts/{key}/version/draft/actions/discard", Method.POST)
+                .AddUrlSegment("key", chartKey);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }
 
         public ChartLister List()
         {
@@ -114,5 +148,6 @@ namespace SeatsioDotNet.Charts
         {
             return new Lister<Chart, ListParams>(new PageFetcher<Chart>(_restClient, "/charts/archive"));
         }
+
     }
 }

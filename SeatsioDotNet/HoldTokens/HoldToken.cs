@@ -1,4 +1,5 @@
-﻿using RestSharp.Deserializers;
+﻿using System;
+using RestSharp.Deserializers;
 
 namespace SeatsioDotNet.HoldTokens
 {
@@ -6,5 +7,6 @@ namespace SeatsioDotNet.HoldTokens
     {
         [DeserializeAs(Name = "holdToken")]
         public string Token { get; set; }
+        public DateTime ExpiresAt { get; set; }
     }
 }

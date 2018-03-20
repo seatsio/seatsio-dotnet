@@ -29,7 +29,12 @@ namespace SeatsioDotNet
         {
             return new Events.Events(CreateRestClient());
         }
-        
+
+        public EventReports.EventReports EventReports()
+        {
+            return new EventReports.EventReports(CreateRestClient());
+        }
+
         public Charts.Charts Charts()
         {
             return new Charts.Charts(CreateRestClient());
@@ -46,6 +51,5 @@ namespace SeatsioDotNet
             client.Authenticator = new HttpBasicAuthenticator(_secretKey, null);
             return client;
         }
-
     }
 }

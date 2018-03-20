@@ -268,9 +268,5 @@ namespace SeatsioDotNet.Events
             ));
         }
 
-        public EventReports Reports()
-        {
-            return new EventReports(_restClient);
-        }
     }
 }

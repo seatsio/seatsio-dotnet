@@ -2,7 +2,7 @@
 using RestSharp;
 using static SeatsioDotNet.Util.RestUtil;
 
-namespace SeatsioDotNet.Events
+namespace SeatsioDotNet.EventReports
 {
     public class EventReports
     {
@@ -16,8 +16,8 @@ namespace SeatsioDotNet.Events
         public Dictionary<string, IEnumerable<EventReportItem>> ByLabel(string eventKey)
         {
             return FetchReport("byLabel", eventKey);
-        }  
-        
+        }
+
         public IEnumerable<EventReportItem> ByLabel(string eventKey, string label)
         {
             return FetchReport("byLabel", eventKey, label);
@@ -31,8 +31,8 @@ namespace SeatsioDotNet.Events
         public IEnumerable<EventReportItem> ByStatus(string eventKey, string status)
         {
             return FetchReport("byStatus", eventKey, status);
-        } 
-        
+        }
+
         public Dictionary<string, IEnumerable<EventReportItem>> ByCategoryLabel(string eventKey)
         {
             return FetchReport("byCategoryLabel", eventKey);
@@ -41,8 +41,8 @@ namespace SeatsioDotNet.Events
         public IEnumerable<EventReportItem> ByCategoryLabel(string eventKey, string categoryLabel)
         {
             return FetchReport("byCategoryLabel", eventKey, categoryLabel);
-        }    
-        
+        }
+
         public Dictionary<string, IEnumerable<EventReportItem>> ByCategoryKey(string eventKey)
         {
             return FetchReport("byCategoryKey", eventKey);
@@ -51,8 +51,8 @@ namespace SeatsioDotNet.Events
         public IEnumerable<EventReportItem> ByCategoryKey(string eventKey, string categoryKey)
         {
             return FetchReport("byCategoryKey", eventKey, categoryKey);
-        }   
-        
+        }
+
         public Dictionary<string, IEnumerable<EventReportItem>> ByOrderId(string eventKey)
         {
             return FetchReport("byOrderId", eventKey);
@@ -61,8 +61,8 @@ namespace SeatsioDotNet.Events
         public IEnumerable<EventReportItem> ByOrderId(string eventKey, string categoryKey)
         {
             return FetchReport("byOrderId", eventKey, categoryKey);
-        }  
-        
+        }
+
         public Dictionary<string, IEnumerable<EventReportItem>> BySection(string eventKey)
         {
             return FetchReport("bySection", eventKey);

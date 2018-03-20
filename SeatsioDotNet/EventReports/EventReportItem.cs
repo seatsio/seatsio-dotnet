@@ -1,4 +1,4 @@
-﻿namespace SeatsioDotNet.Events
+﻿namespace SeatsioDotNet.EventReports
 {
     public class EventReportItem
     {

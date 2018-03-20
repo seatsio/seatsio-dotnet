@@ -44,6 +44,14 @@ namespace SeatsioDotNet.Charts
             return AssertOk(_restClient.Execute<Chart>(restRequest));
         }
 
+        public Chart RetrieveWithEvents(string chartKey)
+        {
+            var restRequest = new RestRequest("/charts/{key}", Method.GET)
+                .AddUrlSegment("key", chartKey)
+                .AddQueryParameter("expand", "events");
+            return AssertOk(_restClient.Execute<Chart>(restRequest));
+        }
+
         public IEnumerable<string> ListAllTags()
         {
             var restRequest = new RestRequest("/charts/tags", Method.GET);

@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using System.Collections.Generic;
+using RestSharp;
 using SeatsioDotNet.Charts;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
@@ -76,8 +77,8 @@ namespace SeatsioDotNet.Subaccounts
                 .AddUrlSegment("id", id)
                 .AddUrlSegment("chartKey", chartKey);
             return AssertOk(_restClient.Execute<Chart>(restRequest));
-        }   
-        
+        }
+
         public Chart CopyChartToSubaccount(long fromId, long toId, string chartKey)
         {
             var restRequest = new RestRequest("/subaccounts/{fromId}/charts/{chartKey}/actions/copy-to/{toId}", Method.POST)
@@ -87,7 +88,27 @@ namespace SeatsioDotNet.Subaccounts
             return AssertOk(_restClient.Execute<Chart>(restRequest));
         }
 
-        public Lister<Subaccount, ListParams> List()
+        public IEnumerable<Subaccount> ListAll()
+        {
+            return List().All();
+        }
+
+        public Page<Subaccount> ListFirstPage(int? pageSize = null)
+        {
+            return List().FirstPage(pageSize: pageSize);
+        }
+
+        public Page<Subaccount> ListPageAfter(long id, int? pageSize = null)
+        {
+            return List().PageAfter(id, pageSize: pageSize);
+        }
+
+        public Page<Subaccount> ListPageBefore(long id, int? pageSize = null)
+        {
+            return List().PageBefore(id, pageSize: pageSize);
+        }
+
+        private Lister<Subaccount, ListParams> List()
         {
             return new Lister<Subaccount, ListParams>(new PageFetcher<Subaccount>(_restClient, "/subaccounts"));
         }

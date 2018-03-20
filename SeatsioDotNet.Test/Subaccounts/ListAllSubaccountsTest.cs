@@ -12,7 +12,7 @@ namespace SeatsioDotNet.Test.Subaccounts
             var subaccount2 = Client.Subaccounts().Create();
             var subaccount3 = Client.Subaccounts().Create();
 
-            var subaccounts = Client.Subaccounts().List().All();
+            var subaccounts = Client.Subaccounts().ListAll();
 
             Assert.Equal(new[] {subaccount3.Id, subaccount2.Id, subaccount1.Id}, subaccounts.Select(s => s.Id));
         }

@@ -225,7 +225,27 @@ namespace SeatsioDotNet.Events
             return request;
         }
 
-        public Lister<Event, ListParams> List()
+        public IEnumerable<Event> ListAll()
+        {
+            return List().All();
+        }
+
+        public Page<Event> ListFirstPage(int? pageSize = null)
+        {
+            return List().FirstPage(pageSize: pageSize);
+        }
+
+        public Page<Event> ListPageAfter(long id, int? pageSize = null)
+        {
+            return List().PageAfter(id, pageSize: pageSize);
+        }
+
+        public Page<Event> ListPageBefore(long id, int? pageSize = null)
+        {
+            return List().PageBefore(id, pageSize: pageSize);
+        }
+
+        private Lister<Event, ListParams> List()
         {
             return new Lister<Event, ListParams>(new PageFetcher<Event>(_restClient, "/events"));
         }

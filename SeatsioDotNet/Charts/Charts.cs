@@ -185,9 +185,29 @@ namespace SeatsioDotNet.Charts
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
-        public ChartLister List()
+        public IEnumerable<Chart> ListAll(ChartListParams listParams = null)
         {
-            return new ChartLister(_restClient);
+            return List().All(listParams);
+        }
+
+        public Page<Chart> ListFirstPage(ChartListParams listParams = null, int? pageSize = null)
+        {
+            return List().FirstPage(listParams, pageSize);
+        }
+
+        public Page<Chart> ListPageAfter(long id, ChartListParams listParams = null, int? pageSize = null)
+        {
+            return List().PageAfter(id, listParams, pageSize);
+        }
+
+        public Page<Chart> ListPageBefore(long id, ChartListParams listParams = null, int? pageSize = null)
+        {
+            return List().PageBefore(id, listParams, pageSize);
+        }
+
+        private Lister<Chart, ChartListParams> List()
+        {
+            return new Lister<Chart, ChartListParams>(new PageFetcher<Chart>(_restClient, "/charts"));
         }
 
         public Lister<Chart, ListParams> Archive()

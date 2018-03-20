@@ -13,7 +13,7 @@ namespace SeatsioDotNet.Test.Events
             var event2 = Client.Events().Create(chartKey);
             var event3 = Client.Events().Create(chartKey);
 
-            var events = Client.Events().List().All();
+            var events = Client.Events().ListAll();
             
             Assert.Equal(new [] {event3.Key, event2.Key, event1.Key}, events.Select(e => e.Key));
         }

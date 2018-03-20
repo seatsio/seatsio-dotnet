@@ -13,7 +13,7 @@ namespace SeatsioDotNet.Test.Charts
             var chart2 = Client.Charts().Create();
             var chart3 = Client.Charts().Create();
 
-            var charts = Client.Charts().List().All();
+            var charts = Client.Charts().ListAll();
 
             Assert.Equal(new[] {chart3.Key, chart2.Key, chart1.Key}, charts.Select(c => c.Key));
         }
@@ -23,7 +23,7 @@ namespace SeatsioDotNet.Test.Charts
         {
             var charts = Enumerable.Repeat("", 30).Select(x => Client.Charts().Create());
 
-            var retrievedCharts = Client.Charts().List().All();
+            var retrievedCharts = Client.Charts().ListAll();
 
             Assert.Equal(charts.Reverse().Select(c => c.Key), retrievedCharts.Select(c => c.Key));
         }
@@ -35,7 +35,7 @@ namespace SeatsioDotNet.Test.Charts
             var chart2 = Client.Charts().Create("bar");
             var chart3 = Client.Charts().Create("foofoo");
 
-            var charts = Client.Charts().List().All(new ChartListParams().SetFilter("foo"));
+            var charts = Client.Charts().ListAll(new ChartListParams().SetFilter("foo"));
 
             Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
         }
@@ -51,7 +51,7 @@ namespace SeatsioDotNet.Test.Charts
             var chart3 = Client.Charts().Create();
             Client.Charts().AddTag(chart3.Key, "foo");
 
-            var charts = Client.Charts().List().All(new ChartListParams().SetTag("foo"));
+            var charts = Client.Charts().ListAll(new ChartListParams().SetTag("foo"));
 
             Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
         }
@@ -63,7 +63,7 @@ namespace SeatsioDotNet.Test.Charts
             var event1 = Client.Events().Create(chart.Key);
             var event2 = Client.Events().Create(chart.Key);
 
-            var charts = Client.Charts().List().All(new ChartListParams().SetExpandEvents());
+            var charts = Client.Charts().ListAll(new ChartListParams().SetExpandEvents());
 
             Assert.Equal(new[] {event2.Id, event1.Id}, charts.First().Events.Select(c => c.Id));
         }

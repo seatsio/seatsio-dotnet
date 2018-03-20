@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
+using System.Linq;
 using Xunit;
 
 namespace SeatsioDotNet.Test
@@ -14,7 +14,11 @@ namespace SeatsioDotNet.Test
 
         public static void ContainsOnly(IEnumerable<object> expected, IEnumerable<object> actual)
         {
-            Assert.Equal(expected.ToImmutableSortedSet(), actual.ToImmutableSortedSet());
+            var expectedList = expected.ToList();
+            expectedList.Sort();
+            var actualList = actual.ToList();
+            actualList.Sort();
+            Assert.Equal(expectedList, actualList);
         }
     }
 }

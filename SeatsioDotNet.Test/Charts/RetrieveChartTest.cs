@@ -22,7 +22,7 @@ namespace SeatsioDotNet.Test.Charts
             Assert.NotNull(retrievedChart.PublishedVersionThumbnailUrl);
             Assert.Null(retrievedChart.DraftVersionThumbnailUrl);
             Assert.Null(retrievedChart.Events);
-            CustomAssert.ContainsExactly(new[] {"tag1", "tag2"}, retrievedChart.Tags);
+            CustomAssert.ContainsOnly(new[] {"tag1", "tag2"}, retrievedChart.Tags);
             Assert.False(retrievedChart.Archived);
         }
 

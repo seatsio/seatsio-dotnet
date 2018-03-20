@@ -14,7 +14,7 @@ namespace SeatsioDotNet.Test.Charts
             Client.Charts().AddTag(chart.Key, "tag2");
 
             Chart retrievedChart = Client.Charts().Retrieve(chart.Key);
-            CustomAssert.ContainsExactly(new[] {"tag1", "tag2"}, retrievedChart.Tags);
+            CustomAssert.ContainsOnly(new[] {"tag1", "tag2"}, retrievedChart.Tags);
         }
     }
 }

@@ -69,9 +69,9 @@ namespace SeatsioDotNet.Subaccounts
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
-        public Lister<Subaccount> List()
+        public Lister<Subaccount, ListParams> List()
         {
-            return new Lister<Subaccount>(new PageFetcher<Subaccount>(_restClient, "/subaccounts"));
+            return new Lister<Subaccount, ListParams>(new PageFetcher<Subaccount>(_restClient, "/subaccounts"));
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace SeatsioDotNet.Util
 {
-    public class Lister<T>
+    public class Lister<T, TListParams> where TListParams : ListParams
     {
         private readonly PageFetcher<T> _pageFetcher;
 
@@ -11,42 +11,22 @@ namespace SeatsioDotNet.Util
             _pageFetcher = pageFetcher;
         }
 
-        public IEnumerable<T> All()
-        {
-            return All(new ListParams());
-        }
-
-        public IEnumerable<T> All(ListParams listParams)
+        public IEnumerable<T> All(TListParams listParams = null)
         {
             return new PagedEnumerable<T>(_pageFetcher, listParams);
         }
 
-        public Page<T> FirstPage()
-        {
-            return FirstPage(new ListParams());
-        }
-
-        public Page<T> FirstPage(ListParams listParams)
+        public Page<T> FirstPage(TListParams listParams = null)
         {
             return _pageFetcher.FetchFirstPage(listParams);
         }
 
-        public Page<T> PageAfter(long id)
-        {
-            return PageAfter(id, new ListParams());
-        }
-
-        public Page<T> PageAfter(long id, ListParams listParams)
+        public Page<T> PageAfter(long id, TListParams listParams = null)
         {
             return _pageFetcher.FetchAfter(id, listParams);
         }
 
-        public Page<T> PageBefore(long id)
-        {
-            return PageBefore(id, new ListParams());
-        }
-
-        public Page<T> PageBefore(long id, ListParams listParams)
+        public Page<T> PageBefore(long id, TListParams listParams = null)
         {
             return _pageFetcher.FetchBefore(id, listParams);
         }

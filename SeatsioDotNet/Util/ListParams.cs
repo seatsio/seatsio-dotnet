@@ -1,18 +1,20 @@
-﻿namespace SeatsioDotNet.Util
+﻿using System.Collections.Generic;
+
+namespace SeatsioDotNet.Util
 {
     public class ListParams
     {
-        private int? _pageSize;
+        protected Dictionary<string, string> _params = new Dictionary<string, string>();
 
-        public ListParams SetPageSize(int? pageSize)
+        public ListParams SetPageSize(int pageSize)
         {
-            _pageSize = pageSize;
+            _params.Add("pageSize", pageSize.ToString());
             return this;
         }
 
-        public int? GetPageSize()
+        public Dictionary<string, string> AsDictionary()
         {
-            return _pageSize;
+            return _params;
         }
     }
 }

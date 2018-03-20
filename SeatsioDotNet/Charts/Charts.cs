@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using RestSharp;
 using RestSharp.Deserializers;
+using SeatsioDotNet.Test.Charts;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
 
@@ -15,9 +16,17 @@ namespace SeatsioDotNet.Charts
             _restClient = restClient;
         }
 
-        public Chart Create()
+        public Chart Create(string name = null)
         {
-            var restRequest = new RestRequest("/charts", Method.POST);
+            var requestBody = new Dictionary<string, object>();
+
+            if (name != null)
+            {
+                requestBody.Add("name", name);
+            }
+
+            var restRequest = new RestRequest("/charts", Method.POST)
+                .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Chart>(restRequest));
         }
 
@@ -78,9 +87,14 @@ namespace SeatsioDotNet.Charts
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
-        public Lister<Chart> Archive()
+        public ChartLister List()
         {
-            return new Lister<Chart>(new PageFetcher<Chart>(_restClient, "/charts/archive"));
+            return new ChartLister(_restClient);
+        }
+
+        public Lister<Chart, ListParams> Archive()
+        {
+            return new Lister<Chart, ListParams>(new PageFetcher<Chart>(_restClient, "/charts/archive"));
         }
     }
 }

@@ -49,9 +49,12 @@ namespace SeatsioDotNet.Util
                 restRequest = _requestAdapter.Invoke(restRequest);
             }
 
-            if (listParams.GetPageSize() != null)
+            if (listParams != null)
             {
-                restRequest.AddQueryParameter("limit", listParams.GetPageSize().ToString());
+                foreach (var param in listParams.AsDictionary())
+                {
+                    restRequest.AddQueryParameter(param.Key, param.Value);
+                }
             }
 
             return restRequest;

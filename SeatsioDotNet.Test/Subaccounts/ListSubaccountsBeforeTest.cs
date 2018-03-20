@@ -27,7 +27,7 @@ namespace SeatsioDotNet.Test.Subaccounts
             var subaccount2 = Client.Subaccounts().Create();
             var subaccount3 = Client.Subaccounts().Create();
 
-            var page = Client.Subaccounts().List().PageBefore(subaccount1.Id, new ListParams().SetPageSize(1));
+            var page = Client.Subaccounts().List().PageBefore(subaccount1.Id, pageSize: 1);
 
             Assert.Equal(new[] {subaccount2.Id}, page.Items.Select(s => s.Id));
             Assert.Equal(subaccount2.Id, page.NextPageStartsAfter);

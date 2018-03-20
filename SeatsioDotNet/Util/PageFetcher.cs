@@ -23,25 +23,25 @@ namespace SeatsioDotNet.Util
             _requestAdapter = requestAdapter;
         }
 
-        public Page<T> FetchFirstPage(ListParams listParams)
+        public Page<T> FetchFirstPage(ListParams listParams, int? pageSize)
         {
-            var restRequest = BuildRequest(listParams);
+            var restRequest = BuildRequest(listParams, pageSize);
             return AssertOk(_restClient.Execute<Page<T>>(restRequest));
         }
 
-        public Page<T> FetchAfter(long id, ListParams listParams)
+        public Page<T> FetchAfter(long id, ListParams listParams, int? pageSize)
         {
-            var restRequest = BuildRequest(listParams).AddQueryParameter("start_after_id", id.ToString());
+            var restRequest = BuildRequest(listParams, pageSize).AddQueryParameter("start_after_id", id.ToString());
             return AssertOk(_restClient.Execute<Page<T>>(restRequest));
         }
 
-        public Page<T> FetchBefore(long id, ListParams listParams)
+        public Page<T> FetchBefore(long id, ListParams listParams, int? pageSize)
         {
-            var restRequest = BuildRequest(listParams).AddQueryParameter("end_before_id", id.ToString());
+            var restRequest = BuildRequest(listParams, pageSize).AddQueryParameter("end_before_id", id.ToString());
             return AssertOk(_restClient.Execute<Page<T>>(restRequest));
         }
 
-        private RestRequest BuildRequest(ListParams listParams)
+        private RestRequest BuildRequest(ListParams listParams, int? pageSize)
         {
             var restRequest = new RestRequest(_path, Method.GET);
             if (_requestAdapter != null)
@@ -55,6 +55,11 @@ namespace SeatsioDotNet.Util
                 {
                     restRequest.AddQueryParameter(param.Key, param.Value);
                 }
+            }
+
+            if (pageSize != null)
+            {
+                restRequest.AddQueryParameter("limit", pageSize.ToString());
             }
 
             return restRequest;

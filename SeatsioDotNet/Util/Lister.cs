@@ -16,19 +16,19 @@ namespace SeatsioDotNet.Util
             return new PagedEnumerable<T>(_pageFetcher, listParams);
         }
 
-        public Page<T> FirstPage(TListParams listParams = null)
+        public Page<T> FirstPage(TListParams listParams = null, int? pageSize = null)
         {
-            return _pageFetcher.FetchFirstPage(listParams);
+            return _pageFetcher.FetchFirstPage(listParams, pageSize);
         }
 
-        public Page<T> PageAfter(long id, TListParams listParams = null)
+        public Page<T> PageAfter(long id, TListParams listParams = null, int? pageSize = null)
         {
-            return _pageFetcher.FetchAfter(id, listParams);
+            return _pageFetcher.FetchAfter(id, listParams, pageSize);
         }
 
-        public Page<T> PageBefore(long id, TListParams listParams = null)
+        public Page<T> PageBefore(long id, TListParams listParams = null, int? pageSize = null)
         {
-            return _pageFetcher.FetchBefore(id, listParams);
+            return _pageFetcher.FetchBefore(id, listParams, pageSize);
         }
     }
 }

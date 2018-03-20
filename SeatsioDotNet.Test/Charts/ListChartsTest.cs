@@ -17,6 +17,16 @@ namespace SeatsioDotNet.Test.Charts
 
             Assert.Equal(new[] {chart3.Key, chart2.Key, chart1.Key}, charts.Select(c => c.Key));
         }
+        
+        [Fact]
+        public void MultiplePages()
+        {
+            var charts = Enumerable.Repeat("", 30).Select(x => Client.Charts().Create());
+
+            var retrievedCharts = Client.Charts().List().All();
+
+            Assert.Equal(charts.Reverse().Select(c => c.Key), retrievedCharts.Select(c => c.Key));
+        }
 
         [Fact]
         public void Filter()

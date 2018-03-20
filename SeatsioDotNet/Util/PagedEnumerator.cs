@@ -21,11 +21,11 @@ namespace SeatsioDotNet.Util
         {
             if (_currentPage == null)
             {
-                _currentPage = _pageFetcher.FetchFirstPage(_listParams);
+                _currentPage = _pageFetcher.FetchFirstPage(_listParams, null);
             }
             else if (NextPageMustBeFetched())
             {
-                _currentPage = _pageFetcher.FetchAfter(_currentPage.NextPageStartsAfter.Value, _listParams);
+                _currentPage = _pageFetcher.FetchAfter(_currentPage.NextPageStartsAfter.Value, _listParams, null);
                 _indexInCurrentPage = 0;
             }
             else

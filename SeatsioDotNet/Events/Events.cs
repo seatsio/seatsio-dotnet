@@ -21,6 +21,11 @@ namespace SeatsioDotNet.Events
                 .AddJsonBody(new {chartKey});
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }
+        
+        public EventReports Reports()
+        {
+            return new EventReports(_restClient);
+        }
 
         public ObjectStatus RetrieveObjectStatus(string eventKey, string objectLabel)
         {
@@ -141,5 +146,6 @@ namespace SeatsioDotNet.Events
                 .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
         }
+
     }
 }

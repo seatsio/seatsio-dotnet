@@ -8,7 +8,7 @@ namespace SeatsioDotNet.Util
 
         public ListParams SetPageSize(int pageSize)
         {
-            _params.Add("pageSize", pageSize.ToString());
+            _params.Add("limit", pageSize.ToString());
             return this;
         }
 

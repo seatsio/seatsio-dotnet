@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SeatsioDotNet.Subaccounts
+﻿namespace SeatsioDotNet.Subaccounts
 {
     public class Subaccount
     {

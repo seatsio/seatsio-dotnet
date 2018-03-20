@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using SeatsioDotNet.Events;
-using SeatsioDotNet.HoldTokens;
+﻿using SeatsioDotNet.HoldTokens;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events

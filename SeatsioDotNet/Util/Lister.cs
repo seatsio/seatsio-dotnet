@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using RestSharp;
-using SeatsioDotNet.Subaccounts;
-using static SeatsioDotNet.Util.RestUtil;
 
 namespace SeatsioDotNet.Util
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using RestSharp;
+﻿using RestSharp;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
 

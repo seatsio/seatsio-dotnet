@@ -1,6 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Linq;
-using Xunit;
+﻿using Xunit;
 
 namespace SeatsioDotNet.Test.Charts
 {

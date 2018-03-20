@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using SeatsioDotNet.Charts;
+﻿using SeatsioDotNet.Charts;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Charts

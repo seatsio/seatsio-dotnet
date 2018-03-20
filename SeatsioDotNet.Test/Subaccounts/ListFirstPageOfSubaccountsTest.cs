@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using SeatsioDotNet.Util;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Subaccounts
@@ -26,7 +27,7 @@ namespace SeatsioDotNet.Test.Subaccounts
             var subaccount2 = Client.Subaccounts().Create();
             var subaccount3 = Client.Subaccounts().Create();
 
-            var page = Client.Subaccounts().List().FirstPage(new Util.ListParams().SetPageSize(2));
+            var page = Client.Subaccounts().List().FirstPage(new ListParams().SetPageSize(2));
 
             Assert.Equal(new[] {subaccount3.Id, subaccount2.Id}, page.Items.Select(s => s.Id));
             Assert.Equal(subaccount2.Id, page.NextPageStartsAfter.Value);

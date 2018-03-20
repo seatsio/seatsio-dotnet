@@ -1,6 +1,4 @@
-﻿using System;
-using SeatsioDotNet.Events;
-using Xunit;
+﻿using Xunit;
 
 namespace SeatsioDotNet.Test.Events
 {

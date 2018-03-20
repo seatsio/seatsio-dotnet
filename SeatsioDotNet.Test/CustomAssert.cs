@@ -5,9 +5,9 @@ namespace SeatsioDotNet.Test
 {
     public class CustomAssert
     {
-        public static void CloseTo(DateTime date, DateTime otherDate)
+        public static void CloseTo(DateTime expected, DateTime actual)
         {
-            Assert.True(date > otherDate.AddMinutes(-1) && date < otherDate.AddMinutes(1));
+            Assert.True(actual > expected.AddMinutes(-1) && actual < expected.AddMinutes(1));
         }
     }
 }

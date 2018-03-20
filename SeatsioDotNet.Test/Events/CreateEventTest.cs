@@ -17,7 +17,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(chartKey, evnt.ChartKey);
             Assert.False(evnt.BookWholeTables);
             Assert.Null(evnt.ForSaleConfig);
-            CustomAssert.CloseTo(evnt.CreatedOn.Value, DateTime.Now);
+            CustomAssert.CloseTo(DateTime.Now, evnt.CreatedOn.Value);
             Assert.Null(evnt.UpdatedOn);
         }
     }

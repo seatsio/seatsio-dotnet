@@ -8,11 +8,19 @@ namespace SeatsioDotNet.Util
     {
         private readonly RestClient _restClient;
         private readonly string _path;
+        private readonly Func<RestRequest, RestRequest> _requestAdapter;
 
         public PageFetcher(RestClient restClient, String path)
         {
             _restClient = restClient;
             _path = path;
+        }
+
+        public PageFetcher(RestClient restClient, String path, Func<RestRequest, RestRequest> requestAdapter)
+        {
+            _restClient = restClient;
+            _path = path;
+            _requestAdapter = requestAdapter;
         }
 
         public Page<T> FetchFirstPage(ListParams listParams)
@@ -36,6 +44,11 @@ namespace SeatsioDotNet.Util
         private RestRequest BuildRequest(ListParams listParams)
         {
             var restRequest = new RestRequest(_path, Method.GET);
+            if (_requestAdapter != null)
+            {
+                restRequest = _requestAdapter.Invoke(restRequest);
+            }
+
             if (listParams.GetPageSize() != null)
             {
                 restRequest.AddQueryParameter("limit", listParams.GetPageSize().ToString());

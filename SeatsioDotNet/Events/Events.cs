@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Cache;
 using RestSharp;
 using SeatsioDotNet.Test.Events;
+using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
 
 namespace SeatsioDotNet.Events
@@ -15,16 +17,39 @@ namespace SeatsioDotNet.Events
             _restClient = restClient;
         }
 
+        public Lister<Event> List()
+        {
+            return new Lister<Event>(new PageFetcher<Event>(_restClient, "/events"));
+        }
+
+        public Lister<StatusChange> StatusChanges(string eventKey)
+        {
+            return new Lister<StatusChange>(new PageFetcher<StatusChange>(
+                _restClient,
+                "/events/{key}/status-changes",
+                request => (RestRequest) request.AddUrlSegment("key", eventKey)
+            ));
+        }
+
+        public Lister<StatusChange> StatusChanges(string eventKey, string objectLabel)
+        {
+            return new Lister<StatusChange>(new PageFetcher<StatusChange>(
+                _restClient,
+                "/events/{key}/objects/{objectId}/status-changes",
+                request => (RestRequest) request.AddUrlSegment("key", eventKey).AddUrlSegment("objectId", objectLabel)
+            ));
+        }
+
+        public EventReports Reports()
+        {
+            return new EventReports(_restClient);
+        }
+
         public Event Create(string chartKey)
         {
             var restRequest = new RestRequest("/events", Method.POST)
                 .AddJsonBody(new {chartKey});
             return AssertOk(_restClient.Execute<Event>(restRequest));
-        }
-        
-        public EventReports Reports()
-        {
-            return new EventReports(_restClient);
         }
 
         public ObjectStatus RetrieveObjectStatus(string eventKey, string objectLabel)
@@ -38,18 +63,18 @@ namespace SeatsioDotNet.Events
         public void Book(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null)
         {
             ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId);
-        }    
-       
+        }
+
         public void Book(string[] eventKeys, IEnumerable<string> objects, string holdToken = null, string orderId = null)
         {
             ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId);
-        }  
+        }
 
         public void Book(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null)
         {
             ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId);
-        }  
-       
+        }
+
         public void Book(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null)
         {
             ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId);
@@ -58,18 +83,18 @@ namespace SeatsioDotNet.Events
         public void Release(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null)
         {
             ChangeObjectStatus(eventKey, objects, ObjectStatus.Free, holdToken, orderId);
-        }   
-        
+        }
+
         public void Release(string[] eventKeys, IEnumerable<string> objects, string holdToken = null, string orderId = null)
         {
             ChangeObjectStatus(eventKeys, objects, ObjectStatus.Free, holdToken, orderId);
-        }   
-        
+        }
+
         public void Release(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null)
         {
             ChangeObjectStatus(eventKey, objects, ObjectStatus.Free, holdToken, orderId);
-        }   
-        
+        }
+
         public void Release(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null)
         {
             ChangeObjectStatus(eventKeys, objects, ObjectStatus.Free, holdToken, orderId);
@@ -78,18 +103,18 @@ namespace SeatsioDotNet.Events
         public void Hold(string eventKey, IEnumerable<string> objects, string holdToken, string orderId = null)
         {
             ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId);
-        }    
-        
+        }
+
         public void Hold(string[] eventKeys, IEnumerable<string> objects, string holdToken, string orderId = null)
         {
             ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId);
-        } 
-        
+        }
+
         public void Hold(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null)
         {
             ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId);
-        }    
-        
+        }
+
         public void Hold(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null)
         {
             ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId);
@@ -132,7 +157,7 @@ namespace SeatsioDotNet.Events
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
-        
+
         public BestAvailableResult ChangeObjectStatus(string eventKey, BestAvailable bestAvailable, string status)
         {
             var requestBody = new Dictionary<string, object>()
@@ -146,6 +171,5 @@ namespace SeatsioDotNet.Events
                 .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
         }
-
     }
 }

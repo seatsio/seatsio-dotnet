@@ -15,6 +15,17 @@ namespace SeatsioDotNet.Test.Charts
 
             Chart retrievedChart = Client.Charts().Retrieve(chart.Key);
             CustomAssert.ContainsOnly(new[] {"tag1", "tag2"}, retrievedChart.Tags);
+        }   
+        
+        [Fact]
+        public void SpecialCharacters()
+        {
+            var chart = Client.Charts().Create();
+
+            Client.Charts().AddTag(chart.Key, "'tag1:-'/&?<>");
+
+            Chart retrievedChart = Client.Charts().Retrieve(chart.Key);
+            CustomAssert.ContainsOnly(new[] {"'tag1:-'/&?<>"}, retrievedChart.Tags);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RestSharp;
 using RestSharp.Deserializers;
 using SeatsioDotNet.Test.Charts;
@@ -16,13 +17,23 @@ namespace SeatsioDotNet.Charts
             _restClient = restClient;
         }
 
-        public Chart Create(string name = null)
+        public Chart Create(string name = null, string venueType = null, IEnumerable<Category> categories = null)
         {
             var requestBody = new Dictionary<string, object>();
 
             if (name != null)
             {
                 requestBody.Add("name", name);
+            }
+
+            if (venueType != null)
+            {
+                requestBody.Add("venueType", venueType);
+            }
+
+            if (categories != null)
+            {
+                requestBody.Add("categories", categories.Select(c => c.AsDictionary()));
             }
 
             var restRequest = new RestRequest("/charts", Method.POST)
@@ -85,6 +96,13 @@ namespace SeatsioDotNet.Charts
             var restRequest = new RestRequest("/charts/{key}/actions/move-out-of-archive", Method.POST)
                 .AddUrlSegment("key", chartKey);
             AssertOk(_restClient.Execute<object>(restRequest));
+        }
+
+        public dynamic RetrievePublishedVersion(string chartKey)
+        {
+            var restRequest = new RestRequest("/charts/{key}/version/published", Method.GET)
+                .AddUrlSegment("key", chartKey);
+            return AssertOk(_restClient.ExecuteDynamic(restRequest));
         }
 
         public ChartLister List()

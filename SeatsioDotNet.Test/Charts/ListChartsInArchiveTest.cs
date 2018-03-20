@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using SeatsioDotNet.Charts;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Charts

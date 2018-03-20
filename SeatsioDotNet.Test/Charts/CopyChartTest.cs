@@ -1,5 +1,4 @@
-﻿using SeatsioDotNet.Charts;
-using Xunit;
+﻿using Xunit;
 
 namespace SeatsioDotNet.Test.Charts
 {

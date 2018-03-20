@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using RestSharp;
 using RestSharp.Deserializers;
+using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
 
 namespace SeatsioDotNet.Charts
@@ -53,6 +54,25 @@ namespace SeatsioDotNet.Charts
         {
             [DeserializeAs(Name = "tags")]
             public IEnumerable<string> List { get; set; }
+        }
+
+        public void MoveToArchive(string chartKey)
+        {
+            var restRequest = new RestRequest("/charts/{key}/actions/move-to-archive", Method.POST)
+                .AddUrlSegment("key", chartKey);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }
+
+        public void MoveOutOfArchive(string chartKey)
+        {
+            var restRequest = new RestRequest("/charts/{key}/actions/move-out-of-archive", Method.POST)
+                .AddUrlSegment("key", chartKey);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }
+
+        public Lister<Chart> Archive()
+        {
+            return new Lister<Chart>(new PageFetcher<Chart>(_restClient, "/charts/archive"));
         }
     }
 }

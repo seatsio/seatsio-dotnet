@@ -6,5 +6,6 @@ namespace SeatsioDotNet.Charts
     {
         public string Key { get; set; }
         public IEnumerable<string> Tags { get; set; }
+        public bool Archived { get; set; }
     }
 }

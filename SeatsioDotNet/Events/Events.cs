@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RestSharp;
-using SeatsioDotNet.Test.Events;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
 

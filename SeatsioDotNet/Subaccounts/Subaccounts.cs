@@ -1,4 +1,5 @@
 ﻿using RestSharp;
+using SeatsioDotNet.Charts;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
 
@@ -67,6 +68,23 @@ namespace SeatsioDotNet.Subaccounts
             var restRequest = new RestRequest("/subaccounts/{id}/designer-key/actions/regenerate", Method.POST)
                 .AddUrlSegment("id", id);
             AssertOk(_restClient.Execute<object>(restRequest));
+        }
+
+        public Chart CopyChartToParent(long id, string chartKey)
+        {
+            var restRequest = new RestRequest("/subaccounts/{id}/charts/{chartKey}/actions/copy-to/parent", Method.POST)
+                .AddUrlSegment("id", id)
+                .AddUrlSegment("chartKey", chartKey);
+            return AssertOk(_restClient.Execute<Chart>(restRequest));
+        }   
+        
+        public Chart CopyChartToSubaccount(long fromId, long toId, string chartKey)
+        {
+            var restRequest = new RestRequest("/subaccounts/{fromId}/charts/{chartKey}/actions/copy-to/{toId}", Method.POST)
+                .AddUrlSegment("fromId", fromId)
+                .AddUrlSegment("chartKey", chartKey)
+                .AddUrlSegment("toId", toId.ToString());
+            return AssertOk(_restClient.Execute<Chart>(restRequest));
         }
 
         public Lister<Subaccount, ListParams> List()

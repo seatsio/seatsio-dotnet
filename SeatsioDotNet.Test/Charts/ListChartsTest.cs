@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using SeatsioDotNet.Charts;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Charts
@@ -15,8 +16,8 @@ namespace SeatsioDotNet.Test.Charts
             var charts = Client.Charts().List().All();
 
             Assert.Equal(new[] {chart3.Key, chart2.Key, chart1.Key}, charts.Select(c => c.Key));
-        }    
-        
+        }
+
         [Fact]
         public void Filter()
         {
@@ -27,24 +28,24 @@ namespace SeatsioDotNet.Test.Charts
             var charts = Client.Charts().List().All(new ChartListParams().SetFilter("foo"));
 
             Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
-        }   
-        
+        }
+
         [Fact]
         public void Tag()
         {
             var chart1 = Client.Charts().Create();
             Client.Charts().AddTag(chart1.Key, "foo");
-            
+
             var chart2 = Client.Charts().Create();
-            
+
             var chart3 = Client.Charts().Create();
             Client.Charts().AddTag(chart3.Key, "foo");
 
             var charts = Client.Charts().List().All(new ChartListParams().SetTag("foo"));
 
             Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
-        }   
-        
+        }
+
         [Fact]
         public void Exand()
         {

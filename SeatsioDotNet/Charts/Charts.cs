@@ -2,7 +2,6 @@
 using System.Linq;
 using RestSharp;
 using RestSharp.Deserializers;
-using SeatsioDotNet.Test.Charts;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
 
@@ -59,6 +58,28 @@ namespace SeatsioDotNet.Charts
                 .AddUrlSegment("key", chartKey)
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
+        }
+
+        public Chart Copy(string chartKey)
+        {
+            var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy", Method.POST)
+                .AddUrlSegment("key", chartKey);
+            return AssertOk(_restClient.Execute<Chart>(restRequest));
+        }
+
+        public Chart CopyToSubaccount(string chartKey, long subaccountId)
+        {
+            var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy-to/{subaccountId}", Method.POST)
+                .AddUrlSegment("key", chartKey)
+                .AddUrlSegment("subaccountId", subaccountId.ToString());
+            return AssertOk(_restClient.Execute<Chart>(restRequest));
+        }
+
+        public Chart CopyDraftVersion(string chartKey)
+        {
+            var restRequest = new RestRequest("/charts/{key}/version/draft/actions/copy", Method.POST)
+                .AddUrlSegment("key", chartKey);
+            return AssertOk(_restClient.Execute<Chart>(restRequest));
         }
 
         public void AddTag(string chartKey, string tag)
@@ -124,14 +145,39 @@ namespace SeatsioDotNet.Charts
                 .AddUrlSegment("key", chartKey);
             return AssertOk(_restClient.ExecuteDynamic(restRequest));
         }
-        
+
+        public byte[] RetrievePublishedVersionThumbnail(string chartKey)
+        {
+            var restRequest = new RestRequest("/charts/{key}/version/published/thumbnail", Method.GET)
+                .AddUrlSegment("key", chartKey);
+            var restResponse = _restClient.Execute<object>(restRequest);
+            AssertOk(restResponse);
+            return restResponse.RawBytes;
+        }
+
+        public dynamic RetrieveDraftVersion(string chartKey)
+        {
+            var restRequest = new RestRequest("/charts/{key}/version/draft", Method.GET)
+                .AddUrlSegment("key", chartKey);
+            return AssertOk(_restClient.ExecuteDynamic(restRequest));
+        }
+
+        public byte[] RetrieveDraftVersionThumbnail(string chartKey)
+        {
+            var restRequest = new RestRequest("/charts/{key}/version/draft/thumbnail", Method.GET)
+                .AddUrlSegment("key", chartKey);
+            var restResponse = _restClient.Execute<object>(restRequest);
+            AssertOk(restResponse);
+            return restResponse.RawBytes;
+        }
+
         public void PublishDraftVersion(string chartKey)
         {
             var restRequest = new RestRequest("/charts/{key}/version/draft/actions/publish", Method.POST)
                 .AddUrlSegment("key", chartKey);
             AssertOk(_restClient.Execute<object>(restRequest));
-        }   
-        
+        }
+
         public void DiscardDraftVersion(string chartKey)
         {
             var restRequest = new RestRequest("/charts/{key}/version/draft/actions/discard", Method.POST)
@@ -148,6 +194,5 @@ namespace SeatsioDotNet.Charts
         {
             return new Lister<Chart, ListParams>(new PageFetcher<Chart>(_restClient, "/charts/archive"));
         }
-
     }
 }

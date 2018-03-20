@@ -6,7 +6,7 @@ namespace SeatsioDotNet.Test
 {
     public class SeatsioClientTest
     {
-        protected static readonly string BaseUrl = "https://api-staging.seats.io";
+        private static readonly string BaseUrl = "https://api-staging.seats.io";
 
         protected readonly TestUser User;
         protected readonly SeatsioClient Client;
@@ -14,7 +14,7 @@ namespace SeatsioDotNet.Test
         protected SeatsioClientTest()
         {
             User = CreateTestUser();
-            Client = new SeatsioClient(User.SecretKey, BaseUrl);
+            Client = CreateSeatsioClient(User.SecretKey);
         }
 
         private TestUser CreateTestUser()
@@ -25,8 +25,8 @@ namespace SeatsioDotNet.Test
             var request = new RestRequest("/system/public/users", Method.POST)
                 .AddJsonBody(new {email, password});
             return RestUtil.AssertOk(restClient.Execute<TestUser>(request));
-        }  
-        
+        }
+
         protected string CreateTestChart()
         {
             var restClient = new RestClient(BaseUrl);
@@ -38,6 +38,11 @@ namespace SeatsioDotNet.Test
                 .AddParameter("application/json", testChartJson, ParameterType.RequestBody);
             RestUtil.AssertOk(restClient.Execute<object>(request));
             return chartKey;
+        }
+
+        protected SeatsioClient CreateSeatsioClient(string secretKey)
+        {
+            return new SeatsioClient(secretKey, BaseUrl);
         }
 
         private string TestChartJson()

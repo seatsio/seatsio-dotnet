@@ -1,8 +1,7 @@
 ﻿using RestSharp;
-using SeatsioDotNet.Charts;
 using SeatsioDotNet.Util;
 
-namespace SeatsioDotNet.Test.Charts
+namespace SeatsioDotNet.Charts
 {
     public class ChartLister : Lister<Chart, ChartListParams>
     {

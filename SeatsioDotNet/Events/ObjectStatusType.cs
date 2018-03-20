@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SeatsioDotNet.Test.Events
+namespace SeatsioDotNet.Events
 {
     public class ObjectStatus
     {

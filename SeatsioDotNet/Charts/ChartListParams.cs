@@ -1,6 +1,6 @@
 ﻿using SeatsioDotNet.Util;
 
-namespace SeatsioDotNet.Test.Charts
+namespace SeatsioDotNet.Charts
 {
     public class ChartListParams : ListParams
     {

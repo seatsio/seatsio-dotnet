@@ -1,4 +1,5 @@
-﻿using SeatsioDotNet.HoldTokens;
+﻿using SeatsioDotNet.Events;
+using SeatsioDotNet.HoldTokens;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events
@@ -36,7 +37,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(ObjectStatus.Booked, status2.Status);
             Assert.Null(status2.HoldToken);
         }
-        
+
         [Fact]
         public void OrderId()
         {

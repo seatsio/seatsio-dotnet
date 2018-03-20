@@ -16,39 +16,36 @@ namespace SeatsioDotNet.Events
             _restClient = restClient;
         }
 
-        public Lister<Event> List()
-        {
-            return new Lister<Event>(new PageFetcher<Event>(_restClient, "/events"));
-        }
-
-        public Lister<StatusChange> StatusChanges(string eventKey)
-        {
-            return new Lister<StatusChange>(new PageFetcher<StatusChange>(
-                _restClient,
-                "/events/{key}/status-changes",
-                request => (RestRequest) request.AddUrlSegment("key", eventKey)
-            ));
-        }
-
-        public Lister<StatusChange> StatusChanges(string eventKey, string objectLabel)
-        {
-            return new Lister<StatusChange>(new PageFetcher<StatusChange>(
-                _restClient,
-                "/events/{key}/objects/{objectId}/status-changes",
-                request => (RestRequest) request.AddUrlSegment("key", eventKey).AddUrlSegment("objectId", objectLabel)
-            ));
-        }
-
-        public EventReports Reports()
-        {
-            return new EventReports(_restClient);
-        }
-
         public Event Create(string chartKey)
         {
             var restRequest = new RestRequest("/events", Method.POST)
                 .AddJsonBody(new {chartKey});
             return AssertOk(_restClient.Execute<Event>(restRequest));
+        }
+
+        public void Update(string eventKey, string chartKey, string newEventKey, bool? bookWholeTables)
+        {
+            Dictionary<string, object> requestBody = new Dictionary<string, object>();
+
+            if (chartKey != null)
+            {
+                requestBody.Add("chartKey", chartKey);
+            }
+
+            if (newEventKey != null)
+            {
+                requestBody.Add("eventKey", newEventKey);
+            }
+
+            if (bookWholeTables != null)
+            {
+                requestBody.Add("bookWholeTables", bookWholeTables);
+            }
+
+            var restRequest = new RestRequest("/events/{key}", Method.POST)
+                .AddUrlSegment("key", eventKey)
+                .AddJsonBody(requestBody);
+            AssertOk(_restClient.Execute<object>(restRequest));
         }
 
         public Event Retrieve(string eventKey)
@@ -178,6 +175,15 @@ namespace SeatsioDotNet.Events
             return AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
         }
 
+        public void UpdateExtraData(string eventKey, string objectLabel, Dictionary<string, object> extraData)
+        {
+            var restRequest = new RestRequest("/events/{key}/objects/{object}/actions/update-extra-data", Method.POST)
+                .AddUrlSegment("key", eventKey)
+                .AddUrlSegment("object", objectLabel)
+                .AddJsonBody(new {extraData});
+            AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
+        }
+
         public void MarkAsForSale(string eventKey, IEnumerable<string> objects, IEnumerable<string> categories)
         {
             var requestBody = ForSaleRequest(objects, categories);
@@ -185,8 +191,8 @@ namespace SeatsioDotNet.Events
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
-        }  
-        
+        }
+
         public void MarkAsNotForSale(string eventKey, IEnumerable<string> objects, IEnumerable<string> categories)
         {
             var requestBody = ForSaleRequest(objects, categories);
@@ -218,6 +224,34 @@ namespace SeatsioDotNet.Events
             }
 
             return request;
+        }
+
+        public Lister<Event> List()
+        {
+            return new Lister<Event>(new PageFetcher<Event>(_restClient, "/events"));
+        }
+
+        public Lister<StatusChange> StatusChanges(string eventKey)
+        {
+            return new Lister<StatusChange>(new PageFetcher<StatusChange>(
+                _restClient,
+                "/events/{key}/status-changes",
+                request => (RestRequest) request.AddUrlSegment("key", eventKey)
+            ));
+        }
+
+        public Lister<StatusChange> StatusChanges(string eventKey, string objectLabel)
+        {
+            return new Lister<StatusChange>(new PageFetcher<StatusChange>(
+                _restClient,
+                "/events/{key}/objects/{objectId}/status-changes",
+                request => (RestRequest) request.AddUrlSegment("key", eventKey).AddUrlSegment("objectId", objectLabel)
+            ));
+        }
+
+        public EventReports Reports()
+        {
+            return new EventReports(_restClient);
         }
     }
 }

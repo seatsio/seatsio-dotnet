@@ -5,7 +5,7 @@ namespace SeatsioDotNet.Events
 {
     public class BestAvailableResult
     {
-        public Boolean NextToEachOther { get; set; }
+        public bool NextToEachOther { get; set; }
         public IEnumerable<string> Objects { get; set; }
     }
 }

@@ -9,6 +9,6 @@ namespace SeatsioDotNet.Subaccounts
         public string DesignerKey { get; set; }
         public string PublicKey { get; set; }
         public string Name { get; set; }
-        public Boolean Active { get; set; }
+        public bool Active { get; set; }
     }
 }

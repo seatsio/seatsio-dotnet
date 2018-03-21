@@ -54,7 +54,7 @@ namespace SeatsioDotNet.Test.EventReports
             var report = Client.EventReports().ByStatus(evnt.Key);
 
             Assert.Equal(2, report["lolzor"].Count());
-            Assert.Equal(1, report[ObjectStatus.Booked].Count());
+            Assert.Single(report[ObjectStatus.Booked]);
             Assert.Equal(31, report[ObjectStatus.Free].Count());
         }
 
@@ -124,8 +124,8 @@ namespace SeatsioDotNet.Test.EventReports
 
             var report = Client.EventReports().ByLabel(evnt.Key);
 
-            Assert.Equal(1, report["A-1"].Count());
-            Assert.Equal(1, report["A-2"].Count());
+            Assert.Single(report["A-1"]);
+            Assert.Single(report["A-2"]);
         }
 
         [Fact]
@@ -136,7 +136,7 @@ namespace SeatsioDotNet.Test.EventReports
 
             var report = Client.EventReports().ByLabel(evnt.Key, "A-1");
 
-            Assert.Equal(1, report.Count());
+            Assert.Single(report);
         }
 
         [Fact]
@@ -150,7 +150,7 @@ namespace SeatsioDotNet.Test.EventReports
             var report = Client.EventReports().ByOrderId(evnt.Key);
 
             Assert.Equal(2, report["order1"].Count());
-            Assert.Equal(1, report["order2"].Count());
+            Assert.Single(report["order2"]);
             Assert.Equal(31, report["NO_ORDER_ID"].Count());
         }
 

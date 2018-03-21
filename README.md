@@ -21,7 +21,7 @@ Using the dotnet command:
 ### Creating a chart and an event
 
 ```csharp
-var client = new SeatsioClient(<SECRET KEY>); // can be found on https://app.seats.io/settings
+var client = new SeatsioClient("<SECRET KEY>"); // can be found on https://app.seats.io/settings
 var chart = client.Charts.Create();
 var evnt = client.Events.Create(chart.Key);
 ```
@@ -29,49 +29,49 @@ var evnt = client.Events.Create(chart.Key);
 ### Booking objects
 
 ```csharp
-var client = new SeatsioClient(<SECRET KEY>);
+var client = new SeatsioClient("<SECRET KEY>");
 client.Events.Book(<EVENT KEY>, new [] { "A-1", "A-2"});
 ```
 
 ### Releasing objects
 
 ```csharp
-var client = new SeatsioClient(<SECRET KEY>);
+var client = new SeatsioClient("<SECRET KEY>");
 client.Events.Release(<EVENT KEY>, new [] { "A-1", "A-2"});
 ```
 
 ### Booking objects that have been held
 
 ```csharp
-var client = new SeatsioClient(<SECRET KEY>);
+var client = new SeatsioClient("<SECRET KEY>");
 client.Events.Book(<EVENT KEY>, new [] { "A-1", "A-2"}, <A HOLD TOKEN>);
 ```
 
 ### Changing object status
 
 ```csharp
-var client = new SeatsioClient(<SECRET KEY>);
-client.Events.ChangeObjectStatus(<EVENT KEY>, new [] { "A-1", "A-2"}, "unavailable");
+var client = new SeatsioClient("<SECRET KEY>");
+client.Events.ChangeObjectStatus(""<EVENT KEY>"", new [] { "A-1", "A-2"}, "unavailable");
 ```
 
 ### Listing all charts
 
 ```csharp
-var client = new SeatsioClient(<SECRET KEY>);
+var client = new SeatsioClient("<SECRET KEY>");
 var charts = client.Charts.ListAll(); // returns an IEnumerable<Chart>
 ```
 
 ### Retrieving the published version of a chart (i.e. the actual drawing containing objects and categories
 
 ```csharp
-var client = new SeatsioClient(<SECRET KEY>);
-var drawing = client.Charts.RetrievePublishedVersion(<CHART KEY>); // returns a dynamic objects that represents the raw JSON of the drawing
+var client = new SeatsioClient("<SECRET KEY>");
+var drawing = client.Charts.RetrievePublishedVersion(""<CHART KEY>""); // returns a dynamic objects that represents the raw JSON of the drawing
 ```
 
 ### Listing the first page of charts (default page size is 20)
 
 ```csharp
-var client = new SeatsioClient(<SECRET KEY>);
+var client = new SeatsioClient("<SECRET KEY>");
 var charts = client.Charts.ListFirstPage(); // returns a Page<Chart>
 ```
 

@@ -61,7 +61,7 @@ var client = new SeatsioClient("<SECRET KEY>");
 var charts = client.Charts.ListAll(); // returns an IEnumerable<Chart>
 ```
 
-### Retrieving the published version of a chart (i.e. the actual drawing containing objects and categories
+### Retrieving the published version of a chart (i.e. the actual drawing containing objects and categories)
 
 ```csharp
 var client = new SeatsioClient("<SECRET KEY>");

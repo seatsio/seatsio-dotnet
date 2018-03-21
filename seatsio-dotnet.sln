@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "seatsio-dotnet", "seatsio-dotnet.csproj", "{42CB17AA-1703-4F2B-B194-895EF0EB5DD3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeatsioDotNet", "SeatsioDotNet/SeatsioDotNet.csproj", "{42CB17AA-1703-4F2B-B194-895EF0EB5DD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeatsioDotNet.Test", "SeatsioDotNet.Test/SeatsioDotNet.Test.csproj", "{4F99CB9F-5F3A-4A92-89BA-7C4AF5C93E91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +14,9 @@ Global
 		{42CB17AA-1703-4F2B-B194-895EF0EB5DD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42CB17AA-1703-4F2B-B194-895EF0EB5DD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42CB17AA-1703-4F2B-B194-895EF0EB5DD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F99CB9F-5F3A-4A92-89BA-7C4AF5C93E91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F99CB9F-5F3A-4A92-89BA-7C4AF5C93E91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F99CB9F-5F3A-4A92-89BA-7C4AF5C93E91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F99CB9F-5F3A-4A92-89BA-7C4AF5C93E91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

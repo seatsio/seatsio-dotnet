@@ -7,4 +7,4 @@ install:
 
 script:
  - dotnet build
- - dotnet test -f netcoreapp2.0
+ - dotnet test SeatsioDotNet.Test

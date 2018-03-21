@@ -9,9 +9,9 @@ namespace SeatsioDotNet.Test.Events
         public void Test()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
+            var evnt = Client.Events.Create(chartKey);
 
-            var retrievedEvent = Client.Events().Retrieve(evnt.Key);
+            var retrievedEvent = Client.Events.Retrieve(evnt.Key);
             
             Assert.NotNull(retrievedEvent.Key);
             Assert.NotEqual(0, retrievedEvent.Id);

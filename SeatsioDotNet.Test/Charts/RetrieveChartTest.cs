@@ -9,11 +9,11 @@ namespace SeatsioDotNet.Test.Charts
         [Fact]
         public void Test()
         {
-            var chart = Client.Charts().Create();
-            Client.Charts().AddTag(chart.Key, "tag1");
-            Client.Charts().AddTag(chart.Key, "tag2");
+            var chart = Client.Charts.Create();
+            Client.Charts.AddTag(chart.Key, "tag1");
+            Client.Charts.AddTag(chart.Key, "tag2");
 
-            Chart retrievedChart = Client.Charts().Retrieve(chart.Key);
+            Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
             
             Assert.NotEqual(0, retrievedChart.Id);
             Assert.NotNull(retrievedChart.Key);
@@ -29,11 +29,11 @@ namespace SeatsioDotNet.Test.Charts
         [Fact]
         public void WithEvents()
         {
-            var chart = Client.Charts().Create();
-            var event1 = Client.Events().Create(chart.Key);
-            var event2 = Client.Events().Create(chart.Key);
+            var chart = Client.Charts.Create();
+            var event1 = Client.Events.Create(chart.Key);
+            var event2 = Client.Events.Create(chart.Key);
 
-            Chart retrievedChart = Client.Charts().RetrieveWithEvents(chart.Key);
+            Chart retrievedChart = Client.Charts.RetrieveWithEvents(chart.Key);
 
             Assert.Equal(new[] {event2.Id, event1.Id}, retrievedChart.Events.Select(e => e.Id));
         }

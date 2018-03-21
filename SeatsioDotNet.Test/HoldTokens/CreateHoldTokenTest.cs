@@ -8,7 +8,7 @@ namespace SeatsioDotNet.Test.Events
         [Fact]
         public void Test()
         {
-            var holdToken = Client.HoldTokens().Create();
+            var holdToken = Client.HoldTokens.Create();
             
             Assert.NotNull(holdToken.Token);
             CustomAssert.CloseTo(DateTime.Now.AddMinutes(15), holdToken.ExpiresAt);

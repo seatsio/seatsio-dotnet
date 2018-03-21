@@ -10,10 +10,10 @@ namespace SeatsioDotNet.Test.EventReports
         public void ReportItemProperties()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
-            Client.Events().Book(evnt.Key, new[] {new ObjectProperties("A-1", "ticketType1")}, null, "order1");
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1", "ticketType1")}, null, "order1");
 
-            var report = Client.EventReports().ByLabel(evnt.Key);
+            var report = Client.EventReports.ByLabel(evnt.Key);
 
             var reportItem = report["A-1"].First();
             Assert.Equal("A-1", reportItem.Label);
@@ -33,10 +33,10 @@ namespace SeatsioDotNet.Test.EventReports
         public void ReportItemPropertiesForGA()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
-            Client.Events().Book(evnt.Key, new[] {new ObjectProperties("GA1", 5)});
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {new ObjectProperties("GA1", 5)});
 
-            var report = Client.EventReports().ByLabel(evnt.Key);
+            var report = Client.EventReports.ByLabel(evnt.Key);
 
             var reportItem = report["GA1"].First();
             Assert.Equal(5, reportItem.NumBooked);
@@ -47,11 +47,11 @@ namespace SeatsioDotNet.Test.EventReports
         public void ByStatus()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
-            Client.Events().ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "lolzor");
-            Client.Events().ChangeObjectStatus(evnt.Key, new[] {"A-3"}, ObjectStatus.Booked);
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "lolzor");
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-3"}, ObjectStatus.Booked);
 
-            var report = Client.EventReports().ByStatus(evnt.Key);
+            var report = Client.EventReports.ByStatus(evnt.Key);
 
             Assert.Equal(2, report["lolzor"].Count());
             Assert.Single(report[ObjectStatus.Booked]);
@@ -62,10 +62,10 @@ namespace SeatsioDotNet.Test.EventReports
         public void BySpecificStatus()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
-            Client.Events().ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "lolzor");
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "lolzor");
 
-            var report = Client.EventReports().ByStatus(evnt.Key, "lolzor");
+            var report = Client.EventReports.ByStatus(evnt.Key, "lolzor");
 
             Assert.Equal(2, report.Count());
         }
@@ -74,9 +74,9 @@ namespace SeatsioDotNet.Test.EventReports
         public void ByCategoryLabel()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
+            var evnt = Client.Events.Create(chartKey);
 
-            var report = Client.EventReports().ByCategoryLabel(evnt.Key);
+            var report = Client.EventReports.ByCategoryLabel(evnt.Key);
 
             Assert.Equal(17, report["Cat1"].Count());
             Assert.Equal(17, report["Cat2"].Count());
@@ -86,9 +86,9 @@ namespace SeatsioDotNet.Test.EventReports
         public void BySpecificCategoryLabel()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
+            var evnt = Client.Events.Create(chartKey);
 
-            var report = Client.EventReports().ByCategoryLabel(evnt.Key, "Cat1");
+            var report = Client.EventReports.ByCategoryLabel(evnt.Key, "Cat1");
 
             Assert.Equal(17, report.Count());
         }
@@ -97,9 +97,9 @@ namespace SeatsioDotNet.Test.EventReports
         public void ByCategoryKey()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
+            var evnt = Client.Events.Create(chartKey);
 
-            var report = Client.EventReports().ByCategoryKey(evnt.Key);
+            var report = Client.EventReports.ByCategoryKey(evnt.Key);
 
             Assert.Equal(17, report["9"].Count());
             Assert.Equal(17, report["10"].Count());
@@ -109,9 +109,9 @@ namespace SeatsioDotNet.Test.EventReports
         public void BySpecificCategoryKey()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
+            var evnt = Client.Events.Create(chartKey);
 
-            var report = Client.EventReports().ByCategoryKey(evnt.Key, "9");
+            var report = Client.EventReports.ByCategoryKey(evnt.Key, "9");
 
             Assert.Equal(17, report.Count());
         }
@@ -120,9 +120,9 @@ namespace SeatsioDotNet.Test.EventReports
         public void ByLabel()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
+            var evnt = Client.Events.Create(chartKey);
 
-            var report = Client.EventReports().ByLabel(evnt.Key);
+            var report = Client.EventReports.ByLabel(evnt.Key);
 
             Assert.Single(report["A-1"]);
             Assert.Single(report["A-2"]);
@@ -132,9 +132,9 @@ namespace SeatsioDotNet.Test.EventReports
         public void BySpecificLabel()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
+            var evnt = Client.Events.Create(chartKey);
 
-            var report = Client.EventReports().ByLabel(evnt.Key, "A-1");
+            var report = Client.EventReports.ByLabel(evnt.Key, "A-1");
 
             Assert.Single(report);
         }
@@ -143,11 +143,11 @@ namespace SeatsioDotNet.Test.EventReports
         public void ByOrderId()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
-            Client.Events().Book(evnt.Key, new[] {"A-1", "A-2"}, null, "order1");
-            Client.Events().Book(evnt.Key, new[] {"A-3"}, null, "order2");
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"}, null, "order1");
+            Client.Events.Book(evnt.Key, new[] {"A-3"}, null, "order2");
 
-            var report = Client.EventReports().ByOrderId(evnt.Key);
+            var report = Client.EventReports.ByOrderId(evnt.Key);
 
             Assert.Equal(2, report["order1"].Count());
             Assert.Single(report["order2"]);
@@ -158,10 +158,10 @@ namespace SeatsioDotNet.Test.EventReports
         public void BySpecificOrderId()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
-            Client.Events().Book(evnt.Key, new[] {"A-1", "A-2"}, null, "order1");
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"}, null, "order1");
 
-            var report = Client.EventReports().ByOrderId(evnt.Key, "order1");
+            var report = Client.EventReports.ByOrderId(evnt.Key, "order1");
 
             Assert.Equal(2, report.Count());
         }
@@ -170,9 +170,9 @@ namespace SeatsioDotNet.Test.EventReports
         public void BySection()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
+            var evnt = Client.Events.Create(chartKey);
 
-            var report = Client.EventReports().BySection(evnt.Key);
+            var report = Client.EventReports.BySection(evnt.Key);
 
             Assert.Equal(34, report["NO_SECTION"].Count());
         }
@@ -181,9 +181,9 @@ namespace SeatsioDotNet.Test.EventReports
         public void BySpecificSection()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
+            var evnt = Client.Events.Create(chartKey);
 
-            var report = Client.EventReports().BySection(evnt.Key, "NO_SECTION");
+            var report = Client.EventReports.BySection(evnt.Key, "NO_SECTION");
 
             Assert.Equal(34, report.Count());
         }

@@ -12,12 +12,12 @@ namespace SeatsioDotNet.Test.Events
         public void Test()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
-            Client.Events().ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "s1");
-            Client.Events().ChangeObjectStatus(evnt.Key, new[] {"A-2"}, "s2");
-            Client.Events().ChangeObjectStatus(evnt.Key, new[] {"A-3"}, "s3");
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "s1");
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-2"}, "s2");
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-3"}, "s3");
 
-            var statusChanges = Client.Events().StatusChanges(evnt.Key).All();
+            var statusChanges = Client.Events.StatusChanges(evnt.Key).All();
 
             Assert.Equal(new[] {"s3", "s2", "s1"}, statusChanges.Select(s => s.Status));
         }
@@ -26,11 +26,11 @@ namespace SeatsioDotNet.Test.Events
         public void PropertiesOfStatusChange()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
+            var evnt = Client.Events.Create(chartKey);
             var extraData = new Dictionary<string, object> {{"foo", "bar"}};
-            Client.Events().ChangeObjectStatus(evnt.Key, new[] {new ObjectProperties("A-1", extraData)}, "s1", null, "order1");
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {new ObjectProperties("A-1", extraData)}, "s1", null, "order1");
 
-            var statusChanges = Client.Events().StatusChanges(evnt.Key).All();
+            var statusChanges = Client.Events.StatusChanges(evnt.Key).All();
             var statusChange = statusChanges.First();
 
             Assert.NotEqual(0, statusChange.Id);

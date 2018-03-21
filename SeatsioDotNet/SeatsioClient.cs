@@ -5,50 +5,30 @@ namespace SeatsioDotNet
 {
     public class SeatsioClient
     {
-        private readonly string _secretKey;
-        private readonly string _baseUrl;
+        public Charts.Charts Charts { get; }
+        public Events.Events Events { get; }
+        public Subaccounts.Subaccounts Subaccounts { get; }
+        public HoldTokens.HoldTokens HoldTokens { get; }
+        public EventReports.EventReports EventReports { get; }
 
         public SeatsioClient(string secretKey, string baseUrl)
         {
-            _secretKey = secretKey;
-            _baseUrl = baseUrl;
+            var restClient = CreateRestClient(secretKey, baseUrl);
+            Charts = new Charts.Charts(restClient);
+            Events = new Events.Events(restClient);
+            Subaccounts = new Subaccounts.Subaccounts(restClient);
+            HoldTokens = new HoldTokens.HoldTokens(restClient);
+            EventReports = new EventReports.EventReports(restClient);
         }
 
         public SeatsioClient(string secretKey)
         {
-            _secretKey = secretKey;
-            _baseUrl = "https://api.seats.io";
         }
 
-        public Subaccounts.Subaccounts Subaccounts()
+        private static RestClient CreateRestClient(string secretKey, string baseUrl)
         {
-            return new Subaccounts.Subaccounts(CreateRestClient());
-        }
-
-        public Events.Events Events()
-        {
-            return new Events.Events(CreateRestClient());
-        }
-
-        public EventReports.EventReports EventReports()
-        {
-            return new EventReports.EventReports(CreateRestClient());
-        }
-
-        public Charts.Charts Charts()
-        {
-            return new Charts.Charts(CreateRestClient());
-        }
-
-        public HoldTokens.HoldTokens HoldTokens()
-        {
-            return new HoldTokens.HoldTokens(CreateRestClient());
-        }
-
-        private RestClient CreateRestClient()
-        {
-            var client = new RestClient(_baseUrl);
-            client.Authenticator = new HttpBasicAuthenticator(_secretKey, null);
+            var client = new RestClient(baseUrl);
+            client.Authenticator = new HttpBasicAuthenticator(secretKey, null);
             return client;
         }
     }

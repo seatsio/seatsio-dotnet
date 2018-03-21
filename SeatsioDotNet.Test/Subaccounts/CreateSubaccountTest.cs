@@ -7,7 +7,7 @@ namespace SeatsioDotNet.Test.Subaccounts
         [Fact]
         public void Test()
         {
-            var subaccount = Client.Subaccounts().Create("joske");
+            var subaccount = Client.Subaccounts.Create("joske");
 
             Assert.NotEqual(0, subaccount.Id);
             Assert.NotNull(subaccount.SecretKey);
@@ -20,7 +20,7 @@ namespace SeatsioDotNet.Test.Subaccounts
         [Fact]
         public void NameIsOptional()
         {
-            var subaccount = Client.Subaccounts().Create();
+            var subaccount = Client.Subaccounts.Create();
 
             Assert.Null(subaccount.Name);
         }

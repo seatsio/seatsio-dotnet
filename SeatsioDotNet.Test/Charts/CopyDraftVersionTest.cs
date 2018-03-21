@@ -7,11 +7,11 @@ namespace SeatsioDotNet.Test.Charts
         [Fact]
         public void Test()
         {
-            var chart = Client.Charts().Create();
-            Client.Events().Create(chart.Key);
-            Client.Charts().Update(chart.Key, "newname");
+            var chart = Client.Charts.Create();
+            Client.Events.Create(chart.Key);
+            Client.Charts.Update(chart.Key, "newname");
             
-            var copiedChart = Client.Charts().CopyDraftVersion(chart.Key);
+            var copiedChart = Client.Charts.CopyDraftVersion(chart.Key);
             
             Assert.Equal("newname (copy)", copiedChart.Name);
         }

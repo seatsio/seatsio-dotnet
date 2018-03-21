@@ -9,12 +9,12 @@ namespace SeatsioDotNet.Test.Events
         public void Test()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
+            var evnt = Client.Events.Create(chartKey);
             var extraData = new Dictionary<string, object> {{"foo", "bar"}};
 
-            Client.Events().UpdateExtraData(evnt.Key, "A-1", extraData);
+            Client.Events.UpdateExtraData(evnt.Key, "A-1", extraData);
 
-            Assert.Equal(extraData, Client.Events().RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
+            Assert.Equal(extraData, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
         }
     }
 }

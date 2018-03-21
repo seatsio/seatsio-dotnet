@@ -9,11 +9,14 @@ namespace SeatsioDotNet.Charts
 {
     public class Charts
     {
+        public Lister<Chart, ListParams> Archive { get; }
+
         private readonly RestClient _restClient;
 
         public Charts(RestClient restClient)
         {
             _restClient = restClient;
+            Archive = new Lister<Chart, ListParams>(new PageFetcher<Chart>(_restClient, "/charts/archive"));
         }
 
         public Chart Create(string name = null, string venueType = null, IEnumerable<Category> categories = null)
@@ -208,11 +211,6 @@ namespace SeatsioDotNet.Charts
         private Lister<Chart, ChartListParams> List()
         {
             return new Lister<Chart, ChartListParams>(new PageFetcher<Chart>(_restClient, "/charts"));
-        }
-
-        public Lister<Chart, ListParams> Archive()
-        {
-            return new Lister<Chart, ListParams>(new PageFetcher<Chart>(_restClient, "/charts/archive"));
         }
     }
 }

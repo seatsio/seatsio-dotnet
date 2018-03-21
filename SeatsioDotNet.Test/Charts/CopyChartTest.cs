@@ -7,12 +7,12 @@ namespace SeatsioDotNet.Test.Charts
         [Fact]
         public void Test()
         {
-            var chart = Client.Charts().Create("my chart", "BOOTHS");
+            var chart = Client.Charts.Create("my chart", "BOOTHS");
 
-            var copiedChart = Client.Charts().Copy(chart.Key);
-            
+            var copiedChart = Client.Charts.Copy(chart.Key);
+
             Assert.Equal("my chart (copy)", copiedChart.Name);
-            var drawing = Client.Charts().RetrievePublishedVersion(copiedChart.Key);
+            var drawing = Client.Charts.RetrievePublishedVersion(copiedChart.Key);
             Assert.Equal("BOOTHS", drawing["venueType"]);
         }
     }

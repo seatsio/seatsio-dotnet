@@ -8,10 +8,10 @@ namespace SeatsioDotNet.Test.Events
         public void ObjectsCandCategories()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
-            Client.Events().MarkAsNotForSale(evnt.Key, new[] {"o1", "o2"}, new[] {"cat1", "cat2"});
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.MarkAsNotForSale(evnt.Key, new[] {"o1", "o2"}, new[] {"cat1", "cat2"});
 
-            var forSaleConfig = Client.Events().Retrieve(evnt.Key).ForSaleConfig;
+            var forSaleConfig = Client.Events.Retrieve(evnt.Key).ForSaleConfig;
             Assert.False(forSaleConfig.ForSale);
             Assert.Equal(new[] {"o1", "o2"}, forSaleConfig.Objects);
             Assert.Equal(new[] {"cat1", "cat2"}, forSaleConfig.Categories);
@@ -21,10 +21,10 @@ namespace SeatsioDotNet.Test.Events
         public void Objects()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
-            Client.Events().MarkAsNotForSale(evnt.Key, new[] {"o1", "o2"}, null);
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.MarkAsNotForSale(evnt.Key, new[] {"o1", "o2"}, null);
 
-            var forSaleConfig = Client.Events().Retrieve(evnt.Key).ForSaleConfig;
+            var forSaleConfig = Client.Events.Retrieve(evnt.Key).ForSaleConfig;
             Assert.False(forSaleConfig.ForSale);
             Assert.Equal(new[] {"o1", "o2"}, forSaleConfig.Objects);
             Assert.Empty(forSaleConfig.Categories);
@@ -34,10 +34,10 @@ namespace SeatsioDotNet.Test.Events
         public void Categories()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
-            Client.Events().MarkAsNotForSale(evnt.Key, null, new[] {"cat1", "cat2"});
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.MarkAsNotForSale(evnt.Key, null, new[] {"cat1", "cat2"});
 
-            var forSaleConfig = Client.Events().Retrieve(evnt.Key).ForSaleConfig;
+            var forSaleConfig = Client.Events.Retrieve(evnt.Key).ForSaleConfig;
             Assert.False(forSaleConfig.ForSale);
             Assert.Empty(forSaleConfig.Objects);
             Assert.Equal(new[] {"cat1", "cat2"}, forSaleConfig.Categories);

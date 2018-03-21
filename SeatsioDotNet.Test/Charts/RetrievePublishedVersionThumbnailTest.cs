@@ -8,9 +8,9 @@ namespace SeatsioDotNet.Test.Charts
         [Fact]
         public void Test()
         {
-            var chart = Client.Charts().Create();
+            var chart = Client.Charts.Create();
 
-            byte[] draftVersion = Client.Charts().RetrievePublishedVersionThumbnail(chart.Key);
+            byte[] draftVersion = Client.Charts.RetrievePublishedVersionThumbnail(chart.Key);
             Assert.Contains("<!DOCTYPE svg", UTF8.GetString(draftVersion));
         }
     }

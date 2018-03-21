@@ -8,12 +8,12 @@ namespace SeatsioDotNet.Test.Charts
         [Fact]
         public void Test()
         {
-            var chart = Client.Charts().Create();
-            Client.Charts().MoveToArchive(chart.Key);
+            var chart = Client.Charts.Create();
+            Client.Charts.MoveToArchive(chart.Key);
             
-            Client.Charts().MoveOutOfArchive(chart.Key);
+            Client.Charts.MoveOutOfArchive(chart.Key);
 
-            Chart retrievedChart = Client.Charts().Retrieve(chart.Key);
+            Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
             Assert.False(retrievedChart.Archived);
         }
     }

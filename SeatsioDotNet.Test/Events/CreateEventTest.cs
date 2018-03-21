@@ -10,7 +10,7 @@ namespace SeatsioDotNet.Test.Events
         {
             var chartKey = CreateTestChart();
 
-            var evnt = Client.Events().Create(chartKey);
+            var evnt = Client.Events.Create(chartKey);
 
             Assert.NotNull(evnt.Key);
             Assert.NotEqual(0, evnt.Id);

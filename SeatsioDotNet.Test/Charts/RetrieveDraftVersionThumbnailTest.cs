@@ -8,11 +8,11 @@ namespace SeatsioDotNet.Test.Charts
         [Fact]
         public void Test()
         {
-            var chart = Client.Charts().Create();
-            Client.Events().Create(chart.Key);
-            Client.Charts().Update(chart.Key, "aChart");
+            var chart = Client.Charts.Create();
+            Client.Events.Create(chart.Key);
+            Client.Charts.Update(chart.Key, "aChart");
 
-            byte[] draftVersion = Client.Charts().RetrieveDraftVersionThumbnail(chart.Key);
+            byte[] draftVersion = Client.Charts.RetrieveDraftVersionThumbnail(chart.Key);
             Assert.Contains("<!DOCTYPE svg", UTF8.GetString(draftVersion));
         }
     }

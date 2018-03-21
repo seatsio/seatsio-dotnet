@@ -7,13 +7,13 @@ namespace SeatsioDotNet.Test.Charts
         [Fact]
         public void Test()
         {
-            var chart = Client.Charts().Create("oldname");
-            Client.Events().Create(chart.Key);
-            Client.Charts().Update(chart.Key, "newname");
+            var chart = Client.Charts.Create("oldname");
+            Client.Events.Create(chart.Key);
+            Client.Charts.Update(chart.Key, "newname");
 
-            Client.Charts().PublishDraftVersion(chart.Key);
+            Client.Charts.PublishDraftVersion(chart.Key);
 
-            var retrievedChart = Client.Charts().Retrieve(chart.Key);
+            var retrievedChart = Client.Charts.Retrieve(chart.Key);
             Assert.Equal("newname", retrievedChart.Name);
             Assert.Equal("PUBLISHED", retrievedChart.Status);
         }

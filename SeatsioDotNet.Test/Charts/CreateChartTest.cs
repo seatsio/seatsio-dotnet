@@ -9,9 +9,9 @@ namespace SeatsioDotNet.Test.Charts
         [Fact]
         public void Test()
         {
-            var chart = Client.Charts().Create();
+            var chart = Client.Charts.Create();
 
-            Chart retrievedChart = Client.Charts().Retrieve(chart.Key);
+            Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
 
             Assert.NotEqual(0, retrievedChart.Id);
             Assert.NotNull(retrievedChart.Key);
@@ -23,7 +23,7 @@ namespace SeatsioDotNet.Test.Charts
             Assert.Empty(retrievedChart.Tags);
             Assert.False(retrievedChart.Archived);
 
-            var drawing = Client.Charts().RetrievePublishedVersion(chart.Key);
+            var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
             Assert.Equal("MIXED", drawing["venueType"]);
             Assert.Empty(categories(drawing));
         }
@@ -31,12 +31,12 @@ namespace SeatsioDotNet.Test.Charts
         [Fact]
         public void Name()
         {
-            var chart = Client.Charts().Create("aChart");
+            var chart = Client.Charts.Create("aChart");
 
-            Chart retrievedChart = Client.Charts().Retrieve(chart.Key);
+            Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
 
             Assert.Equal("aChart", retrievedChart.Name);
-            var drawing = Client.Charts().RetrievePublishedVersion(chart.Key);
+            var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
             Assert.Equal("aChart", drawing["name"]);
             Assert.Empty(categories(drawing));
         }
@@ -44,12 +44,12 @@ namespace SeatsioDotNet.Test.Charts
         [Fact]
         public void VenueType()
         {
-            var chart = Client.Charts().Create(null, "BOOTHS");
+            var chart = Client.Charts.Create(null, "BOOTHS");
 
-            Chart retrievedChart = Client.Charts().Retrieve(chart.Key);
+            Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
 
             Assert.Equal("Untitled chart", retrievedChart.Name);
-            var drawing = Client.Charts().RetrievePublishedVersion(chart.Key);
+            var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
             Assert.Equal("BOOTHS", drawing["venueType"]);
             Assert.Empty(categories(drawing));
         }
@@ -57,16 +57,16 @@ namespace SeatsioDotNet.Test.Charts
         [Fact]
         public void Categories()
         {
-            var chart = Client.Charts().Create(null, null, new[]
+            var chart = Client.Charts.Create(null, null, new[]
             {
                 new Category(1, "Category 1", "#aaaaaa"),
                 new Category(2, "Category 2", "#bbbbbb")
             });
 
-            Chart retrievedChart = Client.Charts().Retrieve(chart.Key);
+            Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
 
             Assert.Equal("Untitled chart", retrievedChart.Name);
-            var drawing = Client.Charts().RetrievePublishedVersion(chart.Key);
+            var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
             var actualCategories = categories(drawing);
             Assert.Equal(2, actualCategories.Count);
             Assert.Equal(1, actualCategories[0]["key"]);

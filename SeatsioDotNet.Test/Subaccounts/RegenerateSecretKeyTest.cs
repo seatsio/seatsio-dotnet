@@ -7,11 +7,11 @@ namespace SeatsioDotNet.Test.Subaccounts
         [Fact]
         public void Test()
         {
-            var subaccount = Client.Subaccounts().Create();
+            var subaccount = Client.Subaccounts.Create();
             
-            Client.Subaccounts().RegenerateSecretKey(subaccount.Id);
+            Client.Subaccounts.RegenerateSecretKey(subaccount.Id);
 
-            var retrievedSubaccount = Client.Subaccounts().Retrieve(subaccount.Id);
+            var retrievedSubaccount = Client.Subaccounts.Retrieve(subaccount.Id);
             Assert.NotNull(retrievedSubaccount.SecretKey);
             Assert.NotEqual(subaccount.SecretKey, retrievedSubaccount.SecretKey);
         }

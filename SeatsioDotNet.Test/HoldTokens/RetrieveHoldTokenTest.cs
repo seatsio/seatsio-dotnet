@@ -7,9 +7,9 @@ namespace SeatsioDotNet.Test.Events
         [Fact]
         public void Test()
         {
-            var holdToken = Client.HoldTokens().Create();
+            var holdToken = Client.HoldTokens.Create();
             
-            var retrievedHoldToken = Client.HoldTokens().Retrieve(holdToken.Token);
+            var retrievedHoldToken = Client.HoldTokens.Retrieve(holdToken.Token);
             
             Assert.Equal(holdToken.Token, retrievedHoldToken.Token);
             Assert.Equal(holdToken.ExpiresAt, retrievedHoldToken.ExpiresAt);

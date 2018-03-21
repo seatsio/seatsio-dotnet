@@ -9,9 +9,9 @@ namespace SeatsioDotNet.Test.Events
         public void Test()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events().Create(chartKey);
+            var evnt = Client.Events.Create(chartKey);
 
-            var objectStatus = Client.Events().RetrieveObjectStatus(evnt.Key, "A-1");
+            var objectStatus = Client.Events.RetrieveObjectStatus(evnt.Key, "A-1");
 
             Assert.Equal(ObjectStatus.Free, objectStatus.Status);
         }

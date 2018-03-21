@@ -7,13 +7,13 @@ namespace SeatsioDotNet.Test.Subaccounts
         [Fact]
         public void Test()
         {
-            var subaccount = Client.Subaccounts().Create();
-            var chart = CreateSeatsioClient(subaccount.SecretKey).Charts().Create("aChart");
+            var subaccount = Client.Subaccounts.Create();
+            var chart = CreateSeatsioClient(subaccount.SecretKey).Charts.Create("aChart");
 
-            var copiedChart = Client.Subaccounts().CopyChartToParent(subaccount.Id, chart.Key);
+            var copiedChart = Client.Subaccounts.CopyChartToParent(subaccount.Id, chart.Key);
 
             Assert.Equal("aChart", copiedChart.Name);
-            var retrievedChart = Client.Charts().Retrieve(copiedChart.Key);
+            var retrievedChart = Client.Charts.Retrieve(copiedChart.Key);
             Assert.Equal("aChart", retrievedChart.Name);
         }
     }

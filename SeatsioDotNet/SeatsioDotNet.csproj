@@ -2,10 +2,11 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
-    <Version>7</Version>
+    <Version>8</Version>
     <TargetFrameworks>netcoreapp2.0;netstandard2.0</TargetFrameworks>
     <Authors>mroloux</Authors>
     <Title>Official Seats.io .NET API client</Title>
+    <Description>Official Seats.io .NET API client</Description>
     <PackageProjectUrl>https://github.com/seatsio/seatsio-dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/seatsio/seatsio-dotnet</RepositoryUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/seatsio/seatsio-dotnet/master/LICENSE</PackageLicenseUrl>

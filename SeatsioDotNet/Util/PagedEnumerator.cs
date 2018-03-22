@@ -9,9 +9,9 @@ namespace SeatsioDotNet.Util
         private int _indexInCurrentPage;
         
         private readonly PageFetcher<T> _pageFetcher;
-        private readonly ListParams _listParams;
+        private readonly Dictionary<string, object> _listParams;
 
-        public PagedEnumerator(PageFetcher<T> pageFetcher, ListParams listParams)
+        public PagedEnumerator(PageFetcher<T> pageFetcher, Dictionary<string, object> listParams)
         {
             _pageFetcher = pageFetcher;
             _listParams = listParams;

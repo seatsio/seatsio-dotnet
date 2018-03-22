@@ -7,7 +7,7 @@ namespace SeatsioDotNet.Util
     {
         private readonly PagedEnumerator<T> _pagedEnumerator;
 
-        public PagedEnumerable(PageFetcher<T> pageFetcher, ListParams listParams)
+        public PagedEnumerable(PageFetcher<T> pageFetcher, Dictionary<string, object> listParams)
         {
             _pagedEnumerator = new PagedEnumerator<T>(pageFetcher, listParams);
         }

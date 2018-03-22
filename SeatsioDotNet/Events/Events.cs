@@ -245,23 +245,23 @@ namespace SeatsioDotNet.Events
             return List().PageBefore(id, pageSize: pageSize);
         }
 
-        private Lister<Event, ListParams> List()
+        private Lister<Event> List()
         {
-            return new Lister<Event, ListParams>(new PageFetcher<Event>(_restClient, "/events"));
+            return new Lister<Event>(new PageFetcher<Event>(_restClient, "/events"));
         }
 
-        public Lister<StatusChange, ListParams> StatusChanges(string eventKey)
+        public Lister<StatusChange> StatusChanges(string eventKey)
         {
-            return new Lister<StatusChange, ListParams>(new PageFetcher<StatusChange>(
+            return new Lister<StatusChange>(new PageFetcher<StatusChange>(
                 _restClient,
                 "/events/{key}/status-changes",
                 request => (RestRequest) request.AddUrlSegment("key", eventKey)
             ));
         }
 
-        public Lister<StatusChange, ListParams> StatusChanges(string eventKey, string objectLabel)
+        public Lister<StatusChange> StatusChanges(string eventKey, string objectLabel)
         {
-            return new Lister<StatusChange, ListParams>(new PageFetcher<StatusChange>(
+            return new Lister<StatusChange>(new PageFetcher<StatusChange>(
                 _restClient,
                 "/events/{key}/objects/{objectId}/status-changes",
                 request => (RestRequest) request.AddUrlSegment("key", eventKey).AddUrlSegment("objectId", objectLabel)

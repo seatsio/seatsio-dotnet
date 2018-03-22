@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using SeatsioDotNet.Charts;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Charts
@@ -17,7 +16,7 @@ namespace SeatsioDotNet.Test.Charts
 
             Assert.Equal(new[] {chart3.Key, chart2.Key, chart1.Key}, charts.Select(c => c.Key));
         }
-        
+
         [Fact]
         public void MultiplePages()
         {
@@ -35,7 +34,7 @@ namespace SeatsioDotNet.Test.Charts
             var chart2 = Client.Charts.Create("bar");
             var chart3 = Client.Charts.Create("foofoo");
 
-            var charts = Client.Charts.ListAll(new ChartListParams().SetFilter("foo"));
+            var charts = Client.Charts.ListAll(filter: "foo");
 
             Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
         }
@@ -51,7 +50,7 @@ namespace SeatsioDotNet.Test.Charts
             var chart3 = Client.Charts.Create();
             Client.Charts.AddTag(chart3.Key, "foo");
 
-            var charts = Client.Charts.ListAll(new ChartListParams().SetTag("foo"));
+            var charts = Client.Charts.ListAll(tag: "foo");
 
             Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
         }
@@ -63,7 +62,7 @@ namespace SeatsioDotNet.Test.Charts
             var event1 = Client.Events.Create(chart.Key);
             var event2 = Client.Events.Create(chart.Key);
 
-            var charts = Client.Charts.ListAll(new ChartListParams().SetExpandEvents());
+            var charts = Client.Charts.ListAll(expandEvents: true);
 
             Assert.Equal(new[] {event2.Id, event1.Id}, charts.First().Events.Select(c => c.Id));
         }

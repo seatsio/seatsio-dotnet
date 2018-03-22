@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using RestSharp;
 using static SeatsioDotNet.Util.RestUtil;
 
@@ -23,25 +24,25 @@ namespace SeatsioDotNet.Util
             _requestAdapter = requestAdapter;
         }
 
-        public Page<T> FetchFirstPage(ListParams listParams, int? pageSize)
+        public Page<T> FetchFirstPage(Dictionary<string, object> listParams = null, int? pageSize = null)
         {
             var restRequest = BuildRequest(listParams, pageSize);
             return AssertOk(_restClient.Execute<Page<T>>(restRequest));
         }
 
-        public Page<T> FetchAfter(long id, ListParams listParams, int? pageSize)
+        public Page<T> FetchAfter(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
         {
             var restRequest = BuildRequest(listParams, pageSize).AddQueryParameter("start_after_id", id.ToString());
             return AssertOk(_restClient.Execute<Page<T>>(restRequest));
         }
 
-        public Page<T> FetchBefore(long id, ListParams listParams, int? pageSize)
+        public Page<T> FetchBefore(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
         {
             var restRequest = BuildRequest(listParams, pageSize).AddQueryParameter("end_before_id", id.ToString());
             return AssertOk(_restClient.Execute<Page<T>>(restRequest));
         }
 
-        private RestRequest BuildRequest(ListParams listParams, int? pageSize)
+        private RestRequest BuildRequest(Dictionary<string, object> listParams, int? pageSize)
         {
             var restRequest = new RestRequest(_path, Method.GET);
             if (_requestAdapter != null)
@@ -51,9 +52,9 @@ namespace SeatsioDotNet.Util
 
             if (listParams != null)
             {
-                foreach (var param in listParams.AsDictionary())
+                foreach (var param in listParams)
                 {
-                    restRequest.AddQueryParameter(param.Key, param.Value);
+                    restRequest.AddQueryParameter(param.Key, param.Value.ToString());
                 }
             }
 

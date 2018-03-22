@@ -108,9 +108,9 @@ namespace SeatsioDotNet.Subaccounts
             return List().PageBefore(id, pageSize: pageSize);
         }
 
-        private Lister<Subaccount, ListParams> List()
+        private Lister<Subaccount> List()
         {
-            return new Lister<Subaccount, ListParams>(new PageFetcher<Subaccount>(_restClient, "/subaccounts"));
+            return new Lister<Subaccount>(new PageFetcher<Subaccount>(_restClient, "/subaccounts"));
         }
     }
 }

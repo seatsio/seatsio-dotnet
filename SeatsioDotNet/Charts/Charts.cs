@@ -9,14 +9,14 @@ namespace SeatsioDotNet.Charts
 {
     public class Charts
     {
-        public Lister<Chart, ListParams> Archive { get; }
+        public Lister<Chart> Archive { get; }
 
         private readonly RestClient _restClient;
 
         public Charts(RestClient restClient)
         {
             _restClient = restClient;
-            Archive = new Lister<Chart, ListParams>(new PageFetcher<Chart>(_restClient, "/charts/archive"));
+            Archive = new Lister<Chart>(new PageFetcher<Chart>(_restClient, "/charts/archive"));
         }
 
         public Chart Create(string name = null, string venueType = null, IEnumerable<Category> categories = null)
@@ -188,29 +188,51 @@ namespace SeatsioDotNet.Charts
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
-        public IEnumerable<Chart> ListAll(ChartListParams listParams = null)
+        public IEnumerable<Chart> ListAll(string filter = null, string tag = null, bool? expandEvents = null)
         {
-            return List().All(listParams);
+            return List().All(ChartListParams(filter, tag, expandEvents));
         }
 
-        public Page<Chart> ListFirstPage(ChartListParams listParams = null, int? pageSize = null)
+        public Page<Chart> ListFirstPage(string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null)
         {
-            return List().FirstPage(listParams, pageSize);
+            return List().FirstPage(ChartListParams(filter, tag, expandEvents), pageSize);
         }
 
-        public Page<Chart> ListPageAfter(long id, ChartListParams listParams = null, int? pageSize = null)
+        public Page<Chart> ListPageAfter(long id, string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null)
         {
-            return List().PageAfter(id, listParams, pageSize);
+            return List().PageAfter(id, ChartListParams(filter, tag, expandEvents), pageSize);
         }
 
-        public Page<Chart> ListPageBefore(long id, ChartListParams listParams = null, int? pageSize = null)
+        public Page<Chart> ListPageBefore(long id, string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null)
         {
-            return List().PageBefore(id, listParams, pageSize);
+            return List().PageBefore(id, ChartListParams(filter, tag, expandEvents), pageSize);
         }
 
-        private Lister<Chart, ChartListParams> List()
+        private Dictionary<string, object> ChartListParams(string filter, string tag, bool? expandEvents)
         {
-            return new Lister<Chart, ChartListParams>(new PageFetcher<Chart>(_restClient, "/charts"));
+            var chartListParams = new Dictionary<string, object>();
+
+            if (filter != null)
+            {
+                chartListParams.Add("filter", filter);
+            }
+
+            if (tag != null)
+            {
+                chartListParams.Add("tag", tag);
+            }
+
+            if (expandEvents != null && expandEvents.Value)
+            {
+                chartListParams.Add("expand", "events");
+            }
+
+            return chartListParams;
+        }
+
+        private ParametrizedLister<Chart> List()
+        {
+            return new ParametrizedLister<Chart>(new PageFetcher<Chart>(_restClient, "/charts"));
         }
     }
 }

@@ -8,11 +8,16 @@ namespace SeatsioDotNet.Subaccounts
 {
     public class Subaccounts
     {
+        public Lister<Subaccount> Active { get; }
+        public Lister<Subaccount> Inactive { get; }
+
         private readonly RestClient _restClient;
 
         public Subaccounts(RestClient restClient)
         {
             _restClient = restClient;
+            Active = new Lister<Subaccount>(new PageFetcher<Subaccount>(_restClient, "/subaccounts/active"));
+            Inactive = new Lister<Subaccount>(new PageFetcher<Subaccount>(_restClient, "/subaccounts/inactive"));
         }
 
         public Subaccount Create(string name)

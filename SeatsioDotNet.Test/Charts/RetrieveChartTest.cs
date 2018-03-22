@@ -14,7 +14,7 @@ namespace SeatsioDotNet.Test.Charts
             Client.Charts.AddTag(chart.Key, "tag2");
 
             Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
-            
+
             Assert.NotEqual(0, retrievedChart.Id);
             Assert.NotNull(retrievedChart.Key);
             Assert.Equal("NOT_USED", retrievedChart.Status);
@@ -33,7 +33,7 @@ namespace SeatsioDotNet.Test.Charts
             var event1 = Client.Events.Create(chart.Key);
             var event2 = Client.Events.Create(chart.Key);
 
-            Chart retrievedChart = Client.Charts.RetrieveWithEvents(chart.Key);
+            Chart retrievedChart = Client.Charts.Retrieve(chart.Key, expandEvents: true);
 
             Assert.Equal(new[] {event2.Id, event1.Id}, retrievedChart.Events.Select(e => e.Id));
         }

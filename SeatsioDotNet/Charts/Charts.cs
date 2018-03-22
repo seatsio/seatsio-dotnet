@@ -101,18 +101,16 @@ namespace SeatsioDotNet.Charts
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
-        public Chart Retrieve(string chartKey)
+        public Chart Retrieve(string chartKey, bool? expandEvents = null)
         {
             var restRequest = new RestRequest("/charts/{key}", Method.GET)
                 .AddUrlSegment("key", chartKey);
-            return AssertOk(_restClient.Execute<Chart>(restRequest));
-        }
+            
+            if (expandEvents != null && expandEvents.Value)
+            {
+                restRequest.AddQueryParameter("expand", "events");
+            }
 
-        public Chart RetrieveWithEvents(string chartKey)
-        {
-            var restRequest = new RestRequest("/charts/{key}", Method.GET)
-                .AddUrlSegment("key", chartKey)
-                .AddQueryParameter("expand", "events");
             return AssertOk(_restClient.Execute<Chart>(restRequest));
         }
 

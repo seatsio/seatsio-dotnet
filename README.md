@@ -61,12 +61,12 @@ var client = new SeatsioClient("<SECRET KEY>");
 var charts = client.Charts.ListAll(); // returns an IEnumerable<Chart>
 ```
 
-### Retrieving the published version of a chart (i.e. the actual drawing containing objects and categories)
+### Retrieving the published version of a chart (i.e. the actual drawing, containing the venue type, categories etc.)
 
 ```csharp
 var client = new SeatsioClient("<SECRET KEY>");
-var drawing = client.Charts.RetrievePublishedVersion(<CHART KEY>); // returns a dynamic object that represents the raw JSON of the drawing
-Console.WriteLine(drawing["venueType"]);
+var drawing = client.Charts.RetrievePublishedVersion(<CHART KEY>);
+Console.WriteLine(drawing.VenueType);
 ```
 
 ### Listing the first page of charts (default page size is 20)

@@ -17,7 +17,7 @@ namespace SeatsioDotNet.Test.Charts
             var retrievedChart = subaccountClient.Charts.Retrieve(copiedChart.Key);
             Assert.Equal("my chart", retrievedChart.Name);
             var drawing = subaccountClient.Charts.RetrievePublishedVersion(copiedChart.Key);
-            Assert.Equal("BOOTHS", drawing["venueType"]);
+            Assert.Equal("BOOTHS", drawing.VenueType);
         }
     }
 }

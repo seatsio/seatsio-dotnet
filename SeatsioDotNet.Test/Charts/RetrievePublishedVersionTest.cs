@@ -9,8 +9,8 @@ namespace SeatsioDotNet.Test.Charts
         {
             var chart = Client.Charts.Create("aChart");
 
-            var publishedVersion = Client.Charts.RetrievePublishedVersion(chart.Key);
-            Assert.Equal("aChart", publishedVersion["name"]);
+            var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
+            Assert.Equal("aChart", drawing.Name);
         }
 
     }

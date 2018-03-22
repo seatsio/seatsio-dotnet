@@ -105,7 +105,7 @@ namespace SeatsioDotNet.Charts
         {
             var restRequest = new RestRequest("/charts/{key}", Method.GET)
                 .AddUrlSegment("key", chartKey);
-            
+
             if (expandEvents != null && expandEvents.Value)
             {
                 restRequest.AddQueryParameter("expand", "events");
@@ -140,11 +140,11 @@ namespace SeatsioDotNet.Charts
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
-        public dynamic RetrievePublishedVersion(string chartKey)
+        public Drawing RetrievePublishedVersion(string chartKey)
         {
             var restRequest = new RestRequest("/charts/{key}/version/published", Method.GET)
                 .AddUrlSegment("key", chartKey);
-            return AssertOk(_restClient.ExecuteDynamic(restRequest));
+            return AssertOk(_restClient.Execute<Drawing>(restRequest));
         }
 
         public byte[] RetrievePublishedVersionThumbnail(string chartKey)
@@ -156,11 +156,11 @@ namespace SeatsioDotNet.Charts
             return restResponse.RawBytes;
         }
 
-        public dynamic RetrieveDraftVersion(string chartKey)
+        public Drawing RetrieveDraftVersion(string chartKey)
         {
             var restRequest = new RestRequest("/charts/{key}/version/draft", Method.GET)
                 .AddUrlSegment("key", chartKey);
-            return AssertOk(_restClient.ExecuteDynamic(restRequest));
+            return AssertOk(_restClient.Execute<Drawing>(restRequest));
         }
 
         public byte[] RetrieveDraftVersionThumbnail(string chartKey)

@@ -11,8 +11,8 @@ namespace SeatsioDotNet.Test.Charts
             Client.Events.Create(chart.Key);
             Client.Charts.Update(chart.Key, "aChart");
 
-            var draftVersion = Client.Charts.RetrieveDraftVersion(chart.Key);
-            Assert.Equal("aChart", draftVersion["name"]);
+            var drawing = Client.Charts.RetrieveDraftVersion(chart.Key);
+            Assert.Equal("aChart", drawing.Name);
         }
 
     }

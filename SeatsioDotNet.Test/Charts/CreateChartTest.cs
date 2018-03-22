@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SeatsioDotNet.Charts;
+﻿using SeatsioDotNet.Charts;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Charts
@@ -24,8 +23,8 @@ namespace SeatsioDotNet.Test.Charts
             Assert.False(retrievedChart.Archived);
 
             var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
-            Assert.Equal("MIXED", drawing["venueType"]);
-            Assert.Empty(categories(drawing));
+            Assert.Equal("MIXED", drawing.VenueType);
+            Assert.Empty(drawing.Categories);
         }
 
         [Fact]
@@ -37,8 +36,8 @@ namespace SeatsioDotNet.Test.Charts
 
             Assert.Equal("aChart", retrievedChart.Name);
             var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
-            Assert.Equal("aChart", drawing["name"]);
-            Assert.Empty(categories(drawing));
+            Assert.Equal("aChart", drawing.Name);
+            Assert.Empty(drawing.Categories);
         }
 
         [Fact]
@@ -50,8 +49,8 @@ namespace SeatsioDotNet.Test.Charts
 
             Assert.Equal("Untitled chart", retrievedChart.Name);
             var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
-            Assert.Equal("BOOTHS", drawing["venueType"]);
-            Assert.Empty(categories(drawing));
+            Assert.Equal("BOOTHS", drawing.VenueType);
+            Assert.Empty(drawing.Categories);
         }
 
         [Fact]
@@ -67,19 +66,14 @@ namespace SeatsioDotNet.Test.Charts
 
             Assert.Equal("Untitled chart", retrievedChart.Name);
             var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
-            var actualCategories = categories(drawing);
+            var actualCategories = drawing.Categories;
             Assert.Equal(2, actualCategories.Count);
-            Assert.Equal(1, actualCategories[0]["key"]);
-            Assert.Equal("Category 1", actualCategories[0]["label"]);
-            Assert.Equal("#aaaaaa", actualCategories[0]["color"]);   
-            Assert.Equal(2, actualCategories[1]["key"]);
-            Assert.Equal("Category 2", actualCategories[1]["label"]);
-            Assert.Equal("#bbbbbb", actualCategories[1]["color"]);
-        }
-
-        private List<object> categories(dynamic drawing)
-        {
-            return drawing["categories"]["list"];
+            Assert.Equal(1, actualCategories[0].Key);
+            Assert.Equal("Category 1", actualCategories[0].Label);
+            Assert.Equal("#aaaaaa", actualCategories[0].Color);
+            Assert.Equal(2, actualCategories[1].Key);
+            Assert.Equal("Category 2", actualCategories[1].Label);
+            Assert.Equal("#bbbbbb", actualCategories[1].Color);
         }
     }
 }

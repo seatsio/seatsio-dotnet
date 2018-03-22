@@ -13,7 +13,7 @@ namespace SeatsioDotNet.Test.Charts
 
             Assert.Equal("my chart (copy)", copiedChart.Name);
             var drawing = Client.Charts.RetrievePublishedVersion(copiedChart.Key);
-            Assert.Equal("BOOTHS", drawing["venueType"]);
+            Assert.Equal("BOOTHS", drawing.VenueType);
         }
     }
 }

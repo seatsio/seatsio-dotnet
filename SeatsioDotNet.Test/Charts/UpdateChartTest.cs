@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SeatsioDotNet.Charts;
+﻿using SeatsioDotNet.Charts;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Charts
@@ -16,8 +15,8 @@ namespace SeatsioDotNet.Test.Charts
             Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
             Assert.Equal("aChart", retrievedChart.Name);
             var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
-            Assert.Equal("BOOTHS", drawing["venueType"]);
-            Assert.Equal(1, categories(drawing).Count);
+            Assert.Equal("BOOTHS", drawing.VenueType);
+            Assert.Equal(1, drawing.Categories.Count);
         }
 
         [Fact]
@@ -30,13 +29,8 @@ namespace SeatsioDotNet.Test.Charts
             Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
             Assert.Equal("aChart", retrievedChart.Name);
             var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
-            Assert.Equal("BOOTHS", drawing["venueType"]);
-            Assert.Equal(1, categories(drawing).Count);
-        }
-
-        private List<object> categories(dynamic drawing)
-        {
-            return drawing["categories"]["list"];
+            Assert.Equal("BOOTHS", drawing.VenueType);
+            Assert.Equal(1, drawing.Categories.Count);
         }
     }
 }

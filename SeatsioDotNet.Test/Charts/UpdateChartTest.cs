@@ -16,7 +16,7 @@ namespace SeatsioDotNet.Test.Charts
             Assert.Equal("aChart", retrievedChart.Name);
             var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
             Assert.Equal("BOOTHS", drawing.VenueType);
-            Assert.Equal(1, drawing.Categories.Count);
+            Assert.Single(drawing.Categories);
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace SeatsioDotNet.Test.Charts
             Assert.Equal("aChart", retrievedChart.Name);
             var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
             Assert.Equal("BOOTHS", drawing.VenueType);
-            Assert.Equal(1, drawing.Categories.Count);
+            Assert.Single(drawing.Categories);
         }
     }
 }

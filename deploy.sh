@@ -6,5 +6,6 @@ if [ "$#" -ne 1 ]; then
   exit 1
 fi
 
-fileName=(`ls -t SeatsioDotNet/bin/Debug/*.nupkg | head -1`)
+dotnet pack
+fileName=`ls -t SeatsioDotNet/bin/Debug/*.nupkg | head -1`
 dotnet nuget push $fileName -s nuget.org -k $1

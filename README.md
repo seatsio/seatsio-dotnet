@@ -1,5 +1,7 @@
 # seatsio-dotnet, the official Seats.io .NET API client library
 
+[![Build Status](https://travis-ci.org/seatsio/seatsio-dotnet.svg?branch=master)](https://travis-ci.org/seatsio/seatsio-dotnet)
+
 The official Seats.io library, supporting .NET Standard 2.0+, .NET Core 2.0+ and .NET Framework 4.6.1+
 
 ## Installing seatsio-dotnet

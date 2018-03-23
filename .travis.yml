@@ -13,4 +13,4 @@ deploy:
   provider: script
   script: sh deploy.sh $NUGET_API_KEY
   on:
-    branch: releases
+    tags: true

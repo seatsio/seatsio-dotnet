@@ -8,3 +8,9 @@ install:
 script:
  - dotnet build
  - dotnet test SeatsioDotNet.Test
+
+deploy:
+  provider: script
+  script: bash deploy.sh
+  on:
+    branch: release

@@ -28,6 +28,11 @@ namespace SeatsioDotNet.EventReports
             return FetchReport("byStatus", eventKey);
         }
 
+        public Dictionary<string, EventReportSummaryItem> SummaryByStatus(string eventKey)
+        {
+            return FetchSummaryReport("byStatus", eventKey);
+        }
+
         public IEnumerable<EventReportItem> ByStatus(string eventKey, string status)
         {
             return FetchReport("byStatus", eventKey, status);
@@ -38,6 +43,11 @@ namespace SeatsioDotNet.EventReports
             return FetchReport("byCategoryLabel", eventKey);
         }
 
+        public Dictionary<string, EventReportSummaryItem> SummaryByCategoryLabel(string eventKey)
+        {
+            return FetchSummaryReport("byCategoryLabel", eventKey);
+        }
+
         public IEnumerable<EventReportItem> ByCategoryLabel(string eventKey, string categoryLabel)
         {
             return FetchReport("byCategoryLabel", eventKey, categoryLabel);
@@ -46,6 +56,11 @@ namespace SeatsioDotNet.EventReports
         public Dictionary<string, IEnumerable<EventReportItem>> ByCategoryKey(string eventKey)
         {
             return FetchReport("byCategoryKey", eventKey);
+        }
+
+        public Dictionary<string, EventReportSummaryItem> SummaryByCategoryKey(string eventKey)
+        {
+            return FetchSummaryReport("byCategoryKey", eventKey);
         }
 
         public IEnumerable<EventReportItem> ByCategoryKey(string eventKey, string categoryKey)
@@ -68,6 +83,11 @@ namespace SeatsioDotNet.EventReports
             return FetchReport("bySection", eventKey);
         }
 
+        public Dictionary<string, EventReportSummaryItem> SummaryBySection(string eventKey)
+        {
+            return FetchSummaryReport("bySection", eventKey);
+        }
+
         public IEnumerable<EventReportItem> BySection(string eventKey, string section)
         {
             return FetchReport("bySection", eventKey, section);
@@ -79,6 +99,14 @@ namespace SeatsioDotNet.EventReports
                 .AddUrlSegment("key", eventKey)
                 .AddUrlSegment("reportType", reportType);
             return AssertOk(_restClient.Execute<Dictionary<string, IEnumerable<EventReportItem>>>(restRequest));
+        }
+
+        private Dictionary<string, EventReportSummaryItem> FetchSummaryReport(string reportType, string eventKey)
+        {
+            var restRequest = new RestRequest("/reports/events/{key}/{reportType}/summary", Method.GET)
+                .AddUrlSegment("key", eventKey)
+                .AddUrlSegment("reportType", reportType);
+            return AssertOk(_restClient.Execute<Dictionary<string, EventReportSummaryItem>>(restRequest));
         }
 
         private IEnumerable<EventReportItem> FetchReport(string reportType, string eventKey, string filter)

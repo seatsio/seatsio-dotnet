@@ -21,7 +21,7 @@ namespace SeatsioDotNet
             EventReports = new EventReports.EventReports(restClient);
         }
 
-        public SeatsioClient(string secretKey)
+        public SeatsioClient(string secretKey): this(secretKey, "https://api.seats.io")
         {
         }
 

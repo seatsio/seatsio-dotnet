@@ -7,6 +7,7 @@
         public string CategoryLabel { get; set; }
         public int? CategoryKey { get; set; }
         public string TicketType { get; set; }
+        public string ObjectType { get; set; }
         public string OrderId { get; set; }
         public bool ForSale { get; set; }
         public string Section { get; set; }

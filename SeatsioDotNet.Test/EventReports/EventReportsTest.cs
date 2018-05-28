@@ -22,6 +22,7 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(9, reportItem.CategoryKey);
             Assert.Equal("ticketType1", reportItem.TicketType);
             Assert.Equal("order1", reportItem.OrderId);
+            Assert.Equal("seat", reportItem.ObjectType);
             Assert.True(reportItem.ForSale);
             Assert.Null(reportItem.Section);
             Assert.Null(reportItem.Entrance);
@@ -41,6 +42,7 @@ namespace SeatsioDotNet.Test.EventReports
             var reportItem = report["GA1"].First();
             Assert.Equal(5, reportItem.NumBooked);
             Assert.Equal(100, reportItem.Capacity);
+            Assert.Equal("generalAdmission", reportItem.ObjectType);
         }
 
         [Fact]

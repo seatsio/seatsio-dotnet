@@ -29,6 +29,20 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Null(reportItem.NumBooked);
             Assert.Null(reportItem.Capacity);
         }
+        
+        [Fact]
+        public void HoldToken()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var holdToken = Client.HoldTokens.Create();
+            Client.Events.Hold(evnt.Key, new[] {"A-1"}, holdToken.Token);
+
+            var report = Client.EventReports.ByLabel(evnt.Key);
+
+            var reportItem = report["A-1"].First();
+            Assert.Equal(holdToken.Token, reportItem.HoldToken);
+        }
 
         [Fact]
         public void ReportItemPropertiesForGA()

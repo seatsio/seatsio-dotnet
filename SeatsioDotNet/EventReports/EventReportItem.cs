@@ -10,6 +10,7 @@
         public string ObjectType { get; set; }
         public string OrderId { get; set; }
         public bool ForSale { get; set; }
+        public string HoldToken { get; set; }
         public string Section { get; set; }
         public string Entrance { get; set; }
         public int? NumBooked { get; set; }

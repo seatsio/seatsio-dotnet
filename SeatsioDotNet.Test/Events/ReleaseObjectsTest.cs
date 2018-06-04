@@ -1,4 +1,5 @@
-﻿using SeatsioDotNet.Events;
+﻿using System.Collections.Generic;
+using SeatsioDotNet.Events;
 using SeatsioDotNet.HoldTokens;
 using Xunit;
 
@@ -12,11 +13,17 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
             Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"});
-            
-            Client.Events.Release(evnt.Key, new[] {"A-1", "A-2"});
+
+            var result = Client.Events.Release(evnt.Key, new[] {"A-1", "A-2"});
 
             Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").Status);
             Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(evnt.Key, "A-2").Status);
+
+            Assert.Equal(new Dictionary<string, Labels>
+            {
+                {"A-1", new Labels {Own = "1", Row = "A"}},
+                {"A-2", new Labels {Own = "2", Row = "A"}}
+            }, result.Labels);
         }
 
         [Fact]
@@ -37,7 +44,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(ObjectStatus.Free, status2.Status);
             Assert.Null(status2.HoldToken);
         }
-        
+
         [Fact]
         public void OrderId()
         {

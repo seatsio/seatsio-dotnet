@@ -16,6 +16,21 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.True(bestAvailableResult.NextToEachOther);
             Assert.Equal(new[] {"B-4", "B-5", "B-6"}, bestAvailableResult.Objects);
+        }  
+        
+        [Fact]
+        public void Labels()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+
+            var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2), "foo");
+            
+            Assert.Equal(new Dictionary<string, Labels>
+            {
+                {"B-4", new Labels {Own = "4", Row = "B"}},
+                {"B-5", new Labels {Own = "5", Row = "B"}}
+            }, bestAvailableResult.Labels);
         }
 
         [Fact]

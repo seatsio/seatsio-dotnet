@@ -13,11 +13,16 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
 
-            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "foo");
+            var result = Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "foo");
 
             Assert.Equal("foo", Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").Status);
             Assert.Equal("foo", Client.Events.RetrieveObjectStatus(evnt.Key, "A-2").Status);
             Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(evnt.Key, "A-3").Status);
+            Assert.Equal(new Dictionary<string, Labels>
+            {
+                {"A-1", new Labels {Own = "1", Row = "A"}},
+                {"A-2", new Labels {Own = "2", Row = "A"}}
+            }, result.Labels);
         }
 
         [Fact]
@@ -68,8 +73,8 @@ namespace SeatsioDotNet.Test.Events
             var status2 = Client.Events.RetrieveObjectStatus(evnt.Key, "A-2");
             Assert.Equal("foo", status2.Status);
             Assert.Equal("T2", status2.TicketType);
-        } 
-        
+        }
+
         [Fact]
         public void Quantity()
         {
@@ -85,8 +90,8 @@ namespace SeatsioDotNet.Test.Events
 
             var status2 = Client.Events.RetrieveObjectStatus(evnt.Key, "GA2");
             Assert.Equal(10, status2.Quantity);
-        }    
-        
+        }
+
         [Fact]
         public void ExtraData()
         {

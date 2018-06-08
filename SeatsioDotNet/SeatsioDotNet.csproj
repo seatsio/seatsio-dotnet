@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
-    <Version>25</Version>
+    <Version>26</Version>
     <Authors>mroloux;bverbeken</Authors>
     <Title>Official Seats.io .NET API client</Title>
     <Description>Official Seats.io .NET API client</Description>

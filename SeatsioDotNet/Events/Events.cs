@@ -17,8 +17,26 @@ namespace SeatsioDotNet.Events
 
         public Event Create(string chartKey)
         {
+            return Create(chartKey, null, null);
+        }
+
+        public Event Create(string chartKey, string eventKey, bool? bookWholeTables)
+        {
+            Dictionary<string, object> requestBody = new Dictionary<string, object>();
+            requestBody.Add("chartKey", chartKey);
+
+            if (eventKey != null)
+            {
+                requestBody.Add("eventKey", eventKey);
+            }
+
+            if (bookWholeTables != null)
+            {
+                requestBody.Add("bookWholeTables", bookWholeTables);
+            }
+
             var restRequest = new RestRequest("/events", Method.POST)
-                .AddJsonBody(new {chartKey});
+                .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }
 
@@ -45,8 +63,8 @@ namespace SeatsioDotNet.Events
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
-        }    
-        
+        }
+
         public void Delete(string eventKey)
         {
             var restRequest = new RestRequest("/events/{key}", Method.DELETE)
@@ -143,7 +161,7 @@ namespace SeatsioDotNet.Events
         {
             return ChangeObjectStatus(events, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId);
         }
-        
+
         public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null)
         {
             var requestBody = new Dictionary<string, object>()
@@ -275,7 +293,5 @@ namespace SeatsioDotNet.Events
                 request => (RestRequest) request.AddUrlSegment("key", eventKey).AddUrlSegment("objectId", objectLabel)
             ));
         }
-
     }
-
 }

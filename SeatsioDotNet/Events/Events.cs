@@ -45,6 +45,13 @@ namespace SeatsioDotNet.Events
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
+        }    
+        
+        public void Delete(string eventKey)
+        {
+            var restRequest = new RestRequest("/events/{key}", Method.DELETE)
+                .AddUrlSegment("key", eventKey);
+            AssertOk(_restClient.Execute<object>(restRequest));
         }
 
         public Event Retrieve(string eventKey)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FluentAssertions;
 using SeatsioDotNet.Events;
 using Xunit;
 
@@ -26,11 +27,11 @@ namespace SeatsioDotNet.Test.Events
 
             var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2), "foo");
             
-            Assert.Equal(new Dictionary<string, Labels>
+            bestAvailableResult.Labels.Should().BeEquivalentTo(new Dictionary<string, Labels>
             {
-                {"B-4", new Labels {Own = "4", Row = "B"}},
-                {"B-5", new Labels {Own = "5", Row = "B"}}
-            }, bestAvailableResult.Labels);
+                {"B-4", new Labels("4", "seat", "B", "row")},
+                {"B-5", new Labels("5", "seat", "B", "row")}
+            });
         }
 
         [Fact]

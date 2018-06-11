@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FluentAssertions;
 using SeatsioDotNet.Events;
 using SeatsioDotNet.HoldTokens;
 using Xunit;
@@ -19,11 +20,11 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").Status);
             Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(evnt.Key, "A-2").Status);
 
-            Assert.Equal(new Dictionary<string, Labels>
+            result.Labels.Should().BeEquivalentTo(new Dictionary<string, Labels>
             {
-                {"A-1", new Labels {Own = "1", Row = "A"}},
-                {"A-2", new Labels {Own = "2", Row = "A"}}
-            }, result.Labels);
+                {"A-1", new Labels("1", "seat", "A", "row")},
+                {"A-2", new Labels("2", "seat", "A", "row")}
+            });
         }
 
         [Fact]

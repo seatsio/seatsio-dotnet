@@ -6,7 +6,7 @@ namespace SeatsioDotNet.Test
 {
     public class SeatsioClientTest
     {
-        private static readonly string BaseUrl = "https://api-staging.seats.io";
+        private static readonly string BaseUrl = "https://api-staging.seatsio.net";
 
         protected readonly TestUser User;
         protected readonly SeatsioClient Client;

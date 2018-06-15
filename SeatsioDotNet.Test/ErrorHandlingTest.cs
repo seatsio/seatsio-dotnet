@@ -10,7 +10,7 @@ namespace SeatsioDotNet.Test
             var e = Assert.Throws<SeatsioException>(() =>
                 Client.Events.RetrieveObjectStatus("unexistingEvent", "unexistingObject"));
 
-            Assert.StartsWith("GET https://api-staging.seats.io/events/unexistingEvent/objects/unexistingObject resulted in a 404 Not Found response. Reason: Event not found: unexistingEvent. Request ID:", e.Message);
+            Assert.StartsWith("GET https://api-staging.seatsio.net/events/unexistingEvent/objects/unexistingObject resulted in a 404 Not Found response. Reason: Event not found: unexistingEvent. Request ID:", e.Message);
             Assert.Equal(new[] {"Event not found: unexistingEvent"}, e.Messages);
             Assert.NotNull(e.RequestId);
         }

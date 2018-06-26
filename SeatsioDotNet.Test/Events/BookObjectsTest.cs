@@ -26,6 +26,26 @@ namespace SeatsioDotNet.Test.Events
                 {"A-2", new Labels("2", "seat", "A", "row")}
             });
         }
+        
+        
+        [Fact]
+        public void Sections()
+        {
+            var chartKey = CreateTestChartWithSections();
+            var evnt = Client.Events.Create(chartKey);
+
+            var result = Client.Events.Book(evnt.Key, new[] {"Section A-A-1", "Section A-A-2"});
+
+            Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(evnt.Key, "Section A-A-1").Status);
+            Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(evnt.Key, "Section A-A-2").Status);
+            Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(evnt.Key, "Section A-A-3").Status);
+
+            result.Labels.Should().BeEquivalentTo(new Dictionary<string, Labels>
+            {
+                {"Section A-A-1", new Labels("1", "seat", "A", "row", "Section A", "Entrance 1")},
+                {"Section A-A-2", new Labels("2", "seat", "A", "row", "Section A", "Entrance 1")}
+            });
+        }
 
         [Fact]
         public void HoldToken()

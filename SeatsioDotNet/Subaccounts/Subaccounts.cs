@@ -25,6 +25,13 @@ namespace SeatsioDotNet.Subaccounts
             var restRequest = new RestRequest("/subaccounts", Method.POST)
                 .AddJsonBody(new {name});
             return AssertOk(_restClient.Execute<Subaccount>(restRequest));
+        } 
+        
+        public Subaccount CreateWithEmail(string email)
+        {
+            var restRequest = new RestRequest("/subaccounts", Method.POST)
+                .AddJsonBody(new {email});
+            return AssertOk(_restClient.Execute<Subaccount>(restRequest));
         }
 
         public Subaccount Retrieve(long id)

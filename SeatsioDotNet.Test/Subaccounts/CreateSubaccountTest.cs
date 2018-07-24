@@ -24,5 +24,20 @@ namespace SeatsioDotNet.Test.Subaccounts
 
             Assert.Null(subaccount.Name);
         }
+        
+        [Fact]
+        public void TestWithEmail()
+        {
+            var email = RandomEmail();
+            var subaccount = Client.Subaccounts.CreateWithEmail(email);
+
+            Assert.NotEqual(0, subaccount.Id);
+            Assert.NotNull(subaccount.SecretKey);
+            Assert.NotNull(subaccount.DesignerKey);
+            Assert.NotNull(subaccount.PublicKey);
+            Assert.Null(subaccount.Name);
+            Assert.True(subaccount.Active);
+            Assert.Equal(email, subaccount.Email);
+        }
     }
 }

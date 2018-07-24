@@ -22,15 +22,30 @@ namespace SeatsioDotNet.Subaccounts
 
         public Subaccount Create(string name)
         {
-            var restRequest = new RestRequest("/subaccounts", Method.POST)
-                .AddJsonBody(new {name});
-            return AssertOk(_restClient.Execute<Subaccount>(restRequest));
-        } 
-        
-        public Subaccount CreateWithEmail(string email)
+            return DoCreate(null, name);
+        }
+
+        public Subaccount CreateWithEmail(string email, string name = null)
         {
+            return DoCreate(email, name);
+        }
+
+        private Subaccount DoCreate(string email = null, string name = null)
+        {
+            var requestBody = new Dictionary<string, object>();
+
+            if (email != null)
+            {
+                requestBody.Add("email", email);
+            }
+
+            if (name != null)
+            {
+                requestBody.Add("name", name);
+            }
+
             var restRequest = new RestRequest("/subaccounts", Method.POST)
-                .AddJsonBody(new {email});
+                .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Subaccount>(restRequest));
         }
 

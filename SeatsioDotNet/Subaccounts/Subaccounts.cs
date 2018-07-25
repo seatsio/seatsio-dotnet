@@ -33,12 +33,10 @@ namespace SeatsioDotNet.Subaccounts
         private Subaccount DoCreate(string email = null, string name = null)
         {
             var requestBody = new Dictionary<string, object>();
-
             if (email != null)
             {
                 requestBody.Add("email", email);
             }
-
             if (name != null)
             {
                 requestBody.Add("name", name);
@@ -56,11 +54,21 @@ namespace SeatsioDotNet.Subaccounts
             return AssertOk(_restClient.Execute<Subaccount>(restRequest));
         }
 
-        public void Update(long id, string name)
+        public void Update(long id, string name = null, string email = null)
         {
+            var requestBody = new Dictionary<string, object>();
+            if (email != null)
+            {
+                requestBody.Add("email", email);
+            }
+            if (name != null)
+            {
+                requestBody.Add("name", name);
+            }
+            
             var restRequest = new RestRequest("/subaccounts/{id}", Method.POST)
                 .AddUrlSegment("id", id)
-                .AddJsonBody(new {name});
+                .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 

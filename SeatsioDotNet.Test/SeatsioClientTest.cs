@@ -20,23 +20,20 @@ namespace SeatsioDotNet.Test
         private TestUser CreateTestUser()
         {
             var restClient = new RestClient(BaseUrl);
-            var email = RandomEmail();
-            var password = "12345678";
-            var request = new RestRequest("/system/public/users", Method.POST)
-                .AddJsonBody(new {email, password});
+            var request = new RestRequest("/system/public/users/actions/create-test-user", Method.POST);
             return RestUtil.AssertOk(restClient.Execute<TestUser>(request));
         }
 
         protected static string RandomEmail()
         {
-            return "test" + new Random().Next() + "@seats.io";
+            return Guid.NewGuid() + "@mailinator.com";
         }
 
         protected string CreateTestChart()
         {
             return CreateTestChartFromJson(TestChartJson());
-        }    
-        
+        }
+
         protected string CreateTestChartWithSections()
         {
             return CreateTestChartFromJson(TestChartWithSectionsJson());

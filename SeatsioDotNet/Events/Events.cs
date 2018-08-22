@@ -147,6 +147,11 @@ namespace SeatsioDotNet.Events
             return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId);
         }
 
+        public BestAvailableResult Hold(string eventKey, BestAvailable bestAvailable, string holdToken, string orderId = null)
+        {
+            return ChangeObjectStatus(eventKey, bestAvailable, ObjectStatus.Held, holdToken, orderId);
+        }
+
         public ChangeObjectStatusResult ChangeObjectStatus(string eventKey, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null)
         {
             return ChangeObjectStatus(new[] {eventKey}, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId);
@@ -186,13 +191,22 @@ namespace SeatsioDotNet.Events
             return AssertOk(_restClient.Execute<ChangeObjectStatusResult>(restRequest));
         }
 
-        public BestAvailableResult ChangeObjectStatus(string eventKey, BestAvailable bestAvailable, string status)
+        public BestAvailableResult ChangeObjectStatus(string eventKey, BestAvailable bestAvailable, string status, string holdToken = null, string orderId = null)
         {
             var requestBody = new Dictionary<string, object>()
             {
                 {"status", status},
                 {"bestAvailable", bestAvailable.AsDictionary()}
             };
+            if (holdToken != null)
+            {
+                requestBody.Add("holdToken", holdToken);
+            }
+
+            if (orderId != null)
+            {
+                requestBody.Add("orderId", orderId);
+            }
 
             var restRequest = new RestRequest("/events/{key}/actions/change-object-status", Method.POST)
                 .AddUrlSegment("key", eventKey)

@@ -44,5 +44,19 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal("order1", Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").OrderId);
             Assert.Equal("order1", Client.Events.RetrieveObjectStatus(evnt.Key, "A-2").OrderId);
         }
+
+        [Fact]
+        public void BestAvailable()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            HoldToken holdToken = Client.HoldTokens.Create();
+
+            var bestAvailableResult = Client.Events.Hold(evnt.Key, new BestAvailable(3), holdToken.Token, "order1");
+
+            Assert.True(bestAvailableResult.NextToEachOther);
+            Assert.Equal(new[] {"B-4", "B-5", "B-6"}, bestAvailableResult.Objects);
+            Assert.Equal("order1", Client.Events.RetrieveObjectStatus(evnt.Key, "B-4").OrderId);
+        }
     }
 }

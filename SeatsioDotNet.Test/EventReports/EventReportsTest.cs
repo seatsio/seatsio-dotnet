@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using SeatsioDotNet.Events;
 using Xunit;
 
@@ -11,7 +12,8 @@ namespace SeatsioDotNet.Test.EventReports
         {
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
-            Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1", "ticketType1")}, null, "order1");
+            var extraData = new Dictionary<string, object> {{"foo", "bar"}};
+            Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1", "ticketType1", extraData)}, null, "order1");
 
             var report = Client.EventReports.ByLabel(evnt.Key);
 
@@ -28,6 +30,7 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Null(reportItem.Entrance);
             Assert.Null(reportItem.NumBooked);
             Assert.Null(reportItem.Capacity);
+            Assert.Equal(extraData, reportItem.ExtraData);
         }
         
         [Fact]

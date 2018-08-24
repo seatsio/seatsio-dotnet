@@ -1,4 +1,6 @@
-﻿namespace SeatsioDotNet.EventReports
+﻿using System.Collections.Generic;
+
+namespace SeatsioDotNet.EventReports
 {
     public class EventReportItem
     {
@@ -15,5 +17,6 @@
         public string Entrance { get; set; }
         public int? NumBooked { get; set; }
         public int? Capacity { get; set; }
+        public Dictionary<string, object> ExtraData { get; set; }
     }
 }

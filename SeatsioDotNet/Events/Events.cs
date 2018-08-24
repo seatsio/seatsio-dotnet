@@ -106,6 +106,11 @@ namespace SeatsioDotNet.Events
         {
             return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId);
         }
+        
+        public BestAvailableResult Book(string eventKey, BestAvailable bestAvailable, string holdToken = null, string orderId = null)
+        {
+            return ChangeObjectStatus(eventKey, bestAvailable, ObjectStatus.Booked, holdToken, orderId);
+        }
 
         public ChangeObjectStatusResult Release(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null)
         {

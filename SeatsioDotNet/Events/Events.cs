@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using RestSharp;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
@@ -106,7 +107,7 @@ namespace SeatsioDotNet.Events
         {
             return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId);
         }
-        
+
         public BestAvailableResult Book(string eventKey, BestAvailable bestAvailable, string holdToken = null, string orderId = null)
         {
             return ChangeObjectStatus(eventKey, bestAvailable, ObjectStatus.Booked, holdToken, orderId);
@@ -225,6 +226,14 @@ namespace SeatsioDotNet.Events
                 .AddUrlSegment("key", eventKey)
                 .AddUrlSegment("object", objectLabel)
                 .AddJsonBody(new {extraData});
+            AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
+        }
+
+        public void UpdateExtraDatas(string eventKey, Dictionary<string, Dictionary<string, object>> extraData)
+        {
+            var restRequest = new RestRequest("/events/{key}/actions/update-extra-data", Method.POST)
+                .AddUrlSegment("key", eventKey)
+                .AddParameter("application/json", JsonConvert.SerializeObject(new {extraData}), ParameterType.RequestBody); // default serializer doesn't convert extraData to JSON properly
             AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
         }
 

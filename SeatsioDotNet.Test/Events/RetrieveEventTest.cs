@@ -17,6 +17,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.NotEqual(0, retrievedEvent.Id);
             Assert.Equal(chartKey, retrievedEvent.ChartKey);
             Assert.False(retrievedEvent.BookWholeTables);
+            Assert.True(retrievedEvent.SupportsBestAvailable);
             Assert.Null(retrievedEvent.ForSaleConfig);
             CustomAssert.CloseTo(DateTime.Now, retrievedEvent.CreatedOn.Value);
             Assert.Null(retrievedEvent.UpdatedOn);

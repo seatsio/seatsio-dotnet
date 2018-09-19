@@ -9,7 +9,7 @@ namespace SeatsioDotNet.Test
     {
         public static void CloseTo(DateTime expected, DateTime actual)
         {
-            Assert.True(actual > expected.AddMinutes(-1) && actual < expected.AddMinutes(1));
+            Assert.True(actual > expected.AddMinutes(-2) && actual < expected.AddMinutes(2));
         }
 
         public static void ContainsOnly(IEnumerable<object> expected, IEnumerable<object> actual)

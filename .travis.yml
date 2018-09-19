@@ -3,6 +3,7 @@ mono: latest
 dotnet: 2.0.0
 
 install:
+- export FrameworkPathOverride=$(dirname $(which mono))/../lib/mono/4.5/
 - dotnet restore
 
 script:

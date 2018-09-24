@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using SeatsioDotNet.Accounts;
+using Xunit;
 
 namespace SeatsioDotNet.Test.Accounts
 {
@@ -14,9 +15,9 @@ namespace SeatsioDotNet.Test.Accounts
             Assert.NotNull(account.PublicKey);
             Assert.NotNull(account.Email);
             Assert.True(account.Settings.DraftChartDrawingsEnabled);
-            Assert.Equal(account.Settings.ChartValidation.ValidateDuplicateLabels, "WARNING");
-            Assert.Equal(account.Settings.ChartValidation.ValidateObjectsWithoutCategories, "WARNING");
-            Assert.Equal(account.Settings.ChartValidation.ValidateUnlabeledObjects, "WARNING");
+            Assert.Equal(account.Settings.ChartValidation.ValidateDuplicateLabels, ChartValidationLevel.WARNING);
+            Assert.Equal(account.Settings.ChartValidation.ValidateObjectsWithoutCategories, ChartValidationLevel.WARNING);
+            Assert.Equal(account.Settings.ChartValidation.ValidateUnlabeledObjects, ChartValidationLevel.WARNING);
         }
     }
 }

@@ -5,12 +5,12 @@ namespace SeatsioDotNet.Accounts
     public class ChartValidationSettings
     {
         [DeserializeAs(Name = "VALIDATE_DUPLICATE_LABELS")]
-        public string ValidateDuplicateLabels { get; set; }
+        public ChartValidationLevel ValidateDuplicateLabels { get; set; }
         
         [DeserializeAs(Name = "VALIDATE_OBJECTS_WITHOUT_CATEGORIES")]
-        public string ValidateObjectsWithoutCategories { get; set; }
+        public ChartValidationLevel ValidateObjectsWithoutCategories { get; set; }
         
         [DeserializeAs(Name = "VALIDATE_UNLABELED_OBJECTS")]
-        public string ValidateUnlabeledObjects { get; set; }
+        public ChartValidationLevel ValidateUnlabeledObjects { get; set; }
     }
 }

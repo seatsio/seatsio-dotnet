@@ -14,6 +14,7 @@ namespace SeatsioDotNet.Test.Events
             
             Assert.Equal(updatedHoldToken.Token, holdToken.Token);
             CustomAssert.CloseTo(DateTime.Now.AddMinutes(30), updatedHoldToken.ExpiresAt);
+            Assert.InRange(updatedHoldToken.ExpiresInSeconds, 29 * 60, 30 * 60);
         }
     }
 }

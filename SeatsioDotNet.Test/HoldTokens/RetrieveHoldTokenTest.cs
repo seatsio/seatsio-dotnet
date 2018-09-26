@@ -13,6 +13,7 @@ namespace SeatsioDotNet.Test.Events
             
             Assert.Equal(holdToken.Token, retrievedHoldToken.Token);
             Assert.Equal(holdToken.ExpiresAt, retrievedHoldToken.ExpiresAt);
+            Assert.InRange(holdToken.ExpiresInSeconds, 14 * 60, 15 * 60);
         }
     }
 }

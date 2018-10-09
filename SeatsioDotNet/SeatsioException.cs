@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -7,12 +8,12 @@ namespace SeatsioDotNet
 {
     public class SeatsioException : Exception
     {
-        public readonly List<string> Messages;
+        public readonly List<SeatsioApiError> Errors;
         public readonly string RequestId;
 
-        private SeatsioException(List<string> messages, string requestId, IRestResponse response) : base(ExceptionMessage(messages, requestId, response))
+        private SeatsioException(List<SeatsioApiError> errors, string requestId, IRestResponse response) : base(ExceptionMessage(errors, requestId, response))
         {
-            Messages = messages;
+            Errors = errors;
             RequestId = requestId;
         }
 
@@ -20,10 +21,10 @@ namespace SeatsioDotNet
         {
         }
 
-        private static string ExceptionMessage(List<string> messages, string requestId, IRestResponse response)
+        private static string ExceptionMessage(List<SeatsioApiError> errors, string requestId, IRestResponse response)
         {
-            string exceptionMessage = ExceptionMessage(response);
-            exceptionMessage += " Reason: " + String.Join(", ", messages) + ".";
+            string exceptionMessage = ExceptionMessage(response);            
+            exceptionMessage += " Reason: " + String.Join(", ", errors.Select(x => x.Message)) + ".";
             exceptionMessage += " Request ID: " + requestId;
             return exceptionMessage;
         }
@@ -38,16 +39,16 @@ namespace SeatsioDotNet
         {
             if (response.ContentType != null && response.ContentType.Contains("application/json"))
             {
-                var parsedException = JsonConvert.DeserializeObject<SeatsioExceptionTO>(response.Content);
-                return new SeatsioException(parsedException.Messages, parsedException.RequestId, response);
+                var parsedException = JsonConvert.DeserializeObject<SeatsioExceptionTo>(response.Content);
+                return new SeatsioException(parsedException.Errors, parsedException.RequestId, response);
             }
 
             return new SeatsioException(response);
         }
 
-        public struct SeatsioExceptionTO
+        public struct SeatsioExceptionTo
         {
-            public List<string> Messages { get; set; }
+            public List<SeatsioApiError> Errors { get; set; }
             public string RequestId { get; set; }
         }
     }

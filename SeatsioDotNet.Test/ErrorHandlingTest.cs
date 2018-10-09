@@ -11,7 +11,7 @@ namespace SeatsioDotNet.Test
                 Client.Events.RetrieveObjectStatus("unexistingEvent", "unexistingObject"));
 
             Assert.StartsWith("GET https://api-staging.seatsio.net/events/unexistingEvent/objects/unexistingObject resulted in a 404 Not Found response. Reason: Event not found: unexistingEvent. Request ID:", e.Message);
-            Assert.Equal(new[] {"Event not found: unexistingEvent"}, e.Messages);
+            Assert.Contains(new SeatsioApiError("EVENT_NOT_FOUND", "Event not found: unexistingEvent"), e.Errors);            
             Assert.NotNull(e.RequestId);
         }
 
@@ -22,7 +22,7 @@ namespace SeatsioDotNet.Test
                 new SeatsioClient("", "unknownProtocol://").Events.RetrieveObjectStatus("unexistingEvent", "unexistingObject"));
 
             Assert.Equal("GET  resulted in a 0  response.", e.Message);
-            Assert.Null(e.Messages);
+            Assert.Null(e.Errors);
             Assert.Null(e.RequestId);
         }
     }

@@ -21,7 +21,7 @@ namespace SeatsioDotNet
             if (!(obj is SeatsioApiError p))
             {
                 return false;
-            }Ì
+            }
 
             return (Code.Equals(p.Code)) && (Message.Equals(p.Message));
         }

@@ -15,9 +15,9 @@ namespace SeatsioDotNet.Test.Accounts
             Assert.NotNull(account.PublicKey);
             Assert.NotNull(account.Email);
             Assert.True(account.Settings.DraftChartDrawingsEnabled);
-            Assert.Equal(account.Settings.ChartValidation.ValidateDuplicateLabels, ChartValidationLevel.WARNING);
-            Assert.Equal(account.Settings.ChartValidation.ValidateObjectsWithoutCategories, ChartValidationLevel.WARNING);
-            Assert.Equal(account.Settings.ChartValidation.ValidateUnlabeledObjects, ChartValidationLevel.WARNING);
+            Assert.Equal(ChartValidationLevel.ERROR, account.Settings.ChartValidation.ValidateDuplicateLabels);
+            Assert.Equal(ChartValidationLevel.ERROR, account.Settings.ChartValidation.ValidateObjectsWithoutCategories);
+            Assert.Equal(ChartValidationLevel.ERROR, account.Settings.ChartValidation.ValidateUnlabeledObjects);
         }
     }
 }

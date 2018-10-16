@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using SeatsioDotNet.Events;
 
 namespace SeatsioDotNet.EventReports
 {
     public class EventReportItem
     {
         public string Label { get; set; }
+        public Labels Labels { get; set; }
         public string Status { get; set; }
         public string CategoryLabel { get; set; }
         public int? CategoryKey { get; set; }

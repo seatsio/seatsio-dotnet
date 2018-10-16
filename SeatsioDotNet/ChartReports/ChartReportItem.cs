@@ -1,8 +1,11 @@
-﻿namespace SeatsioDotNet.ChartReports
+﻿using SeatsioDotNet.Events;
+
+namespace SeatsioDotNet.ChartReports
 {
     public class ChartReportItem
     {
         public string Label { get; set; }
+        public Labels Labels { get; set; }
         public string CategoryLabel { get; set; }
         public int? CategoryKey { get; set; }
         public string ObjectType { get; set; }

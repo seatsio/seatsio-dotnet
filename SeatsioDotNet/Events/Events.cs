@@ -18,10 +18,25 @@ namespace SeatsioDotNet.Events
 
         public Event Create(string chartKey)
         {
-            return Create(chartKey, null, null);
+            return Create(chartKey, null, null, null);
+        }
+
+        public Event Create(string chartKey, string eventKey)
+        {
+            return Create(chartKey, eventKey, null, null);
         }
 
         public Event Create(string chartKey, string eventKey, bool? bookWholeTables)
+        {
+            return Create(chartKey, eventKey, bookWholeTables, null);
+        }
+
+        public Event Create(string chartKey, string eventKey, Dictionary<string, string> tableBookingModes)
+        {
+            return Create(chartKey, eventKey, null, tableBookingModes);
+        }
+
+        private Event Create(string chartKey, string eventKey, bool? bookWholeTables, Dictionary<string, string> tableBookingModes)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("chartKey", chartKey);
@@ -36,12 +51,32 @@ namespace SeatsioDotNet.Events
                 requestBody.Add("bookWholeTables", bookWholeTables);
             }
 
+            if (tableBookingModes != null)
+            {
+                requestBody.Add("tableBookingModes", tableBookingModes);
+            }
+
             var restRequest = new RestRequest("/events", Method.POST)
                 .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }
 
+        public void Update(string eventKey, string chartKey, string newEventKey)
+        {
+            Update(eventKey, chartKey, newEventKey, null, null);
+        }     
+        
         public void Update(string eventKey, string chartKey, string newEventKey, bool? bookWholeTables)
+        {
+            Update(eventKey, chartKey, newEventKey, bookWholeTables, null);
+        }  
+        
+        public void Update(string eventKey, string chartKey, string newEventKey, Dictionary<string, string> tableBookingModes)
+        {
+            Update(eventKey, chartKey, newEventKey, null, tableBookingModes);
+        }
+
+        private void Update(string eventKey, string chartKey, string newEventKey, bool? bookWholeTables, Dictionary<string, string> tableBookingModes)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
 
@@ -58,6 +93,11 @@ namespace SeatsioDotNet.Events
             if (bookWholeTables != null)
             {
                 requestBody.Add("bookWholeTables", bookWholeTables);
+            }
+
+            if (tableBookingModes != null)
+            {
+                requestBody.Add("tableBookingModes", tableBookingModes);
             }
 
             var restRequest = new RestRequest("/events/{key}", Method.POST)

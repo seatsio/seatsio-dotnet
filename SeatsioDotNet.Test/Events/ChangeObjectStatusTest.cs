@@ -82,15 +82,11 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
             ObjectProperties object1 = new ObjectProperties("GA1", 5);
-            ObjectProperties object2 = new ObjectProperties("GA2", 10);
 
-            Client.Events.ChangeObjectStatus(evnt.Key, new[] {object1, object2}, "foo");
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {object1}, "foo");
 
             var status1 = Client.Events.RetrieveObjectStatus(evnt.Key, "GA1");
             Assert.Equal(5, status1.Quantity);
-
-            var status2 = Client.Events.RetrieveObjectStatus(evnt.Key, "GA2");
-            Assert.Equal(10, status2.Quantity);
         }
 
         [Fact]

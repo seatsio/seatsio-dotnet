@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events
@@ -27,7 +28,7 @@ namespace SeatsioDotNet.Test.Events
         {
             var chartKey = CreateTestChart();
 
-            var evnt = Client.Events.Create(chartKey, "eventje", null);
+            var evnt = Client.Events.Create(chartKey, "eventje");
 
             Assert.Equal("eventje", evnt.Key);
             Assert.False(evnt.BookWholeTables);
@@ -42,6 +43,19 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.NotNull(evnt.Key);
             Assert.True(evnt.BookWholeTables);
+        }  
+        
+        [Fact]
+        public void TableBookingModesAreOptional()
+        {
+            var chartKey = CreateTestChartWithTables();
+            var tableBookingModes = new Dictionary<string, string> {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}};
+            
+            var evnt = Client.Events.Create(chartKey, null, tableBookingModes);
+
+            Assert.NotNull(evnt.Key);
+            Assert.False(evnt.BookWholeTables);
+            Assert.Equal(evnt.TableBookingModes, tableBookingModes);
         }
     }
 }

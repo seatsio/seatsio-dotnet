@@ -116,7 +116,11 @@ namespace SeatsioDotNet.EventReports
                 .AddUrlSegment("reportType", reportType)
                 .AddUrlSegment("filter", filter);
             var report = AssertOk(_restClient.Execute<Dictionary<string, IEnumerable<EventReportItem>>>(restRequest));
-            return report[filter];
+            if (report.ContainsKey(filter))
+            {
+                return report[filter];
+            }
+            return null;
         }
     }
 }

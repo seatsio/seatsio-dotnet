@@ -89,6 +89,17 @@ namespace SeatsioDotNet.Test.EventReports
             var report = Client.EventReports.ByStatus(evnt.Key, "lolzor");
 
             Assert.Equal(2, report.Count());
+        }    
+        
+        [Fact]
+        public void BySpecificNonExistingStatus()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+
+            var report = Client.EventReports.ByStatus(evnt.Key, "lolzor");
+
+            Assert.Null(report);
         }
 
         [Fact]

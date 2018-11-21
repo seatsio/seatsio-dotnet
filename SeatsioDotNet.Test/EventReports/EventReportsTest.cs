@@ -77,6 +77,17 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(2, report["lolzor"].Count());
             Assert.Single(report[ObjectStatus.Booked]);
             Assert.Equal(31, report[ObjectStatus.Free].Count());
+        }  
+        
+        [Fact]
+        public void ByStatusEmptyChart()
+        {
+            var chartKey = Client.Charts.Create().Key;
+            var evnt = Client.Events.Create(chartKey);
+
+            var report = Client.EventReports.ByStatus(evnt.Key);
+
+            Assert.Empty(report);
         }
 
         [Fact]
@@ -99,7 +110,7 @@ namespace SeatsioDotNet.Test.EventReports
 
             var report = Client.EventReports.ByStatus(evnt.Key, "lolzor");
 
-            Assert.Null(report);
+            Assert.Empty(report);
         }
 
         [Fact]

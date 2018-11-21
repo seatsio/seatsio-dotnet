@@ -120,7 +120,8 @@ namespace SeatsioDotNet.EventReports
             {
                 return report[filter];
             }
-            return null;
+
+            return new List<EventReportItem>();
         }
     }
 }

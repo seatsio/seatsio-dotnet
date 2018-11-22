@@ -5,6 +5,7 @@ namespace SeatsioDotNet.Accounts
     public class AccountSettings
     {
         public Boolean DraftChartDrawingsEnabled { get; set; }
+        public Boolean HoldOnSelectForGAs { get; set; }
         public ChartValidationSettings ChartValidation { get; set; }
     }
 }

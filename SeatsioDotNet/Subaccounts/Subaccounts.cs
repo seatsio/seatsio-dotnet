@@ -127,25 +127,62 @@ namespace SeatsioDotNet.Subaccounts
         {
             return List().All();
         }
+        
+        public IEnumerable<Subaccount> ListAll(string filter)
+        {
+            return ParametrizedList().All(SubaccountListParams(filter));
+        }
 
         public Page<Subaccount> ListFirstPage(int? pageSize = null)
         {
             return List().FirstPage(pageSize: pageSize);
+        }
+        
+        public Page<Subaccount> ListFirstPage(string filter, int? pageSize = null)
+        {
+            return ParametrizedList().FirstPage(listParams: SubaccountListParams(filter), pageSize: pageSize);
         }
 
         public Page<Subaccount> ListPageAfter(long id, int? pageSize = null)
         {
             return List().PageAfter(id, pageSize: pageSize);
         }
+        
+        public Page<Subaccount> ListPageAfter(long id, string filter, int? pageSize = null)
+        {
+            return ParametrizedList().PageAfter(id, SubaccountListParams(filter), pageSize: pageSize);
+        }
 
         public Page<Subaccount> ListPageBefore(long id, int? pageSize = null)
         {
             return List().PageBefore(id, pageSize: pageSize);
         }
+        
+        public Page<Subaccount> ListPageBefore(long id, string filter, int? pageSize = null)
+        {
+            return ParametrizedList().PageBefore(id, SubaccountListParams(filter), pageSize: pageSize);
+        }
 
         private Lister<Subaccount> List()
         {
             return new Lister<Subaccount>(new PageFetcher<Subaccount>(_restClient, "/subaccounts"));
+        }
+        
+        private ParametrizedLister<Subaccount> ParametrizedList()
+        {
+            return new ParametrizedLister<Subaccount>(new PageFetcher<Subaccount>(_restClient, "/subaccounts"));
+        }
+        
+        private Dictionary<string, object> SubaccountListParams(string filter)
+        {
+            var chartListParams = new Dictionary<string, object>();
+
+            if (filter != null)
+            {
+                chartListParams.Add("filter", filter);
+            }
+
+            return chartListParams;
         }
     }
 }

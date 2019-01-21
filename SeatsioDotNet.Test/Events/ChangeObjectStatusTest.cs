@@ -19,11 +19,22 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal("foo", Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").Status);
             Assert.Equal("foo", Client.Events.RetrieveObjectStatus(evnt.Key, "A-2").Status);
             Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(evnt.Key, "A-3").Status);
-            result.Labels.Should().BeEquivalentTo(new Dictionary<string, Labels>
-            {
-                {"A-1", new Labels("1", "seat", "A", "row")},
-                {"A-2", new Labels("2", "seat", "A", "row")}
-            });
+            Assert.Equal(new[] {"A-1", "A-2"}, result.Objects.Keys);
+            
+            var reportItem = result.Objects["A-1"];
+            Assert.Equal("A-1", reportItem.Label);
+            reportItem.Labels.Should().BeEquivalentTo(new Labels("1", "seat", "A", "row"));
+            Assert.Equal("foo", reportItem.Status);
+            Assert.Equal("Cat1", reportItem.CategoryLabel);
+            Assert.Equal(9, reportItem.CategoryKey);
+            Assert.Equal("seat", reportItem.ObjectType);
+            Assert.Null(reportItem.TicketType);
+            Assert.Null(reportItem.OrderId);
+            Assert.True(reportItem.ForSale);
+            Assert.Null(reportItem.Section);
+            Assert.Null(reportItem.Entrance);
+            Assert.Null(reportItem.NumBooked);
+            Assert.Null(reportItem.Capacity);
         }
 
         [Fact]

@@ -20,18 +20,27 @@ namespace SeatsioDotNet.Test.Events
         }  
         
         [Fact]
-        public void Labels()
+        public void ObjectDetails()
         {
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
 
             var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2), "foo");
             
-            bestAvailableResult.Labels.Should().BeEquivalentTo(new Dictionary<string, Labels>
-            {
-                {"B-4", new Labels("4", "seat", "B", "row")},
-                {"B-5", new Labels("5", "seat", "B", "row")}
-            });
+            var reportItem = bestAvailableResult.ObjectDetails["B-4"];
+            Assert.Equal("B-4", reportItem.Label);
+            reportItem.Labels.Should().BeEquivalentTo(new Labels("4", "seat", "B", "row"));
+            Assert.Equal("foo", reportItem.Status);
+            Assert.Equal("Cat1", reportItem.CategoryLabel);
+            Assert.Equal(9, reportItem.CategoryKey);
+            Assert.Equal("seat", reportItem.ObjectType);
+            Assert.Null(reportItem.TicketType);
+            Assert.Null(reportItem.OrderId);
+            Assert.True(reportItem.ForSale);
+            Assert.Null(reportItem.Section);
+            Assert.Null(reportItem.Entrance);
+            Assert.Null(reportItem.NumBooked);
+            Assert.Null(reportItem.Capacity);
         }
 
         [Fact]

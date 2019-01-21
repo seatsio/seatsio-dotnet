@@ -24,12 +24,7 @@ namespace SeatsioDotNet.Test.Events
             var status2 = Client.Events.RetrieveObjectStatus(evnt.Key, "A-2");
             Assert.Equal(ObjectStatus.Held, status2.Status);
             Assert.Equal(holdToken.Token, status2.HoldToken);
-
-            result.Labels.Should().BeEquivalentTo(new Dictionary<string, Labels>
-            {
-                {"A-1", new Labels("1", "seat", "A", "row")},
-                {"A-2", new Labels("2", "seat", "A", "row")}
-            });
+            Assert.Equal(new[] {"A-1", "A-2"}, result.Objects.Keys);
         }
 
         [Fact]

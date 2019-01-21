@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using SeatsioDotNet.EventReports;
 
 namespace SeatsioDotNet.Events
 {
     public class ChangeObjectStatusResult
     {
-        public Dictionary<string, Labels> Labels { get; set; }
+        public Dictionary<string, EventReportItem> Objects { get; set; }
     }
 }

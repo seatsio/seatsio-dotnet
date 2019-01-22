@@ -232,7 +232,7 @@ namespace SeatsioDotNet.Events
             }
 
             var restRequest = new RestRequest("/seasons/actions/change-object-status", Method.POST)
-                .AddQueryParameter("expand", "labels")
+                .AddQueryParameter("expand", "objects")
                 .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<ChangeObjectStatusResult>(restRequest));
         }

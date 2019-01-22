@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using SeatsioDotNet.Events;
 using SeatsioDotNet.HoldTokens;
 using Xunit;
@@ -19,15 +18,9 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").Status);
             Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(evnt.Key, "A-2").Status);
             Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(evnt.Key, "A-3").Status);
-
-            result.Labels.Should().BeEquivalentTo(new Dictionary<string, Labels>
-            {
-                {"A-1", new Labels("1", "seat", "A", "row")},
-                {"A-2", new Labels("2", "seat", "A", "row")}
-            });
+            Assert.Equal(new[] {"A-1", "A-2"}, result.Objects.Keys);
         }
-        
-        
+
         [Fact]
         public void Sections()
         {
@@ -40,11 +33,10 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(evnt.Key, "Section A-A-2").Status);
             Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(evnt.Key, "Section A-A-3").Status);
 
-            result.Labels.Should().BeEquivalentTo(new Dictionary<string, Labels>
-            {
-                {"Section A-A-1", new Labels("1", "seat", "A", "row", "Section A", "Entrance 1")},
-                {"Section A-A-2", new Labels("2", "seat", "A", "row", "Section A", "Entrance 1")}
-            });
+            var reportItem = result.Objects["Section A-A-1"];
+            Assert.Equal("Section A", reportItem.Section);
+            Assert.Equal("Entrance 1", reportItem.Entrance);
+            reportItem.Labels.Should().BeEquivalentTo(new Labels("1", "seat", "A", "row", "Section A"));
         }
 
         [Fact]

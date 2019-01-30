@@ -73,12 +73,19 @@ namespace SeatsioDotNet.Events
                 {
                     e.Add("eventKey", param.Key);
                 }
+                if (param.BookWholeTables != null) 
+                {
+                    e.Add("bookWholeTables", param.BookWholeTables);
+                }
+                if (param.TableBookingModes != null) 
+                {
+                    e.Add("tableBookingModes", param.TableBookingModes);
+                }                
                 events.Add(e);
             }
             requestBody.Add("events", events.ToArray());       
-            var restRequest = new RestRequest("/events/actions/create-multiple", Method.POST).AddJsonBody(requestBody);
-            var response = _restClient.Execute<MultipleEvents>(restRequest);
-            return AssertOk(response).events.ToArray();
+            var restRequest = new RestRequest("/events/actions/create-multiple", Method.POST).AddJsonBody(requestBody);            
+            return AssertOk(_restClient.Execute<MultipleEvents>(restRequest)).events.ToArray();
         }
 
         public void Update(string eventKey, string chartKey, string newEventKey)

@@ -61,15 +61,49 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal("event1", events[0].Key);
             Assert.Equal("event2", events[1].Key);
         }
-        
+
         [Fact]
-        public void BookWholeTablesCanBePassedIn() {}
-        
+        public void BookWholeTablesCanBePassedIn()
+        {
+            var chartKey = CreateTestChart();
+            var eventCreationParams = new[]
+            {
+                new EventCreationParams(null, true),
+                new EventCreationParams(null, false)
+            };
+
+            var events = Client.Events.Create(chartKey, eventCreationParams);
+            
+            Assert.True(events[0].BookWholeTables);
+            Assert.False(events[1].BookWholeTables);
+            Assert.Null(events[0].TableBookingModes);
+            Assert.Null(events[1].TableBookingModes);
+        }
+
         [Fact]
-        public void TableBookingModesCanBePassedIn() {}
-        
+        public void TableBookingModesCanBePassedIn()
+        {
+            var chartKey = CreateTestChartWithTables();
+            var eventCreationParams = new[]
+            {
+                new EventCreationParams(null, new Dictionary<string, string> {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}}),
+                new EventCreationParams(null, new Dictionary<string, string> {{"T1", "BY_SEAT"}, {"T2", "BY_TABLE"}})
+            };
+
+            var events = Client.Events.Create(chartKey, eventCreationParams);
+            
+            Assert.False(events[0].BookWholeTables);
+            Assert.False(events[1].BookWholeTables);
+            Assert.Equal(new Dictionary<string, string> {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}}, events[0].TableBookingModes);
+            Assert.Equal(new Dictionary<string, string> {{"T1", "BY_SEAT"}, {"T2", "BY_TABLE"}}, events[1].TableBookingModes);
+
+        }
+
         [Fact]
-        public void ErrorOnDuplicateKeys() {}
+        public void ErrorOnDuplicateKeys()
+        {
+            
+        }
         
     }    
     

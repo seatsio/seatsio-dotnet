@@ -45,6 +45,31 @@ namespace SeatsioDotNet.Test.Events
             Assert.NotNull(e.CreatedOn);
             Assert.Null(e.UpdatedOn);
         }
+
+        [Fact]
+        public void EventKeyCanBePassedIn()
+        {
+            var chartKey = CreateTestChart();
+            var eventCreationParams = new[]
+            {
+                new EventCreationParams("event1"),
+                new EventCreationParams("event2")
+            };
+
+            var events = Client.Events.Create(chartKey, eventCreationParams);
+            
+            Assert.Equal("event1", events[0].Key);
+            Assert.Equal("event2", events[1].Key);
+        }
+        
+        [Fact]
+        public void BookWholeTablesCanBePassedIn() {}
+        
+        [Fact]
+        public void TableBookingModesCanBePassedIn() {}
+        
+        [Fact]
+        public void ErrorOnDuplicateKeys() {}
         
     }    
     

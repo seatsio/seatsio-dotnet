@@ -66,9 +66,14 @@ namespace SeatsioDotNet.Events
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("chartKey", chartKey);
             var events = new List<Dictionary<string, object>>();
-            foreach (var eventCreationParam in eventCreationParams)
+            foreach (var param in eventCreationParams)
             {
-                events.Add(new Dictionary<string, object>());
+                var e = new Dictionary<string, object>();
+                if (param.Key != null)
+                {
+                    e.Add("eventKey", param.Key);
+                }
+                events.Add(e);
             }
             requestBody.Add("events", events.ToArray());       
             var restRequest = new RestRequest("/events/actions/create-multiple", Method.POST).AddJsonBody(requestBody);

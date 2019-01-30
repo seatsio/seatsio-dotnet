@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using RestSharp;
@@ -56,9 +57,23 @@ namespace SeatsioDotNet.Events
                 requestBody.Add("tableBookingModes", tableBookingModes);
             }
 
-            var restRequest = new RestRequest("/events", Method.POST)
-                .AddJsonBody(requestBody);
+            var restRequest = new RestRequest("/events", Method.POST).AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Event>(restRequest));
+        }
+        
+        public Event[] Create(string chartKey, EventCreationParams[] eventCreationParams)
+        {
+            Dictionary<string, object> requestBody = new Dictionary<string, object>();
+            requestBody.Add("chartKey", chartKey);
+            var events = new List<Dictionary<string, object>>();
+            foreach (var eventCreationParam in eventCreationParams)
+            {
+                events.Add(new Dictionary<string, object>());
+            }
+            requestBody.Add("events", events.ToArray());       
+            var restRequest = new RestRequest("/events/actions/create-multiple", Method.POST).AddJsonBody(requestBody);
+            var response = _restClient.Execute<MultipleEvents>(restRequest);
+            return AssertOk(response).events.ToArray();
         }
 
         public void Update(string eventKey, string chartKey, string newEventKey)
@@ -361,5 +376,6 @@ namespace SeatsioDotNet.Events
                 request => (RestRequest) request.AddUrlSegment("key", eventKey).AddUrlSegment("objectId", objectLabel)
             ));
         }
+        
     }
 }

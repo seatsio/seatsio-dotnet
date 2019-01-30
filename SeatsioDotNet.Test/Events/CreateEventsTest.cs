@@ -99,10 +99,17 @@ namespace SeatsioDotNet.Test.Events
 
         }
 
-        [Fact]
+        [Fact]               
         public void ErrorOnDuplicateKeys()
         {
-            
+            var chartKey = CreateTestChart();
+            var eventCreationParams = new[]
+            {
+                new EventCreationParams("e1"),
+                new EventCreationParams("e1")
+            };
+
+            Assert.Throws<SeatsioException>(() => Client.Events.Create(chartKey, eventCreationParams));
         }
         
     }    

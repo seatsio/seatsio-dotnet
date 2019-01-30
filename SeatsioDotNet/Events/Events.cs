@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using RestSharp;
@@ -56,9 +57,35 @@ namespace SeatsioDotNet.Events
                 requestBody.Add("tableBookingModes", tableBookingModes);
             }
 
-            var restRequest = new RestRequest("/events", Method.POST)
-                .AddJsonBody(requestBody);
+            var restRequest = new RestRequest("/events", Method.POST).AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Event>(restRequest));
+        }
+        
+        public Event[] Create(string chartKey, EventCreationParams[] eventCreationParams)
+        {
+            Dictionary<string, object> requestBody = new Dictionary<string, object>();
+            requestBody.Add("chartKey", chartKey);
+            var events = new List<Dictionary<string, object>>();
+            foreach (var param in eventCreationParams)
+            {
+                var e = new Dictionary<string, object>();
+                if (param.Key != null)
+                {
+                    e.Add("eventKey", param.Key);
+                }
+                if (param.BookWholeTables != null) 
+                {
+                    e.Add("bookWholeTables", param.BookWholeTables);
+                }
+                if (param.TableBookingModes != null) 
+                {
+                    e.Add("tableBookingModes", param.TableBookingModes);
+                }                
+                events.Add(e);
+            }
+            requestBody.Add("events", events.ToArray());       
+            var restRequest = new RestRequest("/events/actions/create-multiple", Method.POST).AddJsonBody(requestBody);            
+            return AssertOk(_restClient.Execute<MultipleEvents>(restRequest)).events.ToArray();
         }
 
         public void Update(string eventKey, string chartKey, string newEventKey)
@@ -361,5 +388,6 @@ namespace SeatsioDotNet.Events
                 request => (RestRequest) request.AddUrlSegment("key", eventKey).AddUrlSegment("objectId", objectLabel)
             ));
         }
+        
     }
 }

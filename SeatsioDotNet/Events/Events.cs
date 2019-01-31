@@ -91,13 +91,13 @@ namespace SeatsioDotNet.Events
         public void Update(string eventKey, string chartKey, string newEventKey)
         {
             Update(eventKey, chartKey, newEventKey, null, null);
-        }     
-        
+        }
+
         public void Update(string eventKey, string chartKey, string newEventKey, bool? bookWholeTables)
         {
             Update(eventKey, chartKey, newEventKey, bookWholeTables, null);
-        }  
-        
+        }
+
         public void Update(string eventKey, string chartKey, string newEventKey, Dictionary<string, string> tableBookingModes)
         {
             Update(eventKey, chartKey, newEventKey, null, tableBookingModes);
@@ -371,16 +371,32 @@ namespace SeatsioDotNet.Events
             return new Lister<Event>(new PageFetcher<Event>(_restClient, "/events"));
         }
 
-        public Lister<StatusChange> StatusChanges(string eventKey)
+        public Lister<StatusChange> StatusChanges(string eventKey, string filter = null, string sortField = null, string sortDirection = null)
         {
             return new Lister<StatusChange>(new PageFetcher<StatusChange>(
                 _restClient,
                 "/events/{key}/status-changes",
-                request => (RestRequest) request.AddUrlSegment("key", eventKey)
+                request => (RestRequest) request.AddUrlSegment("key", eventKey),
+                new Dictionary<string, string> {{"filter", filter}, {"sort", ToSort(sortField, sortDirection)}}
             ));
         }
 
-        public Lister<StatusChange> StatusChanges(string eventKey, string objectLabel)
+        private static string ToSort(string sortField, string sortDirection)
+        {
+            if (sortField == null)
+            {
+                return null;
+            }
+
+            if (sortDirection == null)
+            {
+                return sortField;
+            }
+
+            return sortField + ":" + sortDirection;
+        }
+
+        public Lister<StatusChange> StatusChangesForObject(string eventKey, string objectLabel)
         {
             return new Lister<StatusChange>(new PageFetcher<StatusChange>(
                 _restClient,

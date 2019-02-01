@@ -11,7 +11,7 @@ namespace SeatsioDotNet.Test.Events
             var holdToken = Client.HoldTokens.Create();
             
             Assert.NotNull(holdToken.Token);
-            CustomAssert.CloseTo(DateTime.Now.AddMinutes(15), holdToken.ExpiresAt);
+            CustomAssert.CloseTo(DateTimeOffset.Now.AddMinutes(15), holdToken.ExpiresAt);
             Assert.InRange(holdToken.ExpiresInSeconds, 14 * 60, 15 * 60);
         }   
         
@@ -21,7 +21,7 @@ namespace SeatsioDotNet.Test.Events
             var holdToken = Client.HoldTokens.Create(5);
             
             Assert.NotNull(holdToken.Token);
-            CustomAssert.CloseTo(DateTime.Now.AddMinutes(5), holdToken.ExpiresAt);
+            CustomAssert.CloseTo(DateTimeOffset.Now.AddMinutes(5), holdToken.ExpiresAt);
             Assert.InRange(holdToken.ExpiresInSeconds, 4 * 60, 5 * 60);
         }
     }

@@ -8,6 +8,7 @@ install:
 
 script:
  - dotnet build
+ - export TZ=Europe/Brussels
  - dotnet test SeatsioDotNet.Test
 
 deploy:

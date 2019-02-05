@@ -70,6 +70,40 @@ namespace SeatsioDotNet.Test.Events
             var statusChanges = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel").All();
 
             Assert.Equal(new[] {"A-1", "A-2", "A-3", "B-1"}, statusChanges.Select(s => s.ObjectLabel));
+        }     
+        
+        [Fact]
+        public void SortAscPageBefore()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {"A-1"});
+            Client.Events.Book(evnt.Key, new[] {"A-2"});
+            Client.Events.Book(evnt.Key, new[] {"B-1"});
+            Client.Events.Book(evnt.Key, new[] {"A-3"});
+
+            var statusChangeLister = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel");
+            var statusChangeA3 = statusChangeLister.All().ToList()[2];
+            var statusChanges = statusChangeLister.PageBefore(statusChangeA3.Id, 2).Items;
+
+            Assert.Equal(new[] {"A-1", "A-2"}, statusChanges.Select(s => s.ObjectLabel));
+        }    
+        
+        [Fact]
+        public void SortAscPageAfter()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {"A-1"});
+            Client.Events.Book(evnt.Key, new[] {"A-2"});
+            Client.Events.Book(evnt.Key, new[] {"B-1"});
+            Client.Events.Book(evnt.Key, new[] {"A-3"});
+
+            var statusChangeLister = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel");
+            var statusChangeA1 = statusChangeLister.All().ToList()[0];
+            var statusChanges = statusChangeLister.PageAfter(statusChangeA1.Id, 2).Items;
+
+            Assert.Equal(new[] {"A-2", "A-3"}, statusChanges.Select(s => s.ObjectLabel));
         }       
         
         [Fact]

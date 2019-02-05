@@ -19,7 +19,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.False(retrievedEvent.BookWholeTables);
             Assert.True(retrievedEvent.SupportsBestAvailable);
             Assert.Null(retrievedEvent.ForSaleConfig);
-            CustomAssert.CloseTo(DateTime.Now, retrievedEvent.CreatedOn.Value);
+            CustomAssert.CloseTo(DateTimeOffset.Now, retrievedEvent.CreatedOn.Value);
             Assert.Null(retrievedEvent.UpdatedOn);
         }
     }

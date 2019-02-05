@@ -34,12 +34,57 @@ namespace SeatsioDotNet.Test.Events
             var statusChange = statusChanges.First();
 
             Assert.NotEqual(0, statusChange.Id);
-            CustomAssert.CloseTo(DateTime.Now, statusChange.Date);
+            CustomAssert.CloseTo(DateTimeOffset.Now, statusChange.Date);
             Assert.Equal("order1", statusChange.OrderId);
             Assert.Equal("s1", statusChange.Status);
             Assert.Equal("A-1", statusChange.ObjectLabel);
             Assert.Equal(evnt.Id, statusChange.EventId);
             Assert.Equal(extraData, statusChange.ExtraData);
+        }
+        
+        [Fact]
+        public void Filter()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {"A-1"});
+            Client.Events.Book(evnt.Key, new[] {"A-2"});
+            Client.Events.Book(evnt.Key, new[] {"B-1"});
+            Client.Events.Book(evnt.Key, new[] {"A-3"});
+
+            var statusChanges = Client.Events.StatusChanges(evnt.Key, filter: "A-").All();
+
+            Assert.Equal(new[] {"A-3", "A-2", "A-1"}, statusChanges.Select(s => s.ObjectLabel));
+        }    
+        
+        [Fact]
+        public void SortAsc()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {"A-1"});
+            Client.Events.Book(evnt.Key, new[] {"A-2"});
+            Client.Events.Book(evnt.Key, new[] {"B-1"});
+            Client.Events.Book(evnt.Key, new[] {"A-3"});
+
+            var statusChanges = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel").All();
+
+            Assert.Equal(new[] {"A-1", "A-2", "A-3", "B-1"}, statusChanges.Select(s => s.ObjectLabel));
+        }       
+        
+        [Fact]
+        public void SortDesc()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {"A-1"});
+            Client.Events.Book(evnt.Key, new[] {"A-2"});
+            Client.Events.Book(evnt.Key, new[] {"B-1"});
+            Client.Events.Book(evnt.Key, new[] {"A-3"});
+
+            var statusChanges = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel", sortDirection: "DESC").All();
+
+            Assert.Equal(new[] {"B-1", "A-3", "A-2", "A-1"}, statusChanges.Select(s => s.ObjectLabel));
         }
     }
 }

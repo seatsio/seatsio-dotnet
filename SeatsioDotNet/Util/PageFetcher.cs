@@ -10,6 +10,7 @@ namespace SeatsioDotNet.Util
         private readonly RestClient _restClient;
         private readonly string _path;
         private readonly Func<RestRequest, RestRequest> _requestAdapter;
+        private readonly Dictionary<string, string> _queryParams;
 
         public PageFetcher(RestClient restClient, String path)
         {
@@ -22,6 +23,14 @@ namespace SeatsioDotNet.Util
             _restClient = restClient;
             _path = path;
             _requestAdapter = requestAdapter;
+        }
+
+        public PageFetcher(RestClient restClient, String path, Func<RestRequest, RestRequest> requestAdapter, Dictionary<String, String> queryParams)
+        {
+            _restClient = restClient;
+            _path = path;
+            _requestAdapter = requestAdapter;
+            _queryParams = queryParams;
         }
 
         public Page<T> FetchFirstPage(Dictionary<string, object> listParams = null, int? pageSize = null)
@@ -44,7 +53,7 @@ namespace SeatsioDotNet.Util
 
         private RestRequest BuildRequest(Dictionary<string, object> listParams, int? pageSize)
         {
-            var restRequest = new RestRequest(_path, Method.GET);
+            var restRequest = new RestRequest(_path);
             if (_requestAdapter != null)
             {
                 restRequest = _requestAdapter.Invoke(restRequest);
@@ -61,6 +70,14 @@ namespace SeatsioDotNet.Util
             if (pageSize != null)
             {
                 restRequest.AddQueryParameter("limit", pageSize.ToString());
+            }
+
+            if (_queryParams != null)
+            {
+                foreach (var queryParam in _queryParams)
+                {
+                    restRequest.AddQueryParameter(queryParam.Key, queryParam.Value);
+                }
             }
 
             return restRequest;

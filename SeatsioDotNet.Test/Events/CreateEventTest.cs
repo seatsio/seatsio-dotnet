@@ -19,10 +19,10 @@ namespace SeatsioDotNet.Test.Events
             Assert.False(evnt.BookWholeTables);
             Assert.True(evnt.SupportsBestAvailable);
             Assert.Null(evnt.ForSaleConfig);
-            CustomAssert.CloseTo(DateTime.Now, evnt.CreatedOn.Value);
+            CustomAssert.CloseTo(DateTimeOffset.Now, evnt.CreatedOn.Value);
             Assert.Null(evnt.UpdatedOn);
-        }   
-        
+        }
+
         [Fact]
         public void EventKeyIsOptional()
         {
@@ -32,8 +32,8 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.Equal("eventje", evnt.Key);
             Assert.False(evnt.BookWholeTables);
-        }    
-        
+        }
+
         [Fact]
         public void BookWholeTablesIsOptional()
         {
@@ -43,14 +43,14 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.NotNull(evnt.Key);
             Assert.True(evnt.BookWholeTables);
-        }  
-        
+        }
+
         [Fact]
         public void TableBookingModesAreOptional()
         {
             var chartKey = CreateTestChartWithTables();
             var tableBookingModes = new Dictionary<string, string> {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}};
-            
+
             var evnt = Client.Events.Create(chartKey, null, tableBookingModes);
 
             Assert.NotNull(evnt.Key);

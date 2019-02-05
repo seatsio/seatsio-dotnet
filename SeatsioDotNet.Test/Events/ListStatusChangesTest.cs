@@ -34,7 +34,7 @@ namespace SeatsioDotNet.Test.Events
             var statusChange = statusChanges.First();
 
             Assert.NotEqual(0, statusChange.Id);
-            CustomAssert.CloseTo(DateTime.Now, statusChange.Date);
+            CustomAssert.CloseTo(DateTimeOffset.Now, statusChange.Date);
             Assert.Equal("order1", statusChange.OrderId);
             Assert.Equal("s1", statusChange.Status);
             Assert.Equal("A-1", statusChange.ObjectLabel);

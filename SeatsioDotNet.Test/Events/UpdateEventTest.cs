@@ -19,7 +19,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(evnt.Key, retrievedEvent.Key);
             Assert.Equal(chartKey2, retrievedEvent.ChartKey);
             Assert.False(retrievedEvent.BookWholeTables);
-            CustomAssert.CloseTo(DateTime.Now, retrievedEvent.UpdatedOn.Value);
+            CustomAssert.CloseTo(DateTimeOffset.Now, retrievedEvent.UpdatedOn.Value);
         }    
         
         [Fact]

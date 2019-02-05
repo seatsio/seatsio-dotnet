@@ -7,7 +7,7 @@ namespace SeatsioDotNet.HoldTokens
     {
         [DeserializeAs(Name = "holdToken")]
         public string Token { get; set; }
-        public DateTime ExpiresAt { get; set; }
+        public DateTimeOffset ExpiresAt { get; set; }
         public int ExpiresInSeconds { get; set; }
     }
 }

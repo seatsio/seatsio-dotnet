@@ -7,7 +7,7 @@ namespace SeatsioDotNet.Test
 {
     public class CustomAssert
     {
-        public static void CloseTo(DateTime expected, DateTime actual)
+        public static void CloseTo(DateTimeOffset expected, DateTimeOffset actual)
         {
             Assert.True(actual > expected.AddMinutes(-2) && actual < expected.AddMinutes(2));
         }

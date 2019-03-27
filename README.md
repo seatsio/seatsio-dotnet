@@ -57,13 +57,6 @@ var client = new SeatsioClient("<SECRET KEY>");
 client.Events.ChangeObjectStatus(""<EVENT KEY>"", new [] { "A-1", "A-2"}, "unavailable");
 ```
 
-### Listing all charts
-
-```csharp
-var client = new SeatsioClient("<SECRET KEY>");
-var charts = client.Charts.ListAll(); // returns an IEnumerable<Chart>
-```
-
 ### Retrieving the published version of a chart (i.e. the actual drawing, containing the venue type, categories etc.)
 
 ```csharp
@@ -72,11 +65,52 @@ var drawing = client.Charts.RetrievePublishedVersion(<CHART KEY>);
 Console.WriteLine(drawing.VenueType);
 ```
 
-### Listing the first page of charts (default page size is 20)
+### Listing all charts
 
 ```csharp
 var client = new SeatsioClient("<SECRET KEY>");
-var charts = client.Charts.ListFirstPage(); // returns a Page<Chart>
+
+var charts = client.Charts.ListAll();
+foreach (var chart in charts)
+{
+  Console.WriteLine("Chart " + chart.Key);
+}
+```
+
+Note: `listAll()` returns an IEnumerable`, which under the hood calls the seats.io API to fetch charts page by page. So multiple API calls may be done underneath to fetch all charts.
+
+### Listing charts page by page
+
+E.g. to show charts in a paginated list on a dashboard.
+
+```csharp
+// ... user initially opens the screen ...
+
+var firstPage = client.Charts.ListFirstPage();
+foreach (var chart in firstPage.Items)
+{
+  Console.WriteLine("Chart " + chart.Key);
+}
+```
+
+```csharp
+// ... user clicks on 'next page' button ...
+
+var nextPage = client.Charts.ListPageAfter(firstPage.NextPageStartsAfter);
+foreach (var chart in nextPage.Items)
+{
+  Console.WriteLine("Chart " + chart.Key);
+}
+```
+
+```csharp
+// ... user clicks on 'previous page' button ...
+
+var previousPage = client.Charts.ListPageBefore(nextPage.PreviousPageEndsBefore);
+foreach (var chart in previousPage.Items)
+{
+  Console.WriteLine("Chart " + chart.Key);
+}
 ```
 
 ## Error handling

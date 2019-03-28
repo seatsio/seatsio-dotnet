@@ -13,25 +13,25 @@ namespace SeatsioDotNet.ChartReports
             _restClient = restClient;
         }
 
-        public Dictionary<string, IEnumerable<ChartReportItem>> ByLabel(string eventKey)
+        public Dictionary<string, IEnumerable<ChartReportItem>> ByLabel(string chartKey)
         {
-            return FetchReport("byLabel", eventKey);
+            return FetchReport("byLabel", chartKey);
         }
         
-        public Dictionary<string, IEnumerable<ChartReportItem>> ByCategoryKey(string eventKey)
+        public Dictionary<string, IEnumerable<ChartReportItem>> ByCategoryKey(string chartKey)
         {
-            return FetchReport("byCategoryKey", eventKey);
+            return FetchReport("byCategoryKey", chartKey);
         }
         
-        public Dictionary<string, IEnumerable<ChartReportItem>> ByCategoryLabel(string eventKey)
+        public Dictionary<string, IEnumerable<ChartReportItem>> ByCategoryLabel(string chartKey)
         {
-            return FetchReport("byCategoryLabel", eventKey);
+            return FetchReport("byCategoryLabel", chartKey);
         }
 
-        private Dictionary<string, IEnumerable<ChartReportItem>> FetchReport(string reportType, string eventKey)
+        private Dictionary<string, IEnumerable<ChartReportItem>> FetchReport(string reportType, string chartKey)
         {
             var restRequest = new RestRequest("/reports/charts/{key}/{reportType}", Method.GET)
-                .AddUrlSegment("key", eventKey)
+                .AddUrlSegment("key", chartKey)
                 .AddUrlSegment("reportType", reportType);
             return AssertOk(_restClient.Execute<Dictionary<string, IEnumerable<ChartReportItem>>>(restRequest));
         }

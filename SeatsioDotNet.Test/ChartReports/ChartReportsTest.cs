@@ -47,5 +47,25 @@ namespace SeatsioDotNet.Test.ChartReports
             Assert.Single(report["A-1"]);
             Assert.Single(report["A-2"]);
         }
+
+        [Fact]
+        public void ByCategoryKey()
+        {
+            var chartKey = CreateTestChart();            
+            var report = Client.ChartReports.ByCategoryKey(chartKey);
+            Assert.Equal(2, report.Count);
+            Assert.Equal(17, report["9"].Count());
+            Assert.Equal(17, report["10"].Count());
+        }
+
+        [Fact]
+        public void ByCategoryLabel()
+        {
+            var chartKey = CreateTestChart();            
+            var report = Client.ChartReports.ByCategoryLabel(chartKey);
+            Assert.Equal(2, report.Count);
+            Assert.Equal(17, report["Cat1"].Count());
+            Assert.Equal(17, report["Cat2"].Count());
+        }
     }
 }

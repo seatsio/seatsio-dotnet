@@ -17,6 +17,16 @@ namespace SeatsioDotNet.ChartReports
         {
             return FetchReport("byLabel", eventKey);
         }
+        
+        public Dictionary<string, IEnumerable<ChartReportItem>> ByCategoryKey(string eventKey)
+        {
+            return FetchReport("byCategoryKey", eventKey);
+        }
+        
+        public Dictionary<string, IEnumerable<ChartReportItem>> ByCategoryLabel(string eventKey)
+        {
+            return FetchReport("byCategoryLabel", eventKey);
+        }
 
         private Dictionary<string, IEnumerable<ChartReportItem>> FetchReport(string reportType, string eventKey)
         {

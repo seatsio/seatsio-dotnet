@@ -45,6 +45,11 @@ namespace SeatsioDotNet.Test
             return CreateTestChartFromJson(File.ReadAllText("./resources/sampleChartWithTables.json"));
         }
 
+        protected string CreateTestChartWithErrors()
+        {
+            return CreateTestChartFromJson(File.ReadAllText("./resources/sampleChartWithErrors.json"));
+        }
+
         protected string CreateTestChartFromJson(String json)
         {
             var restClient = new RestClient(BaseUrl);

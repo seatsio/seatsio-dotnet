@@ -186,6 +186,20 @@ namespace SeatsioDotNet.Charts
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
+        public ChartValidationResult ValidatePublishedVersion(string chartKey)
+        {
+            var restRequest = new RestRequest("/charts/{key}/version/published/actions/validate", Method.POST)
+                .AddUrlSegment("key",chartKey);
+            return AssertOk(_restClient.Execute<ChartValidationResult>(restRequest));
+        }
+
+        public ChartValidationResult ValidateDraftVersion(string chartKey)
+        {
+            var restRequest = new RestRequest("/charts/{key}/version/draft/actions/validate", Method.POST)
+                .AddUrlSegment("key",chartKey);
+            return AssertOk(_restClient.Execute<ChartValidationResult>(restRequest));
+        }
+
         public IEnumerable<Chart> ListAll(string filter = null, string tag = null, bool? expandEvents = null)
         {
             return List().All(ChartListParams(filter, tag, expandEvents));

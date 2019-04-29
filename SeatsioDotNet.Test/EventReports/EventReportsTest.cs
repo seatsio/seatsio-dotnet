@@ -34,7 +34,7 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Null(reportItem.Capacity);
             Assert.Equal(extraData, reportItem.ExtraData);
         }
-        
+
         [Fact]
         public void HoldToken()
         {
@@ -55,11 +55,15 @@ namespace SeatsioDotNet.Test.EventReports
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
             Client.Events.Book(evnt.Key, new[] {new ObjectProperties("GA1", 5)});
+            var holdToken = Client.HoldTokens.Create();
+            Client.Events.Hold(evnt.Key, new[] {new ObjectProperties("GA1", 3)}, holdToken.Token);
 
             var report = Client.EventReports.ByLabel(evnt.Key);
 
             var reportItem = report["GA1"].First();
             Assert.Equal(5, reportItem.NumBooked);
+            Assert.Equal(3, reportItem.NumHeld);
+            Assert.Equal(92, reportItem.NumFree);
             Assert.Equal(100, reportItem.Capacity);
             Assert.Equal("generalAdmission", reportItem.ObjectType);
         }
@@ -77,8 +81,8 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(2, report["lolzor"].Count());
             Assert.Single(report[ObjectStatus.Booked]);
             Assert.Equal(31, report[ObjectStatus.Free].Count());
-        }  
-        
+        }
+
         [Fact]
         public void ByStatusEmptyChart()
         {
@@ -100,8 +104,8 @@ namespace SeatsioDotNet.Test.EventReports
             var report = Client.EventReports.ByStatus(evnt.Key, "lolzor");
 
             Assert.Equal(2, report.Count());
-        }    
-        
+        }
+
         [Fact]
         public void BySpecificNonExistingStatus()
         {

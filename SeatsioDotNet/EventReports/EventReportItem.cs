@@ -18,6 +18,8 @@ namespace SeatsioDotNet.EventReports
         public string Section { get; set; }
         public string Entrance { get; set; }
         public int? NumBooked { get; set; }
+        public int? NumFree { get; set; }
+        public int? NumHeld { get; set; }
         public int? Capacity { get; set; }
         public Dictionary<string, object> ExtraData { get; set; }
     }

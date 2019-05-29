@@ -66,5 +66,22 @@ namespace SeatsioDotNet.Test.Charts
 
             Assert.Equal(new[] {event2.Id, event1.Id}, charts.First().Events.Select(c => c.Id));
         }
+
+        [Fact]
+        public void AllWithValidation() {
+            Client.Accounts.UpdateSetting("VALIDATE_DUPLICATE_LABELS", "ERROR");
+            Client.Accounts.UpdateSetting("VALIDATE_UNLABELED_OBJECTS", "ERROR");
+            Client.Accounts.UpdateSetting("VALIDATE_OBJECTS_WITHOUT_CATEGORIES", "WARNING");
+            CreateTestChartWithErrors();
+            CreateTestChartWithErrors();
+            CreateTestChartWithErrors();
+
+            var charts = Client.Charts.ListAll(withValidation: true);
+
+            
+            foreach (var chart in charts) {
+                Assert.Contains(new[] {"VALIDATE_DUPLICATE_LABELS", "VALIDATE_UNLABELED_OBJECTS"}.ToList(), charts.Select(c => c.Validation.Errors).ToList());
+            }
+        }
     }
 }

@@ -73,15 +73,22 @@ namespace SeatsioDotNet.Test.Charts
             Client.Accounts.UpdateSetting("VALIDATE_UNLABELED_OBJECTS", "ERROR");
             Client.Accounts.UpdateSetting("VALIDATE_OBJECTS_WITHOUT_CATEGORIES", "WARNING");
             CreateTestChartWithErrors();
-            CreateTestChartWithErrors();
-            CreateTestChartWithErrors();
 
             var charts = Client.Charts.ListAll(withValidation: true);
 
-            
-            foreach (var chart in charts) {
-                Assert.Contains(new[] {"VALIDATE_DUPLICATE_LABELS", "VALIDATE_UNLABELED_OBJECTS"}.ToList(), charts.Select(c => c.Validation.Errors).ToList());
-            }
+            Assert.Equal(new[] {"VALIDATE_DUPLICATE_LABELS", "VALIDATE_UNLABELED_OBJECTS"}, charts.First().Validation.Errors);
+        }
+
+        [Fact]
+        public void AllWithoutValidation() {
+            Client.Accounts.UpdateSetting("VALIDATE_DUPLICATE_LABELS", "ERROR");
+            Client.Accounts.UpdateSetting("VALIDATE_UNLABELED_OBJECTS", "ERROR");
+            Client.Accounts.UpdateSetting("VALIDATE_OBJECTS_WITHOUT_CATEGORIES", "WARNING");
+            CreateTestChartWithErrors();
+
+            var charts = Client.Charts.ListAll();
+
+            Assert.Null(charts.First().Validation);
         }
     }
 }

@@ -239,7 +239,7 @@ namespace SeatsioDotNet.Charts
                 chartListParams.Add("expand", "events");
             }
 
-            if (withValidation != false) {
+            if (withValidation == true) {
                 chartListParams.Add("validation", true);
             }
 

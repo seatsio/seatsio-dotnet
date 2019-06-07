@@ -12,6 +12,7 @@ namespace SeatsioDotNet
         public HoldTokens.HoldTokens HoldTokens { get; }
         public EventReports.EventReports EventReports { get; }
         public ChartReports.ChartReports ChartReports { get; }
+        public UsageReports.UsageReports UsageReports { get; }
 
         public SeatsioClient(string secretKey, string baseUrl)
         {
@@ -23,6 +24,7 @@ namespace SeatsioDotNet
             HoldTokens = new HoldTokens.HoldTokens(restClient);
             EventReports = new EventReports.EventReports(restClient);
             ChartReports = new ChartReports.ChartReports(restClient);
+            UsageReports = new UsageReports.UsageReports(restClient);
         }
 
         public SeatsioClient(string secretKey): this(secretKey, "https://api.seatsio.net")

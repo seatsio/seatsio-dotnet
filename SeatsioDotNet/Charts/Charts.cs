@@ -200,27 +200,27 @@ namespace SeatsioDotNet.Charts
             return AssertOk(_restClient.Execute<ChartValidationResult>(restRequest));
         }
 
-        public IEnumerable<Chart> ListAll(string filter = null, string tag = null, bool? expandEvents = null)
+        public IEnumerable<Chart> ListAll(string filter = null, string tag = null, bool? expandEvents = null, bool? withValidation = false)
         {
-            return List().All(ChartListParams(filter, tag, expandEvents));
+            return List().All(ChartListParams(filter, tag, expandEvents, withValidation));
         }
 
-        public Page<Chart> ListFirstPage(string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null)
+        public Page<Chart> ListFirstPage(string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null, bool? withValidation = false)
         {
-            return List().FirstPage(ChartListParams(filter, tag, expandEvents), pageSize);
+            return List().FirstPage(ChartListParams(filter, tag, expandEvents, withValidation), pageSize);
         }
 
-        public Page<Chart> ListPageAfter(long id, string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null)
+        public Page<Chart> ListPageAfter(long id, string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null, bool? withValidation = false)
         {
-            return List().PageAfter(id, ChartListParams(filter, tag, expandEvents), pageSize);
+            return List().PageAfter(id, ChartListParams(filter, tag, expandEvents, withValidation), pageSize);
         }
 
-        public Page<Chart> ListPageBefore(long id, string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null)
+        public Page<Chart> ListPageBefore(long id, string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null, bool? withValidation = false)
         {
-            return List().PageBefore(id, ChartListParams(filter, tag, expandEvents), pageSize);
+            return List().PageBefore(id, ChartListParams(filter, tag, expandEvents, withValidation), pageSize);
         }
 
-        private Dictionary<string, object> ChartListParams(string filter, string tag, bool? expandEvents)
+        private Dictionary<string, object> ChartListParams(string filter, string tag, bool? expandEvents, bool? withValidation = false)
         {
             var chartListParams = new Dictionary<string, object>();
 
@@ -237,6 +237,10 @@ namespace SeatsioDotNet.Charts
             if (expandEvents != null && expandEvents.Value)
             {
                 chartListParams.Add("expand", "events");
+            }
+
+            if (withValidation == true) {
+                chartListParams.Add("validation", true);
             }
 
             return chartListParams;

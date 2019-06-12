@@ -17,5 +17,6 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
     <PackageReference Include="RestSharp" Version="106.5.4" />
+    <PackageReference Include="xunit.analyzers" Version="0.7.0" />
   </ItemGroup>
 </Project>

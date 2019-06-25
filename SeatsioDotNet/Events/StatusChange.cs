@@ -12,5 +12,6 @@ namespace SeatsioDotNet.Events
         public string OrderId { get; set; }
         public long EventId { get; set; }
         public Dictionary<string, object> ExtraData { get; set; }
+        public StatusChangeOrigin Origin { get; set; }
     }
 }

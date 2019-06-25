@@ -40,6 +40,8 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal("A-1", statusChange.ObjectLabel);
             Assert.Equal(evnt.Id, statusChange.EventId);
             Assert.Equal(extraData, statusChange.ExtraData);
+            Assert.Equal("API_CALL", statusChange.Origin.Type);
+            Assert.NotNull(statusChange.Origin.Ip);
         }
         
         [Fact]

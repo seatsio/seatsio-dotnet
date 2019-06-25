@@ -53,5 +53,19 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(new[] {"B-4", "B-5", "B-6"}, bestAvailableResult.Objects);
             Assert.Equal("order1", Client.Events.RetrieveObjectStatus(evnt.Key, "B-4").OrderId);
         }
+        
+        [Fact]
+        public void KeepExtraData()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var extraData = new Dictionary<string, object> {{"foo1", "bar1"}};
+            Client.Events.UpdateExtraData(evnt.Key, "A-1", extraData);
+            HoldToken holdToken = Client.HoldTokens.Create();
+
+            Client.Events.Hold(evnt.Key, new[] {"A-1"}, holdToken.Token, null, true);
+
+            Assert.Equal(extraData, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
+        }
     }
 }

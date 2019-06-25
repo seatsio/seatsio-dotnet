@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using FluentAssertions;
 using SeatsioDotNet.Events;
 using SeatsioDotNet.HoldTokens;
 using Xunit;
@@ -68,6 +69,19 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.Equal("order1", Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").OrderId);
             Assert.Equal("order1", Client.Events.RetrieveObjectStatus(evnt.Key, "A-2").OrderId);
+        }  
+        
+        [Fact]
+        public void KeepExtraData()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var extraData = new Dictionary<string, object> {{"foo1", "bar1"}};
+            Client.Events.UpdateExtraData(evnt.Key, "A-1", extraData);
+
+            Client.Events.Book(evnt.Key, new[] {"A-1"}, null, null, true);
+
+            Assert.Equal(extraData, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
         }
     }
 }

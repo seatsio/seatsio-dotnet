@@ -72,5 +72,44 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(new Dictionary<string, object> {{"foo", "bar"}}, Client.Events.RetrieveObjectStatus(evnt.Key, "B-4").ExtraData);
             Assert.Equal(new Dictionary<string, object> {{"foo", "baz"}}, Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").ExtraData);
         }
+        
+        [Fact]
+        public void KeepExtraDataTrue()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var extraData = new Dictionary<string, object> {{"foo1", "bar1"}};
+            Client.Events.UpdateExtraData(evnt.Key, "B-5", extraData);
+
+            Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus", null, null, true);
+
+            Assert.Equal(extraData, Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").ExtraData);
+        }
+
+        [Fact]
+        public void KeepExtraDataFalse()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var extraData = new Dictionary<string, object> {{"foo1", "bar1"}};
+            Client.Events.UpdateExtraData(evnt.Key, "B-5", extraData);
+
+            Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus", null, null, false);
+
+            Assert.Null(Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").ExtraData);
+        }
+
+        [Fact]
+        public void NoKeepExtraData()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var extraData = new Dictionary<string, object> {{"foo1", "bar1"}};
+            Client.Events.UpdateExtraData(evnt.Key, "B-5", extraData);
+
+            Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus");
+
+            Assert.Null(Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").ExtraData);
+        }
     }
 }

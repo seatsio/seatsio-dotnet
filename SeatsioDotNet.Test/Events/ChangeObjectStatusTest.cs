@@ -20,7 +20,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal("foo", Client.Events.RetrieveObjectStatus(evnt.Key, "A-2").Status);
             Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(evnt.Key, "A-3").Status);
             Assert.Equal(new[] {"A-1", "A-2"}, result.Objects.Keys);
-            
+
             var reportItem = result.Objects["A-1"];
             Assert.Equal("A-1", reportItem.Label);
             reportItem.Labels.Should().BeEquivalentTo(new Labels("1", "seat", "A", "row"));
@@ -117,6 +117,45 @@ namespace SeatsioDotNet.Test.Events
 
             var status2 = Client.Events.RetrieveObjectStatus(evnt.Key, "A-2");
             Assert.Equal(extraData2, status2.ExtraData);
+        }
+
+        [Fact]
+        public void KeepExtraDataTrue()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var extraData = new Dictionary<string, object> {{"foo1", "bar1"}};
+            Client.Events.UpdateExtraData(evnt.Key, "A-1", extraData);
+
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", null, null, true);
+
+            Assert.Equal(extraData, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
+        }
+
+        [Fact]
+        public void KeepExtraDataFalse()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var extraData = new Dictionary<string, object> {{"foo1", "bar1"}};
+            Client.Events.UpdateExtraData(evnt.Key, "A-1", extraData);
+
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", null, null, false);
+
+            Assert.Null(Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
+        }
+
+        [Fact]
+        public void NoKeepExtraData()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var extraData = new Dictionary<string, object> {{"foo1", "bar1"}};
+            Client.Events.UpdateExtraData(evnt.Key, "A-1", extraData);
+
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus");
+
+            Assert.Null(Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
         }
     }
 }

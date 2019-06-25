@@ -155,92 +155,92 @@ namespace SeatsioDotNet.Events
             return AssertOk(_restClient.Execute<ObjectStatus>(restRequest));
         }
 
-        public ChangeObjectStatusResult Book(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null)
+        public ChangeObjectStatusResult Book(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult Book(string[] eventKeys, IEnumerable<string> objects, string holdToken = null, string orderId = null)
+        public ChangeObjectStatusResult Book(string[] eventKeys, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult Book(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null)
+        public ChangeObjectStatusResult Book(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult Book(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null)
+        public ChangeObjectStatusResult Book(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData);
         }
 
-        public BestAvailableResult Book(string eventKey, BestAvailable bestAvailable, string holdToken = null, string orderId = null)
+        public BestAvailableResult Book(string eventKey, BestAvailable bestAvailable, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(eventKey, bestAvailable, ObjectStatus.Booked, holdToken, orderId);
+            return ChangeObjectStatus(eventKey, bestAvailable, ObjectStatus.Booked, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult Release(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null)
+        public ChangeObjectStatusResult Release(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Free, holdToken, orderId);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult Release(string[] eventKeys, IEnumerable<string> objects, string holdToken = null, string orderId = null)
+        public ChangeObjectStatusResult Release(string[] eventKeys, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Free, holdToken, orderId);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult Release(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null)
+        public ChangeObjectStatusResult Release(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Free, holdToken, orderId);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult Release(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null)
+        public ChangeObjectStatusResult Release(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Free, holdToken, orderId);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult Hold(string eventKey, IEnumerable<string> objects, string holdToken, string orderId = null)
+        public ChangeObjectStatusResult Hold(string eventKey, IEnumerable<string> objects, string holdToken, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult Hold(string[] eventKeys, IEnumerable<string> objects, string holdToken, string orderId = null)
+        public ChangeObjectStatusResult Hold(string[] eventKeys, IEnumerable<string> objects, string holdToken, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult Hold(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null)
+        public ChangeObjectStatusResult Hold(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult Hold(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null)
+        public ChangeObjectStatusResult Hold(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData);
         }
 
-        public BestAvailableResult Hold(string eventKey, BestAvailable bestAvailable, string holdToken, string orderId = null)
+        public BestAvailableResult Hold(string eventKey, BestAvailable bestAvailable, string holdToken, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(eventKey, bestAvailable, ObjectStatus.Held, holdToken, orderId);
+            return ChangeObjectStatus(eventKey, bestAvailable, ObjectStatus.Held, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult ChangeObjectStatus(string eventKey, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null)
+        public ChangeObjectStatusResult ChangeObjectStatus(string eventKey, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(new[] {eventKey}, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId);
+            return ChangeObjectStatus(new[] {eventKey}, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult ChangeObjectStatus(string eventKey, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null)
+        public ChangeObjectStatusResult ChangeObjectStatus(string eventKey, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(new[] {eventKey}, objects, status, holdToken, orderId);
+            return ChangeObjectStatus(new[] {eventKey}, objects, status, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null)
+        public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
-            return ChangeObjectStatus(events, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId);
+            return ChangeObjectStatus(events, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId, keepExtraData);
         }
 
-        public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null)
+        public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
             var requestBody = new Dictionary<string, object>()
             {
@@ -248,6 +248,7 @@ namespace SeatsioDotNet.Events
                 {"objects", objects.Select(o => o.AsDictionary())},
                 {"events", events}
             };
+            
             if (holdToken != null)
             {
                 requestBody.Add("holdToken", holdToken);
@@ -256,6 +257,11 @@ namespace SeatsioDotNet.Events
             if (orderId != null)
             {
                 requestBody.Add("orderId", orderId);
+            }
+            
+            if (keepExtraData != null)
+            {
+                requestBody.Add("keepExtraData", keepExtraData);
             }
 
             var restRequest = new RestRequest("/seasons/actions/change-object-status", Method.POST)
@@ -264,13 +270,14 @@ namespace SeatsioDotNet.Events
             return AssertOk(_restClient.Execute<ChangeObjectStatusResult>(restRequest));
         }
 
-        public BestAvailableResult ChangeObjectStatus(string eventKey, BestAvailable bestAvailable, string status, string holdToken = null, string orderId = null)
+        public BestAvailableResult ChangeObjectStatus(string eventKey, BestAvailable bestAvailable, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
             var requestBody = new Dictionary<string, object>()
             {
                 {"status", status},
                 {"bestAvailable", bestAvailable.AsDictionary()}
             };
+            
             if (holdToken != null)
             {
                 requestBody.Add("holdToken", holdToken);
@@ -279,6 +286,11 @@ namespace SeatsioDotNet.Events
             if (orderId != null)
             {
                 requestBody.Add("orderId", orderId);
+            }
+
+            if (keepExtraData != null)
+            {
+                requestBody.Add("keepExtraData", keepExtraData);
             }
 
             var restRequest = new RestRequest("/events/{key}/actions/change-object-status", Method.POST)

@@ -5,6 +5,10 @@ namespace SeatsioDotNet.UsageReports
         public int Year { get; set; }
         public int Month { get; set; }
 
+        public UsageMonth()
+        {
+        }
+
         public UsageMonth(int year, int month)
         {
             Year = year;

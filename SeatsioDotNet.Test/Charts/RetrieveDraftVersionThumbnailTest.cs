@@ -12,8 +12,8 @@ namespace SeatsioDotNet.Test.Charts
             Client.Events.Create(chart.Key);
             Client.Charts.Update(chart.Key, "aChart");
 
-            byte[] draftVersion = Client.Charts.RetrieveDraftVersionThumbnail(chart.Key);
-            Assert.Contains("<!DOCTYPE svg", UTF8.GetString(draftVersion));
+            byte[] thumbnail = Client.Charts.RetrieveDraftVersionThumbnail(chart.Key);
+            Assert.NotEmpty(thumbnail);
         }
     }
 }

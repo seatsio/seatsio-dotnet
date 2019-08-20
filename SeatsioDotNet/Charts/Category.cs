@@ -4,7 +4,7 @@ namespace SeatsioDotNet.Charts
 {
     public class Category
     {
-        public int? Key { get; set; }
+        public object Key { get; set; }
         public string Label { get; set; }
         public string Color { get; set; }
 
@@ -12,7 +12,14 @@ namespace SeatsioDotNet.Charts
         {
         }
 
-        public Category(int? key, string label, string color)
+        public Category(int key, string label, string color)
+        {
+            Key = key;
+            Label = label;
+            Color = color;
+        }
+
+        public Category(string key, string label, string color)
         {
             Key = key;
             Label = label;

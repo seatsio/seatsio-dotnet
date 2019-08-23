@@ -14,6 +14,7 @@ namespace SeatsioDotNet.Test.Events
             var objectStatus = Client.Events.RetrieveObjectStatus(evnt.Key, "A-1");
 
             Assert.Equal(ObjectStatus.Free, objectStatus.Status);
+            Assert.True(objectStatus.ForSale);
         }
     }
 }

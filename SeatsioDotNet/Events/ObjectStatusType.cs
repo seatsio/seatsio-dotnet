@@ -14,5 +14,6 @@ namespace SeatsioDotNet.Events
         public string HoldToken { get; set; }
         public string OrderId { get; set; }
         public Dictionary<string, object> ExtraData { get; set; }
+        public bool ForSale { get; set; }
     }
 }

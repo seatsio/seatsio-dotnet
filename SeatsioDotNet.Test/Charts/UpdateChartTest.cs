@@ -24,7 +24,7 @@ namespace SeatsioDotNet.Test.Charts
         {
             var chart = Client.Charts.Create("aChart", "BOOTHS");
 
-            Client.Charts.Update(chart.Key, categories: new[] {new Category(1, "Category 1", "#aaaaaa"), new Category("cat-2", "Category 2", "#bbbbbb")});
+            Client.Charts.Update(chart.Key, categories: new[] {new Category(1, "Category 1", "#aaaaaa"), new Category("cat-2", "Category 2", "#bbbbbb", true)});
 
             Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
             Assert.Equal("aChart", retrievedChart.Name);

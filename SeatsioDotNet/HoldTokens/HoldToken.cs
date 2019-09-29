@@ -9,5 +9,6 @@ namespace SeatsioDotNet.HoldTokens
         public string Token { get; set; }
         public DateTimeOffset ExpiresAt { get; set; }
         public int ExpiresInSeconds { get; set; }
+        public long AccountId { get; set; }
     }
 }

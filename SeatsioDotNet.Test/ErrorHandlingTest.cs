@@ -19,7 +19,7 @@ namespace SeatsioDotNet.Test
         public void WeirdError()
         {
             var e = Assert.Throws<SeatsioException>(() =>
-                new SeatsioClient("", "unknownProtocol://").Events.RetrieveObjectStatus("unexistingEvent", "unexistingObject"));
+                new SeatsioClient("", null, "unknownProtocol://").Events.RetrieveObjectStatus("unexistingEvent", "unexistingObject"));
 
             Assert.Equal("GET  resulted in a 0  response.", e.Message);
             Assert.Null(e.Errors);

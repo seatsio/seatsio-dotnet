@@ -17,7 +17,7 @@ namespace SeatsioDotNet.Test.Subaccounts
             Assert.Equal(subaccount.PublicKey, retrievedSubaccount.PublicKey);
             Assert.Equal("joske", retrievedSubaccount.Name);
             Assert.True(retrievedSubaccount.Active);
-            Assert.True(retrievedSubaccount.AccountId > 0);
+            Assert.NotNull(retrievedSubaccount.workspaceKey);
         }
     }
 }

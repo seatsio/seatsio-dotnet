@@ -14,9 +14,9 @@ namespace SeatsioDotNet
         public ChartReports.ChartReports ChartReports { get; }
         public UsageReports.UsageReports UsageReports { get; }
 
-        public SeatsioClient(string secretKey, long? accountId, string baseUrl)
+        public SeatsioClient(string secretKey, string workspaceKey, string baseUrl)
         {
-            var restClient = CreateRestClient(secretKey, accountId, baseUrl);
+            var restClient = CreateRestClient(secretKey, workspaceKey, baseUrl);
             Charts = new Charts.Charts(restClient);
             Events = new Events.Events(restClient);
             Accounts = new Accounts.Accounts(restClient);
@@ -27,7 +27,7 @@ namespace SeatsioDotNet
             UsageReports = new UsageReports.UsageReports(restClient);
         }
 
-        public SeatsioClient(string secretKey, long? accountId) : this(secretKey, accountId, "https://api.seatsio.net")
+        public SeatsioClient(string secretKey, string workspaceKey) : this(secretKey, workspaceKey, "https://api.seatsio.net")
         {
         }
 
@@ -35,13 +35,13 @@ namespace SeatsioDotNet
         {
         }
 
-        private static RestClient CreateRestClient(string secretKey, long? accountId, string baseUrl)
+        private static RestClient CreateRestClient(string secretKey, string workspaceKey, string baseUrl)
         {
             var client = new RestClient(baseUrl);
             client.Authenticator = new HttpBasicAuthenticator(secretKey, null);
-            if (accountId != null)
+            if (workspaceKey != null)
             {
-                client.AddDefaultHeader("X-Account-ID", accountId.ToString());
+                client.AddDefaultHeader("X-Workspace-Key", workspaceKey.ToString());
             }
 
             return client;

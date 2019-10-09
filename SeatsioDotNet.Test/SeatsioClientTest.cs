@@ -64,7 +64,12 @@ namespace SeatsioDotNet.Test
 
         protected SeatsioClient CreateSeatsioClient(string secretKey)
         {
-            return new SeatsioClient(secretKey, BaseUrl);
+            return new SeatsioClient(secretKey, null, BaseUrl);
+        }
+
+        protected SeatsioClient CreateSeatsioClient(string secretKey, string workspaceKey)
+        {
+            return new SeatsioClient(secretKey, workspaceKey, BaseUrl);
         }
     }
 }

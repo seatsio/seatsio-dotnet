@@ -3,6 +3,7 @@
     public class Subaccount
     {
         public long Id { get; set; }
+        public string workspaceKey { get; set; }
         public string SecretKey { get; set; }
         public string DesignerKey { get; set; }
         public string PublicKey { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using RestSharp;
+using RestSharp.Authenticators;
 using SeatsioDotNet.Util;
 
 namespace SeatsioDotNet.Test
@@ -53,9 +54,9 @@ namespace SeatsioDotNet.Test
         protected string CreateTestChartFromJson(String json)
         {
             var restClient = new RestClient(BaseUrl);
+            restClient.Authenticator = new HttpBasicAuthenticator(User.SecretKey, null);
             var chartKey = Guid.NewGuid().ToString();
-            var request = new RestRequest("/system/public/{designerKey}/charts/{chartKey}", Method.POST)
-                .AddUrlSegment("designerKey", User.DesignerKey)
+            var request = new RestRequest("/system/public/charts/{chartKey}", Method.POST)
                 .AddUrlSegment("chartKey", chartKey)
                 .AddParameter("application/json", json, ParameterType.RequestBody);
             RestUtil.AssertOk(restClient.Execute<object>(request));

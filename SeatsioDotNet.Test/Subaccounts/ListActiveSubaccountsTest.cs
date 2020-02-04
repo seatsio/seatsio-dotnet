@@ -15,7 +15,7 @@ namespace SeatsioDotNet.Test.Subaccounts
 
             var subaccounts = Client.Subaccounts.Active.All();
 
-            Assert.Equal(new[] {subaccount3.Id, subaccount1.Id}, subaccounts.Select(s => s.Id));
+            Assert.Equal(new[] {subaccount3.Id, subaccount1.Id, User.MainWorkspace.PrimaryUser.Id}, subaccounts.Select(s => s.Id));
         }
     }
 }

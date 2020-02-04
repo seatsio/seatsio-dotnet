@@ -14,7 +14,7 @@ namespace SeatsioDotNet.Test.Subaccounts
 
             var page = Client.Subaccounts.ListFirstPage();
 
-            Assert.Equal(new[] {subaccount3.Id, subaccount2.Id, subaccount1.Id}, page.Items.Select(s => s.Id));
+            Assert.Equal(new[] {subaccount3.Id, subaccount2.Id, subaccount1.Id, User.MainWorkspace.PrimaryUser.Id}, page.Items.Select(s => s.Id));
             Assert.Null(page.NextPageStartsAfter);
             Assert.Null(page.PreviousPageEndsBefore);
         }  

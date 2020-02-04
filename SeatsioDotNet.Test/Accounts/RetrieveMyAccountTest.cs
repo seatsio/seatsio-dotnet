@@ -12,13 +12,10 @@ namespace SeatsioDotNet.Test.Accounts
             
             Assert.NotNull(account.SecretKey);
             Assert.NotNull(account.DesignerKey);
-            Assert.NotNull(account.PublicKey);
             Assert.NotNull(account.Email);
             Assert.True(account.Settings.DraftChartDrawingsEnabled);
             Assert.True(account.Settings.HoldOnSelectForGAs);
-            Assert.Equal(ChartValidationLevel.ERROR, account.Settings.ChartValidation.ValidateDuplicateLabels);
-            Assert.Equal(ChartValidationLevel.ERROR, account.Settings.ChartValidation.ValidateObjectsWithoutCategories);
-            Assert.Equal(ChartValidationLevel.ERROR, account.Settings.ChartValidation.ValidateUnlabeledObjects);
+            Assert.Equal(ChartValidationLevel.OFF, account.Settings.ChartValidation.ValidateDuplicateLabels);
         }
     }
 }

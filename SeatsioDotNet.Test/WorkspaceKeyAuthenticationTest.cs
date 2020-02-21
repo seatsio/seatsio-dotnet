@@ -9,10 +9,10 @@ namespace SeatsioDotNet.Test
         {
             var subaccount = Client.Subaccounts.Create();
 
-            var subaccountClient = CreateSeatsioClient(User.SecretKey, subaccount.workspace.Key);
+            var subaccountClient = CreateSeatsioClient(User.SecretKey, subaccount.PublicKey);
             var holdToken = subaccountClient.HoldTokens.Create();
 
-            Assert.Equal(subaccount.workspace.Key, holdToken.workspaceKey);
+            Assert.Equal(subaccount.PublicKey, holdToken.workspaceKey);
         }
     }
 }

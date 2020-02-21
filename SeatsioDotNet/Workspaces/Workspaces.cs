@@ -56,24 +56,46 @@ namespace SeatsioDotNet.Workspaces
             return List().All();
         }
 
-        public Page<Workspace> ListFirstPage(int? pageSize = null)
+        public IEnumerable<Workspace> ListAll(string filter)
         {
-            return List().FirstPage(pageSize: pageSize);
+            return ParametrizedList().All(WorkspaceListParams(filter));
         }
 
-        public Page<Workspace> ListPageAfter(long id, int? pageSize = null)
+        public Page<Workspace> ListFirstPage(int? pageSize = null, string filter = null)
         {
-            return List().PageAfter(id, pageSize: pageSize);
+            return ParametrizedList().FirstPage(WorkspaceListParams(filter), pageSize);
         }
 
-        public Page<Workspace> ListPageBefore(long id, int? pageSize = null)
+        public Page<Workspace> ListPageAfter(long id, int? pageSize = null, string filter = null)
         {
-            return List().PageBefore(id, pageSize: pageSize);
+            return ParametrizedList().PageAfter(id, WorkspaceListParams(filter), pageSize);
+        }
+
+        public Page<Workspace> ListPageBefore(long id, int? pageSize = null, string filter = null)
+        {
+            return ParametrizedList().PageBefore(id, WorkspaceListParams(filter), pageSize);
         }
 
         private Lister<Workspace> List()
         {
             return new Lister<Workspace>(new PageFetcher<Workspace>(_restClient, "/workspaces"));
+        }
+
+        private ParametrizedLister<Workspace> ParametrizedList()
+        {
+            return new ParametrizedLister<Workspace>(new PageFetcher<Workspace>(_restClient, "/workspaces"));
+        }
+
+        private Dictionary<string, object> WorkspaceListParams(string filter)
+        {
+            var workspaceListParams = new Dictionary<string, object>();
+
+            if (filter != null)
+            {
+                workspaceListParams.Add("filter", filter);
+            }
+
+            return workspaceListParams;
         }
     }
 }

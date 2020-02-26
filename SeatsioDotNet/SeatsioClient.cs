@@ -9,6 +9,7 @@ namespace SeatsioDotNet
         public Events.Events Events { get; }
         public Accounts.Accounts Accounts { get; }
         public Subaccounts.Subaccounts Subaccounts { get; }
+        public Workspaces.Workspaces Workspaces { get; }
         public HoldTokens.HoldTokens HoldTokens { get; }
         public EventReports.EventReports EventReports { get; }
         public ChartReports.ChartReports ChartReports { get; }
@@ -21,6 +22,7 @@ namespace SeatsioDotNet
             Events = new Events.Events(restClient);
             Accounts = new Accounts.Accounts(restClient);
             Subaccounts = new Subaccounts.Subaccounts(restClient);
+            Workspaces = new Workspaces.Workspaces(restClient);
             HoldTokens = new HoldTokens.HoldTokens(restClient);
             EventReports = new EventReports.EventReports(restClient);
             ChartReports = new ChartReports.ChartReports(restClient);

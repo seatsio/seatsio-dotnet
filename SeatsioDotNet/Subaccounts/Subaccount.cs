@@ -1,6 +1,4 @@
-﻿using SeatsioDotNet.Workspaces;
-
-namespace SeatsioDotNet.Subaccounts
+﻿namespace SeatsioDotNet.Subaccounts
 {
     public class Subaccount
     {
@@ -10,6 +8,5 @@ namespace SeatsioDotNet.Subaccounts
         public string PublicKey { get; set; }
         public string Name { get; set; }
         public bool Active { get; set; }
-        public Workspace workspace { get; set; }
     }
 }

@@ -66,29 +66,5 @@ namespace SeatsioDotNet.Test.Charts
 
             Assert.Equal(new[] {event2.Id, event1.Id}, charts.First().Events.Select(c => c.Id));
         }
-
-        [Fact]
-        public void AllWithValidation() {
-            Client.Accounts.UpdateSetting("VALIDATE_DUPLICATE_LABELS", "ERROR");
-            Client.Accounts.UpdateSetting("VALIDATE_UNLABELED_OBJECTS", "ERROR");
-            Client.Accounts.UpdateSetting("VALIDATE_OBJECTS_WITHOUT_CATEGORIES", "WARNING");
-            CreateTestChartWithErrors();
-
-            var charts = Client.Charts.ListAll(withValidation: true);
-
-            Assert.Equal(new[] {"VALIDATE_DUPLICATE_LABELS", "VALIDATE_UNLABELED_OBJECTS"}, charts.First().Validation.Errors);
-        }
-
-        [Fact]
-        public void AllWithoutValidation() {
-            Client.Accounts.UpdateSetting("VALIDATE_DUPLICATE_LABELS", "ERROR");
-            Client.Accounts.UpdateSetting("VALIDATE_UNLABELED_OBJECTS", "ERROR");
-            Client.Accounts.UpdateSetting("VALIDATE_OBJECTS_WITHOUT_CATEGORIES", "WARNING");
-            CreateTestChartWithErrors();
-
-            var charts = Client.Charts.ListAll();
-
-            Assert.Null(charts.First().Validation);
-        }
     }
 }

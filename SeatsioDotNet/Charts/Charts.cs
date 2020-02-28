@@ -76,6 +76,14 @@ namespace SeatsioDotNet.Charts
                 .AddUrlSegment("key", chartKey)
                 .AddUrlSegment("subaccountId", subaccountId.ToString());
             return AssertOk(_restClient.Execute<Chart>(restRequest));
+        }    
+        
+        public Chart CopyToWorkspace(string chartKey, string toWorkspaceKey)
+        {
+            var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy-to-workspace/{toWorkspaceKey}", Method.POST)
+                .AddUrlSegment("key", chartKey)
+                .AddUrlSegment("toWorkspaceKey", toWorkspaceKey);
+            return AssertOk(_restClient.Execute<Chart>(restRequest));
         }
 
         public Chart CopyDraftVersion(string chartKey)

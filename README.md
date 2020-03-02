@@ -113,6 +113,13 @@ foreach (var chart in previousPage.Items)
 }
 ```
 
+### Creating a workspace
+
+```csharp
+var client = new SeatsioClient("<COMPANY ADMIN KEY>");
+client.Workspaces.Create("a workspace);
+```
+
 ## Error handling
 
 When an API call results in a 4xx or 5xx error (e.g. when a chart could not be found), a SeatsioException is thrown.

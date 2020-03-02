@@ -7,7 +7,6 @@ namespace SeatsioDotNet
     {
         public Charts.Charts Charts { get; }
         public Events.Events Events { get; }
-        public Accounts.Accounts Accounts { get; }
         public Subaccounts.Subaccounts Subaccounts { get; }
         public Workspaces.Workspaces Workspaces { get; }
         public HoldTokens.HoldTokens HoldTokens { get; }
@@ -20,7 +19,6 @@ namespace SeatsioDotNet
             var restClient = CreateRestClient(secretKey, workspaceKey, baseUrl);
             Charts = new Charts.Charts(restClient);
             Events = new Events.Events(restClient);
-            Accounts = new Accounts.Accounts(restClient);
             Subaccounts = new Subaccounts.Subaccounts(restClient);
             Workspaces = new Workspaces.Workspaces(restClient);
             HoldTokens = new HoldTokens.HoldTokens(restClient);

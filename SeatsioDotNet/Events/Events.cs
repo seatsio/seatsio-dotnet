@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using RestSharp;
@@ -242,13 +241,44 @@ namespace SeatsioDotNet.Events
 
         public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null)
         {
+            var requestBody = ChangeObjectStatusRequest(events, objects, status, holdToken, orderId, keepExtraData);
+            var restRequest = new RestRequest("/seasons/actions/change-object-status", Method.POST)
+                .AddQueryParameter("expand", "objects")
+                .AddJsonBody(requestBody);
+            return AssertOk(_restClient.Execute<ChangeObjectStatusResult>(restRequest));
+        }
+
+        public List<ChangeObjectStatusResult> ChangeObjectStatus(StatusChangeRequest[] requests)
+        {
+            var serializedRequests = requests.Select(r => ChangeObjectStatusRequest(r.EventKey, r.Objects, r.Status, r.HoldToken, r.OrderId, r.KeepExtraData));
+            var restRequest = new RestRequest("/events/actions/change-object-status", Method.POST)
+                .AddQueryParameter("expand", "objects")
+                .AddJsonBody(new Dictionary<string, object> {{ "statusChanges", serializedRequests}});
+            return AssertOk(_restClient.Execute<ChangeObjectStatusInBatchResult>(restRequest)).Results;
+        }
+
+        private Dictionary<string, object> ChangeObjectStatusRequest(string evnt, IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData)
+        {
+            var request = ChangeObjectStatusRequest(objects, status, holdToken, orderId, keepExtraData);
+            request.Add("event", evnt);
+            return request;
+        }
+
+        private Dictionary<string, object> ChangeObjectStatusRequest(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData)
+        {
+            var request = ChangeObjectStatusRequest(objects, status, holdToken, orderId, keepExtraData);
+            request.Add("events", events);
+            return request;
+        }
+        
+        private Dictionary<string, object> ChangeObjectStatusRequest(IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData)
+        {
             var requestBody = new Dictionary<string, object>()
             {
                 {"status", status},
                 {"objects", objects.Select(o => o.AsDictionary())},
-                {"events", events}
             };
-            
+
             if (holdToken != null)
             {
                 requestBody.Add("holdToken", holdToken);
@@ -258,16 +288,13 @@ namespace SeatsioDotNet.Events
             {
                 requestBody.Add("orderId", orderId);
             }
-            
+
             if (keepExtraData != null)
             {
                 requestBody.Add("keepExtraData", keepExtraData);
             }
 
-            var restRequest = new RestRequest("/seasons/actions/change-object-status", Method.POST)
-                .AddQueryParameter("expand", "objects")
-                .AddJsonBody(requestBody);
-            return AssertOk(_restClient.Execute<ChangeObjectStatusResult>(restRequest));
+            return requestBody;
         }
 
         public BestAvailableResult ChangeObjectStatus(string eventKey, BestAvailable bestAvailable, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null)
@@ -417,5 +444,9 @@ namespace SeatsioDotNet.Events
             ));
         }
         
+        private class ChangeObjectStatusInBatchResult
+        {
+            public List<ChangeObjectStatusResult> Results { get; set; }
+        }
     }
 }

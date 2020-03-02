@@ -2,6 +2,7 @@
 using System.IO;
 using RestSharp;
 using RestSharp.Authenticators;
+using SeatsioDotNet.Subaccounts;
 using SeatsioDotNet.Util;
 
 namespace SeatsioDotNet.Test
@@ -10,20 +11,23 @@ namespace SeatsioDotNet.Test
     {
         protected static readonly string BaseUrl = "https://api-staging.seatsio.net";
 
-        protected readonly TestUser User;
+        protected readonly User User;
+        protected readonly Subaccount Subaccount;
         protected readonly SeatsioClient Client;
 
         protected SeatsioClientTest()
         {
-            User = CreateTestUser();
+            TestCompany testCompany = CreateTestCompany();
+            User = testCompany.admin;
+            Subaccount = testCompany.subaccount;
             Client = CreateSeatsioClient(User.SecretKey);
         }
 
-        private TestUser CreateTestUser()
+        private TestCompany CreateTestCompany()
         {
             var restClient = new RestClient(BaseUrl);
-            var request = new RestRequest("/system/public/users/actions/create-test-user", Method.POST);
-            return RestUtil.AssertOk(restClient.Execute<TestUser>(request));
+            var request = new RestRequest("/system/public/users/actions/create-test-company", Method.POST);
+            return RestUtil.AssertOk(restClient.Execute<TestCompany>(request));
         }
 
         protected static string RandomEmail()

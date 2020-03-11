@@ -15,7 +15,7 @@ namespace SeatsioDotNet.Test.Workspaces
 
             var workspaces = Client.Workspaces.ListAll();
 
-            Assert.Equal(new[] {"ws3", "ws2", "ws1", "Main workspace"}, workspaces.Select(e => e.Name));
+            Assert.Equal(new[] {"ws3", "ws2", "ws1", "Default workspace"}, workspaces.Select(e => e.Name));
         }  
         
         [Fact]

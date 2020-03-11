@@ -22,5 +22,9 @@ namespace SeatsioDotNet.EventReports
         public int? NumHeld { get; set; }
         public int? Capacity { get; set; }
         public Dictionary<string, object> ExtraData { get; set; }
+        public bool? IsAccessible { get; set; }
+        public bool? IsCompanionSeat { get; set; }
+        public bool? HasRestrictedView { get; set; }
+        public string DisplayedObjectType { get; set; }
     }
 }

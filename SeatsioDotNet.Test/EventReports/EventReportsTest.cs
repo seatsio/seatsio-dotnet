@@ -33,6 +33,10 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Null(reportItem.NumBooked);
             Assert.Null(reportItem.Capacity);
             Assert.Equal(extraData, reportItem.ExtraData);
+            Assert.False(reportItem.IsAccessible);
+            Assert.False(reportItem.IsCompanionSeat);
+            Assert.False(reportItem.HasRestrictedView);
+            Assert.Null(reportItem.DisplayedObjectType);
         }
 
         [Fact]
@@ -66,6 +70,10 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(92, reportItem.NumFree);
             Assert.Equal(100, reportItem.Capacity);
             Assert.Equal("generalAdmission", reportItem.ObjectType);
+            Assert.Null(reportItem.IsAccessible);
+            Assert.Null(reportItem.IsCompanionSeat);
+            Assert.Null(reportItem.HasRestrictedView);
+            Assert.Null(reportItem.DisplayedObjectType);
         }
 
         [Fact]

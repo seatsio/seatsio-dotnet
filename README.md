@@ -18,6 +18,10 @@ From Package Manager:
 Using the dotnet command:
 
     dotnet add package SeatsioDotNet
+    
+## Versioning
+
+seatsio-dotnet follows semver since v70.2.0.
 	
 ## Examples
 

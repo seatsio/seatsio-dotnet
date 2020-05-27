@@ -37,6 +37,8 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.False(reportItem.IsCompanionSeat);
             Assert.False(reportItem.HasRestrictedView);
             Assert.Null(reportItem.DisplayedObjectType);
+            Assert.Null(reportItem.LeftNeighbour);
+            Assert.Equal("A-2", reportItem.RightNeighbour);
         }
 
         [Fact]

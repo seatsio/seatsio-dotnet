@@ -26,5 +26,7 @@ namespace SeatsioDotNet.EventReports
         public bool? IsCompanionSeat { get; set; }
         public bool? HasRestrictedView { get; set; }
         public string DisplayedObjectType { get; set; }
+        public string LeftNeighbour { get; set; }
+        public string RightNeighbour { get; set; }
     }
 }

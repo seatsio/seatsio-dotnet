@@ -35,6 +35,8 @@ namespace SeatsioDotNet.Test.Events
             Assert.Null(reportItem.Entrance);
             Assert.Null(reportItem.NumBooked);
             Assert.Null(reportItem.Capacity);
+            Assert.Null(reportItem.LeftNeighbour);
+            Assert.Equal("A-2", reportItem.RightNeighbour);
         }
 
         [Fact]

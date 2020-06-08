@@ -401,6 +401,22 @@ namespace SeatsioDotNet.Events
             return request;
         }
 
+        public void AssignObjectsToChannel(string eventKey, object channelsConfig)
+        {
+            var requestBody = AssignObjectsToChannelsRequest(channelsConfig);
+            var restRequest = new RestRequest("/events/{key}/channels/assign-objects", Method.POST)
+                .AddUrlSegment("key", eventKey)
+                .AddJsonBody(requestBody);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }
+
+        private Dictionary<string, object> AssignObjectsToChannelsRequest(object channelsConfig)
+        {
+            var request = new Dictionary<string, object>();
+            request.Add("channelConfig", channelsConfig);
+            return request;
+        }
+
         public IEnumerable<Event> ListAll()
         {
             return List().All();

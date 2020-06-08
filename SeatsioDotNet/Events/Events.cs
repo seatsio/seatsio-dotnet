@@ -59,7 +59,7 @@ namespace SeatsioDotNet.Events
             var restRequest = new RestRequest("/events", Method.POST).AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }
-        
+
         public Event[] Create(string chartKey, EventCreationParams[] eventCreationParams)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
@@ -72,18 +72,18 @@ namespace SeatsioDotNet.Events
                 {
                     e.Add("eventKey", param.Key);
                 }
-                if (param.BookWholeTables != null) 
+                if (param.BookWholeTables != null)
                 {
                     e.Add("bookWholeTables", param.BookWholeTables);
                 }
-                if (param.TableBookingModes != null) 
+                if (param.TableBookingModes != null)
                 {
                     e.Add("tableBookingModes", param.TableBookingModes);
-                }                
+                }
                 events.Add(e);
             }
-            requestBody.Add("events", events.ToArray());       
-            var restRequest = new RestRequest("/events/actions/create-multiple", Method.POST).AddJsonBody(requestBody);            
+            requestBody.Add("events", events.ToArray());
+            var restRequest = new RestRequest("/events/actions/create-multiple", Method.POST).AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<MultipleEvents>(restRequest)).events.ToArray();
         }
 
@@ -270,7 +270,7 @@ namespace SeatsioDotNet.Events
             request.Add("events", events);
             return request;
         }
-        
+
         private Dictionary<string, object> ChangeObjectStatusRequest(IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData)
         {
             var requestBody = new Dictionary<string, object>()
@@ -304,7 +304,7 @@ namespace SeatsioDotNet.Events
                 {"status", status},
                 {"bestAvailable", bestAvailable.AsDictionary()}
             };
-            
+
             if (holdToken != null)
             {
                 requestBody.Add("holdToken", holdToken);
@@ -385,6 +385,22 @@ namespace SeatsioDotNet.Events
             return request;
         }
 
+        public void UpdateChannels(string eventKey, object channels)
+        {
+            var requestBody = UpdateChannelsRequest(channels);
+            var restRequest = new RestRequest("/events/{key}/channels/update", Method.POST)
+                .AddUrlSegment("key", eventKey)
+                .AddJsonBody(requestBody);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }
+
+        private Dictionary<string, object> UpdateChannelsRequest(object channels)
+        {
+            var request = new Dictionary<string, object>();
+            request.Add("channels", channels);
+            return request;
+        }
+
         public IEnumerable<Event> ListAll()
         {
             return List().All();
@@ -443,7 +459,7 @@ namespace SeatsioDotNet.Events
                 request => (RestRequest) request.AddUrlSegment("key", eventKey).AddUrlSegment("objectId", objectLabel)
             ));
         }
-        
+
         private class ChangeObjectStatusInBatchResult
         {
             public List<ChangeObjectStatusResult> Results { get; set; }

@@ -40,6 +40,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal("channel 1", channel1.Name);
             Assert.Equal("#FFFF00", channel1.Color);
             Assert.Equal(1, channel1.Index);
+            Assert.Empty(channel1.Objects);
 
 
             var channel2 = retrievedEvent.Channels[1];
@@ -47,6 +48,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal("channel 2", channel2.Name);
             Assert.Equal("#00FFFF", channel2.Color);
             Assert.Equal(2, channel2.Index);
+            Assert.Empty(channel1.Objects);
         }
 
     }

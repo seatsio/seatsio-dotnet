@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using RestSharp.Deserializers;
 
 namespace SeatsioDotNet.Events
 {
@@ -9,5 +10,6 @@ namespace SeatsioDotNet.Events
         public string Name { get; set; }
         public string Color { get; set; }
         public int Index { get; set; }
+        public IEnumerable<string> Objects { get; set; }
     }
 }

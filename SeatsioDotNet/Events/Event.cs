@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using RestSharp.Deserializers;
 
 namespace SeatsioDotNet.Events
 {
@@ -14,5 +15,6 @@ namespace SeatsioDotNet.Events
         public ForSaleConfig ForSaleConfig { get; set; }
         public DateTimeOffset? CreatedOn { get; set; }
         public DateTimeOffset? UpdatedOn { get; set; }
+        public List<Channel> Channels { get; set; }
     }
 }

@@ -385,7 +385,7 @@ namespace SeatsioDotNet.Events
             return request;
         }
 
-        public void UpdateChannels(string eventKey, object channels)
+        public void UpdateChannels(string eventKey, Dictionary<string, Channel> channels)
         {
             var requestBody = UpdateChannelsRequest(channels);
             var restRequest = new RestRequest("/events/{key}/channels/update", Method.POST)
@@ -394,10 +394,15 @@ namespace SeatsioDotNet.Events
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
-        private Dictionary<string, object> UpdateChannelsRequest(object channels)
+        private Dictionary<string, object> UpdateChannelsRequest(Dictionary<string, Channel> channels)
         {
+            var channelsJson = new Dictionary<string, object>();
+            foreach(KeyValuePair<string, Channel> entry in channels)
+            {
+                channelsJson.Add(entry.Key, entry.Value.AsJsonObject());
+            }
             var request = new Dictionary<string, object>();
-            request.Add("channels", channels);
+            request.Add("channels", channelsJson);
             return request;
         }
 

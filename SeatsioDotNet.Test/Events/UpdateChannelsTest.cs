@@ -14,20 +14,10 @@ namespace SeatsioDotNet.Test.Events
             var chartKey1 = CreateTestChart();
             var event1 = Client.Events.Create(chartKey1);
 
-            var channels = new
+            var channels = new Dictionary<string, Channel>()
             {
-                channelKey1 = new
-                {
-                    name = "channel 1",
-                    color = "#FFFF00",
-                    index = 1
-                },
-                channelKey2 = new
-                {
-                    name = "channel 2",
-                    color = "#00FFFF",
-                    index = 2
-                }
+                { "channelKey1", new Channel("channel 1", "#FFFF00", 1) },
+                { "channelKey2", new Channel("channel 2", "#00FFFF", 2) }
             };
 
             Client.Events.UpdateChannels(event1.Key, channels);

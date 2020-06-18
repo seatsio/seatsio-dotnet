@@ -16,5 +16,6 @@ namespace SeatsioDotNet.Events
         public DateTimeOffset? CreatedOn { get; set; }
         public DateTimeOffset? UpdatedOn { get; set; }
         public List<Channel> Channels { get; set; }
+        public string SocialDistancingRulesetKey { get; set; }
     }
 }

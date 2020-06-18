@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SeatsioDotNet.Charts;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events
@@ -56,6 +57,21 @@ namespace SeatsioDotNet.Test.Events
             Assert.NotNull(evnt.Key);
             Assert.False(evnt.BookWholeTables);
             Assert.Equal(evnt.TableBookingModes, tableBookingModes);
+        }   
+        
+        [Fact]
+        public void SocialDistancingRulesetKeyCanBepassedIn()
+        {
+            var chartKey = CreateTestChart();
+            var rulesets = new Dictionary<string, SocialDistancingRuleset>()
+            {
+                { "ruleset1", new SocialDistancingRuleset(0, "My first ruleset") },
+            };
+            Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
+
+            var evnt = Client.Events.Create(chartKey, null, null, "ruleset1");
+            
+            Assert.Equal("ruleset1", evnt.SocialDistancingRulesetKey);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SeatsioDotNet.Charts;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events
@@ -63,6 +64,41 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(chartKey, retrievedEvent.ChartKey);
             Assert.False(retrievedEvent.BookWholeTables);
             Assert.Equal(retrievedEvent.TableBookingModes, new Dictionary<string, string> {{"T1", "BY_SEAT"}});
+        }     
+        
+        [Fact]
+        public void UpdateSocialDistancingRulesetKey()
+        {
+            var chartKey = CreateTestChart();
+            var rulesets = new Dictionary<string, SocialDistancingRuleset>()
+            {
+                { "ruleset1", new SocialDistancingRuleset(0, "My first ruleset", 1, true, 2, 1, new List<string> {"A-1"}, new List<string> {"A-2"}) },
+                { "ruleset2", new SocialDistancingRuleset(1, "My second ruleset") }
+            };
+            Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
+            var evnt = Client.Events.Create(chartKey, null, null, "ruleset1");
+
+            Client.Events.Update(evnt.Key, null, null, null, "ruleset2");
+
+            var retrievedEvent = Client.Events.Retrieve(evnt.Key);
+            Assert.Equal(retrievedEvent.SocialDistancingRulesetKey, "ruleset2");
+        }      
+        
+        [Fact]
+        public void RemoveSocialDistancingRulesetKey()
+        {
+            var chartKey = CreateTestChart();
+            var rulesets = new Dictionary<string, SocialDistancingRuleset>()
+            {
+                { "ruleset1", new SocialDistancingRuleset(0, "My first ruleset") }
+            };
+            Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
+            var evnt = Client.Events.Create(chartKey, null, null, "ruleset1");
+
+            Client.Events.Update(evnt.Key, null, null, null, "");
+
+            var retrievedEvent = Client.Events.Retrieve(evnt.Key);
+            Assert.Null(retrievedEvent.SocialDistancingRulesetKey);
         }
     }
 }

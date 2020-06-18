@@ -18,25 +18,30 @@ namespace SeatsioDotNet.Events
 
         public Event Create(string chartKey)
         {
-            return Create(chartKey, null, null, null);
+            return Create(chartKey, null, null, null, null);
         }
 
         public Event Create(string chartKey, string eventKey)
         {
-            return Create(chartKey, eventKey, null, null);
+            return Create(chartKey, eventKey, null, null, null);
         }
 
         public Event Create(string chartKey, string eventKey, bool? bookWholeTables)
         {
-            return Create(chartKey, eventKey, bookWholeTables, null);
+            return Create(chartKey, eventKey, bookWholeTables, null, null);
         }
 
         public Event Create(string chartKey, string eventKey, Dictionary<string, string> tableBookingModes)
         {
-            return Create(chartKey, eventKey, null, tableBookingModes);
+            return Create(chartKey, eventKey, null, tableBookingModes, null);
+        }   
+        
+        public Event Create(string chartKey, string eventKey, Dictionary<string, string> tableBookingModes, string socialDistancingRulesetKey)
+        {
+            return Create(chartKey, eventKey, null, tableBookingModes, socialDistancingRulesetKey);
         }
 
-        private Event Create(string chartKey, string eventKey, bool? bookWholeTables, Dictionary<string, string> tableBookingModes)
+        private Event Create(string chartKey, string eventKey, bool? bookWholeTables, Dictionary<string, string> tableBookingModes, string socialDistancingRulesetKey)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("chartKey", chartKey);
@@ -54,6 +59,11 @@ namespace SeatsioDotNet.Events
             if (tableBookingModes != null)
             {
                 requestBody.Add("tableBookingModes", tableBookingModes);
+            }
+
+            if (socialDistancingRulesetKey != null)
+            {
+                requestBody.Add("socialDistancingRulesetKey", socialDistancingRulesetKey);
             }
 
             var restRequest = new RestRequest("/events", Method.POST).AddJsonBody(requestBody);
@@ -79,6 +89,10 @@ namespace SeatsioDotNet.Events
                 if (param.TableBookingModes != null)
                 {
                     e.Add("tableBookingModes", param.TableBookingModes);
+                }          
+                if (param.SocialDistancingRulesetKey != null)
+                {
+                    e.Add("socialDistancingRulesetKey", param.SocialDistancingRulesetKey);
                 }
                 events.Add(e);
             }
@@ -89,20 +103,25 @@ namespace SeatsioDotNet.Events
 
         public void Update(string eventKey, string chartKey, string newEventKey)
         {
-            Update(eventKey, chartKey, newEventKey, null, null);
+            Update(eventKey, chartKey, newEventKey, null, null, null);
         }
 
         public void Update(string eventKey, string chartKey, string newEventKey, bool? bookWholeTables)
         {
-            Update(eventKey, chartKey, newEventKey, bookWholeTables, null);
+            Update(eventKey, chartKey, newEventKey, bookWholeTables, null, null);
         }
 
         public void Update(string eventKey, string chartKey, string newEventKey, Dictionary<string, string> tableBookingModes)
         {
-            Update(eventKey, chartKey, newEventKey, null, tableBookingModes);
+            Update(eventKey, chartKey, newEventKey, null, tableBookingModes, null);
+        }  
+        
+        public void Update(string eventKey, string chartKey, string newEventKey, Dictionary<string, string> tableBookingModes, string socialDistancingRulesetKey)
+        {
+            Update(eventKey, chartKey, newEventKey, null, tableBookingModes, socialDistancingRulesetKey);
         }
 
-        private void Update(string eventKey, string chartKey, string newEventKey, bool? bookWholeTables, Dictionary<string, string> tableBookingModes)
+        private void Update(string eventKey, string chartKey, string newEventKey, bool? bookWholeTables, Dictionary<string, string> tableBookingModes, string socialDistancingRulesetKey)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
 
@@ -124,6 +143,11 @@ namespace SeatsioDotNet.Events
             if (tableBookingModes != null)
             {
                 requestBody.Add("tableBookingModes", tableBookingModes);
+            } 
+            
+            if (socialDistancingRulesetKey != null)
+            {
+                requestBody.Add("socialDistancingRulesetKey", socialDistancingRulesetKey);
             }
 
             var restRequest = new RestRequest("/events/{key}", Method.POST)

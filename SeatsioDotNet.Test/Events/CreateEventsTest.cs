@@ -1,6 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
+using SeatsioDotNet.Charts;
 using SeatsioDotNet.Events;
 using Xunit;
 
@@ -96,7 +95,27 @@ namespace SeatsioDotNet.Test.Events
             Assert.False(events[1].BookWholeTables);
             Assert.Equal(new Dictionary<string, string> {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}}, events[0].TableBookingModes);
             Assert.Equal(new Dictionary<string, string> {{"T1", "BY_SEAT"}, {"T2", "BY_TABLE"}}, events[1].TableBookingModes);
+        }   
+        
+        [Fact]
+        public void SocialDistancingRulesetKeyCanBePassedIn()
+        {
+            var chartKey = CreateTestChart();
+            var rulesets = new Dictionary<string, SocialDistancingRuleset>()
+            {
+                { "ruleset1", new SocialDistancingRuleset(0, "My first ruleset") },
+            };
+            Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
+            var eventCreationParams = new[]
+            {
+                new EventCreationParams(null, "ruleset1"),
+                new EventCreationParams(null, "ruleset1")
+            };
 
+            var events = Client.Events.Create(chartKey, eventCreationParams);
+            
+            Assert.Equal("ruleset1", events[0].SocialDistancingRulesetKey);
+            Assert.Equal("ruleset1", events[1].SocialDistancingRulesetKey);
         }
 
         [Fact]               

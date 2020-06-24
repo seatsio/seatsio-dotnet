@@ -5,6 +5,9 @@ namespace SeatsioDotNet.EventReports
 {
     public class EventReportItem
     {
+        public const string Selectable = "selectable";
+        public const string NotSelectable = "not_selectable";
+        
         public string Label { get; set; }
         public Labels Labels { get; set; }
         public string Status { get; set; }
@@ -28,5 +31,7 @@ namespace SeatsioDotNet.EventReports
         public string DisplayedObjectType { get; set; }
         public string LeftNeighbour { get; set; }
         public string RightNeighbour { get; set; }
+        public bool IsSelectable { get; set; }
+        public bool? IsDisabledBySocialDistancing { get; set; }
     }
 }

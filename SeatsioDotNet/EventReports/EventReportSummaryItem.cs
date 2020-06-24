@@ -9,5 +9,6 @@ namespace SeatsioDotNet.EventReports
         public Dictionary<string, int> byCategoryKey { get; set; }
         public Dictionary<string, int> byCategoryLabel { get; set; }
         public Dictionary<string, int> bySection { get; set; }
+        public Dictionary<string, int> bySelectability { get; set; }
     }
 }

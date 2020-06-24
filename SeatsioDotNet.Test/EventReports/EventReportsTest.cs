@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using SeatsioDotNet.Events;
 using Xunit;
+using static SeatsioDotNet.EventReports.EventReportItem;
 
 namespace SeatsioDotNet.Test.EventReports
 {
@@ -39,6 +40,8 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Null(reportItem.DisplayedObjectType);
             Assert.Null(reportItem.LeftNeighbour);
             Assert.Equal("A-2", reportItem.RightNeighbour);
+            Assert.False(reportItem.IsSelectable);
+            Assert.False(reportItem.IsDisabledBySocialDistancing);
         }
 
         [Fact]
@@ -243,6 +246,31 @@ namespace SeatsioDotNet.Test.EventReports
             var report = Client.EventReports.BySection(evnt.Key, "NO_SECTION");
 
             Assert.Equal(34, report.Count());
+        }
+        
+        [Fact]
+        public void BySelectability()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"});
+
+            var report = Client.EventReports.BySelectability(evnt.Key);
+
+            Assert.Equal(32, report[Selectable].Count());
+            Assert.Equal(2, report[NotSelectable].Count());
+        }
+
+        [Fact]
+        public void BySpecificSelectability()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"});
+
+            var report = Client.EventReports.BySelectability(evnt.Key, NotSelectable);
+
+            Assert.Equal(2, report.Count());
         }
     }
 }

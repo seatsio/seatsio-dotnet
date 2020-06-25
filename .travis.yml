@@ -1,6 +1,6 @@
 language: csharp
 mono: latest
-dotnet: 2.10.8
+dotnet: 2.0.0
 dist: xenial
 
 install:

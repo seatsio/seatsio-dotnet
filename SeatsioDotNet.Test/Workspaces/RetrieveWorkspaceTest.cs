@@ -15,6 +15,7 @@ namespace SeatsioDotNet.Test.Workspaces
             Assert.NotNull(retrievedWorkspace.Key);
             Assert.NotNull(retrievedWorkspace.SecretKey);
             Assert.False(retrievedWorkspace.IsTest);
+            Assert.True(retrievedWorkspace.IsActive);
         }
     }
 }

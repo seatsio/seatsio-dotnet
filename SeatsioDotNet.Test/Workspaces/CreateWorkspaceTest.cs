@@ -13,6 +13,7 @@ namespace SeatsioDotNet.Test.Workspaces
             Assert.NotNull(workspace.Key);
             Assert.NotNull(workspace.SecretKey);
             Assert.False(workspace.IsTest);
+            Assert.True(workspace.IsActive);
         } 
         
         [Fact]
@@ -24,6 +25,7 @@ namespace SeatsioDotNet.Test.Workspaces
             Assert.NotNull(workspace.Key);
             Assert.NotNull(workspace.SecretKey);
             Assert.True(workspace.IsTest);
+            Assert.True(workspace.IsActive);
         }
     }
 }

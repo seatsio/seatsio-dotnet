@@ -57,6 +57,20 @@ namespace SeatsioDotNet.Workspaces
                 .AddUrlSegment("key", key);
             var response = AssertOk(_restClient.Execute<Dictionary<string, string>>(restRequest));
             return response["secretKey"];
+        }  
+        
+        public void Activate(string key)
+        {
+            var restRequest = new RestRequest("/workspaces/{key}/actions/activate", Method.POST)
+                .AddUrlSegment("key", key);
+            AssertOk(_restClient.Execute<Dictionary<string, string>>(restRequest));
+        }   
+        
+        public void Deactivate(string key)
+        {
+            var restRequest = new RestRequest("/workspaces/{key}/actions/deactivate", Method.POST)
+                .AddUrlSegment("key", key);
+            AssertOk(_restClient.Execute<Dictionary<string, string>>(restRequest));
         }
 
         public IEnumerable<Workspace> ListAll()

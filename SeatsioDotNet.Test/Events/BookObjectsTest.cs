@@ -69,8 +69,8 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.Equal("order1", Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").OrderId);
             Assert.Equal("order1", Client.Events.RetrieveObjectStatus(evnt.Key, "A-2").OrderId);
-        }  
-        
+        }
+
         [Fact]
         public void KeepExtraData()
         {
@@ -82,6 +82,26 @@ namespace SeatsioDotNet.Test.Events
             Client.Events.Book(evnt.Key, new[] {"A-1"}, null, null, true);
 
             Assert.Equal(extraData, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
+        }
+
+       [Fact]
+        public void ChannelKeys()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var channels = new Dictionary<string, Channel>()
+            {
+                { "channelKey1", new Channel("channel 1", "#FFFF00", 1) }
+            };
+            Client.Events.UpdateChannels(evnt.Key, channels);
+            Client.Events.AssignObjectsToChannel(evnt.Key, new
+            {
+                channelKey1 = new [] {"A-1", "A-2"}
+            });
+
+            Client.Events.Book(evnt.Key, new[] {"A-1"}, null, null, true, new[] {"channelKey1"});
+
+            Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").Status);
         }
     }
 }

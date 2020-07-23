@@ -99,7 +99,27 @@ namespace SeatsioDotNet.Test.Events
                 channelKey1 = new [] {"A-1", "A-2"}
             });
 
-            Client.Events.Book(evnt.Key, new[] {"A-1"}, null, null, true, new[] {"channelKey1"});
+            Client.Events.Book(evnt.Key, new[] {"A-1"}, null, null, true, null, new[] {"channelKey1"});
+
+            Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").Status);
+        }   
+        
+        [Fact]
+        public void IgnoreChannels()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var channels = new Dictionary<string, Channel>()
+            {
+                { "channelKey1", new Channel("channel 1", "#FFFF00", 1) }
+            };
+            Client.Events.UpdateChannels(evnt.Key, channels);
+            Client.Events.AssignObjectsToChannel(evnt.Key, new
+            {
+                channelKey1 = new [] {"A-1", "A-2"}
+            });
+
+            Client.Events.Book(evnt.Key, new[] {"A-1"}, null, null, true, true);
 
             Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").Status);
         }

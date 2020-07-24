@@ -274,7 +274,7 @@ namespace SeatsioDotNet.Events
 
         public List<ChangeObjectStatusResult> ChangeObjectStatus(StatusChangeRequest[] requests)
         {
-            var serializedRequests = requests.Select(r => ChangeObjectStatusRequest(r.EventKey, r.Objects, r.Status, r.HoldToken, r.OrderId, r.KeepExtraData));
+            var serializedRequests = requests.Select(r => ChangeObjectStatusRequest(r.EventKey, r.Objects, r.Status, r.HoldToken, r.OrderId, r.KeepExtraData, r.IgnoreChannels, r.ChannelKeys));
             var restRequest = new RestRequest("/events/actions/change-object-status", Method.POST)
                 .AddQueryParameter("expand", "objects")
                 .AddJsonBody(new Dictionary<string, object> {{ "statusChanges", serializedRequests}});

@@ -68,14 +68,29 @@ namespace SeatsioDotNet.Test.Events
                 new Dictionary<string, object> {{"foo", "baz"}}
             };
 
-            var bestAvailableResult =
-                Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2, null, extraData), "foo");
+            var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2, extraData: extraData), "foo");
 
             Assert.Equal(new[] {"B-4", "B-5"}, bestAvailableResult.Objects);
-            Assert.Equal(new Dictionary<string, object> {{"foo", "bar"}},
-                Client.Events.RetrieveObjectStatus(evnt.Key, "B-4").ExtraData);
-            Assert.Equal(new Dictionary<string, object> {{"foo", "baz"}},
-                Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").ExtraData);
+            Assert.Equal(new Dictionary<string, object> {{"foo", "bar"}}, Client.Events.RetrieveObjectStatus(evnt.Key, "B-4").ExtraData);
+            Assert.Equal(new Dictionary<string, object> {{"foo", "baz"}}, Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").ExtraData);
+        }      
+        
+        [Fact]
+        public void TicketTypes()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var extraData = new[]
+            {
+                new Dictionary<string, object> {{"foo", "bar"}},
+                new Dictionary<string, object> {{"foo", "baz"}}
+            };
+
+            var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2, ticketTypes: new[]{"adult", "child"}), "foo");
+
+            Assert.Equal(new[] {"B-4", "B-5"}, bestAvailableResult.Objects);
+            Assert.Equal("adult", Client.Events.RetrieveObjectStatus(evnt.Key, "B-4").TicketType);
+            Assert.Equal("child", Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").TicketType);
         }
 
         [Fact]

@@ -62,17 +62,35 @@ namespace SeatsioDotNet.Test.Events
         {
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
-            var extraData = new []
+            var extraData = new[]
             {
                 new Dictionary<string, object> {{"foo", "bar"}},
                 new Dictionary<string, object> {{"foo", "baz"}}
             };
 
-            var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2, null, extraData), "foo");
+            var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2, extraData: extraData), "foo");
 
             Assert.Equal(new[] {"B-4", "B-5"}, bestAvailableResult.Objects);
             Assert.Equal(new Dictionary<string, object> {{"foo", "bar"}}, Client.Events.RetrieveObjectStatus(evnt.Key, "B-4").ExtraData);
             Assert.Equal(new Dictionary<string, object> {{"foo", "baz"}}, Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").ExtraData);
+        }
+
+        [Fact]
+        public void TicketTypes()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var extraData = new[]
+            {
+                new Dictionary<string, object> {{"foo", "bar"}},
+                new Dictionary<string, object> {{"foo", "baz"}}
+            };
+
+            var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2, ticketTypes: new[]{"adult", "child"}), "foo");
+
+            Assert.Equal(new[] {"B-4", "B-5"}, bestAvailableResult.Objects);
+            Assert.Equal("adult", Client.Events.RetrieveObjectStatus(evnt.Key, "B-4").TicketType);
+            Assert.Equal("child", Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").TicketType);
         }
 
         [Fact]
@@ -112,6 +130,46 @@ namespace SeatsioDotNet.Test.Events
             Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus");
 
             Assert.Null(Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").ExtraData);
+        }
+
+        [Fact]
+        public void ChannelKeys()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var channels = new Dictionary<string, Channel>()
+            {
+                {"channelKey1", new Channel("channel 1", "#FFFF00", 1)}
+            };
+            Client.Events.UpdateChannels(evnt.Key, channels);
+            Client.Events.AssignObjectsToChannel(evnt.Key, new
+            {
+                channelKey1 = new[] {"B-6"}
+            });
+
+            var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus", channelKeys: new[] {"channelKey1"});
+
+            Assert.Equal(new[] {"B-6"}, bestAvailableResult.Objects);
+        }   
+        
+        [Fact]
+        public void IgnoreChannels()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var channels = new Dictionary<string, Channel>()
+            {
+                {"channelKey1", new Channel("channel 1", "#FFFF00", 1)}
+            };
+            Client.Events.UpdateChannels(evnt.Key, channels);
+            Client.Events.AssignObjectsToChannel(evnt.Key, new
+            {
+                channelKey1 = new[] {"B-5"}
+            });
+
+            var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus", ignoreChannels: true);
+
+            Assert.Equal(new[] {"B-5"}, bestAvailableResult.Objects);
         }
     }
 }

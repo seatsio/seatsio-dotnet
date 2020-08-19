@@ -7,5 +7,6 @@
         public string SecretKey { get; set; }
         public bool IsTest { get; set; }
         public bool IsActive { get; set; }
+        public bool IsDefault { get; set; }
     }
 }

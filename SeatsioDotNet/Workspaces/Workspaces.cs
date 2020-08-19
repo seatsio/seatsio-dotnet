@@ -71,6 +71,13 @@ namespace SeatsioDotNet.Workspaces
             var restRequest = new RestRequest("/workspaces/{key}/actions/deactivate", Method.POST)
                 .AddUrlSegment("key", key);
             AssertOk(_restClient.Execute<Dictionary<string, string>>(restRequest));
+        }  
+        
+        public void SetDefault(string key)
+        {
+            var restRequest = new RestRequest("/workspaces/actions/set-default/{key}", Method.POST)
+                .AddUrlSegment("key", key);
+            AssertOk(_restClient.Execute<Dictionary<string, string>>(restRequest));
         }
 
         public IEnumerable<Workspace> ListAll()

@@ -7,23 +7,14 @@ namespace SeatsioDotNet.Events
         public int Number { get; }
         public IEnumerable<string> Categories { get; }
         public IEnumerable<Dictionary<string, object>> ExtraData { get; }
+        public string[] TicketTypes { get; }
 
-        public BestAvailable(int number)
-        {
-            Number = number;
-        }
-
-        public BestAvailable(int number, IEnumerable<string> categories)
-        {
-            Categories = categories;
-            Number = number;
-        }
-
-        public BestAvailable(int number, IEnumerable<string> categories, IEnumerable<Dictionary<string, object>> extraData)
+        public BestAvailable(int number, IEnumerable<string> categories = null, IEnumerable<Dictionary<string, object>> extraData = null, string[] ticketTypes = null)
         {
             Categories = categories;
             Number = number;
             ExtraData = extraData;
+            TicketTypes = ticketTypes;
         }
 
         public Dictionary<string, object> AsDictionary()
@@ -36,10 +27,13 @@ namespace SeatsioDotNet.Events
             {
                 dictionary.Add("categories", Categories);
             }
-
             if (ExtraData != null)
             {
                 dictionary.Add("extraData", ExtraData);
+            }
+            if (TicketTypes != null)
+            {
+                dictionary.Add("ticketTypes", TicketTypes);
             }
 
             return dictionary;

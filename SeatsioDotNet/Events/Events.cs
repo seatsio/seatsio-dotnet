@@ -178,94 +178,94 @@ namespace SeatsioDotNet.Events
             return AssertOk(_restClient.Execute<ObjectStatus>(restRequest));
         }
 
-        public ChangeObjectStatusResult Book(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Book(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData, channelKeys);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
-        public ChangeObjectStatusResult Book(string[] eventKeys, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null)
+        public ChangeObjectStatusResult Book(string[] eventKeys, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
-        public ChangeObjectStatusResult Book(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null)
+        public ChangeObjectStatusResult Book(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
-        public ChangeObjectStatusResult Book(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null)
+        public ChangeObjectStatusResult Book(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
         }
 
-        public BestAvailableResult Book(string eventKey, BestAvailable bestAvailable, string holdToken = null, string orderId = null, bool? keepExtraData = null)
+        public BestAvailableResult Book(string eventKey, BestAvailable bestAvailable, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKey, bestAvailable, ObjectStatus.Booked, holdToken, orderId, keepExtraData);
+            return ChangeObjectStatus(eventKey, bestAvailable, ObjectStatus.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
-        public ChangeObjectStatusResult Release(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Release(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData, channelKeys);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
         }
 
-        public ChangeObjectStatusResult Release(string[] eventKeys, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Release(string[] eventKeys, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData, channelKeys);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
-        public ChangeObjectStatusResult Release(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Release(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData, channelKeys);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
-        public ChangeObjectStatusResult Release(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Release(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData, channelKeys);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
         }
 
-        public ChangeObjectStatusResult Hold(string eventKey, IEnumerable<string> objects, string holdToken, string orderId = null, bool? keepExtraData = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Hold(string eventKey, IEnumerable<string> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, channelKeys);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
-        public ChangeObjectStatusResult Hold(string[] eventKeys, IEnumerable<string> objects, string holdToken, string orderId = null, bool? keepExtraData = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Hold(string[] eventKeys, IEnumerable<string> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, channelKeys);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
-        public ChangeObjectStatusResult Hold(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null, bool? keepExtraData = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Hold(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, channelKeys);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
         }
 
-        public ChangeObjectStatusResult Hold(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null, bool? keepExtraData = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Hold(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, channelKeys);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
-        public BestAvailableResult Hold(string eventKey, BestAvailable bestAvailable, string holdToken, string orderId = null, bool? keepExtraData = null)
+        public BestAvailableResult Hold(string eventKey, BestAvailable bestAvailable, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKey, bestAvailable, ObjectStatus.Held, holdToken, orderId, keepExtraData);
+            return ChangeObjectStatus(eventKey, bestAvailable, ObjectStatus.Held, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
         }
 
-        public ChangeObjectStatusResult ChangeObjectStatus(string eventKey, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult ChangeObjectStatus(string eventKey, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null,bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(new[] {eventKey}, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId, keepExtraData, channelKeys);
+            return ChangeObjectStatus(new[] {eventKey}, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
-        public ChangeObjectStatusResult ChangeObjectStatus(string eventKey, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult ChangeObjectStatus(string eventKey, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(new[] {eventKey}, objects, status, holdToken, orderId, keepExtraData, channelKeys);
+            return ChangeObjectStatus(new[] {eventKey}, objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
-        public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(events, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId, keepExtraData, channelKeys);
+            return ChangeObjectStatus(events, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
-        public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            var requestBody = ChangeObjectStatusRequest(events, objects, status, holdToken, orderId, keepExtraData, channelKeys);
+            var requestBody = ChangeObjectStatusRequest(events, objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
             var restRequest = new RestRequest("/seasons/actions/change-object-status", Method.POST)
                 .AddQueryParameter("expand", "objects")
                 .AddJsonBody(requestBody);
@@ -274,28 +274,28 @@ namespace SeatsioDotNet.Events
 
         public List<ChangeObjectStatusResult> ChangeObjectStatus(StatusChangeRequest[] requests)
         {
-            var serializedRequests = requests.Select(r => ChangeObjectStatusRequest(r.EventKey, r.Objects, r.Status, r.HoldToken, r.OrderId, r.KeepExtraData));
+            var serializedRequests = requests.Select(r => ChangeObjectStatusRequest(r.EventKey, r.Objects, r.Status, r.HoldToken, r.OrderId, r.KeepExtraData, r.IgnoreChannels, r.ChannelKeys));
             var restRequest = new RestRequest("/events/actions/change-object-status", Method.POST)
                 .AddQueryParameter("expand", "objects")
                 .AddJsonBody(new Dictionary<string, object> {{ "statusChanges", serializedRequests}});
             return AssertOk(_restClient.Execute<ChangeObjectStatusInBatchResult>(restRequest)).Results;
         }
 
-        private Dictionary<string, object> ChangeObjectStatusRequest(string evnt, IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, string[] channelKeys = null)
+        private Dictionary<string, object> ChangeObjectStatusRequest(string evnt, IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            var request = ChangeObjectStatusRequest(objects, status, holdToken, orderId, keepExtraData, channelKeys);
+            var request = ChangeObjectStatusRequest(objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
             request.Add("event", evnt);
             return request;
         }
 
-        private Dictionary<string, object> ChangeObjectStatusRequest(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, string[] channelKeys = null)
+        private Dictionary<string, object> ChangeObjectStatusRequest(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            var request = ChangeObjectStatusRequest(objects, status, holdToken, orderId, keepExtraData, channelKeys);
+            var request = ChangeObjectStatusRequest(objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
             request.Add("events", events);
             return request;
         }
 
-        private Dictionary<string, object> ChangeObjectStatusRequest(IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, string[] channelKeys = null)
+        private Dictionary<string, object> ChangeObjectStatusRequest(IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null, string[] channelKeys = null)
         {
             var requestBody = new Dictionary<string, object>()
             {
@@ -317,15 +317,21 @@ namespace SeatsioDotNet.Events
             {
                 requestBody.Add("keepExtraData", keepExtraData);
             }
+            
+            if (ignoreChannels != null)
+            {
+                requestBody.Add("ignoreChannels", ignoreChannels);
+            }
 
             if (channelKeys != null)
             {
                 requestBody.Add("channelKeys", channelKeys);
             }
+            
             return requestBody;
         }
 
-        public BestAvailableResult ChangeObjectStatus(string eventKey, BestAvailable bestAvailable, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null)
+        public BestAvailableResult ChangeObjectStatus(string eventKey, BestAvailable bestAvailable, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
             var requestBody = new Dictionary<string, object>()
             {
@@ -346,6 +352,16 @@ namespace SeatsioDotNet.Events
             if (keepExtraData != null)
             {
                 requestBody.Add("keepExtraData", keepExtraData);
+            }
+            
+            if (ignoreChannels != null)
+            {
+                requestBody.Add("ignoreChannels", ignoreChannels);
+            }
+            
+            if (channelKeys != null)
+            {
+                requestBody.Add("channelKeys", channelKeys);
             }
 
             var restRequest = new RestRequest("/events/{key}/actions/change-object-status", Method.POST)

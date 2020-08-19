@@ -17,8 +17,8 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.True(bestAvailableResult.NextToEachOther);
             Assert.Equal(new[] {"B-4", "B-5", "B-6"}, bestAvailableResult.Objects);
-        }  
-        
+        }
+
         [Fact]
         public void ObjectDetails()
         {
@@ -26,13 +26,13 @@ namespace SeatsioDotNet.Test.Events
             var evnt = Client.Events.Create(chartKey);
 
             var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2), "foo");
-            
+
             var reportItem = bestAvailableResult.ObjectDetails["B-4"];
             Assert.Equal("B-4", reportItem.Label);
             reportItem.Labels.Should().BeEquivalentTo(new Labels("4", "seat", "B", "row"));
             Assert.Equal("foo", reportItem.Status);
             Assert.Equal("Cat1", reportItem.CategoryLabel);
-            Assert.Equal(9, reportItem.CategoryKey);
+            Assert.Equal("9", reportItem.CategoryKey);
             Assert.Equal("seat", reportItem.ObjectType);
             Assert.Null(reportItem.TicketType);
             Assert.Null(reportItem.OrderId);
@@ -64,8 +64,8 @@ namespace SeatsioDotNet.Test.Events
             var evnt = Client.Events.Create(chartKey);
             var extraData = new []
             {
-                new Dictionary<string, object> {{"foo", "bar"}},   
-                new Dictionary<string, object> {{"foo", "baz"}}   
+                new Dictionary<string, object> {{"foo", "bar"}},
+                new Dictionary<string, object> {{"foo", "baz"}}
             };
 
             var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2, null, extraData), "foo");
@@ -74,7 +74,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(new Dictionary<string, object> {{"foo", "bar"}}, Client.Events.RetrieveObjectStatus(evnt.Key, "B-4").ExtraData);
             Assert.Equal(new Dictionary<string, object> {{"foo", "baz"}}, Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").ExtraData);
         }
-        
+
         [Fact]
         public void KeepExtraDataTrue()
         {

@@ -7,12 +7,12 @@ namespace SeatsioDotNet.EventReports
     {
         public const string Selectable = "selectable";
         public const string NotSelectable = "not_selectable";
-        
+
         public string Label { get; set; }
         public Labels Labels { get; set; }
         public string Status { get; set; }
         public string CategoryLabel { get; set; }
-        public int? CategoryKey { get; set; }
+        public string CategoryKey { get; set; }
         public string TicketType { get; set; }
         public string ObjectType { get; set; }
         public string OrderId { get; set; }

@@ -24,7 +24,7 @@ namespace SeatsioDotNet.Test.EventReports
             reportItem.Labels.Should().BeEquivalentTo(new Labels("1", "seat", "A", "row"));
             Assert.Equal(ObjectStatus.Booked, reportItem.Status);
             Assert.Equal("Cat1", reportItem.CategoryLabel);
-            Assert.Equal(9, reportItem.CategoryKey);
+            Assert.Equal("9", reportItem.CategoryKey);
             Assert.Equal("ticketType1", reportItem.TicketType);
             Assert.Equal("order1", reportItem.OrderId);
             Assert.Equal("seat", reportItem.ObjectType);
@@ -247,7 +247,7 @@ namespace SeatsioDotNet.Test.EventReports
 
             Assert.Equal(34, report.Count());
         }
-        
+
         [Fact]
         public void BySelectability()
         {

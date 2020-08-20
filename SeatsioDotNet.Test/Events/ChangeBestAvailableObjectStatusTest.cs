@@ -32,7 +32,7 @@ namespace SeatsioDotNet.Test.Events
             reportItem.Labels.Should().BeEquivalentTo(new Labels("4", "seat", "B", "row"));
             Assert.Equal("foo", reportItem.Status);
             Assert.Equal("Cat1", reportItem.CategoryLabel);
-            Assert.Equal(9, reportItem.CategoryKey);
+            Assert.Equal("9", reportItem.CategoryKey);
             Assert.Equal("seat", reportItem.ObjectType);
             Assert.Null(reportItem.TicketType);
             Assert.Null(reportItem.OrderId);
@@ -73,8 +73,8 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(new[] {"B-4", "B-5"}, bestAvailableResult.Objects);
             Assert.Equal(new Dictionary<string, object> {{"foo", "bar"}}, Client.Events.RetrieveObjectStatus(evnt.Key, "B-4").ExtraData);
             Assert.Equal(new Dictionary<string, object> {{"foo", "baz"}}, Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").ExtraData);
-        }      
-        
+        }
+
         [Fact]
         public void TicketTypes()
         {

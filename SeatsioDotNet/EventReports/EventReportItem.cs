@@ -33,5 +33,6 @@ namespace SeatsioDotNet.EventReports
         public string RightNeighbour { get; set; }
         public bool IsSelectable { get; set; }
         public bool? IsDisabledBySocialDistancing { get; set; }
+        public string Channel { get; set; }
     }
 }

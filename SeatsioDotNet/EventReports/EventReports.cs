@@ -106,6 +106,21 @@ namespace SeatsioDotNet.EventReports
         public IEnumerable<EventReportItem> BySelectability(string eventKey, string selectability)
         {
             return FetchReport("bySelectability", eventKey, selectability);
+        }   
+        
+        public Dictionary<string, IEnumerable<EventReportItem>> ByChannel(string eventKey)
+        {
+            return FetchReport("byChannel", eventKey);
+        }
+
+        public Dictionary<string, EventReportSummaryItem> SummaryByChannel(string eventKey)
+        {
+            return FetchSummaryReport("byChannel", eventKey);
+        }
+
+        public IEnumerable<EventReportItem> ByChannel(string eventKey, string channelKey)
+        {
+            return FetchReport("byChannel", eventKey, channelKey);
         }
 
         private Dictionary<string, IEnumerable<EventReportItem>> FetchReport(string reportType, string eventKey)

@@ -17,6 +17,16 @@ namespace SeatsioDotNet.Test.EventReports
             var extraData = new Dictionary<string, object> {{"foo", "bar"}};
             Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1", "ticketType1", extraData)}, null, "order1");
 
+            var channels = new Dictionary<string, Channel>()
+            {
+                {"channelKey1", new Channel("channel 1", "#FFFF00", 1)}
+            };
+            Client.Events.UpdateChannels(evnt.Key, channels);
+            Client.Events.AssignObjectsToChannel(evnt.Key, new
+            {
+                channelKey1 = new[] {"A-1"}
+            });
+
             var report = Client.EventReports.ByLabel(evnt.Key);
 
             var reportItem = report["A-1"].First();
@@ -42,6 +52,7 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal("A-2", reportItem.RightNeighbour);
             Assert.False(reportItem.IsSelectable);
             Assert.False(reportItem.IsDisabledBySocialDistancing);
+            Assert.Equal("channelKey1", reportItem.Channel);
         }
 
         [Fact]
@@ -269,6 +280,47 @@ namespace SeatsioDotNet.Test.EventReports
             Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"});
 
             var report = Client.EventReports.BySelectability(evnt.Key, NotSelectable);
+
+            Assert.Equal(2, report.Count());
+        }
+
+        [Fact]
+        public void ByChannel()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var channels = new Dictionary<string, Channel>()
+            {
+                {"channelKey1", new Channel("channel 1", "#FFFF00", 1)}
+            };
+            Client.Events.UpdateChannels(evnt.Key, channels);
+            Client.Events.AssignObjectsToChannel(evnt.Key, new
+            {
+                channelKey1 = new[] {"A-1", "A-2"}
+            });
+
+            var report = Client.EventReports.ByChannel(evnt.Key);
+
+            Assert.Equal(32, report["NO_CHANNEL"].Count());
+            Assert.Equal(2, report["channelKey1"].Count());
+        }
+
+        [Fact]
+        public void BySpecificChannel()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var channels = new Dictionary<string, Channel>()
+            {
+                {"channelKey1", new Channel("channel 1", "#FFFF00", 1)}
+            };
+            Client.Events.UpdateChannels(evnt.Key, channels);
+            Client.Events.AssignObjectsToChannel(evnt.Key, new
+            {
+                channelKey1 = new[] {"A-1", "A-2"}
+            });
+
+            var report = Client.EventReports.ByChannel(evnt.Key, "channelKey1");
 
             Assert.Equal(2, report.Count());
         }

@@ -10,6 +10,9 @@ namespace SeatsioDotNet.Charts
         public bool DisableSeatsInFrontAndBehind { get; set; }
         public int NumberOfDisabledAisleSeats { get; set; }
         public int MaxGroupSize { get; set; }
+        public int MaxOccupancyAbsolute { get; set; }
+        public int MaxOccupancyPercentage { get; set; }
+        public bool FixedGroupLayout { get; set; }
         public List<string> DisabledSeats { get; set; }
         public List<string> EnabledSeats { get; set; }
 
@@ -17,8 +20,9 @@ namespace SeatsioDotNet.Charts
         {
         }
 
-        public SocialDistancingRuleset(int index, string name, int numberOfDisabledSeatsToTheSides = 0,
+        public SocialDistancingRuleset(int index = 0, string name = null, int numberOfDisabledSeatsToTheSides = 0,
             bool disableSeatsInFrontAndBehind = false, int numberOfDisabledAisleSeats = 0, int maxGroupSize = 0,
+            int maxOccupancyAbsolute = 0, int maxOccupancyPercentage = 0, bool fixedGroupLayout = false,
             List<string> disabledSeats = null, List<string> enabledSeats = null)
         {
             Index = index;
@@ -27,8 +31,26 @@ namespace SeatsioDotNet.Charts
             DisableSeatsInFrontAndBehind = disableSeatsInFrontAndBehind;
             NumberOfDisabledAisleSeats = numberOfDisabledAisleSeats;
             MaxGroupSize = maxGroupSize;
+            MaxOccupancyAbsolute = maxOccupancyAbsolute;
+            MaxOccupancyPercentage = maxOccupancyPercentage;
+            FixedGroupLayout = fixedGroupLayout;
             DisabledSeats = disabledSeats ?? new List<string>();
             EnabledSeats = enabledSeats ?? new List<string>();
+        }
+
+        public static SocialDistancingRuleset Fixed(int index = 0, string name = null, List<string> disabledSeats = null)
+        {
+            return new SocialDistancingRuleset(index, name, 0, false, 0, 0, 0, 0, true, disabledSeats, null);
+        }   
+        
+        public static SocialDistancingRuleset RuleBased(int index = 0, string name = null, int numberOfDisabledSeatsToTheSides = 0,
+            bool disableSeatsInFrontAndBehind = false, int numberOfDisabledAisleSeats = 0, int maxGroupSize = 0,
+            int maxOccupancyAbsolute = 0, int maxOccupancyPercentage = 0,
+            List<string> disabledSeats = null, List<string> enabledSeats = null)
+        {
+            return new SocialDistancingRuleset(index, name, numberOfDisabledSeatsToTheSides, disableSeatsInFrontAndBehind,
+                numberOfDisabledAisleSeats, maxGroupSize, maxOccupancyAbsolute, maxOccupancyPercentage,
+                false, disabledSeats, enabledSeats);
         }
 
         public object AsJsonObject()
@@ -41,6 +63,9 @@ namespace SeatsioDotNet.Charts
                 disableSeatsInFrontAndBehind = DisableSeatsInFrontAndBehind,
                 numberOfDisabledAisleSeats = NumberOfDisabledAisleSeats,
                 maxGroupSize = MaxGroupSize,
+                maxOccupancyAbsolute = MaxOccupancyAbsolute,
+                maxOccupancyPercentage = MaxOccupancyPercentage,
+                fixedGroupLayout = FixedGroupLayout,
                 disabledSeats = DisabledSeats,
                 enabledSeats = EnabledSeats
             };

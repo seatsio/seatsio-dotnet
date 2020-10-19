@@ -13,7 +13,7 @@ namespace SeatsioDotNet.Test.Charts
             var chartKey = CreateTestChart();
             var rulesets = new Dictionary<string, SocialDistancingRuleset>()
             {
-                {"ruleset1", new SocialDistancingRuleset(0, "My first ruleset", 1, true, 2, 1, 10, 0, false, new List<string> {"A-1"}, new List<string> {"A-2"})},
+                {"ruleset1", new SocialDistancingRuleset(0, "My first ruleset", 1, true, 2, 1, 10, 0, true, false, new List<string> {"A-1"}, new List<string> {"A-2"})},
                 {"ruleset2", new SocialDistancingRuleset(1, "My second ruleset")}
             };
 
@@ -31,6 +31,7 @@ namespace SeatsioDotNet.Test.Charts
             Assert.Equal(1, ruleset1.MaxGroupSize);
             Assert.Equal(10, ruleset1.MaxOccupancyAbsolute);
             Assert.Equal(0, ruleset1.MaxOccupancyPercentage);
+            Assert.True(ruleset1.OneGroupPerTable);
             Assert.False(ruleset1.FixedGroupLayout);
             Assert.Equal(new List<string> {"A-1"}, ruleset1.DisabledSeats);
             Assert.Equal(new List<string> {"A-2"}, ruleset1.EnabledSeats);
@@ -44,6 +45,7 @@ namespace SeatsioDotNet.Test.Charts
             Assert.Equal(0, ruleset2.MaxGroupSize);
             Assert.Equal(0, ruleset2.MaxOccupancyAbsolute);
             Assert.Equal(0, ruleset2.MaxOccupancyPercentage);
+            Assert.False(ruleset2.OneGroupPerTable);
             Assert.False(ruleset2.FixedGroupLayout);
             Assert.Empty(ruleset2.DisabledSeats);
             Assert.Empty(ruleset2.EnabledSeats);
@@ -55,7 +57,7 @@ namespace SeatsioDotNet.Test.Charts
             var chartKey = CreateTestChart();
             var rulesets = new Dictionary<string, SocialDistancingRuleset>()
             {
-                { "ruleset1", SocialDistancingRuleset.RuleBased(0, "My first ruleset", 1, true, 2, 1, 10, 0, new List<string> {"A-1"}, new List<string> {"A-2"})},
+                { "ruleset1", SocialDistancingRuleset.RuleBased(0, "My first ruleset", 1, true, 2, 1, 10, 0, true, new List<string> {"A-1"}, new List<string> {"A-2"})},
             };
 
             Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
@@ -72,6 +74,7 @@ namespace SeatsioDotNet.Test.Charts
             Assert.Equal(1, ruleset1.MaxGroupSize);
             Assert.Equal(10, ruleset1.MaxOccupancyAbsolute);
             Assert.Equal(0, ruleset1.MaxOccupancyPercentage);
+            Assert.True(ruleset1.OneGroupPerTable);
             Assert.False(ruleset1.FixedGroupLayout);
             Assert.Equal(new List<string> {"A-1"}, ruleset1.DisabledSeats);
             Assert.Equal(new List<string> {"A-2"}, ruleset1.EnabledSeats);

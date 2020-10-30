@@ -13,26 +13,32 @@ namespace SeatsioDotNet.ChartReports
             _restClient = restClient;
         }
 
-        public Dictionary<string, IEnumerable<ChartReportItem>> ByLabel(string chartKey)
+        public Dictionary<string, IEnumerable<ChartReportItem>> ByLabel(string chartKey, string bookWholeTablesMode)
         {
-            return FetchReport("byLabel", chartKey);
+            return FetchReport("byLabel", chartKey, bookWholeTablesMode);
         }
         
-        public Dictionary<string, IEnumerable<ChartReportItem>> ByCategoryKey(string chartKey)
+        public Dictionary<string, IEnumerable<ChartReportItem>> ByCategoryKey(string chartKey, string bookWholeTablesMode)
         {
-            return FetchReport("byCategoryKey", chartKey);
+            return FetchReport("byCategoryKey", chartKey, bookWholeTablesMode);
         }
         
-        public Dictionary<string, IEnumerable<ChartReportItem>> ByCategoryLabel(string chartKey)
+        public Dictionary<string, IEnumerable<ChartReportItem>> ByCategoryLabel(string chartKey, string bookWholeTablesMode)
         {
-            return FetchReport("byCategoryLabel", chartKey);
+            return FetchReport("byCategoryLabel", chartKey, bookWholeTablesMode);
         }
 
-        private Dictionary<string, IEnumerable<ChartReportItem>> FetchReport(string reportType, string chartKey)
+        private Dictionary<string, IEnumerable<ChartReportItem>> FetchReport(string reportType, string chartKey, string bookWholeTablesMode)
         {
             var restRequest = new RestRequest("/reports/charts/{key}/{reportType}", Method.GET)
                 .AddUrlSegment("key", chartKey)
                 .AddUrlSegment("reportType", reportType);
+            
+            if (bookWholeTablesMode != null)
+            {
+                restRequest.AddQueryParameter("bookWholeTables", bookWholeTablesMode);
+            }
+            
             return AssertOk(_restClient.Execute<Dictionary<string, IEnumerable<ChartReportItem>>>(restRequest));
         }
     }

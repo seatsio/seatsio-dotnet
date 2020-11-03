@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SeatsioDotNet.Charts;
+using SeatsioDotNet.Events;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events
@@ -19,7 +20,6 @@ namespace SeatsioDotNet.Test.Events
             var retrievedEvent = Client.Events.Retrieve(evnt.Key);
             Assert.Equal(evnt.Key, retrievedEvent.Key);
             Assert.Equal(chartKey2, retrievedEvent.ChartKey);
-            Assert.False(retrievedEvent.BookWholeTables);
             CustomAssert.CloseTo(DateTimeOffset.Now, retrievedEvent.UpdatedOn.Value);
         }    
         
@@ -34,36 +34,21 @@ namespace SeatsioDotNet.Test.Events
             var retrievedEvent = Client.Events.Retrieve("newKey");
             Assert.Equal("newKey", retrievedEvent.Key);
             Assert.Equal(chartKey, retrievedEvent.ChartKey);
-            Assert.False(retrievedEvent.BookWholeTables);
-        }   
-        
-        [Fact]
-        public void UpdateBookWholeTables()
-        {
-            var chartKey = CreateTestChart();
-            var evnt = Client.Events.Create(chartKey);
+        }
 
-            Client.Events.Update(evnt.Key, null, null, true);
-
-            var retrievedEvent = Client.Events.Retrieve(evnt.Key);
-            Assert.Equal(evnt.Key, retrievedEvent.Key);
-            Assert.Equal(chartKey, retrievedEvent.ChartKey);
-            Assert.True(retrievedEvent.BookWholeTables);
-        }    
-        
         [Fact]
-        public void UpdateTableBookingModes()
+        public void UpdateTableBookingConfig()
         {
             var chartKey = CreateTestChartWithTables();
-            var evnt = Client.Events.Create(chartKey, null, new Dictionary<string, string> {{"T1", "BY_TABLE"}});
+            var evnt = Client.Events.Create(chartKey, null, TableBookingConfig.Custom(new Dictionary<string, string> {{"T1", "BY_TABLE"}}));
 
-            Client.Events.Update(evnt.Key, null, null, new Dictionary<string, string> {{"T1", "BY_SEAT"}});
+            Client.Events.Update(evnt.Key, null, null, TableBookingConfig.Custom(new Dictionary<string, string> {{"T1", "BY_SEAT"}}));
 
             var retrievedEvent = Client.Events.Retrieve(evnt.Key);
             Assert.Equal(evnt.Key, retrievedEvent.Key);
             Assert.Equal(chartKey, retrievedEvent.ChartKey);
-            Assert.False(retrievedEvent.BookWholeTables);
-            Assert.Equal(retrievedEvent.TableBookingModes, new Dictionary<string, string> {{"T1", "BY_SEAT"}});
+            Assert.Equal("CUSTOM", retrievedEvent.TableBookingConfig.Mode);
+            Assert.Equal(new Dictionary<string, string> {{"T1", "BY_SEAT"}}, retrievedEvent.TableBookingConfig.Tables);
         }     
         
         [Fact]

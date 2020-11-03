@@ -5,8 +5,7 @@ namespace SeatsioDotNet.Events
     public class EventCreationParams
     {
         public string Key { get; set; }
-        public bool? BookWholeTables { get; set; }
-        public Dictionary<string, string> TableBookingModes { get; set; }
+        public TableBookingConfig TableBookingConfig { get; set; }
         public string SocialDistancingRulesetKey { get; set; }
 
 
@@ -19,17 +18,10 @@ namespace SeatsioDotNet.Events
             Key = key;
         }
 
-        public EventCreationParams(string key, bool bookWholeTables)
+        public EventCreationParams(string key, TableBookingConfig tableBookingConfig)
         {
             Key = key;
-            BookWholeTables = bookWholeTables;
-        }
-
-
-        public EventCreationParams(string key, Dictionary<string, string> tableBookingModes)
-        {
-            Key = key;
-            TableBookingModes = tableBookingModes;
+            TableBookingConfig = tableBookingConfig;
         }
 
         public EventCreationParams(string key, string socialDistancingRulesetKey)

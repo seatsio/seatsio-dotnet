@@ -9,8 +9,7 @@ namespace SeatsioDotNet.Events
         public int Id { get; set; }
         public string Key { get; set; }
         public string ChartKey { get; set; }
-        public bool BookWholeTables { get; set; }
-        public Dictionary<string, string> TableBookingModes { get; set; }
+        public TableBookingConfig TableBookingConfig { get; set; }
         public bool SupportsBestAvailable { get; set; }
         public ForSaleConfig ForSaleConfig { get; set; }
         public DateTimeOffset? CreatedOn { get; set; }

@@ -121,7 +121,7 @@ foreach (var chart in previousPage.Items)
 
 ```csharp
 var client = new SeatsioClient("<COMPANY ADMIN KEY>");
-client.Workspaces.Create("a workspace);
+client.Workspaces.Create("a workspace");
 ```
 
 ## Error handling

@@ -54,7 +54,7 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var rulesets = new Dictionary<string, SocialDistancingRuleset>()
             {
-                { "ruleset1", new SocialDistancingRuleset(0, "My first ruleset") },
+                { "ruleset1", SocialDistancingRuleset.RuleBased("My first ruleset").Build() },
             };
             Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
 

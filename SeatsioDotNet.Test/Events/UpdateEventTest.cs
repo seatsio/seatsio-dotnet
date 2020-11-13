@@ -57,8 +57,8 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var rulesets = new Dictionary<string, SocialDistancingRuleset>()
             {
-                { "ruleset1", SocialDistancingRuleset.RuleBased(0, "My first ruleset") },
-                { "ruleset2", SocialDistancingRuleset.RuleBased(0, "My second ruleset") }
+                { "ruleset1", SocialDistancingRuleset.RuleBased("My first ruleset").Build() },
+                { "ruleset2", SocialDistancingRuleset.RuleBased("My second ruleset").Build() }
             };
             Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
             var evnt = Client.Events.Create(chartKey, null, null, "ruleset1");
@@ -75,7 +75,7 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var rulesets = new Dictionary<string, SocialDistancingRuleset>()
             {
-                { "ruleset1", new SocialDistancingRuleset(0, "My first ruleset") }
+                { "ruleset1", SocialDistancingRuleset.RuleBased("My first ruleset").Build() }
             };
             Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
             var evnt = Client.Events.Create(chartKey, null, null, "ruleset1");

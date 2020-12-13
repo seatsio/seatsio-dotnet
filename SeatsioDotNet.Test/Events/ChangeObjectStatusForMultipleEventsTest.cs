@@ -1,4 +1,6 @@
-﻿using SeatsioDotNet.Events;
+﻿using System.Collections.Generic;
+using SeatsioDotNet.Charts;
+using SeatsioDotNet.Events;
 using SeatsioDotNet.HoldTokens;
 using Xunit;
 
@@ -66,6 +68,27 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(event1.Key, "A-2").Status);
             Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(event2.Key, "A-1").Status);
             Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(event2.Key, "A-2").Status);
+        }
+        
+        [Fact]
+        public void IgnoreSocialDistancing()
+        {
+            var chartKey = CreateTestChart();
+            var ruleset = SocialDistancingRuleset.Fixed("ruleset")
+                .WithDisabledSeats(new List<string> {"A-1"})
+                .Build();
+            var rulesets = new Dictionary<string, SocialDistancingRuleset>
+            {
+                {"ruleset", ruleset},
+            };
+            Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
+            var event1 = Client.Events.Create(chartKey, null, null, "ruleset");
+            var event2 = Client.Events.Create(chartKey, null, null, "ruleset");
+
+            Client.Events.Book(new[] {event1.Key, event2.Key}, new[] {"A-1"}, null, null, null, null, null, true);
+
+            Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(event1.Key, "A-1").Status);
+            Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(event2.Key, "A-1").Status);
         }
 
     }

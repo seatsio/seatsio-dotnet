@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
+using SeatsioDotNet.Charts;
 using SeatsioDotNet.Events;
 using SeatsioDotNet.HoldTokens;
 using Xunit;
@@ -156,6 +157,25 @@ namespace SeatsioDotNet.Test.Events
             Client.Events.UpdateExtraData(evnt.Key, "A-1", extraData);
 
             Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus");
+
+            Assert.Null(Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
+        }
+        
+        [Fact]
+        public void IgnoreSocialDistancing()
+        {
+            var chartKey = CreateTestChart();
+            var ruleset = SocialDistancingRuleset.Fixed("ruleset")
+                .WithDisabledSeats(new List<string> {"A-1"})
+                .Build();
+            var rulesets = new Dictionary<string, SocialDistancingRuleset>
+            {
+                {"ruleset", ruleset},
+            };
+            Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
+            var evnt = Client.Events.Create(chartKey, null, null, "ruleset");
+
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", null, null, null, null, null, true);
 
             Assert.Null(Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
         }

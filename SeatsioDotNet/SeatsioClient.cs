@@ -27,11 +27,11 @@ namespace SeatsioDotNet
             UsageReports = new UsageReports.UsageReports(restClient);
         }
 
-        public SeatsioClient(string secretKey, string workspaceKey, Region region) : this(secretKey, workspaceKey, region.Url())
+        public SeatsioClient(Region region, string secretKey, string workspaceKey) : this(secretKey, workspaceKey, region.Url())
         {
         }
 
-        public SeatsioClient(string secretKey, Region region) : this(secretKey, null, region)
+        public SeatsioClient(Region region, string secretKey) : this(region, secretKey, null)
         {
         }
 

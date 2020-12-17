@@ -28,7 +28,7 @@ seatsio-dotnet follows semver since v70.2.0.
 ### Creating a chart and an event
 
 ```csharp
-var client = new SeatsioClient("<WORKSPACE SECRET KEY>"); // can be found on https://app.seats.io/workspace-settings
+var client = new SeatsioClient(Region.US, "<WORKSPACE SECRET KEY>"); // workspace secret key can be found on https://app.seats.io/workspace-settings
 var chart = client.Charts.Create();
 var evnt = client.Events.Create(chart.Key);
 ```
@@ -36,35 +36,35 @@ var evnt = client.Events.Create(chart.Key);
 ### Booking objects
 
 ```csharp
-var client = new SeatsioClient("<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.US, "<WORKSPACE SECRET KEY>");
 client.Events.Book(<EVENT KEY>, new [] { "A-1", "A-2"});
 ```
 
 ### Releasing objects
 
 ```csharp
-var client = new SeatsioClient("<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.US, "<WORKSPACE SECRET KEY>");
 client.Events.Release(<EVENT KEY>, new [] { "A-1", "A-2"});
 ```
 
 ### Booking objects that have been held
 
 ```csharp
-var client = new SeatsioClient("<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.US, "<WORKSPACE SECRET KEY>");
 client.Events.Book(<EVENT KEY>, new [] { "A-1", "A-2"}, <A HOLD TOKEN>);
 ```
 
 ### Changing object status
 
 ```csharp
-var client = new SeatsioClient("<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.US, "<WORKSPACE SECRET KEY>");
 client.Events.ChangeObjectStatus(""<EVENT KEY>"", new [] { "A-1", "A-2"}, "unavailable");
 ```
 
 ### Retrieving the published version of a chart (i.e. the actual drawing, containing the venue type, categories etc.)
 
 ```csharp
-var client = new SeatsioClient("<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.US, "<WORKSPACE SECRET KEY>");
 var drawing = client.Charts.RetrievePublishedVersion(<CHART KEY>);
 Console.WriteLine(drawing.VenueType);
 ```
@@ -72,7 +72,7 @@ Console.WriteLine(drawing.VenueType);
 ### Listing all charts
 
 ```csharp
-var client = new SeatsioClient("<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.US, "<WORKSPACE SECRET KEY>");
 
 var charts = client.Charts.ListAll();
 foreach (var chart in charts)
@@ -120,7 +120,7 @@ foreach (var chart in previousPage.Items)
 ### Creating a workspace
 
 ```csharp
-var client = new SeatsioClient("<COMPANY ADMIN KEY>");
+var client = new SeatsioClient(Region.US, "<COMPANY ADMIN KEY>");
 client.Workspaces.Create("a workspace");
 ```
 

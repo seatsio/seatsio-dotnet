@@ -8,51 +8,24 @@ namespace SeatsioDotNet.Charts
         public string Name { get; set; }
         public int NumberOfDisabledSeatsToTheSides { get; set; }
         public bool DisableSeatsInFrontAndBehind { get; set; }
+        public bool DisableDiagonalSeatsInFrontAndBehind { get; set; }
         public int NumberOfDisabledAisleSeats { get; set; }
         public int MaxGroupSize { get; set; }
         public int MaxOccupancyAbsolute { get; set; }
         public int MaxOccupancyPercentage { get; set; }
         public bool OneGroupPerTable { get; set; }
         public bool FixedGroupLayout { get; set; }
-        public List<string> DisabledSeats { get; set; }
-        public List<string> EnabledSeats { get; set; }
+        public List<string> DisabledSeats { get; set; } = new List<string>();
+        public List<string> EnabledSeats { get; set; } = new List<string>();
 
-        public SocialDistancingRuleset()
+        public static FixedSocialDistancingRulesetBuilder Fixed(string name)
         {
+            return new FixedSocialDistancingRulesetBuilder(name);
         }
 
-        public SocialDistancingRuleset(int index = 0, string name = null, int numberOfDisabledSeatsToTheSides = 0,
-            bool disableSeatsInFrontAndBehind = false, int numberOfDisabledAisleSeats = 0, int maxGroupSize = 0,
-            int maxOccupancyAbsolute = 0, int maxOccupancyPercentage = 0, bool oneGroupPerTable = false, bool fixedGroupLayout = false,
-            List<string> disabledSeats = null, List<string> enabledSeats = null)
+        public static RuleBasedSocialDistancingRulesetBuilder RuleBased(string name)
         {
-            Index = index;
-            Name = name;
-            NumberOfDisabledSeatsToTheSides = numberOfDisabledSeatsToTheSides;
-            DisableSeatsInFrontAndBehind = disableSeatsInFrontAndBehind;
-            NumberOfDisabledAisleSeats = numberOfDisabledAisleSeats;
-            MaxGroupSize = maxGroupSize;
-            MaxOccupancyAbsolute = maxOccupancyAbsolute;
-            MaxOccupancyPercentage = maxOccupancyPercentage;
-            OneGroupPerTable = oneGroupPerTable;
-            FixedGroupLayout = fixedGroupLayout;
-            DisabledSeats = disabledSeats ?? new List<string>();
-            EnabledSeats = enabledSeats ?? new List<string>();
-        }
-
-        public static SocialDistancingRuleset Fixed(int index = 0, string name = null, List<string> disabledSeats = null)
-        {
-            return new SocialDistancingRuleset(index, name, 0, false, 0, 0, 0, 0, false, true, disabledSeats, null);
-        }   
-        
-        public static SocialDistancingRuleset RuleBased(int index = 0, string name = null, int numberOfDisabledSeatsToTheSides = 0,
-            bool disableSeatsInFrontAndBehind = false, int numberOfDisabledAisleSeats = 0, int maxGroupSize = 0,
-            int maxOccupancyAbsolute = 0, int maxOccupancyPercentage = 0, bool oneGroupPerTable = false,
-            List<string> disabledSeats = null, List<string> enabledSeats = null)
-        {
-            return new SocialDistancingRuleset(index, name, numberOfDisabledSeatsToTheSides, disableSeatsInFrontAndBehind,
-                numberOfDisabledAisleSeats, maxGroupSize, maxOccupancyAbsolute, maxOccupancyPercentage, oneGroupPerTable,
-                false, disabledSeats, enabledSeats);
+            return new RuleBasedSocialDistancingRulesetBuilder(name);
         }
 
         public object AsJsonObject()
@@ -63,6 +36,7 @@ namespace SeatsioDotNet.Charts
                 name = Name,
                 numberOfDisabledSeatsToTheSides = NumberOfDisabledSeatsToTheSides,
                 disableSeatsInFrontAndBehind = DisableSeatsInFrontAndBehind,
+                disableDiagonalSeatsInFrontAndBehind = DisableDiagonalSeatsInFrontAndBehind,
                 numberOfDisabledAisleSeats = NumberOfDisabledAisleSeats,
                 maxGroupSize = MaxGroupSize,
                 maxOccupancyAbsolute = MaxOccupancyAbsolute,
@@ -72,6 +46,151 @@ namespace SeatsioDotNet.Charts
                 disabledSeats = DisabledSeats,
                 enabledSeats = EnabledSeats
             };
+        }
+    }
+
+    public class FixedSocialDistancingRulesetBuilder
+    {
+        private readonly string Name;
+        private int Index;
+        private List<string> DisabledSeats;
+
+        public FixedSocialDistancingRulesetBuilder(string name)
+        {
+            Name = name;
+        }
+
+        public SocialDistancingRuleset Build()
+        {
+            var ruleset = new SocialDistancingRuleset
+            {
+                Name = Name,
+                Index = Index, 
+                FixedGroupLayout = true,
+                DisabledSeats = DisabledSeats
+            };
+            return ruleset;
+        }
+
+        public FixedSocialDistancingRulesetBuilder WithIndex(int index)
+        {
+            Index = index;
+            return this;
+        }
+
+        public FixedSocialDistancingRulesetBuilder WithDisabledSeats(List<string> disabledSeats)
+        {
+            DisabledSeats = disabledSeats;
+            return this;
+        }
+    }
+
+    public class RuleBasedSocialDistancingRulesetBuilder
+    {
+        private readonly string Name;
+        private int Index;
+        private int NumberOfDisabledSeatsToTheSides;
+        private bool DisableSeatsInFrontAndBehind;
+        private bool DisableDiagonalSeatsInFrontAndBehind;
+        private int NumberOfDisabledAisleSeats;
+        private int MaxGroupSize;
+        private int MaxOccupancyAbsolute;
+        private int MaxOccupancyPercentage;
+        private bool OneGroupPerTable;
+        private bool FixedGroupLayout;
+        private List<string> DisabledSeats = new List<string>();
+        private List<string> EnabledSeats = new List<string>();
+
+        public RuleBasedSocialDistancingRulesetBuilder(string name)
+        {
+            Name = name;
+        }
+
+        public SocialDistancingRuleset Build()
+        {
+            var ruleset = new SocialDistancingRuleset
+            {
+                Name = Name,
+                Index = Index,
+                NumberOfDisabledSeatsToTheSides = NumberOfDisabledSeatsToTheSides,
+                DisableSeatsInFrontAndBehind = DisableSeatsInFrontAndBehind,
+                DisableDiagonalSeatsInFrontAndBehind = DisableDiagonalSeatsInFrontAndBehind,
+                NumberOfDisabledAisleSeats = NumberOfDisabledAisleSeats,
+                MaxGroupSize = MaxGroupSize,
+                MaxOccupancyAbsolute = MaxOccupancyAbsolute,
+                MaxOccupancyPercentage = MaxOccupancyPercentage,
+                OneGroupPerTable = OneGroupPerTable,
+                FixedGroupLayout = false,
+                DisabledSeats = DisabledSeats,
+                EnabledSeats = EnabledSeats
+            };
+            return ruleset;
+        }
+
+        public RuleBasedSocialDistancingRulesetBuilder WithIndex(int index)
+        {
+            Index = index;
+            return this;
+        }
+
+        public RuleBasedSocialDistancingRulesetBuilder WithNumberOfDisabledSeatsToTheSides(int numberOfDisabledSeatsToTheSides)
+        {
+            NumberOfDisabledSeatsToTheSides = numberOfDisabledSeatsToTheSides;
+            return this;
+        }
+
+        public RuleBasedSocialDistancingRulesetBuilder WithDisableSeatsInFrontAndBehind(bool disableSeatsInFrontAndBehind)
+        {
+            DisableSeatsInFrontAndBehind = disableSeatsInFrontAndBehind;
+            return this;
+        }   
+        
+        public RuleBasedSocialDistancingRulesetBuilder WithDisableDiagonalSeatsInFrontAndBehind(bool disableDiagonalSeatsInFrontAndBehind)
+        {
+            DisableDiagonalSeatsInFrontAndBehind = disableDiagonalSeatsInFrontAndBehind;
+            return this;
+        }
+
+        public RuleBasedSocialDistancingRulesetBuilder WithNumberOfDisabledAisleSeats(int numberOfDisabledAisleSeats)
+        {
+            NumberOfDisabledAisleSeats = numberOfDisabledAisleSeats;
+            return this;
+        }
+
+        public RuleBasedSocialDistancingRulesetBuilder WithMaxGroupSize(int maxGroupSize)
+        {
+            MaxGroupSize = maxGroupSize;
+            return this;
+        }
+
+        public RuleBasedSocialDistancingRulesetBuilder WithMaxOccupancyAbsolute(int maxOccupancyAbsolute)
+        {
+            MaxOccupancyAbsolute = maxOccupancyAbsolute;
+            return this;
+        }
+
+        public RuleBasedSocialDistancingRulesetBuilder WithMaxOccupancyPercentage(int maxOccupancyPercentage)
+        {
+            MaxOccupancyPercentage = maxOccupancyPercentage;
+            return this;
+        }
+
+        public RuleBasedSocialDistancingRulesetBuilder WithOneGroupPerTable(bool oneGroupPerTable)
+        {
+            OneGroupPerTable = oneGroupPerTable;
+            return this;
+        }
+
+        public RuleBasedSocialDistancingRulesetBuilder WithDisabledSeats(List<string> disabledSeats)
+        {
+            DisabledSeats = disabledSeats;
+            return this;
+        }
+
+        public RuleBasedSocialDistancingRulesetBuilder WithEnabledSeats(List<string> enabledSeats)
+        {
+            EnabledSeats = enabledSeats;
+            return this;
         }
     }
 }

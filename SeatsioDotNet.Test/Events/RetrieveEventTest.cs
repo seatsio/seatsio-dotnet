@@ -1,4 +1,5 @@
 ﻿using System;
+using SeatsioDotNet.Events;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events
@@ -16,7 +17,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.NotNull(retrievedEvent.Key);
             Assert.NotEqual(0, retrievedEvent.Id);
             Assert.Equal(chartKey, retrievedEvent.ChartKey);
-            Assert.False(retrievedEvent.BookWholeTables);
+            Assert.Equal("INHERIT", evnt.TableBookingConfig.Mode);
             Assert.True(retrievedEvent.SupportsBestAvailable);
             Assert.Null(retrievedEvent.ForSaleConfig);
             CustomAssert.CloseTo(DateTimeOffset.Now, retrievedEvent.CreatedOn.Value);

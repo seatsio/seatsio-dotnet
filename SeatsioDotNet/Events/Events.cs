@@ -18,30 +18,20 @@ namespace SeatsioDotNet.Events
 
         public Event Create(string chartKey)
         {
-            return Create(chartKey, null, null, null, null);
+            return Create(chartKey, null, null, null);
         }
 
         public Event Create(string chartKey, string eventKey)
         {
-            return Create(chartKey, eventKey, null, null, null);
+            return Create(chartKey, eventKey, null, null);
         }
 
-        public Event Create(string chartKey, string eventKey, bool? bookWholeTables)
+        public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig)
         {
-            return Create(chartKey, eventKey, bookWholeTables, null, null);
+            return Create(chartKey, eventKey, tableBookingConfig, null);
         }
 
-        public Event Create(string chartKey, string eventKey, Dictionary<string, string> tableBookingModes)
-        {
-            return Create(chartKey, eventKey, null, tableBookingModes, null);
-        }
-
-        public Event Create(string chartKey, string eventKey, Dictionary<string, string> tableBookingModes, string socialDistancingRulesetKey)
-        {
-            return Create(chartKey, eventKey, null, tableBookingModes, socialDistancingRulesetKey);
-        }
-
-        private Event Create(string chartKey, string eventKey, bool? bookWholeTables, Dictionary<string, string> tableBookingModes, string socialDistancingRulesetKey)
+        public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig, string socialDistancingRulesetKey)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("chartKey", chartKey);
@@ -51,14 +41,9 @@ namespace SeatsioDotNet.Events
                 requestBody.Add("eventKey", eventKey);
             }
 
-            if (bookWholeTables != null)
+            if (tableBookingConfig != null)
             {
-                requestBody.Add("bookWholeTables", bookWholeTables);
-            }
-
-            if (tableBookingModes != null)
-            {
-                requestBody.Add("tableBookingModes", tableBookingModes);
+                requestBody.Add("tableBookingConfig", tableBookingConfig.AsJsonObject());
             }
 
             if (socialDistancingRulesetKey != null)
@@ -82,13 +67,9 @@ namespace SeatsioDotNet.Events
                 {
                     e.Add("eventKey", param.Key);
                 }
-                if (param.BookWholeTables != null)
+                if (param.TableBookingConfig != null)
                 {
-                    e.Add("bookWholeTables", param.BookWholeTables);
-                }
-                if (param.TableBookingModes != null)
-                {
-                    e.Add("tableBookingModes", param.TableBookingModes);
+                    e.Add("tableBookingConfig", param.TableBookingConfig.AsJsonObject());
                 }
                 if (param.SocialDistancingRulesetKey != null)
                 {
@@ -103,25 +84,15 @@ namespace SeatsioDotNet.Events
 
         public void Update(string eventKey, string chartKey, string newEventKey)
         {
-            Update(eventKey, chartKey, newEventKey, null, null, null);
-        }
-
-        public void Update(string eventKey, string chartKey, string newEventKey, bool? bookWholeTables)
+            Update(eventKey, chartKey, newEventKey, null, null);
+        }    
+        
+        public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig)
         {
-            Update(eventKey, chartKey, newEventKey, bookWholeTables, null, null);
+            Update(eventKey, chartKey, newEventKey, tableBookingConfig, null);
         }
 
-        public void Update(string eventKey, string chartKey, string newEventKey, Dictionary<string, string> tableBookingModes)
-        {
-            Update(eventKey, chartKey, newEventKey, null, tableBookingModes, null);
-        }
-
-        public void Update(string eventKey, string chartKey, string newEventKey, Dictionary<string, string> tableBookingModes, string socialDistancingRulesetKey)
-        {
-            Update(eventKey, chartKey, newEventKey, null, tableBookingModes, socialDistancingRulesetKey);
-        }
-
-        private void Update(string eventKey, string chartKey, string newEventKey, bool? bookWholeTables, Dictionary<string, string> tableBookingModes, string socialDistancingRulesetKey)
+        public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig, string socialDistancingRulesetKey)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
 
@@ -135,14 +106,9 @@ namespace SeatsioDotNet.Events
                 requestBody.Add("eventKey", newEventKey);
             }
 
-            if (bookWholeTables != null)
+            if (tableBookingConfig != null)
             {
-                requestBody.Add("bookWholeTables", bookWholeTables);
-            }
-
-            if (tableBookingModes != null)
-            {
-                requestBody.Add("tableBookingModes", tableBookingModes);
+                requestBody.Add("tableBookingConfig", tableBookingConfig.AsJsonObject());
             }
 
             if (socialDistancingRulesetKey != null)
@@ -178,24 +144,24 @@ namespace SeatsioDotNet.Events
             return AssertOk(_restClient.Execute<ObjectStatus>(restRequest));
         }
 
-        public ChangeObjectStatusResult Book(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Book(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
-        public ChangeObjectStatusResult Book(string[] eventKeys, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Book(string[] eventKeys, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
-        public ChangeObjectStatusResult Book(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Book(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
-        public ChangeObjectStatusResult Book(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Book(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys, ignoreSocialDistancing);
         }
 
         public BestAvailableResult Book(string eventKey, BestAvailable bestAvailable, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
@@ -223,24 +189,24 @@ namespace SeatsioDotNet.Events
             return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
         }
 
-        public ChangeObjectStatusResult Hold(string eventKey, IEnumerable<string> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Hold(string eventKey, IEnumerable<string> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
-        public ChangeObjectStatusResult Hold(string[] eventKeys, IEnumerable<string> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Hold(string[] eventKeys, IEnumerable<string> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
-        public ChangeObjectStatusResult Hold(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Hold(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
+            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys, ignoreSocialDistancing);
         }
 
-        public ChangeObjectStatusResult Hold(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult Hold(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
         public BestAvailableResult Hold(string eventKey, BestAvailable bestAvailable, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
@@ -248,24 +214,24 @@ namespace SeatsioDotNet.Events
             return ChangeObjectStatus(eventKey, bestAvailable, ObjectStatus.Held, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
         }
 
-        public ChangeObjectStatusResult ChangeObjectStatus(string eventKey, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null,bool? ignoreChannels = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult ChangeObjectStatus(string eventKey, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null,bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(new[] {eventKey}, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            return ChangeObjectStatus(new[] {eventKey}, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
-        public ChangeObjectStatusResult ChangeObjectStatus(string eventKey, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult ChangeObjectStatus(string eventKey, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(new[] {eventKey}, objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            return ChangeObjectStatus(new[] {eventKey}, objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
-        public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(events, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            return ChangeObjectStatus(events, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
-        public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            var requestBody = ChangeObjectStatusRequest(events, objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            var requestBody = ChangeObjectStatusRequest(events, objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
             var restRequest = new RestRequest("/seasons/actions/change-object-status", Method.POST)
                 .AddQueryParameter("expand", "objects")
                 .AddJsonBody(requestBody);
@@ -281,21 +247,21 @@ namespace SeatsioDotNet.Events
             return AssertOk(_restClient.Execute<ChangeObjectStatusInBatchResult>(restRequest)).Results;
         }
 
-        private Dictionary<string, object> ChangeObjectStatusRequest(string evnt, IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null, string[] channelKeys = null)
+        private Dictionary<string, object> ChangeObjectStatusRequest(string evnt, IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            var request = ChangeObjectStatusRequest(objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            var request = ChangeObjectStatusRequest(objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
             request.Add("event", evnt);
             return request;
         }
 
-        private Dictionary<string, object> ChangeObjectStatusRequest(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null, string[] channelKeys = null)
+        private Dictionary<string, object> ChangeObjectStatusRequest(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            var request = ChangeObjectStatusRequest(objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            var request = ChangeObjectStatusRequest(objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
             request.Add("events", events);
             return request;
         }
 
-        private Dictionary<string, object> ChangeObjectStatusRequest(IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null, string[] channelKeys = null)
+        private Dictionary<string, object> ChangeObjectStatusRequest(IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
             var requestBody = new Dictionary<string, object>()
             {
@@ -326,6 +292,11 @@ namespace SeatsioDotNet.Events
             if (channelKeys != null)
             {
                 requestBody.Add("channelKeys", channelKeys);
+            }
+            
+            if (ignoreSocialDistancing != null)
+            {
+                requestBody.Add("ignoreSocialDistancing", ignoreSocialDistancing);
             }
             
             return requestBody;

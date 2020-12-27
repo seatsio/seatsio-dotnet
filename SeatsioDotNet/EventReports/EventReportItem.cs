@@ -7,6 +7,9 @@ namespace SeatsioDotNet.EventReports
     {
         public const string Selectable = "selectable";
         public const string NotSelectable = "not_selectable";
+        
+        public const string NoSection = "NO_SECTION";
+        public const string NoChannel = "NO_CHANNEL";
 
         public string Label { get; set; }
         public Labels Labels { get; set; }

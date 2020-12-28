@@ -1,6 +1,6 @@
 namespace SeatsioDotNet.UsageReports
 {
-    public class UsageSubaccount
+    public class UsageWorkspace
     {
         public long Id { get; set; }
     }

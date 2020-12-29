@@ -6,7 +6,7 @@ namespace SeatsioDotNet.Events
 {
     public class Event
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Key { get; set; }
         public string ChartKey { get; set; }
         public TableBookingConfig TableBookingConfig { get; set; }

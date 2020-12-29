@@ -4,7 +4,7 @@ namespace SeatsioDotNet.UsageReports
 {
     public class UsageDetails
     {
-        public UsageWorkspace Workspace { get; set; }
+        public long Workspace { get; set; }
         public IEnumerable<UsageByChart> UsageByChart { get; set; }
     }
 }

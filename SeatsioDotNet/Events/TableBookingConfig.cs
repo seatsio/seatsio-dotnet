@@ -39,10 +39,18 @@ namespace SeatsioDotNet.Events
 
         public object AsJsonObject()
         {
+            if (Mode == "CUSTOM")
+            {
+                return new
+                {
+                    mode = Mode,
+                    tables = Tables
+                };
+            }
+
             return new
             {
-                mode = Mode,
-                tables = Tables
+                mode = Mode
             };
         }
     }

@@ -36,7 +36,7 @@ namespace SeatsioDotNet.Test.Events
         }
 
         [Fact]
-        public void TableBookingModesAreOptional()
+        public void TableBookingModeCustomCanBeUsed()
         {
             var chartKey = CreateTestChartWithTables();
             var tableBookingConfig = TableBookingConfig.Custom(new Dictionary<string, string> {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}});
@@ -46,6 +46,17 @@ namespace SeatsioDotNet.Test.Events
             Assert.NotNull(evnt.Key);
             Assert.Equal("CUSTOM", evnt.TableBookingConfig.Mode);
             Assert.Equal(new Dictionary<string, string> {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}}, evnt.TableBookingConfig.Tables);
+        }   
+        
+        [Fact]
+        public void TableBookingModeInheritCanBeUsed()
+        {
+            var chartKey = CreateTestChartWithTables();
+
+            var evnt = Client.Events.Create(chartKey, null, TableBookingConfig.Inherit());
+
+            Assert.NotNull(evnt.Key);
+            Assert.Equal("INHERIT", evnt.TableBookingConfig.Mode);
         }   
         
         [Fact]

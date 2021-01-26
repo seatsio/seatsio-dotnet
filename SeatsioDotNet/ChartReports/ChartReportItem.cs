@@ -12,6 +12,7 @@ namespace SeatsioDotNet.ChartReports
         public string Section { get; set; }
         public string Entrance { get; set; }
         public int? Capacity { get; set; }
+        public bool? BookAsAWhole { get; set; }
         public string LeftNeighbour { get; set; }
         public string RightNeighbour { get; set; }
     }

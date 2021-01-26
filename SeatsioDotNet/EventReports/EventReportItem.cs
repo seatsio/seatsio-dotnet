@@ -7,7 +7,7 @@ namespace SeatsioDotNet.EventReports
     {
         public const string Selectable = "selectable";
         public const string NotSelectable = "not_selectable";
-        
+
         public const string NoSection = "NO_SECTION";
         public const string NoChannel = "NO_CHANNEL";
 
@@ -27,6 +27,7 @@ namespace SeatsioDotNet.EventReports
         public int? NumFree { get; set; }
         public int? NumHeld { get; set; }
         public int? Capacity { get; set; }
+        public bool? BookAsAWhole { get; set; }
         public Dictionary<string, object> ExtraData { get; set; }
         public bool? IsAccessible { get; set; }
         public bool? IsCompanionSeat { get; set; }

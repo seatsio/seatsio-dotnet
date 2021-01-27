@@ -53,6 +53,7 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.False(reportItem.IsSelectable);
             Assert.False(reportItem.IsDisabledBySocialDistancing);
             Assert.Equal("channelKey1", reportItem.Channel);
+            Assert.Null(reportItem.BookAsAWhole);
         }
 
         [Fact]
@@ -90,6 +91,7 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Null(reportItem.IsCompanionSeat);
             Assert.Null(reportItem.HasRestrictedView);
             Assert.Null(reportItem.DisplayedObjectType);
+            Assert.False(reportItem.BookAsAWhole);
         }
 
         [Fact]

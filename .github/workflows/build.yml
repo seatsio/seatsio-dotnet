@@ -16,4 +16,7 @@ jobs:
         dotnet-version: 2.0.0
     - run: dotnet restore
     - run: dotnet build --no-restore
+    - uses: zcong1993/setup-timezone@master
+      with:
+        timezone: Europe/Brussels
     - run: dotnet test SeatsioDotNet.Test --no-build --verbosity normal

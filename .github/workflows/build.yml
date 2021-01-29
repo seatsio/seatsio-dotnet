@@ -14,7 +14,6 @@ jobs:
     - uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 2.0.0
-    - uses: microsoft/setup-msbuild@v1
     - run: dotnet restore
     - run: dotnet build --no-restore
     - run: dotnet test --no-build --verbosity normal

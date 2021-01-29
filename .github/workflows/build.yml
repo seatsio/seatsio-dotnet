@@ -16,4 +16,4 @@ jobs:
         dotnet-version: 2.0.0
     - run: dotnet restore
     - run: dotnet build --no-restore
-    - run: dotnet test --no-build --verbosity normal
+    - run: dotnet test SeatsioDotNet.Test --no-build --verbosity normal

@@ -12,7 +12,7 @@ jobs:
           dotnet-version: 2.0.0
       - name: publish on version change
         id: publish_nuget
-        uses: rohith/publish-nuget@v2.5.2
+        uses: brandedoutcast/publish-nuget@v2
         with:
           PROJECT_FILE_PATH: SeatsioDotNet/SeatsioDotNet.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}

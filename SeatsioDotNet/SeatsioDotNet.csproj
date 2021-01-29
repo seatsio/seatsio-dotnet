@@ -2,17 +2,19 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
-    <Version>79.0.0</Version>
+    <Version>78.2.0</Version>
     <Authors>mroloux;bverbeken</Authors>
     <Title>Official Seats.io .NET API client</Title>
     <Description>Official Seats.io .NET API client</Description>
     <PackageProjectUrl>https://github.com/seatsio/seatsio-dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/seatsio/seatsio-dotnet</RepositoryUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/seatsio/seatsio-dotnet/master/LICENSE</PackageLicenseUrl>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
     <PackageReference Include="RestSharp" Version="106.11.7" />
   </ItemGroup>

@@ -52,6 +52,8 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(new Dictionary<string, int> {{Free, 116}}, report["10"].byStatus);
             Assert.Equal(new Dictionary<string, int> {{Selectable, 116}}, report["10"].bySelectability);
             Assert.Equal(new Dictionary<string, int> {{NoChannel, 116}}, report["10"].byChannel);
+            
+            Assert.Equal(0, report["NO_CATEGORY"].Count);
         }  
         
         [Fact]
@@ -75,6 +77,8 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(new Dictionary<string, int> {{Free, 116}}, report["Cat2"].byStatus);
             Assert.Equal(new Dictionary<string, int> {{Selectable, 116}}, report["Cat2"].bySelectability);
             Assert.Equal(new Dictionary<string, int> {{NoChannel, 116}}, report["Cat2"].byChannel);
+            
+            Assert.Equal(0, report["NO_CATEGORY"].Count);
         }
 
         [Fact]

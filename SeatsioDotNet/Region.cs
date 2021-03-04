@@ -14,9 +14,19 @@ namespace SeatsioDotNet
             return new Region("eu");
         }
 
-        public static Region US()
+        public static Region NA()
         {
-            return new Region("us");
+            return new Region("na");
+        }
+        
+        public static Region SA()
+        {
+            return new Region("sa");
+        }  
+        
+        public static Region OC()
+        {
+            return new Region("oc");
         }
 
         public string Url()

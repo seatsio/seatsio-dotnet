@@ -31,6 +31,11 @@ namespace SeatsioDotNet.EventReports
         public Dictionary<string, EventReportSummaryItem> SummaryByStatus(string eventKey)
         {
             return FetchSummaryReport("byStatus", eventKey);
+        }   
+        
+        public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryByStatus(string eventKey)
+        {
+            return FetchDeepSummaryReport("byStatus", eventKey);
         }
 
         public IEnumerable<EventReportItem> ByStatus(string eventKey, string status)
@@ -47,6 +52,11 @@ namespace SeatsioDotNet.EventReports
         {
             return FetchSummaryReport("byCategoryLabel", eventKey);
         }
+        
+        public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryByCategoryLabel(string eventKey)
+        {
+            return FetchDeepSummaryReport("byCategoryLabel", eventKey);
+        }
 
         public IEnumerable<EventReportItem> ByCategoryLabel(string eventKey, string categoryLabel)
         {
@@ -61,6 +71,11 @@ namespace SeatsioDotNet.EventReports
         public Dictionary<string, EventReportSummaryItem> SummaryByCategoryKey(string eventKey)
         {
             return FetchSummaryReport("byCategoryKey", eventKey);
+        }  
+        
+        public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryByCategoryKey(string eventKey)
+        {
+            return FetchDeepSummaryReport("byCategoryKey", eventKey);
         }
 
         public IEnumerable<EventReportItem> ByCategoryKey(string eventKey, string categoryKey)
@@ -86,6 +101,11 @@ namespace SeatsioDotNet.EventReports
         public Dictionary<string, EventReportSummaryItem> SummaryBySection(string eventKey)
         {
             return FetchSummaryReport("bySection", eventKey);
+        }   
+        
+        public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryBySection(string eventKey)
+        {
+            return FetchDeepSummaryReport("bySection", eventKey);
         }
 
         public IEnumerable<EventReportItem> BySection(string eventKey, string section)
@@ -101,6 +121,11 @@ namespace SeatsioDotNet.EventReports
         public Dictionary<string, EventReportSummaryItem> SummaryBySelectability(string eventKey)
         {
             return FetchSummaryReport("bySelectability", eventKey);
+        }       
+        
+        public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryBySelectability(string eventKey)
+        {
+            return FetchDeepSummaryReport("bySelectability", eventKey);
         }
 
         public IEnumerable<EventReportItem> BySelectability(string eventKey, string selectability)
@@ -116,6 +141,11 @@ namespace SeatsioDotNet.EventReports
         public Dictionary<string, EventReportSummaryItem> SummaryByChannel(string eventKey)
         {
             return FetchSummaryReport("byChannel", eventKey);
+        }  
+        
+        public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryByChannel(string eventKey)
+        {
+            return FetchDeepSummaryReport("byChannel", eventKey);
         }
 
         public IEnumerable<EventReportItem> ByChannel(string eventKey, string channelKey)
@@ -137,6 +167,14 @@ namespace SeatsioDotNet.EventReports
                 .AddUrlSegment("key", eventKey)
                 .AddUrlSegment("reportType", reportType);
             return AssertOk(_restClient.Execute<Dictionary<string, EventReportSummaryItem>>(restRequest));
+        }    
+        
+        private Dictionary<string, EventReportDeepSummaryItem> FetchDeepSummaryReport(string reportType, string eventKey)
+        {
+            var restRequest = new RestRequest("/reports/events/{key}/{reportType}/summary/deep", Method.GET)
+                .AddUrlSegment("key", eventKey)
+                .AddUrlSegment("reportType", reportType);
+            return AssertOk(_restClient.Execute<Dictionary<string, EventReportDeepSummaryItem>>(restRequest));
         }
 
         private IEnumerable<EventReportItem> FetchReport(string reportType, string eventKey, string filter)

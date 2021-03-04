@@ -5,7 +5,7 @@ namespace SeatsioDotNet.Events
 {
     public class StatusChange
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string ObjectLabel { get; set; }
         public string Status { get; set; }
         public DateTimeOffset Date { get; set; }

@@ -53,6 +53,7 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.False(reportItem.IsSelectable);
             Assert.False(reportItem.IsDisabledBySocialDistancing);
             Assert.Equal("channelKey1", reportItem.Channel);
+            Assert.Null(reportItem.BookAsAWhole);
         }
 
         [Fact]
@@ -90,6 +91,7 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Null(reportItem.IsCompanionSeat);
             Assert.Null(reportItem.HasRestrictedView);
             Assert.Null(reportItem.DisplayedObjectType);
+            Assert.False(reportItem.BookAsAWhole);
         }
 
         [Fact]
@@ -245,7 +247,7 @@ namespace SeatsioDotNet.Test.EventReports
 
             var report = Client.EventReports.BySection(evnt.Key);
 
-            Assert.Equal(34, report["NO_SECTION"].Count());
+            Assert.Equal(34, report[NoSection].Count());
         }
 
         [Fact]
@@ -254,7 +256,7 @@ namespace SeatsioDotNet.Test.EventReports
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
 
-            var report = Client.EventReports.BySection(evnt.Key, "NO_SECTION");
+            var report = Client.EventReports.BySection(evnt.Key, NoSection);
 
             Assert.Equal(34, report.Count());
         }
@@ -301,7 +303,7 @@ namespace SeatsioDotNet.Test.EventReports
 
             var report = Client.EventReports.ByChannel(evnt.Key);
 
-            Assert.Equal(32, report["NO_CHANNEL"].Count());
+            Assert.Equal(32, report[NoChannel].Count());
             Assert.Equal(2, report["channelKey1"].Count());
         }
 

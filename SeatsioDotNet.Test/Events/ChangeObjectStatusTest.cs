@@ -20,7 +20,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal("foo", Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").Status);
             Assert.Equal("foo", Client.Events.RetrieveObjectStatus(evnt.Key, "A-2").Status);
             Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(evnt.Key, "A-3").Status);
-            Assert.Equal(new[] {"A-1", "A-2"}, result.Objects.Keys);
+            CustomAssert.ContainsOnly(new[] {"A-1", "A-2"}, result.Objects.Keys);
 
             var reportItem = result.Objects["A-1"];
             Assert.Equal("A-1", reportItem.Label);

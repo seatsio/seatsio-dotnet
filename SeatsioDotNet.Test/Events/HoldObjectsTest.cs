@@ -25,7 +25,7 @@ namespace SeatsioDotNet.Test.Events
             var status2 = Client.Events.RetrieveObjectStatus(evnt.Key, "A-2");
             Assert.Equal(ObjectStatus.Held, status2.Status);
             Assert.Equal(holdToken.Token, status2.HoldToken);
-            Assert.Equal(new[] {"A-1", "A-2"}, result.Objects.Keys);
+            CustomAssert.ContainsOnly(new[] {"A-1", "A-2"}, result.Objects.Keys);
         }
 
         [Fact]

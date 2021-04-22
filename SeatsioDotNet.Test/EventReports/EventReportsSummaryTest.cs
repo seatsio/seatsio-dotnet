@@ -30,6 +30,29 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(new Dictionary<string, int> {{"Cat1", 115}, {"Cat2", 116}}, report[Free].byCategoryLabel);
             Assert.Equal(new Dictionary<string, int> {{Selectable, 231}}, report[Free].bySelectability);
             Assert.Equal(new Dictionary<string, int> {{NoChannel, 231}}, report[Free].byChannel);
+        } 
+        
+        [Fact]
+        public void SummaryByObjectType()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+
+            var report = Client.EventReports.SummaryByObjectType(evnt.Key);
+
+            Assert.Equal(32, report["seat"].Count);
+            Assert.Equal(new Dictionary<string, int> {{NoSection, 32}}, report["seat"].bySection);
+            Assert.Equal(new Dictionary<string, int> {{"9", 16}, {"10", 16}}, report["seat"].byCategoryKey);
+            Assert.Equal(new Dictionary<string, int> {{"Cat1", 16}, {"Cat2", 16}}, report["seat"].byCategoryLabel);
+            Assert.Equal(new Dictionary<string, int> {{Selectable, 32}}, report["seat"].bySelectability);
+            Assert.Equal(new Dictionary<string, int> {{NoChannel, 32}}, report["seat"].byChannel);
+
+            Assert.Equal(200, report["generalAdmission"].Count);
+            Assert.Equal(new Dictionary<string, int> {{NoSection, 200}}, report["generalAdmission"].bySection);
+            Assert.Equal(new Dictionary<string, int> {{"9", 100}, {"10", 100}}, report["generalAdmission"].byCategoryKey);
+            Assert.Equal(new Dictionary<string, int> {{"Cat1", 100}, {"Cat2", 100}}, report["generalAdmission"].byCategoryLabel);
+            Assert.Equal(new Dictionary<string, int> {{Selectable, 200}}, report["generalAdmission"].bySelectability);
+            Assert.Equal(new Dictionary<string, int> {{NoChannel, 200}}, report["generalAdmission"].byChannel);
         }  
         
         [Fact]

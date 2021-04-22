@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SeatsioDotNet.Events;
+﻿using SeatsioDotNet.Events;
 using Xunit;
 using static SeatsioDotNet.Events.ObjectStatus;
 using static SeatsioDotNet.EventReports.EventReportItem;
@@ -20,6 +19,19 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(1, report[Booked].Count);
             Assert.Equal(1, report[Booked].bySection[NoSection].Count);
             Assert.Equal(1, report[Booked].bySection[NoSection].bySelectability[NotSelectable]);
+        }   
+        
+        [Fact]
+        public void DeepSummaryByObjectType()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+
+            var report = Client.EventReports.DeepSummaryByObjectType(evnt.Key);
+
+            Assert.Equal(32, report["seat"].Count);
+            Assert.Equal(32, report["seat"].bySection[NoSection].Count);
+            Assert.Equal(32, report["seat"].bySection[NoSection].bySelectability[Selectable]);
         }
 
         [Fact]

@@ -142,6 +142,31 @@ namespace SeatsioDotNet.Test.EventReports
 
             Assert.Empty(report);
         }
+        
+        [Fact]
+        public void ByObjectType()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+
+            var report = Client.EventReports.ByObjectType(evnt.Key);
+
+            Assert.Equal(32, report["seat"].Count());
+            Assert.Equal(2, report["generalAdmission"].Count());
+            Assert.Equal(0, report["booth"].Count());
+            Assert.Equal(0, report["table"].Count());
+        }
+
+        [Fact]
+        public void BySpecificObjectType()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+
+            var report = Client.EventReports.ByObjectType(evnt.Key, "seat");
+
+            Assert.Equal(32, report.Count());
+        }
 
         [Fact]
         public void ByCategoryLabel()

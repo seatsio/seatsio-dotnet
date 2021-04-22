@@ -16,6 +16,11 @@ namespace SeatsioDotNet.ChartReports
         public Dictionary<string, IEnumerable<ChartReportItem>> ByLabel(string chartKey, string bookWholeTablesMode)
         {
             return FetchReport("byLabel", chartKey, bookWholeTablesMode);
+        }    
+        
+        public Dictionary<string, IEnumerable<ChartReportItem>> ByObjectType(string chartKey, string bookWholeTablesMode)
+        {
+            return FetchReport("byObjectType", chartKey, bookWholeTablesMode);
         }
         
         public Dictionary<string, IEnumerable<ChartReportItem>> ByCategoryKey(string chartKey, string bookWholeTablesMode)

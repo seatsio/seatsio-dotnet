@@ -41,6 +41,26 @@ namespace SeatsioDotNet.EventReports
         public IEnumerable<EventReportItem> ByStatus(string eventKey, string status)
         {
             return FetchReport("byStatus", eventKey, status);
+        }      
+        
+        public Dictionary<string, IEnumerable<EventReportItem>> ByObjectType(string eventKey)
+        {
+            return FetchReport("byObjectType", eventKey);
+        }
+
+        public Dictionary<string, EventReportSummaryItem> SummaryByObjectType(string eventKey)
+        {
+            return FetchSummaryReport("byObjectType", eventKey);
+        }   
+        
+        public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryByObjectType(string eventKey)
+        {
+            return FetchDeepSummaryReport("byObjectType", eventKey);
+        }
+
+        public IEnumerable<EventReportItem> ByObjectType(string eventKey, string objectType)
+        {
+            return FetchReport("byObjectType", eventKey, objectType);
         }
 
         public Dictionary<string, IEnumerable<EventReportItem>> ByCategoryLabel(string eventKey)

@@ -50,6 +50,17 @@ namespace SeatsioDotNet.Test.ChartReports
 
             Assert.Single(report["A-1"]);
             Assert.Single(report["A-2"]);
+        }  
+        
+        [Fact]
+        public void ByObjectType()
+        {
+            var chartKey = CreateTestChart();
+
+            var report = Client.ChartReports.ByObjectType(chartKey, null);
+
+            Assert.Equal(32, report["seat"].Count());
+            Assert.Equal(2, report["generalAdmission"].Count());
         }
 
         [Fact]

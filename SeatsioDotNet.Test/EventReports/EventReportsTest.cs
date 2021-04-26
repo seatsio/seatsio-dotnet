@@ -54,6 +54,7 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.False(reportItem.IsDisabledBySocialDistancing);
             Assert.Equal("channelKey1", reportItem.Channel);
             Assert.Null(reportItem.BookAsAWhole);
+            Assert.NotNull(reportItem.DistanceToFocalPoint);
         }
 
         [Fact]

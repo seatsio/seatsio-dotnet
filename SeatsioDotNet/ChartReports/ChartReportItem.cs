@@ -15,5 +15,6 @@ namespace SeatsioDotNet.ChartReports
         public bool? BookAsAWhole { get; set; }
         public string LeftNeighbour { get; set; }
         public string RightNeighbour { get; set; }
+        public float? DistanceToFocalPoint { get; set; }
     }
 }

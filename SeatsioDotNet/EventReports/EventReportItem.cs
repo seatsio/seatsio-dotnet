@@ -38,5 +38,6 @@ namespace SeatsioDotNet.EventReports
         public bool IsSelectable { get; set; }
         public bool? IsDisabledBySocialDistancing { get; set; }
         public string Channel { get; set; }
+        public float? DistanceToFocalPoint { get; set; }
     }
 }

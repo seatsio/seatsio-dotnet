@@ -26,6 +26,7 @@ namespace SeatsioDotNet.Test.ChartReports
             Assert.Null(reportItem.LeftNeighbour);
             Assert.Equal("A-2", reportItem.RightNeighbour);
             Assert.Null(reportItem.BookAsAWhole);
+            Assert.NotNull(reportItem.DistanceToFocalPoint);
         }
 
         [Fact]

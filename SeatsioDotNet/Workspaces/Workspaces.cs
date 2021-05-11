@@ -8,11 +8,16 @@ namespace SeatsioDotNet.Workspaces
 {
     public class Workspaces
     {
+        public WorkspaceLister Active { get; }
+        public WorkspaceLister Inactive { get; }
+
         private readonly RestClient _restClient;
 
         public Workspaces(RestClient restClient)
         {
             _restClient = restClient;
+            Active = new WorkspaceLister(new PageFetcher<Workspace>(_restClient, "/workspaces/active"));
+            Inactive = new WorkspaceLister(new PageFetcher<Workspace>(_restClient, "/workspaces/inactive"));
         }
 
         public Workspace Create(string name)
@@ -80,51 +85,29 @@ namespace SeatsioDotNet.Workspaces
             AssertOk(_restClient.Execute<Dictionary<string, string>>(restRequest));
         }
 
-        public IEnumerable<Workspace> ListAll()
+        public IEnumerable<Workspace> ListAll(string filter = null)
         {
-            return List().All();
-        }
-
-        public IEnumerable<Workspace> ListAll(string filter)
-        {
-            return ParametrizedList().All(WorkspaceListParams(filter));
+            return ParametrizedList().All(filter);
         }
 
         public Page<Workspace> ListFirstPage(int? pageSize = null, string filter = null)
         {
-            return ParametrizedList().FirstPage(WorkspaceListParams(filter), pageSize);
+            return ParametrizedList().FirstPage(filter, pageSize);
         }
 
         public Page<Workspace> ListPageAfter(long id, int? pageSize = null, string filter = null)
         {
-            return ParametrizedList().PageAfter(id, WorkspaceListParams(filter), pageSize);
+            return ParametrizedList().PageAfter(id, filter, pageSize);
         }
 
         public Page<Workspace> ListPageBefore(long id, int? pageSize = null, string filter = null)
         {
-            return ParametrizedList().PageBefore(id, WorkspaceListParams(filter), pageSize);
+            return ParametrizedList().PageBefore(id, filter, pageSize);
         }
 
-        private Lister<Workspace> List()
+        private WorkspaceLister ParametrizedList()
         {
-            return new Lister<Workspace>(new PageFetcher<Workspace>(_restClient, "/workspaces"));
-        }
-
-        private ParametrizedLister<Workspace> ParametrizedList()
-        {
-            return new ParametrizedLister<Workspace>(new PageFetcher<Workspace>(_restClient, "/workspaces"));
-        }
-
-        private Dictionary<string, object> WorkspaceListParams(string filter)
-        {
-            var workspaceListParams = new Dictionary<string, object>();
-
-            if (filter != null)
-            {
-                workspaceListParams.Add("filter", filter);
-            }
-
-            return workspaceListParams;
+            return new WorkspaceLister(new PageFetcher<Workspace>(_restClient, "/workspaces"));
         }
     }
 }

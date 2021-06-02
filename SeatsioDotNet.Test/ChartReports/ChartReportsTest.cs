@@ -17,6 +17,7 @@ namespace SeatsioDotNet.Test.ChartReports
             var reportItem = report["A-1"].First();
             Assert.Equal("A-1", reportItem.Label);
             reportItem.Labels.Should().BeEquivalentTo(new Labels("1", "seat", "A", "row"));
+            reportItem.IDs.Should().BeEquivalentTo(new IDs("1", "A", null));
             Assert.Equal("Cat1", reportItem.CategoryLabel);
             Assert.Equal(9, reportItem.CategoryKey);
             Assert.Equal("seat", reportItem.ObjectType);

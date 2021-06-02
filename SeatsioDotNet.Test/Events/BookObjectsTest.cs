@@ -39,6 +39,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal("Section A", reportItem.Section);
             Assert.Equal("Entrance 1", reportItem.Entrance);
             reportItem.Labels.Should().BeEquivalentTo(new Labels("1", "seat", "A", "row", "Section A"));
+            reportItem.IDs.Should().BeEquivalentTo(new IDs("1", "A", "Section A"));
         }
 
         [Fact]

@@ -25,6 +25,7 @@ namespace SeatsioDotNet.Test.Events
             var reportItem = result.Objects["A-1"];
             Assert.Equal("A-1", reportItem.Label);
             reportItem.Labels.Should().BeEquivalentTo(new Labels("1", "seat", "A", "row"));
+            reportItem.IDs.Should().BeEquivalentTo(new IDs("1", "A", null));
             Assert.Equal("foo", reportItem.Status);
             Assert.Equal("Cat1", reportItem.CategoryLabel);
             Assert.Equal("9", reportItem.CategoryKey);

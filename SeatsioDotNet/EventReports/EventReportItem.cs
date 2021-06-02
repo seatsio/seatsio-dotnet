@@ -13,6 +13,7 @@ namespace SeatsioDotNet.EventReports
 
         public string Label { get; set; }
         public Labels Labels { get; set; }
+        public IDs IDs { get; set; }
         public string Status { get; set; }
         public string CategoryLabel { get; set; }
         public string CategoryKey { get; set; }

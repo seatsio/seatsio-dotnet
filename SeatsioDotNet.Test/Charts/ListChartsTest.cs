@@ -56,7 +56,7 @@ namespace SeatsioDotNet.Test.Charts
         }
 
         [Fact]
-        public void Exand()
+        public void Expand()
         {
             var chart = Client.Charts.Create();
             var event1 = Client.Events.Create(chart.Key);
@@ -65,6 +65,16 @@ namespace SeatsioDotNet.Test.Charts
             var charts = Client.Charts.ListAll(expandEvents: true);
 
             Assert.Equal(new[] {event2.Id, event1.Id}, charts.First().Events.Select(c => c.Id));
+        }   
+        
+        [Fact]
+        public void Validation()
+        {
+            CreateTestChartWithErrors();
+            
+            var charts = Client.Charts.ListAll(withValidation: true);
+
+            Assert.NotNull(charts.First().Validation);
         }
     }
 }

@@ -18,6 +18,10 @@ From Package Manager:
 Using the dotnet command:
 
     dotnet add package SeatsioDotNet
+
+This is the homepage of our NuGet package:
+
+https://www.nuget.org/packages/SeatsioDotNet/
     
 ## Versioning
 

@@ -19,6 +19,14 @@ Using the dotnet command:
 
     dotnet add package SeatsioDotNet
 
+From within Visual Studio:
+
+- Open the Solution Explorer.
+- Right-click on a project within your solution.
+- Click on Manage NuGet Packages...
+- Click on the Browse tab and search for "SeatsioDotNet". 
+- Install the package.
+
 This is the homepage of our NuGet package:
 
 https://www.nuget.org/packages/SeatsioDotNet/

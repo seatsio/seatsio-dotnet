@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading;
 using RestSharp;
 using RestSharp.Authenticators;
@@ -15,6 +16,11 @@ namespace SeatsioDotNet
         public EventReports.EventReports EventReports { get; }
         public ChartReports.ChartReports ChartReports { get; }
         public UsageReports.UsageReports UsageReports { get; }
+
+        static SeatsioClient()
+        {
+            ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls12;
+        }
 
         public SeatsioClient(string secretKey, string workspaceKey, string baseUrl)
         {

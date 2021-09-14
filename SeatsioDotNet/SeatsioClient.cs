@@ -17,6 +17,8 @@ namespace SeatsioDotNet
         public ChartReports.ChartReports ChartReports { get; }
         public UsageReports.UsageReports UsageReports { get; }
 
+        private SeatsioRestClient RestClient;
+
         static SeatsioClient()
         {
             ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls12;
@@ -24,15 +26,15 @@ namespace SeatsioDotNet
 
         public SeatsioClient(string secretKey, string workspaceKey, string baseUrl)
         {
-            var restClient = CreateRestClient(secretKey, workspaceKey, baseUrl);
-            Charts = new Charts.Charts(restClient);
-            Events = new Events.Events(restClient);
-            Subaccounts = new Subaccounts.Subaccounts(restClient);
-            Workspaces = new Workspaces.Workspaces(restClient);
-            HoldTokens = new HoldTokens.HoldTokens(restClient);
-            EventReports = new EventReports.EventReports(restClient);
-            ChartReports = new ChartReports.ChartReports(restClient);
-            UsageReports = new UsageReports.UsageReports(restClient);
+            RestClient = CreateRestClient(secretKey, workspaceKey, baseUrl);
+            Charts = new Charts.Charts(RestClient);
+            Events = new Events.Events(RestClient);
+            Subaccounts = new Subaccounts.Subaccounts(RestClient);
+            Workspaces = new Workspaces.Workspaces(RestClient);
+            HoldTokens = new HoldTokens.HoldTokens(RestClient);
+            EventReports = new EventReports.EventReports(RestClient);
+            ChartReports = new ChartReports.ChartReports(RestClient);
+            UsageReports = new UsageReports.UsageReports(RestClient);
         }
 
         public SeatsioClient(Region region, string secretKey, string workspaceKey) : this(secretKey, workspaceKey,
@@ -44,7 +46,13 @@ namespace SeatsioDotNet
         {
         }
 
-        public static RestClient CreateRestClient(string secretKey, string workspaceKey, string baseUrl)
+        public SeatsioClient SetMaxRetries(int maxRetries)
+        {
+            RestClient.SetMaxRetries(maxRetries);
+            return this;
+        }
+
+        private static SeatsioRestClient CreateRestClient(string secretKey, string workspaceKey, string baseUrl)
         {
             var client = new SeatsioRestClient(baseUrl);
             client.Authenticator = new HttpBasicAuthenticator(secretKey, null);
@@ -58,8 +66,10 @@ namespace SeatsioDotNet
     }
 }
 
-class SeatsioRestClient : RestClient
+public class SeatsioRestClient : RestClient
 {
+    private int MaxRetries = 5;
+
     public SeatsioRestClient(string baseUrl) : base(baseUrl)
     {
     }
@@ -68,7 +78,7 @@ class SeatsioRestClient : RestClient
     {
         var retryCount = 0;
         var response = base.Execute<T>(request);
-        while (retryCount < 5 && (int) response.StatusCode == 429)
+        while (retryCount < MaxRetries && (int) response.StatusCode == 429)
         {
             var waitTime = (int) Math.Pow(2, retryCount + 2) * 100;
             retryCount++;
@@ -77,5 +87,11 @@ class SeatsioRestClient : RestClient
         }
 
         return response;
+    }
+
+    public SeatsioRestClient SetMaxRetries(int maxRetries)
+    {
+        MaxRetries = maxRetries;
+        return this;
     }
 }

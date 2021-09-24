@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using SeatsioDotNet.Charts;
+using SeatsioDotNet.EventReports;
 using SeatsioDotNet.Events;
 using SeatsioDotNet.HoldTokens;
 using Xunit;
@@ -17,9 +18,9 @@ namespace SeatsioDotNet.Test.Events
 
             var result = Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "foo");
 
-            Assert.Equal("foo", Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").Status);
-            Assert.Equal("foo", Client.Events.RetrieveObjectStatus(evnt.Key, "A-2").Status);
-            Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(evnt.Key, "A-3").Status);
+            Assert.Equal("foo", Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").Status);
+            Assert.Equal("foo", Client.Events.RetrieveObjectInfo(evnt.Key, "A-2").Status);
+            Assert.Equal(EventObjectInfo.Free, Client.Events.RetrieveObjectInfo(evnt.Key, "A-3").Status);
             CustomAssert.ContainsOnly(new[] {"A-1", "A-2"}, result.Objects.Keys);
 
             var reportItem = result.Objects["A-1"];
@@ -51,13 +52,13 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "foo", holdToken.Token);
 
-            var status1 = Client.Events.RetrieveObjectStatus(evnt.Key, "A-1");
-            Assert.Equal("foo", status1.Status);
-            Assert.Null(status1.HoldToken);
+            var objectInfo1 = Client.Events.RetrieveObjectInfo(evnt.Key, "A-1");
+            Assert.Equal("foo", objectInfo1.Status);
+            Assert.Null(objectInfo1.HoldToken);
 
-            var status2 = Client.Events.RetrieveObjectStatus(evnt.Key, "A-2");
-            Assert.Equal("foo", status2.Status);
-            Assert.Null(status2.HoldToken);
+            var objectInfo2 = Client.Events.RetrieveObjectInfo(evnt.Key, "A-2");
+            Assert.Equal("foo", objectInfo2.Status);
+            Assert.Null(objectInfo2.HoldToken);
         }
 
         [Fact]
@@ -68,8 +69,8 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "foo", null, "order1");
 
-            Assert.Equal("order1", Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").OrderId);
-            Assert.Equal("order1", Client.Events.RetrieveObjectStatus(evnt.Key, "A-2").OrderId);
+            Assert.Equal("order1", Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").OrderId);
+            Assert.Equal("order1", Client.Events.RetrieveObjectInfo(evnt.Key, "A-2").OrderId);
         }
 
         [Fact]
@@ -82,13 +83,13 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.ChangeObjectStatus(evnt.Key, new[] {object1, object2}, "foo");
 
-            var status1 = Client.Events.RetrieveObjectStatus(evnt.Key, "A-1");
-            Assert.Equal("foo", status1.Status);
-            Assert.Equal("T1", status1.TicketType);
+            var objectInfo1 = Client.Events.RetrieveObjectInfo(evnt.Key, "A-1");
+            Assert.Equal("foo", objectInfo1.Status);
+            Assert.Equal("T1", objectInfo1.TicketType);
 
-            var status2 = Client.Events.RetrieveObjectStatus(evnt.Key, "A-2");
-            Assert.Equal("foo", status2.Status);
-            Assert.Equal("T2", status2.TicketType);
+            var objectInfo2 = Client.Events.RetrieveObjectInfo(evnt.Key, "A-2");
+            Assert.Equal("foo", objectInfo2.Status);
+            Assert.Equal("T2", objectInfo2.TicketType);
         }
 
         [Fact]
@@ -100,8 +101,8 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.ChangeObjectStatus(evnt.Key, new[] {object1}, "foo");
 
-            var status1 = Client.Events.RetrieveObjectStatus(evnt.Key, "GA1");
-            Assert.Equal(5, status1.Quantity);
+            var objectInfo1 = Client.Events.RetrieveObjectInfo(evnt.Key, "GA1");
+            Assert.Equal(5, objectInfo1.NumBooked);
         }
 
         [Fact]
@@ -116,11 +117,11 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.ChangeObjectStatus(evnt.Key, new[] {object1, object2}, "foo");
 
-            var status1 = Client.Events.RetrieveObjectStatus(evnt.Key, "A-1");
-            Assert.Equal(extraData1, status1.ExtraData);
+            var objectInfo1 = Client.Events.RetrieveObjectInfo(evnt.Key, "A-1");
+            Assert.Equal(extraData1, objectInfo1.ExtraData);
 
-            var status2 = Client.Events.RetrieveObjectStatus(evnt.Key, "A-2");
-            Assert.Equal(extraData2, status2.ExtraData);
+            var objectInfo2 = Client.Events.RetrieveObjectInfo(evnt.Key, "A-2");
+            Assert.Equal(extraData2, objectInfo2.ExtraData);
         }
 
         [Fact]
@@ -133,7 +134,7 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", null, null, true);
 
-            Assert.Equal(extraData, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
+            Assert.Equal(extraData, Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
         }
 
         [Fact]
@@ -146,7 +147,7 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", null, null, false);
 
-            Assert.Null(Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
+            Assert.Null(Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
         }
 
         [Fact]
@@ -159,7 +160,7 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus");
 
-            Assert.Null(Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
+            Assert.Null(Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
         }
         
         [Fact]
@@ -178,7 +179,7 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", null, null, null, null, null, true);
 
-            Assert.Null(Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
+            Assert.Null(Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
         }
     }
 }

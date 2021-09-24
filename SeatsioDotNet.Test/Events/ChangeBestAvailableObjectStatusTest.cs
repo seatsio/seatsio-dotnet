@@ -72,8 +72,8 @@ namespace SeatsioDotNet.Test.Events
             var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2, extraData: extraData), "foo");
 
             Assert.Equal(new[] {"B-4", "B-5"}, bestAvailableResult.Objects);
-            Assert.Equal(new Dictionary<string, object> {{"foo", "bar"}}, Client.Events.RetrieveObjectStatus(evnt.Key, "B-4").ExtraData);
-            Assert.Equal(new Dictionary<string, object> {{"foo", "baz"}}, Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").ExtraData);
+            Assert.Equal(new Dictionary<string, object> {{"foo", "bar"}}, Client.Events.RetrieveObjectInfo(evnt.Key, "B-4").ExtraData);
+            Assert.Equal(new Dictionary<string, object> {{"foo", "baz"}}, Client.Events.RetrieveObjectInfo(evnt.Key, "B-5").ExtraData);
         }
 
         [Fact]
@@ -90,8 +90,8 @@ namespace SeatsioDotNet.Test.Events
             var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2, ticketTypes: new[]{"adult", "child"}), "foo");
 
             Assert.Equal(new[] {"B-4", "B-5"}, bestAvailableResult.Objects);
-            Assert.Equal("adult", Client.Events.RetrieveObjectStatus(evnt.Key, "B-4").TicketType);
-            Assert.Equal("child", Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").TicketType);
+            Assert.Equal("adult", Client.Events.RetrieveObjectInfo(evnt.Key, "B-4").TicketType);
+            Assert.Equal("child", Client.Events.RetrieveObjectInfo(evnt.Key, "B-5").TicketType);
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus", null, null, true);
 
-            Assert.Equal(extraData, Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").ExtraData);
+            Assert.Equal(extraData, Client.Events.RetrieveObjectInfo(evnt.Key, "B-5").ExtraData);
         }
 
         [Fact]
@@ -117,7 +117,7 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus", null, null, false);
 
-            Assert.Null(Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").ExtraData);
+            Assert.Null(Client.Events.RetrieveObjectInfo(evnt.Key, "B-5").ExtraData);
         }
 
         [Fact]
@@ -130,7 +130,7 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus");
 
-            Assert.Null(Client.Events.RetrieveObjectStatus(evnt.Key, "B-5").ExtraData);
+            Assert.Null(Client.Events.RetrieveObjectInfo(evnt.Key, "B-5").ExtraData);
         }
 
         [Fact]

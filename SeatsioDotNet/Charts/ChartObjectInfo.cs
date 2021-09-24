@@ -2,7 +2,7 @@
 
 namespace SeatsioDotNet.ChartReports
 {
-    public class ChartReportItem
+    public class ChartObjectInfo
     {
         public string Label { get; set; }
         public Labels Labels { get; set; }

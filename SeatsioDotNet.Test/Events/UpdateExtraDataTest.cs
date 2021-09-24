@@ -14,7 +14,7 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.UpdateExtraData(evnt.Key, "A-1", extraData);
 
-            Assert.Equal(extraData, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
+            Assert.Equal(extraData, Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
         }
     }
 }

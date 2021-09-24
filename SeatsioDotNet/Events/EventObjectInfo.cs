@@ -3,13 +3,17 @@ using SeatsioDotNet.Events;
 
 namespace SeatsioDotNet.EventReports
 {
-    public class EventReportItem
+    public class EventObjectInfo
     {
         public const string Selectable = "selectable";
         public const string NotSelectable = "not_selectable";
 
         public const string NoSection = "NO_SECTION";
         public const string NoChannel = "NO_CHANNEL";
+
+        public const string Free = "free";
+        public const string Booked = "booked";
+        public const string Held = "reservedByToken";
 
         public string Label { get; set; }
         public Labels Labels { get; set; }
@@ -40,5 +44,6 @@ namespace SeatsioDotNet.EventReports
         public bool? IsDisabledBySocialDistancing { get; set; }
         public string Channel { get; set; }
         public float? DistanceToFocalPoint { get; set; }
+        public Dictionary<string, Dictionary<string, int>> Holds { get; set; }
     }
 }

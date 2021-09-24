@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using SeatsioDotNet.Events;
 using Xunit;
-using static SeatsioDotNet.Events.ObjectStatus;
-using static SeatsioDotNet.EventReports.EventReportItem;
+using static SeatsioDotNet.EventReports.EventObjectInfo;
 
 namespace SeatsioDotNet.Test.EventReports
 {

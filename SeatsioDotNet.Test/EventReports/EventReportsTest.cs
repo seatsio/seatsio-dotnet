@@ -3,7 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using SeatsioDotNet.Events;
 using Xunit;
-using static SeatsioDotNet.EventReports.EventReportItem;
+using static SeatsioDotNet.EventReports.EventObjectInfo;
 
 namespace SeatsioDotNet.Test.EventReports
 {
@@ -33,7 +33,7 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal("A-1", reportItem.Label);
             reportItem.Labels.Should().BeEquivalentTo(new Labels("1", "seat", "A", "row"));
             reportItem.IDs.Should().BeEquivalentTo(new IDs("1", "A", null));
-            Assert.Equal(ObjectStatus.Booked, reportItem.Status);
+            Assert.Equal(Booked, reportItem.Status);
             Assert.Equal("Cat1", reportItem.CategoryLabel);
             Assert.Equal("9", reportItem.CategoryKey);
             Assert.Equal("ticketType1", reportItem.TicketType);
@@ -102,13 +102,13 @@ namespace SeatsioDotNet.Test.EventReports
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
             Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "lolzor");
-            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-3"}, ObjectStatus.Booked);
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-3"}, Booked);
 
             var report = Client.EventReports.ByStatus(evnt.Key);
 
             Assert.Equal(2, report["lolzor"].Count());
-            Assert.Single(report[ObjectStatus.Booked]);
-            Assert.Equal(31, report[ObjectStatus.Free].Count());
+            Assert.Single(report[Booked]);
+            Assert.Equal(31, report[Free].Count());
         }
 
         [Fact]

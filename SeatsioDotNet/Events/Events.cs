@@ -2,6 +2,7 @@
 using System.Linq;
 using Newtonsoft.Json;
 using RestSharp;
+using SeatsioDotNet.EventReports;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
 
@@ -136,82 +137,96 @@ namespace SeatsioDotNet.Events
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }
 
-        public ObjectStatus RetrieveObjectStatus(string eventKey, string objectLabel)
+        public EventObjectInfo RetrieveObjectInfo(string eventKey, string objectLabel)
         {
             var restRequest = new RestRequest("/events/{key}/objects/{object}", Method.GET)
                 .AddUrlSegment("key", eventKey)
                 .AddUrlSegment("object", objectLabel);
-            return AssertOk(_restClient.Execute<ObjectStatus>(restRequest));
+            return AssertOk(_restClient.Execute<EventObjectInfo>(restRequest));
+        }
+        
+        public Dictionary<string, EventObjectInfo> RetrieveObjectInfos(string eventKey, string[] objectLabels)
+        {
+            var restRequest = new RestRequest("/events/{key}/objects", Method.GET)
+                .AddUrlSegment("key", eventKey);
+            
+            foreach (var objectLabel in objectLabels)
+            {
+                restRequest.AddQueryParameter("label", objectLabel);
+            }
+            
+            return AssertOk(_restClient.Execute<Dictionary<string, EventObjectInfo>>(restRequest));
+            
         }
 
         public ChangeObjectStatusResult Book(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
+            return ChangeObjectStatus(eventKey, objects, EventObjectInfo.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
         public ChangeObjectStatusResult Book(string[] eventKeys, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
+            return ChangeObjectStatus(eventKeys, objects, EventObjectInfo.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
         public ChangeObjectStatusResult Book(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
+            return ChangeObjectStatus(eventKey, objects, EventObjectInfo.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
         public ChangeObjectStatusResult Book(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Booked, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys, ignoreSocialDistancing);
+            return ChangeObjectStatus(eventKeys, objects, EventObjectInfo.Booked, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys, ignoreSocialDistancing);
         }
 
         public BestAvailableResult Book(string eventKey, BestAvailable bestAvailable, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKey, bestAvailable, ObjectStatus.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            return ChangeObjectStatus(eventKey, bestAvailable, EventObjectInfo.Booked, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
         public ChangeObjectStatusResult Release(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
+            return ChangeObjectStatus(eventKey, objects, EventObjectInfo.Free, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
         }
 
         public ChangeObjectStatusResult Release(string[] eventKeys, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            return ChangeObjectStatus(eventKeys, objects, EventObjectInfo.Free, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
         public ChangeObjectStatusResult Release(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+            return ChangeObjectStatus(eventKey, objects, EventObjectInfo.Free, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
         }
 
         public ChangeObjectStatusResult Release(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Free, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
+            return ChangeObjectStatus(eventKeys, objects, EventObjectInfo.Free, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
         }
 
         public ChangeObjectStatusResult Hold(string eventKey, IEnumerable<string> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
+            return ChangeObjectStatus(eventKey, objects, EventObjectInfo.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
         public ChangeObjectStatusResult Hold(string[] eventKeys, IEnumerable<string> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
+            return ChangeObjectStatus(eventKeys, objects, EventObjectInfo.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
         public ChangeObjectStatusResult Hold(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKey, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys, ignoreSocialDistancing);
+            return ChangeObjectStatus(eventKey, objects, EventObjectInfo.Held, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys, ignoreSocialDistancing);
         }
 
         public ChangeObjectStatusResult Hold(string[] eventKeys, IEnumerable<ObjectProperties> objects, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
-            return ChangeObjectStatus(eventKeys, objects, ObjectStatus.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
+            return ChangeObjectStatus(eventKeys, objects, EventObjectInfo.Held, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
         public BestAvailableResult Hold(string eventKey, BestAvailable bestAvailable, string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
-            return ChangeObjectStatus(eventKey, bestAvailable, ObjectStatus.Held, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
+            return ChangeObjectStatus(eventKey, bestAvailable, EventObjectInfo.Held, holdToken, orderId, keepExtraData,ignoreChannels,  channelKeys);
         }
 
         public ChangeObjectStatusResult ChangeObjectStatus(string eventKey, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null,bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using SeatsioDotNet.Charts;
+using SeatsioDotNet.EventReports;
 using SeatsioDotNet.Events;
 using SeatsioDotNet.HoldTokens;
 using Xunit;
@@ -18,13 +19,13 @@ namespace SeatsioDotNet.Test.Events
 
             var result = Client.Events.Hold(evnt.Key, new[] {"A-1", "A-2"}, holdToken.Token);
 
-            var status1 = Client.Events.RetrieveObjectStatus(evnt.Key, "A-1");
-            Assert.Equal(ObjectStatus.Held, status1.Status);
-            Assert.Equal(holdToken.Token, status1.HoldToken);
+            var objectInfo1 = Client.Events.RetrieveObjectInfo(evnt.Key, "A-1");
+            Assert.Equal(EventObjectInfo.Held, objectInfo1.Status);
+            Assert.Equal(holdToken.Token, objectInfo1.HoldToken);
 
-            var status2 = Client.Events.RetrieveObjectStatus(evnt.Key, "A-2");
-            Assert.Equal(ObjectStatus.Held, status2.Status);
-            Assert.Equal(holdToken.Token, status2.HoldToken);
+            var objectInfo2 = Client.Events.RetrieveObjectInfo(evnt.Key, "A-2");
+            Assert.Equal(EventObjectInfo.Held, objectInfo2.Status);
+            Assert.Equal(holdToken.Token, objectInfo2.HoldToken);
             CustomAssert.ContainsOnly(new[] {"A-1", "A-2"}, result.Objects.Keys);
         }
 
@@ -37,8 +38,8 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.Hold(evnt.Key, new[] {"A-1", "A-2"}, holdToken.Token, "order1");
 
-            Assert.Equal("order1", Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").OrderId);
-            Assert.Equal("order1", Client.Events.RetrieveObjectStatus(evnt.Key, "A-2").OrderId);
+            Assert.Equal("order1", Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").OrderId);
+            Assert.Equal("order1", Client.Events.RetrieveObjectInfo(evnt.Key, "A-2").OrderId);
         }
 
         [Fact]
@@ -52,7 +53,7 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.True(bestAvailableResult.NextToEachOther);
             Assert.Equal(new[] {"B-4", "B-5", "B-6"}, bestAvailableResult.Objects);
-            Assert.Equal("order1", Client.Events.RetrieveObjectStatus(evnt.Key, "B-4").OrderId);
+            Assert.Equal("order1", Client.Events.RetrieveObjectInfo(evnt.Key, "B-4").OrderId);
         }
 
         [Fact]
@@ -66,7 +67,7 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.Hold(evnt.Key, new[] {"A-1"}, holdToken.Token, null, true);
 
-            Assert.Equal(extraData, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").ExtraData);
+            Assert.Equal(extraData, Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
         }
 
        [Fact]
@@ -87,7 +88,7 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.Hold(evnt.Key, new[] {"A-1"}, holdToken.Token, null, true, null, new[] {"channelKey1"});
 
-            Assert.Equal(ObjectStatus.Held, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").Status);
+            Assert.Equal(EventObjectInfo.Held, Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").Status);
         }    
         
         [Fact]
@@ -108,7 +109,7 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.Hold(evnt.Key, new[] {"A-1"}, holdToken.Token, null, true, true);
 
-            Assert.Equal(ObjectStatus.Held, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").Status);
+            Assert.Equal(EventObjectInfo.Held, Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").Status);
         }
         
         [Fact]
@@ -130,7 +131,7 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.Hold(evnt.Key, new[] {"A-1"}, holdToken.Token, null, null, null, null, true);
 
-            Assert.Equal(ObjectStatus.Held, Client.Events.RetrieveObjectStatus(evnt.Key, "A-1").Status);
+            Assert.Equal(EventObjectInfo.Held, Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").Status);
         }
     }
 }

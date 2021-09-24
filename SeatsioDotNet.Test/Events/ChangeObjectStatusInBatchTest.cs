@@ -21,10 +21,10 @@ namespace SeatsioDotNet.Test.Events
             });
 
             Assert.Equal("lolzor", result[0].Objects["A-1"].Status);
-            Assert.Equal("lolzor", Client.Events.RetrieveObjectStatus(evnt1.Key, "A-1").Status);
+            Assert.Equal("lolzor", Client.Events.RetrieveObjectInfo(evnt1.Key, "A-1").Status);
 
             Assert.Equal("lolzor", result[1].Objects["A-2"].Status);
-            Assert.Equal("lolzor", Client.Events.RetrieveObjectStatus(evnt2.Key, "A-2").Status);
+            Assert.Equal("lolzor", Client.Events.RetrieveObjectInfo(evnt2.Key, "A-2").Status);
         }
 
         [Fact]

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SeatsioDotNet.Charts;
+using SeatsioDotNet.EventReports;
 using SeatsioDotNet.Events;
 using SeatsioDotNet.HoldTokens;
 using Xunit;
@@ -17,10 +18,10 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.ChangeObjectStatus(new[] {event1.Key, event2.Key}, new[] {"A-1", "A-2"}, "foo");
 
-            Assert.Equal("foo", Client.Events.RetrieveObjectStatus(event1.Key, "A-1").Status);
-            Assert.Equal("foo", Client.Events.RetrieveObjectStatus(event1.Key, "A-2").Status);
-            Assert.Equal("foo", Client.Events.RetrieveObjectStatus(event2.Key, "A-1").Status);
-            Assert.Equal("foo", Client.Events.RetrieveObjectStatus(event2.Key, "A-2").Status);
+            Assert.Equal("foo", Client.Events.RetrieveObjectInfo(event1.Key, "A-1").Status);
+            Assert.Equal("foo", Client.Events.RetrieveObjectInfo(event1.Key, "A-2").Status);
+            Assert.Equal("foo", Client.Events.RetrieveObjectInfo(event2.Key, "A-1").Status);
+            Assert.Equal("foo", Client.Events.RetrieveObjectInfo(event2.Key, "A-2").Status);
         }      
         
         [Fact]
@@ -32,10 +33,10 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.Book(new[] {event1.Key, event2.Key}, new[] {"A-1", "A-2"});
 
-            Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(event1.Key, "A-1").Status);
-            Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(event1.Key, "A-2").Status);
-            Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(event2.Key, "A-1").Status);
-            Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(event2.Key, "A-2").Status);
+            Assert.Equal(EventObjectInfo.Booked, Client.Events.RetrieveObjectInfo(event1.Key, "A-1").Status);
+            Assert.Equal(EventObjectInfo.Booked, Client.Events.RetrieveObjectInfo(event1.Key, "A-2").Status);
+            Assert.Equal(EventObjectInfo.Booked, Client.Events.RetrieveObjectInfo(event2.Key, "A-1").Status);
+            Assert.Equal(EventObjectInfo.Booked, Client.Events.RetrieveObjectInfo(event2.Key, "A-2").Status);
         } 
         
         [Fact]
@@ -48,10 +49,10 @@ namespace SeatsioDotNet.Test.Events
             
             Client.Events.Hold(new[] {event1.Key, event2.Key}, new[] {"A-1", "A-2"}, holdToken.Token);
 
-            Assert.Equal(ObjectStatus.Held, Client.Events.RetrieveObjectStatus(event1.Key, "A-1").Status);
-            Assert.Equal(ObjectStatus.Held, Client.Events.RetrieveObjectStatus(event1.Key, "A-2").Status);
-            Assert.Equal(ObjectStatus.Held, Client.Events.RetrieveObjectStatus(event2.Key, "A-1").Status);
-            Assert.Equal(ObjectStatus.Held, Client.Events.RetrieveObjectStatus(event2.Key, "A-2").Status);
+            Assert.Equal(EventObjectInfo.Held, Client.Events.RetrieveObjectInfo(event1.Key, "A-1").Status);
+            Assert.Equal(EventObjectInfo.Held, Client.Events.RetrieveObjectInfo(event1.Key, "A-2").Status);
+            Assert.Equal(EventObjectInfo.Held, Client.Events.RetrieveObjectInfo(event2.Key, "A-1").Status);
+            Assert.Equal(EventObjectInfo.Held, Client.Events.RetrieveObjectInfo(event2.Key, "A-2").Status);
         }  
         
         [Fact]
@@ -64,10 +65,10 @@ namespace SeatsioDotNet.Test.Events
             
             Client.Events.Release(new[] {event1.Key, event2.Key}, new[] {"A-1", "A-2"});
 
-            Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(event1.Key, "A-1").Status);
-            Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(event1.Key, "A-2").Status);
-            Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(event2.Key, "A-1").Status);
-            Assert.Equal(ObjectStatus.Free, Client.Events.RetrieveObjectStatus(event2.Key, "A-2").Status);
+            Assert.Equal(EventObjectInfo.Free, Client.Events.RetrieveObjectInfo(event1.Key, "A-1").Status);
+            Assert.Equal(EventObjectInfo.Free, Client.Events.RetrieveObjectInfo(event1.Key, "A-2").Status);
+            Assert.Equal(EventObjectInfo.Free, Client.Events.RetrieveObjectInfo(event2.Key, "A-1").Status);
+            Assert.Equal(EventObjectInfo.Free, Client.Events.RetrieveObjectInfo(event2.Key, "A-2").Status);
         }
         
         [Fact]
@@ -87,8 +88,8 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.Book(new[] {event1.Key, event2.Key}, new[] {"A-1"}, null, null, null, null, null, true);
 
-            Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(event1.Key, "A-1").Status);
-            Assert.Equal(ObjectStatus.Booked, Client.Events.RetrieveObjectStatus(event2.Key, "A-1").Status);
+            Assert.Equal(EventObjectInfo.Booked, Client.Events.RetrieveObjectInfo(event1.Key, "A-1").Status);
+            Assert.Equal(EventObjectInfo.Booked, Client.Events.RetrieveObjectInfo(event2.Key, "A-1").Status);
         }
 
     }

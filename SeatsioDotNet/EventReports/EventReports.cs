@@ -13,17 +13,17 @@ namespace SeatsioDotNet.EventReports
             _restClient = restClient;
         }
 
-        public Dictionary<string, IEnumerable<EventReportItem>> ByLabel(string eventKey)
+        public Dictionary<string, IEnumerable<EventObjectInfo>> ByLabel(string eventKey)
         {
             return FetchReport("byLabel", eventKey);
         }
 
-        public IEnumerable<EventReportItem> ByLabel(string eventKey, string label)
+        public IEnumerable<EventObjectInfo> ByLabel(string eventKey, string label)
         {
             return FetchReport("byLabel", eventKey, label);
         }
 
-        public Dictionary<string, IEnumerable<EventReportItem>> ByStatus(string eventKey)
+        public Dictionary<string, IEnumerable<EventObjectInfo>> ByStatus(string eventKey)
         {
             return FetchReport("byStatus", eventKey);
         }
@@ -38,12 +38,12 @@ namespace SeatsioDotNet.EventReports
             return FetchDeepSummaryReport("byStatus", eventKey);
         }
 
-        public IEnumerable<EventReportItem> ByStatus(string eventKey, string status)
+        public IEnumerable<EventObjectInfo> ByStatus(string eventKey, string status)
         {
             return FetchReport("byStatus", eventKey, status);
         }      
         
-        public Dictionary<string, IEnumerable<EventReportItem>> ByObjectType(string eventKey)
+        public Dictionary<string, IEnumerable<EventObjectInfo>> ByObjectType(string eventKey)
         {
             return FetchReport("byObjectType", eventKey);
         }
@@ -58,12 +58,12 @@ namespace SeatsioDotNet.EventReports
             return FetchDeepSummaryReport("byObjectType", eventKey);
         }
 
-        public IEnumerable<EventReportItem> ByObjectType(string eventKey, string objectType)
+        public IEnumerable<EventObjectInfo> ByObjectType(string eventKey, string objectType)
         {
             return FetchReport("byObjectType", eventKey, objectType);
         }
 
-        public Dictionary<string, IEnumerable<EventReportItem>> ByCategoryLabel(string eventKey)
+        public Dictionary<string, IEnumerable<EventObjectInfo>> ByCategoryLabel(string eventKey)
         {
             return FetchReport("byCategoryLabel", eventKey);
         }
@@ -78,12 +78,12 @@ namespace SeatsioDotNet.EventReports
             return FetchDeepSummaryReport("byCategoryLabel", eventKey);
         }
 
-        public IEnumerable<EventReportItem> ByCategoryLabel(string eventKey, string categoryLabel)
+        public IEnumerable<EventObjectInfo> ByCategoryLabel(string eventKey, string categoryLabel)
         {
             return FetchReport("byCategoryLabel", eventKey, categoryLabel);
         }
 
-        public Dictionary<string, IEnumerable<EventReportItem>> ByCategoryKey(string eventKey)
+        public Dictionary<string, IEnumerable<EventObjectInfo>> ByCategoryKey(string eventKey)
         {
             return FetchReport("byCategoryKey", eventKey);
         }
@@ -98,22 +98,22 @@ namespace SeatsioDotNet.EventReports
             return FetchDeepSummaryReport("byCategoryKey", eventKey);
         }
 
-        public IEnumerable<EventReportItem> ByCategoryKey(string eventKey, string categoryKey)
+        public IEnumerable<EventObjectInfo> ByCategoryKey(string eventKey, string categoryKey)
         {
             return FetchReport("byCategoryKey", eventKey, categoryKey);
         }
 
-        public Dictionary<string, IEnumerable<EventReportItem>> ByOrderId(string eventKey)
+        public Dictionary<string, IEnumerable<EventObjectInfo>> ByOrderId(string eventKey)
         {
             return FetchReport("byOrderId", eventKey);
         }
 
-        public IEnumerable<EventReportItem> ByOrderId(string eventKey, string categoryKey)
+        public IEnumerable<EventObjectInfo> ByOrderId(string eventKey, string categoryKey)
         {
             return FetchReport("byOrderId", eventKey, categoryKey);
         }
 
-        public Dictionary<string, IEnumerable<EventReportItem>> BySection(string eventKey)
+        public Dictionary<string, IEnumerable<EventObjectInfo>> BySection(string eventKey)
         {
             return FetchReport("bySection", eventKey);
         }
@@ -128,12 +128,12 @@ namespace SeatsioDotNet.EventReports
             return FetchDeepSummaryReport("bySection", eventKey);
         }
 
-        public IEnumerable<EventReportItem> BySection(string eventKey, string section)
+        public IEnumerable<EventObjectInfo> BySection(string eventKey, string section)
         {
             return FetchReport("bySection", eventKey, section);
         }  
         
-        public Dictionary<string, IEnumerable<EventReportItem>> BySelectability(string eventKey)
+        public Dictionary<string, IEnumerable<EventObjectInfo>> BySelectability(string eventKey)
         {
             return FetchReport("bySelectability", eventKey);
         }
@@ -148,12 +148,12 @@ namespace SeatsioDotNet.EventReports
             return FetchDeepSummaryReport("bySelectability", eventKey);
         }
 
-        public IEnumerable<EventReportItem> BySelectability(string eventKey, string selectability)
+        public IEnumerable<EventObjectInfo> BySelectability(string eventKey, string selectability)
         {
             return FetchReport("bySelectability", eventKey, selectability);
         }   
         
-        public Dictionary<string, IEnumerable<EventReportItem>> ByChannel(string eventKey)
+        public Dictionary<string, IEnumerable<EventObjectInfo>> ByChannel(string eventKey)
         {
             return FetchReport("byChannel", eventKey);
         }
@@ -168,17 +168,17 @@ namespace SeatsioDotNet.EventReports
             return FetchDeepSummaryReport("byChannel", eventKey);
         }
 
-        public IEnumerable<EventReportItem> ByChannel(string eventKey, string channelKey)
+        public IEnumerable<EventObjectInfo> ByChannel(string eventKey, string channelKey)
         {
             return FetchReport("byChannel", eventKey, channelKey);
         }
 
-        private Dictionary<string, IEnumerable<EventReportItem>> FetchReport(string reportType, string eventKey)
+        private Dictionary<string, IEnumerable<EventObjectInfo>> FetchReport(string reportType, string eventKey)
         {
             var restRequest = new RestRequest("/reports/events/{key}/{reportType}", Method.GET)
                 .AddUrlSegment("key", eventKey)
                 .AddUrlSegment("reportType", reportType);
-            return AssertOk(_restClient.Execute<Dictionary<string, IEnumerable<EventReportItem>>>(restRequest));
+            return AssertOk(_restClient.Execute<Dictionary<string, IEnumerable<EventObjectInfo>>>(restRequest));
         }
 
         private Dictionary<string, EventReportSummaryItem> FetchSummaryReport(string reportType, string eventKey)
@@ -197,19 +197,19 @@ namespace SeatsioDotNet.EventReports
             return AssertOk(_restClient.Execute<Dictionary<string, EventReportDeepSummaryItem>>(restRequest));
         }
 
-        private IEnumerable<EventReportItem> FetchReport(string reportType, string eventKey, string filter)
+        private IEnumerable<EventObjectInfo> FetchReport(string reportType, string eventKey, string filter)
         {
             var restRequest = new RestRequest("/reports/events/{key}/{reportType}/{filter}", Method.GET)
                 .AddUrlSegment("key", eventKey)
                 .AddUrlSegment("reportType", reportType)
                 .AddUrlSegment("filter", filter);
-            var report = AssertOk(_restClient.Execute<Dictionary<string, IEnumerable<EventReportItem>>>(restRequest));
+            var report = AssertOk(_restClient.Execute<Dictionary<string, IEnumerable<EventObjectInfo>>>(restRequest));
             if (report.ContainsKey(filter))
             {
                 return report[filter];
             }
 
-            return new List<EventReportItem>();
+            return new List<EventObjectInfo>();
         }
     }
 }

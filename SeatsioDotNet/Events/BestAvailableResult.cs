@@ -7,6 +7,6 @@ namespace SeatsioDotNet.Events
     {
         public bool NextToEachOther { get; set; }
         public IEnumerable<string> Objects { get; set; }
-        public Dictionary<string, EventReportItem> ObjectDetails { get; set; }
+        public Dictionary<string, EventObjectInfo> ObjectDetails { get; set; }
     }
 }

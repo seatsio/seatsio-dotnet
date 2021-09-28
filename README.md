@@ -83,6 +83,21 @@ var drawing = client.Charts.RetrievePublishedVersion(<CHART KEY>);
 Console.WriteLine(drawing.VenueType);
 ```
 
+### Retrieving object category and status (and other information)
+
+```csharp
+var client = new SeatsioClient(Region.EU, "<WORKSPACE SECRET KEY>");
+var objectInfos = Client.Events.RetrieveObjectInfos(evnt.Key, new string[] {"A-1", "A-2"});
+
+Console.WriteLine(objectInfos["A-1"].CategoryKey);
+Console.WriteLine(objectInfos["A-1"].CategoryLabel);
+Console.WriteLine(objectInfos["A-1"].Status);
+
+Console.WriteLine(objectInfos["A-2"].CategoryKey);
+Console.WriteLine(objectInfos["A-2"].CategoryLabel);
+Console.WriteLine(objectInfos["A-2"].Status);
+```
+
 ### Listing all charts
 
 ```csharp

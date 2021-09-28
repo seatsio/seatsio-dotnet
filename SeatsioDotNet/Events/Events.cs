@@ -139,10 +139,8 @@ namespace SeatsioDotNet.Events
 
         public EventObjectInfo RetrieveObjectInfo(string eventKey, string objectLabel)
         {
-            var restRequest = new RestRequest("/events/{key}/objects/{object}", Method.GET)
-                .AddUrlSegment("key", eventKey)
-                .AddUrlSegment("object", objectLabel);
-            return AssertOk(_restClient.Execute<EventObjectInfo>(restRequest));
+            var result = RetrieveObjectInfos(eventKey, new string[] {objectLabel});
+            return result[objectLabel];
         }
         
         public Dictionary<string, EventObjectInfo> RetrieveObjectInfos(string eventKey, string[] objectLabels)

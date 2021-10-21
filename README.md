@@ -153,6 +153,14 @@ var client = new SeatsioClient(Region.EU, "<COMPANY ADMIN KEY>");
 client.Workspaces.Create("a workspace");
 ```
 
+### Creating a chart and an event with the company admin key
+
+```csharp
+var client = new SeatsioClient(Region.EU, "<COMPANY ADMIN KEY>", "<WORKSPACE PUBLIC KEY>"); // workspace public key can be found on https://app.seats.io/workspace-settings
+var chart = client.Charts.Create();
+var evnt = client.Events.Create(chart.Key);
+```
+
 ## Error handling
 
 When an API call results in a 4xx or 5xx error (e.g. when a chart could not be found), a SeatsioException is thrown.

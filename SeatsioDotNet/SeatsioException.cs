@@ -11,7 +11,7 @@ namespace SeatsioDotNet
         public readonly List<SeatsioApiError> Errors;
         public readonly string RequestId;
 
-        private SeatsioException(List<SeatsioApiError> errors, string requestId, IRestResponse response) : base(ExceptionMessage(errors, requestId, response))
+        protected SeatsioException(List<SeatsioApiError> errors, string requestId, IRestResponse response) : base(ExceptionMessage(errors, requestId, response))
         {
             Errors = errors;
             RequestId = requestId;
@@ -40,6 +40,10 @@ namespace SeatsioDotNet
             if (response.ContentType != null && response.ContentType.Contains("application/json"))
             {
                 var parsedException = JsonConvert.DeserializeObject<SeatsioExceptionTo>(response.Content);
+                if ((int) response.StatusCode == 429)
+                {
+                    return new RateLimitExceededException(parsedException.Errors, parsedException.RequestId, response);
+                }
                 return new SeatsioException(parsedException.Errors, parsedException.RequestId, response);
             }
 

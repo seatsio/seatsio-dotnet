@@ -245,7 +245,7 @@ namespace SeatsioDotNet.Events
         public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
         {
             var requestBody = ChangeObjectStatusRequest(events, objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
-            var restRequest = new RestRequest("/seasons/actions/change-object-status", Method.POST)
+            var restRequest = new RestRequest("/events/groups/actions/change-object-status", Method.POST)
                 .AddQueryParameter("expand", "objects")
                 .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<ChangeObjectStatusResult>(restRequest));

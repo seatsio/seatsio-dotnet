@@ -51,7 +51,7 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Null(reportItem.DisplayedObjectType);
             Assert.Null(reportItem.LeftNeighbour);
             Assert.Equal("A-2", reportItem.RightNeighbour);
-            Assert.False(reportItem.IsSelectable);
+            Assert.False(reportItem.IsAvailable);
             Assert.False(reportItem.IsDisabledBySocialDistancing);
             Assert.Equal("channelKey1", reportItem.Channel);
             Assert.Null(reportItem.BookAsAWhole);
@@ -289,26 +289,26 @@ namespace SeatsioDotNet.Test.EventReports
         }
 
         [Fact]
-        public void BySelectability()
+        public void ByAvailability()
         {
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
             Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"});
 
-            var report = Client.EventReports.BySelectability(evnt.Key);
+            var report = Client.EventReports.ByAvailability(evnt.Key);
 
-            Assert.Equal(32, report[Selectable].Count());
-            Assert.Equal(2, report[NotSelectable].Count());
+            Assert.Equal(32, report[Available].Count());
+            Assert.Equal(2, report[NotAvailable].Count());
         }
 
         [Fact]
-        public void BySpecificSelectability()
+        public void BySpecificAvailability()
         {
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
             Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"});
 
-            var report = Client.EventReports.BySelectability(evnt.Key, NotSelectable);
+            var report = Client.EventReports.ByAvailability(evnt.Key, NotAvailable);
 
             Assert.Equal(2, report.Count());
         }

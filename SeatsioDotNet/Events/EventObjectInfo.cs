@@ -5,8 +5,8 @@ namespace SeatsioDotNet.EventReports
 {
     public class EventObjectInfo
     {
-        public const string Selectable = "selectable";
-        public const string NotSelectable = "not_selectable";
+        public const string Available = "available";
+        public const string NotAvailable = "not_available";
 
         public const string NoSection = "NO_SECTION";
         public const string NoChannel = "NO_CHANNEL";
@@ -40,7 +40,7 @@ namespace SeatsioDotNet.EventReports
         public string DisplayedObjectType { get; set; }
         public string LeftNeighbour { get; set; }
         public string RightNeighbour { get; set; }
-        public bool IsSelectable { get; set; }
+        public bool IsAvailable { get; set; }
         public bool? IsDisabledBySocialDistancing { get; set; }
         public string Channel { get; set; }
         public float? DistanceToFocalPoint { get; set; }

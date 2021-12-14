@@ -17,7 +17,7 @@ namespace SeatsioDotNet.Test.EventReports
 
             Assert.Equal(1, report[Booked].Count);
             Assert.Equal(1, report[Booked].bySection[NoSection].Count);
-            Assert.Equal(1, report[Booked].bySection[NoSection].bySelectability[NotSelectable]);
+            Assert.Equal(1, report[Booked].bySection[NoSection].byAvailability[NotAvailable]);
         }   
         
         [Fact]
@@ -30,7 +30,7 @@ namespace SeatsioDotNet.Test.EventReports
 
             Assert.Equal(32, report["seat"].Count);
             Assert.Equal(32, report["seat"].bySection[NoSection].Count);
-            Assert.Equal(32, report["seat"].bySection[NoSection].bySelectability[Selectable]);
+            Assert.Equal(32, report["seat"].bySection[NoSection].byAvailability[Available]);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace SeatsioDotNet.Test.EventReports
 
             Assert.Equal(116, report["9"].Count);
             Assert.Equal(116, report["9"].bySection[NoSection].Count);
-            Assert.Equal(1, report["9"].bySection[NoSection].bySelectability[NotSelectable]);
+            Assert.Equal(1, report["9"].bySection[NoSection].byAvailability[NotAvailable]);
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace SeatsioDotNet.Test.EventReports
 
             Assert.Equal(116, report["Cat1"].Count);
             Assert.Equal(116, report["Cat1"].bySection[NoSection].Count);
-            Assert.Equal(1, report["Cat1"].bySection[NoSection].bySelectability[NotSelectable]);
+            Assert.Equal(1, report["Cat1"].bySection[NoSection].byAvailability[NotAvailable]);
         }
 
         [Fact]
@@ -72,21 +72,21 @@ namespace SeatsioDotNet.Test.EventReports
 
             Assert.Equal(232, report[NoSection].Count);
             Assert.Equal(116, report[NoSection].byCategoryLabel["Cat1"].Count);
-            Assert.Equal(1, report[NoSection].byCategoryLabel["Cat1"].bySelectability[NotSelectable]);
+            Assert.Equal(1, report[NoSection].byCategoryLabel["Cat1"].byAvailability[NotAvailable]);
         }
 
         [Fact]
-        public void DeepSummaryBySelectability()
+        public void DeepSummaryByAvailability()
         {
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
             Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1")});
 
-            var report = Client.EventReports.DeepSummaryBySelectability(evnt.Key);
+            var report = Client.EventReports.DeepSummaryByAvailability(evnt.Key);
 
-            Assert.Equal(1, report[NotSelectable].Count);
-            Assert.Equal(1, report[NotSelectable].byCategoryLabel["Cat1"].Count);
-            Assert.Equal(1, report[NotSelectable].byCategoryLabel["Cat1"].bySection[NoSection]);
+            Assert.Equal(1, report[NotAvailable].Count);
+            Assert.Equal(1, report[NotAvailable].byCategoryLabel["Cat1"].Count);
+            Assert.Equal(1, report[NotAvailable].byCategoryLabel["Cat1"].bySection[NoSection]);
         }    
         
         [Fact]

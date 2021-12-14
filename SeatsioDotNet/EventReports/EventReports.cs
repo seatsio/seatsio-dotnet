@@ -133,24 +133,24 @@ namespace SeatsioDotNet.EventReports
             return FetchReport("bySection", eventKey, section);
         }  
         
-        public Dictionary<string, IEnumerable<EventObjectInfo>> BySelectability(string eventKey)
+        public Dictionary<string, IEnumerable<EventObjectInfo>> ByAvailability(string eventKey)
         {
-            return FetchReport("bySelectability", eventKey);
+            return FetchReport("byAvailability", eventKey);
         }
 
-        public Dictionary<string, EventReportSummaryItem> SummaryBySelectability(string eventKey)
+        public Dictionary<string, EventReportSummaryItem> SummaryByAvailability(string eventKey)
         {
-            return FetchSummaryReport("bySelectability", eventKey);
+            return FetchSummaryReport("byAvailability", eventKey);
         }       
         
-        public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryBySelectability(string eventKey)
+        public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryByAvailability(string eventKey)
         {
-            return FetchDeepSummaryReport("bySelectability", eventKey);
+            return FetchDeepSummaryReport("byAvailability", eventKey);
         }
 
-        public IEnumerable<EventObjectInfo> BySelectability(string eventKey, string selectability)
+        public IEnumerable<EventObjectInfo> ByAvailability(string eventKey, string availability)
         {
-            return FetchReport("bySelectability", eventKey, selectability);
+            return FetchReport("byAvailability", eventKey, availability);
         }   
         
         public Dictionary<string, IEnumerable<EventObjectInfo>> ByChannel(string eventKey)

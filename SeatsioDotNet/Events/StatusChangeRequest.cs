@@ -13,6 +13,8 @@ namespace SeatsioDotNet.Events
         public bool? KeepExtraData { get; }
         public bool? IgnoreChannels { get;  }
         public string[] ChannelKeys { get;  }
+        public string[] AllowedPreviousStatuses { get; }
+        public string[] RejectedPreviousStatuses { get; }
 
         public StatusChangeRequest(string eventKey, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
         {
@@ -26,7 +28,7 @@ namespace SeatsioDotNet.Events
             ChannelKeys = channelKeys;
         }
 
-        public StatusChangeRequest(string eventKey, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        public StatusChangeRequest(string eventKey, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null)
         {
             EventKey = eventKey;
             Objects = objects.Select(o => new ObjectProperties(o));
@@ -36,6 +38,8 @@ namespace SeatsioDotNet.Events
             KeepExtraData = keepExtraData;
             IgnoreChannels = ignoreChannels;
             ChannelKeys = channelKeys;
+            AllowedPreviousStatuses = allowedPreviousStatuses;
+            RejectedPreviousStatuses = rejectedPreviousStatuses;
         }
     }
 }

@@ -253,16 +253,16 @@ namespace SeatsioDotNet.Events
 
         public List<ChangeObjectStatusResult> ChangeObjectStatus(StatusChangeRequest[] requests)
         {
-            var serializedRequests = requests.Select(r => ChangeObjectStatusRequest(r.EventKey, r.Objects, r.Status, r.HoldToken, r.OrderId, r.KeepExtraData, r.IgnoreChannels, r.ChannelKeys));
+            var serializedRequests = requests.Select(r => ChangeObjectStatusRequest(r.EventKey, r.Objects, r.Status, r.HoldToken, r.OrderId, r.KeepExtraData, r.IgnoreChannels, r.ChannelKeys, null, r.AllowedPreviousStatuses, r.RejectedPreviousStatuses));
             var restRequest = new RestRequest("/events/actions/change-object-status", Method.POST)
                 .AddQueryParameter("expand", "objects")
                 .AddJsonBody(new Dictionary<string, object> {{ "statusChanges", serializedRequests}});
             return AssertOk(_restClient.Execute<ChangeObjectStatusInBatchResult>(restRequest)).Results;
         }
 
-        private Dictionary<string, object> ChangeObjectStatusRequest(string evnt, IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
+        private Dictionary<string, object> ChangeObjectStatusRequest(string evnt, IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null)
         {
-            var request = ChangeObjectStatusRequest(objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
+            var request = ChangeObjectStatusRequest(objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing, allowedPreviousStatuses, rejectedPreviousStatuses);
             request.Add("event", evnt);
             return request;
         }
@@ -274,7 +274,7 @@ namespace SeatsioDotNet.Events
             return request;
         }
 
-        private Dictionary<string, object> ChangeObjectStatusRequest(IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
+        private Dictionary<string, object> ChangeObjectStatusRequest(IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null)
         {
             var requestBody = new Dictionary<string, object>()
             {
@@ -311,7 +311,16 @@ namespace SeatsioDotNet.Events
             {
                 requestBody.Add("ignoreSocialDistancing", ignoreSocialDistancing);
             }
-            
+
+            if (allowedPreviousStatuses != null)
+            {
+                requestBody.Add("allowedPreviousStatuses", allowedPreviousStatuses);
+            }
+
+            if (rejectedPreviousStatuses != null)
+            {
+                requestBody.Add("rejectedPreviousStatuses", rejectedPreviousStatuses);
+            }
             return requestBody;
         }
 

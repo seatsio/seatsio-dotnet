@@ -72,5 +72,36 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.Equal("lolzor", result[0].Objects["A-1"].Status);
         }
+        
+        [Fact]
+        public void AllowedPreviousStatuses()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            
+            Assert.Throws<SeatsioException>(() =>
+            {
+                Client.Events.ChangeObjectStatus(new[]
+                {
+                    new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "lolzor", ignoreChannels: true, allowedPreviousStatuses:new []{"someOtherStatus"}),
+                });                
+            });
+            
+        }
+        
+        [Fact]
+        public void RejectedPreviousStatuses()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            
+            Assert.Throws<SeatsioException>(() =>
+            {
+                Client.Events.ChangeObjectStatus(new[]
+                {
+                    new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "lolzor", ignoreChannels: true, rejectedPreviousStatuses:new []{"free"}),
+                });                
+            });
+        }
     }
 }

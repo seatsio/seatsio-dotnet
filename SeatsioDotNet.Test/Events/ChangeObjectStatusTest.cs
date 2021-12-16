@@ -181,5 +181,35 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.Null(Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
         }
+
+        [Fact]
+        public void AllowedPreviousStatuses()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+
+            Assert.Throws<SeatsioException>(() =>
+            {
+                Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", 
+                    null, null, null, null, null, true,
+                    new []{"somePreviousStatus"}
+                    );
+            });
+        }
+
+        [Fact]
+        public void RejectedPreviousStatuses()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+
+            Assert.Throws<SeatsioException>(() =>
+            {
+                Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", 
+                    null, null, null, null, null, true, 
+                    null, new []{"free"}
+                );
+            });
+        }
     }
 }

@@ -141,6 +141,28 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(new Dictionary<string, int> {{"9", 1}}, report[NotAvailable].byCategoryKey);
             Assert.Equal(new Dictionary<string, int> {{NoChannel, 1}}, report[NotAvailable].byChannel);
         }    
+                
+        [Fact]
+        public void SummaryByAvailabilityReason()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1")});
+
+            var report = Client.EventReports.SummaryByAvailabilityReason(evnt.Key);
+
+            Assert.Equal(231, report[Available].Count);
+            Assert.Equal(new Dictionary<string, int> {{NoSection, 231}}, report[Available].bySection);
+            Assert.Equal(new Dictionary<string, int> {{Free, 231}}, report[Available].byStatus);
+            Assert.Equal(new Dictionary<string, int> {{"9", 115}, {"10", 116}}, report[Available].byCategoryKey);
+            Assert.Equal(new Dictionary<string, int> {{NoChannel, 231}}, report[Available].byChannel);
+
+            Assert.Equal(1, report[Booked].Count);
+            Assert.Equal(new Dictionary<string, int> {{NoSection, 1}}, report[Booked].bySection);
+            Assert.Equal(new Dictionary<string, int> {{Booked, 1}}, report[Booked].byStatus);
+            Assert.Equal(new Dictionary<string, int> {{"9", 1}}, report[Booked].byCategoryKey);
+            Assert.Equal(new Dictionary<string, int> {{NoChannel, 1}}, report[Booked].byChannel);
+        }    
         
         [Fact]
         public void SummaryByChannel()

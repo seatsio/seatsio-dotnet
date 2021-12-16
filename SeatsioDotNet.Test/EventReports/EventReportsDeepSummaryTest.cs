@@ -18,8 +18,8 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(1, report[Booked].Count);
             Assert.Equal(1, report[Booked].bySection[NoSection].Count);
             Assert.Equal(1, report[Booked].bySection[NoSection].byAvailability[NotAvailable]);
-        }   
-        
+        }
+
         [Fact]
         public void DeepSummaryByObjectType()
         {
@@ -87,8 +87,22 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(1, report[NotAvailable].Count);
             Assert.Equal(1, report[NotAvailable].byCategoryLabel["Cat1"].Count);
             Assert.Equal(1, report[NotAvailable].byCategoryLabel["Cat1"].bySection[NoSection]);
-        }    
-        
+        }
+
+        [Fact]
+        public void DeepSummaryByAvailabilityReason()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1")});
+
+            var report = Client.EventReports.DeepSummaryByAvailabilityReason(evnt.Key);
+
+            Assert.Equal(1, report[Booked].Count);
+            Assert.Equal(1, report[Booked].byCategoryLabel["Cat1"].Count);
+            Assert.Equal(1, report[Booked].byCategoryLabel["Cat1"].bySection[NoSection]);
+        }
+
         [Fact]
         public void DeepSummaryByChannel()
         {

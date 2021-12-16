@@ -312,6 +312,31 @@ namespace SeatsioDotNet.Test.EventReports
 
             Assert.Equal(2, report.Count());
         }
+        
+        [Fact]
+        public void ByAvailabilityReason()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"});
+
+            var report = Client.EventReports.ByAvailabilityReason(evnt.Key);
+
+            Assert.Equal(32, report[Available].Count());
+            Assert.Equal(2, report[Booked].Count());
+        }
+
+        [Fact]
+        public void BySpecificAvailabilityReason()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"});
+
+            var report = Client.EventReports.ByAvailabilityReason(evnt.Key, Booked);
+
+            Assert.Equal(2, report.Count());
+        }
 
         [Fact]
         public void ByChannel()

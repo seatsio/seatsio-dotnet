@@ -16,6 +16,7 @@ namespace SeatsioDotNet
         public EventReports.EventReports EventReports { get; }
         public ChartReports.ChartReports ChartReports { get; }
         public UsageReports.UsageReports UsageReports { get; }
+        public Seasons.Seasons Seasons { get; }
 
         private SeatsioRestClient RestClient;
 
@@ -35,6 +36,7 @@ namespace SeatsioDotNet
             EventReports = new EventReports.EventReports(RestClient);
             ChartReports = new ChartReports.ChartReports(RestClient);
             UsageReports = new UsageReports.UsageReports(RestClient);
+            Seasons = new Seasons.Seasons(RestClient);
         }
 
         public SeatsioClient(Region region, string secretKey, string workspaceKey) : this(secretKey, workspaceKey,

@@ -23,14 +23,39 @@ namespace SeatsioDotNet.ChartReports
             return FetchReport("byObjectType", chartKey, bookWholeTablesMode);
         }
         
+        public Dictionary<string, ChartReportSummaryItem> SummaryByObjectType(string chartKey)
+        {
+            return FetchSummaryReport("byObjectType", chartKey);
+        }
+        
         public Dictionary<string, IEnumerable<ChartObjectInfo>> ByCategoryKey(string chartKey, string bookWholeTablesMode)
         {
             return FetchReport("byCategoryKey", chartKey, bookWholeTablesMode);
         }
         
+        public Dictionary<string, ChartReportSummaryItem> SummaryByCategoryKey(string chartKey)
+        {
+            return FetchSummaryReport("byCategoryKey", chartKey);
+        }
+        
         public Dictionary<string, IEnumerable<ChartObjectInfo>> ByCategoryLabel(string chartKey, string bookWholeTablesMode)
         {
             return FetchReport("byCategoryLabel", chartKey, bookWholeTablesMode);
+        }   
+        
+        public Dictionary<string, ChartReportSummaryItem> SummaryByCategoryLabel(string chartKey)
+        {
+            return FetchSummaryReport("byCategoryLabel", chartKey);
+        }
+        
+        public Dictionary<string, IEnumerable<ChartObjectInfo>> BySection(string chartKey, string bookWholeTablesMode)
+        {
+            return FetchReport("bySection", chartKey, bookWholeTablesMode);
+        }
+        
+        public Dictionary<string, ChartReportSummaryItem> SummaryBySection(string eventKey)
+        {
+            return FetchSummaryReport("bySection", eventKey);
         }
 
         private Dictionary<string, IEnumerable<ChartObjectInfo>> FetchReport(string reportType, string chartKey, string bookWholeTablesMode)
@@ -46,5 +71,14 @@ namespace SeatsioDotNet.ChartReports
             
             return AssertOk(_restClient.Execute<Dictionary<string, IEnumerable<ChartObjectInfo>>>(restRequest));
         }
+        
+        private Dictionary<string, ChartReportSummaryItem> FetchSummaryReport(string reportType, string chartKey)
+        {
+            var restRequest = new RestRequest("/reports/charts/{key}/{reportType}/summary", Method.GET)
+                .AddUrlSegment("key", chartKey)
+                .AddUrlSegment("reportType", reportType);
+            return AssertOk(_restClient.Execute<Dictionary<string, ChartReportSummaryItem>>(restRequest));
+        }
+
     }
 }

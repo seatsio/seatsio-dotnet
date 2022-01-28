@@ -63,6 +63,8 @@ namespace SeatsioDotNet.Test.ChartReports
 
             Assert.Equal(32, report["seat"].Count());
             Assert.Equal(2, report["generalAdmission"].Count());
+            Assert.Empty(report["booth"]);
+            Assert.Empty(report["table"]);
         }
 
         [Fact]
@@ -70,9 +72,10 @@ namespace SeatsioDotNet.Test.ChartReports
         {
             var chartKey = CreateTestChart();
             var report = Client.ChartReports.ByCategoryKey(chartKey, null);
-            Assert.Equal(2, report.Count);
+            Assert.Equal(3, report.Count);
             Assert.Equal(17, report["9"].Count());
             Assert.Equal(17, report["10"].Count());
+            Assert.Empty(report["NO_CATEGORY"]);
         }
 
         [Fact]
@@ -80,9 +83,21 @@ namespace SeatsioDotNet.Test.ChartReports
         {
             var chartKey = CreateTestChart();
             var report = Client.ChartReports.ByCategoryLabel(chartKey, null);
-            Assert.Equal(2, report.Count);
+            Assert.Equal(3, report.Count);
             Assert.Equal(17, report["Cat1"].Count());
             Assert.Equal(17, report["Cat2"].Count());
+            Assert.Empty(report["NO_CATEGORY"]);
+        }  
+        
+        [Fact]
+        public void BySection()
+        {
+            var chartKey = CreateTestChartWithSections();
+            var report = Client.ChartReports.BySection(chartKey, null);
+            Assert.Equal(3, report.Count);
+            Assert.Equal(36, report["Section A"].Count());
+            Assert.Equal(35, report["Section B"].Count());
+            Assert.Empty(report["NO_SECTION"]);
         }
 
         [Fact]

@@ -12,7 +12,7 @@ namespace SeatsioDotNet.Test.ChartReports
         {
             var chartKey = CreateTestChart();
 
-            var report = Client.ChartReports.ByLabel(chartKey, null);
+            var report = Client.ChartReports.ByLabel(chartKey);
 
             var reportItem = report["A-1"].First();
             Assert.Equal("A-1", reportItem.Label);
@@ -35,7 +35,7 @@ namespace SeatsioDotNet.Test.ChartReports
         {
             var chartKey = CreateTestChart();
 
-            var report = Client.ChartReports.ByLabel(chartKey, null);
+            var report = Client.ChartReports.ByLabel(chartKey);
 
             var reportItem = report["GA1"].First();
             Assert.Equal(100, reportItem.Capacity);
@@ -48,7 +48,7 @@ namespace SeatsioDotNet.Test.ChartReports
         {
             var chartKey = CreateTestChart();
 
-            var report = Client.ChartReports.ByLabel(chartKey, null);
+            var report = Client.ChartReports.ByLabel(chartKey);
 
             Assert.Single(report["A-1"]);
             Assert.Single(report["A-2"]);
@@ -59,7 +59,7 @@ namespace SeatsioDotNet.Test.ChartReports
         {
             var chartKey = CreateTestChart();
 
-            var report = Client.ChartReports.ByObjectType(chartKey, null);
+            var report = Client.ChartReports.ByObjectType(chartKey);
 
             Assert.Equal(32, report["seat"].Count());
             Assert.Equal(2, report["generalAdmission"].Count());
@@ -71,7 +71,7 @@ namespace SeatsioDotNet.Test.ChartReports
         public void ByCategoryKey()
         {
             var chartKey = CreateTestChart();
-            var report = Client.ChartReports.ByCategoryKey(chartKey, null);
+            var report = Client.ChartReports.ByCategoryKey(chartKey);
             Assert.Equal(3, report.Count);
             Assert.Equal(17, report["9"].Count());
             Assert.Equal(17, report["10"].Count());
@@ -82,7 +82,7 @@ namespace SeatsioDotNet.Test.ChartReports
         public void ByCategoryLabel()
         {
             var chartKey = CreateTestChart();
-            var report = Client.ChartReports.ByCategoryLabel(chartKey, null);
+            var report = Client.ChartReports.ByCategoryLabel(chartKey);
             Assert.Equal(3, report.Count);
             Assert.Equal(17, report["Cat1"].Count());
             Assert.Equal(17, report["Cat2"].Count());
@@ -93,7 +93,7 @@ namespace SeatsioDotNet.Test.ChartReports
         public void BySection()
         {
             var chartKey = CreateTestChartWithSections();
-            var report = Client.ChartReports.BySection(chartKey, null);
+            var report = Client.ChartReports.BySection(chartKey);
             Assert.Equal(3, report.Count);
             Assert.Equal(36, report["Section A"].Count());
             Assert.Equal(35, report["Section B"].Count());
@@ -105,7 +105,7 @@ namespace SeatsioDotNet.Test.ChartReports
         {
             var chartKey = CreateTestChartWithTables();
 
-            var report = Client.ChartReports.ByLabel(chartKey, null);
+            var report = Client.ChartReports.ByLabel(chartKey);
 
             CustomAssert.ContainsOnly(new [] {"T1-1", "T1-2", "T1-3", "T1-4", "T1-5", "T1-6", "T2-1", "T2-2", "T2-3", "T2-4", "T2-5", "T2-6", "T1", "T2"}, report.Keys);
         }

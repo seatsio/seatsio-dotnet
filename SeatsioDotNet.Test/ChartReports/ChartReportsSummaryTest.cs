@@ -25,6 +25,17 @@ namespace SeatsioDotNet.Test.ChartReports
                 report["generalAdmission"].byCategoryKey);
             Assert.Equal(new Dictionary<string, int> {{"Cat1", 100}, {"Cat2", 100}},
                 report["generalAdmission"].byCategoryLabel);
+        }     
+        
+        [Fact]
+        public void SummaryByObjectType_BookWholeTablesTrue()
+        {
+            var chartKey = CreateTestChartWithTables();
+
+            var report = Client.ChartReports.SummaryByObjectType(chartKey, "true");
+
+            Assert.Equal(0, report["seat"].Count);
+            Assert.Equal(2, report["table"].Count);
         }
 
         [Fact]

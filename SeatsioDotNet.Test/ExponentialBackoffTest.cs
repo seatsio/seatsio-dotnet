@@ -10,9 +10,9 @@ namespace SeatsioDotNet.Test
         public void AbortsEventuallyIfServerKeepsReturning429()
         {
             var start = DateTimeOffset.Now;
-            var client = new SeatsioRestClient("https://mockbin.org");
+            var client = new SeatsioRestClient("https://httpbin.org");
 
-            var response = client.Execute<object>(new RestRequest("/bin/0381d6f4-0155-4b8c-937b-73d3d88b2a3f", Method.GET));
+            var response = client.Execute<object>(new RestRequest("/status/429", Method.GET));
 
             Assert.Equal(429, (int) response.StatusCode);
 
@@ -25,9 +25,9 @@ namespace SeatsioDotNet.Test
         public void AbortsDirectlyIfServerReturnsOtherErrorThan429()
         {
             var start = DateTimeOffset.Now;
-            var client = new SeatsioRestClient("https://mockbin.org");
+            var client = new SeatsioRestClient("https://httpbin.org");
 
-            var response = client.Execute<object>(new RestRequest("/bin/1eea3aab-2bb2-4f92-99c2-50d942fb6294", Method.GET));
+            var response = client.Execute<object>(new RestRequest("/status/400", Method.GET));
 
             Assert.Equal(400, (int) response.StatusCode);
 
@@ -39,9 +39,9 @@ namespace SeatsioDotNet.Test
         public void AbortsDirectlyIfServerReturnsError429ButMaxRetries0()
         {
             var start = DateTimeOffset.Now;
-            var client = new SeatsioRestClient("https://mockbin.org").SetMaxRetries(0);
+            var client = new SeatsioRestClient("https://httpbin.org").SetMaxRetries(0);
 
-            var response = client.Execute<object>(new RestRequest("/bin/0381d6f4-0155-4b8c-937b-73d3d88b2a3f", Method.GET));
+            var response = client.Execute<object>(new RestRequest("/status/429", Method.GET));
 
             Assert.Equal(429, (int) response.StatusCode);
 

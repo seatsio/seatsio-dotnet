@@ -1,19 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
+	<PropertyGroup>
     <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
-  </PropertyGroup>
-  <ItemGroup>
+	</PropertyGroup>
+	<ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
-    <ProjectReference Include="..\SeatsioDotNet\SeatsioDotNet.csproj" />
+		<ProjectReference Include="..\SeatsioDotNet\SeatsioDotNet.csproj" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-    <PackageReference Include="xunit" Version="2.4.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+		<PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="RestSharp" Version="106.15.0" />
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="resources\*">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+		<DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="resources\*">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 </Project>

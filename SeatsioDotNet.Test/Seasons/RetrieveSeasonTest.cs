@@ -20,16 +20,12 @@ namespace SeatsioDotNet.Test.Seasons
             Assert.NotEqual(0, retrievedSeason.Id);
             Assert.Equal(new[] {partialSeason1.Key, partialSeason2.Key}, retrievedSeason.PartialSeasonKeys);
             Assert.Empty(retrievedSeason.Events);
-
-            var seasonEvent = retrievedSeason.SeasonEvent;
-            Assert.Equal(season.Key, seasonEvent.Key);
-            Assert.NotEqual(0, seasonEvent.Id);
-            Assert.Equal(chartKey, seasonEvent.ChartKey);
-            Assert.Equal("INHERIT", seasonEvent.TableBookingConfig.Mode);
-            Assert.True(seasonEvent.SupportsBestAvailable);
-            Assert.Null(seasonEvent.ForSaleConfig);
-            CustomAssert.CloseTo(DateTimeOffset.Now, seasonEvent.CreatedOn.Value);
-            Assert.Null(seasonEvent.UpdatedOn);
+            Assert.Equal(chartKey, season.ChartKey);
+            Assert.Equal("INHERIT", season.TableBookingConfig.Mode);
+            Assert.True(season.SupportsBestAvailable);
+            Assert.Null(season.ForSaleConfig);
+            CustomAssert.CloseTo(DateTimeOffset.Now, season.CreatedOn.Value);
+            Assert.Null(season.UpdatedOn);
         }
     }
 }

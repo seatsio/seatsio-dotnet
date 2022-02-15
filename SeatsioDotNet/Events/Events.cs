@@ -139,7 +139,7 @@ namespace SeatsioDotNet.Events
 
         public EventObjectInfo RetrieveObjectInfo(string eventKey, string objectLabel)
         {
-            var result = RetrieveObjectInfos(eventKey, new string[] {objectLabel});
+            var result = RetrieveObjectInfos(eventKey, new[] {objectLabel});
             return result[objectLabel];
         }
         

@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using RestSharp.Authenticators;
+using RestSharp.Deserializers;
+using SeatsioDotNet.Events;
+using SeatsioDotNet.Seasons;
 
 namespace SeatsioDotNet
 {
@@ -36,7 +41,7 @@ namespace SeatsioDotNet
             EventReports = new EventReports.EventReports(RestClient);
             ChartReports = new ChartReports.ChartReports(RestClient);
             UsageReports = new UsageReports.UsageReports(RestClient);
-            Seasons = new Seasons.Seasons(RestClient);
+            Seasons = new Seasons.Seasons(RestClient, this);
         }
 
         public SeatsioClient(Region region, string secretKey, string workspaceKey) : this(secretKey, workspaceKey,

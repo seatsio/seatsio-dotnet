@@ -9,13 +9,15 @@ namespace SeatsioDotNet.Seasons
     public class Seasons
     {
         private readonly RestClient _restClient;
+        private readonly SeatsioClient _seatsioClient;
 
-        public Seasons(RestClient restClient)
+        public Seasons(RestClient restClient, SeatsioClient seatsioClient)
         {
             _restClient = restClient;
+            _seatsioClient = seatsioClient;
         }
 
-        public Season Create(string chartKey, string key = null, int? numberOfEvents = null, IEnumerable<string> eventKeys = null, TableBookingConfig tableBookingConfig = null, string socialDistancingRulesetKey = null)
+        public Event Create(string chartKey, string key = null, int? numberOfEvents = null, IEnumerable<string> eventKeys = null, TableBookingConfig tableBookingConfig = null, string socialDistancingRulesetKey = null)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("chartKey", chartKey);
@@ -46,10 +48,10 @@ namespace SeatsioDotNet.Seasons
             }
 
             var restRequest = new RestRequest("/seasons", Method.POST).AddJsonBody(requestBody);
-            return AssertOk(_restClient.Execute<Season>(restRequest));
+            return AssertOk(_restClient.Execute<Event>(restRequest));
         }
 
-        public Season CreatePartialSeason(string topLevelSeasonKey, string partialSeasonKey = null, IEnumerable<string> eventKeys = null)
+        public Event CreatePartialSeason(string topLevelSeasonKey, string partialSeasonKey = null, IEnumerable<string> eventKeys = null)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             
@@ -66,40 +68,15 @@ namespace SeatsioDotNet.Seasons
             var restRequest = new RestRequest("/seasons/{topLevelSeasonKey}/partial-seasons", Method.POST)
                 .AddUrlSegment("topLevelSeasonKey", topLevelSeasonKey)
                 .AddJsonBody(requestBody);
-            return AssertOk(_restClient.Execute<Season>(restRequest));
+            return AssertOk(_restClient.Execute<Event>(restRequest));
         }
 
-        public Season Retrieve(string key)
+        public Event Retrieve(string key)
         {
-            var restRequest = new RestRequest("/seasons/{key}", Method.GET)
-                .AddUrlSegment("key", key);
-            return AssertOk(_restClient.Execute<Season>(restRequest));
+            return _seatsioClient.Events.Retrieve(key);
         }
 
-        public Season RetrievePartialSeason(string topLevelSeasonKey, string partialSeasonKey)
-        {
-            var restRequest = new RestRequest("/seasons/{topLevelSeasonKey}/partial-seasons/{partialSeasonKey}", Method.GET)
-                .AddUrlSegment("topLevelSeasonKey", topLevelSeasonKey)
-                .AddUrlSegment("partialSeasonKey", partialSeasonKey);
-            return AssertOk(_restClient.Execute<Season>(restRequest));
-        }
-
-        public void Delete(string key)
-        {
-            var restRequest = new RestRequest("/seasons/{key}", Method.DELETE)
-                .AddUrlSegment("key", key);
-            AssertOk(_restClient.Execute<object>(restRequest));
-        }
-
-        public void DeletePartialSeason(string topLevelSeasonKey, string partialSeasonKey)
-        {
-            var restRequest = new RestRequest("/seasons/{topLevelSeasonKey}/partial-seasons/{partialSeasonKey}", Method.DELETE)
-                .AddUrlSegment("topLevelSeasonKey", topLevelSeasonKey)
-                .AddUrlSegment("partialSeasonKey", partialSeasonKey);
-            AssertOk(_restClient.Execute<object>(restRequest));
-        }
-
-        public Season AddEventsToPartialSeason(string topLevelSeasonKey, string partialSeasonKey, string[] eventKeys)
+        public Event AddEventsToPartialSeason(string topLevelSeasonKey, string partialSeasonKey, string[] eventKeys)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("eventKeys", eventKeys);
@@ -107,19 +84,19 @@ namespace SeatsioDotNet.Seasons
                 .AddUrlSegment("topLevelSeasonKey", topLevelSeasonKey)
                 .AddUrlSegment("partialSeasonKey", partialSeasonKey)
                 .AddJsonBody(requestBody);
-            return AssertOk(_restClient.Execute<Season>(restRequest));
+            return AssertOk(_restClient.Execute<Event>(restRequest));
         }
 
-        public Season RemoveEventFromPartialSeason(string topLevelSeasonKey, string partialSeasonKey, string eventKey)
+        public Event RemoveEventFromPartialSeason(string topLevelSeasonKey, string partialSeasonKey, string eventKey)
         {
             var restRequest = new RestRequest("/seasons/{topLevelSeasonKey}/partial-seasons/{partialSeasonKey}/events/{eventKey}", Method.DELETE)
                     .AddUrlSegment("topLevelSeasonKey", topLevelSeasonKey)
                     .AddUrlSegment("partialSeasonKey", partialSeasonKey)
                     .AddUrlSegment("eventKey", eventKey);
-            return AssertOk(_restClient.Execute<Season>(restRequest));
+            return AssertOk(_restClient.Execute<Event>(restRequest));
         }
 
-        public Season CreateEvents(string key, string[] eventKeys = null, int? numberOfEvents = null)
+        public Event CreateEvents(string key, string[] eventKeys = null, int? numberOfEvents = null)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
 
@@ -136,32 +113,7 @@ namespace SeatsioDotNet.Seasons
             var restRequest = new RestRequest("/seasons/{key}/actions/create-events", Method.POST)
                 .AddUrlSegment("key", key)
                 .AddJsonBody(requestBody);
-            return AssertOk(_restClient.Execute<Season>(restRequest));
-        }
-        
-        public IEnumerable<Season> ListAll()
-        {
-            return List().All();
-        }
-
-        public Page<Season> ListFirstPage(int? pageSize = null)
-        {
-            return List().FirstPage(pageSize: pageSize);
-        }
-
-        public Page<Season> ListPageAfter(long id, int? pageSize = null)
-        {
-            return List().PageAfter(id, pageSize: pageSize);
-        }
-
-        public Page<Season> ListPageBefore(long id, int? pageSize = null)
-        {
-            return List().PageBefore(id, pageSize: pageSize);
-        }
-
-        private Lister<Season> List()
-        {
-            return new Lister<Season>(new PageFetcher<Season>(_restClient, "/seasons"));
+            return AssertOk(_restClient.Execute<Event>(restRequest));
         }
     }
 }

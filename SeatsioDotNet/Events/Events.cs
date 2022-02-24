@@ -5,6 +5,8 @@ using RestSharp;
 using SeatsioDotNet.EventReports;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
+using SeatsioDotNet.Charts;
+using System;
 
 namespace SeatsioDotNet.Events
 {
@@ -19,20 +21,25 @@ namespace SeatsioDotNet.Events
 
         public Event Create(string chartKey)
         {
-            return Create(chartKey, null, null, null);
+            return Create(chartKey, null, null, null, null);
         }
 
         public Event Create(string chartKey, string eventKey)
         {
-            return Create(chartKey, eventKey, null, null);
+            return Create(chartKey, eventKey, null, null, null);
         }
 
         public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig)
         {
-            return Create(chartKey, eventKey, tableBookingConfig, null);
+            return Create(chartKey, eventKey, tableBookingConfig, null, null);
         }
 
         public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig, string socialDistancingRulesetKey)
+        {
+            return Create(chartKey, eventKey, tableBookingConfig, socialDistancingRulesetKey, null);
+        }
+
+        public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig, string socialDistancingRulesetKey, Dictionary<string, object> objectCategories)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("chartKey", chartKey);
@@ -50,6 +57,11 @@ namespace SeatsioDotNet.Events
             if (socialDistancingRulesetKey != null)
             {
                 requestBody.Add("socialDistancingRulesetKey", socialDistancingRulesetKey);
+            }
+
+            if (objectCategories != null)
+            {
+                requestBody.Add("objectCategories", objectCategories);
             }
 
             var restRequest = new RestRequest("/events", Method.POST).AddJsonBody(requestBody);
@@ -86,14 +98,20 @@ namespace SeatsioDotNet.Events
         public void Update(string eventKey, string chartKey, string newEventKey)
         {
             Update(eventKey, chartKey, newEventKey, null, null);
-        }    
-        
+        }
+
         public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig)
         {
             Update(eventKey, chartKey, newEventKey, tableBookingConfig, null);
         }
 
-        public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig, string socialDistancingRulesetKey)
+        public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig,
+            string socialDistancingRulesetKey)
+        {
+            Update(eventKey, chartKey, newEventKey, tableBookingConfig, socialDistancingRulesetKey, null);  
+        }
+
+        public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig, string socialDistancingRulesetKey, Dictionary<string, object> objectCategories)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
 
@@ -115,6 +133,11 @@ namespace SeatsioDotNet.Events
             if (socialDistancingRulesetKey != null)
             {
                 requestBody.Add("socialDistancingRulesetKey", socialDistancingRulesetKey);
+            }
+
+            if (objectCategories != null)
+            {
+                requestBody.Add("objectCategories", objectCategories);
             }
 
             var restRequest = new RestRequest("/events/{key}", Method.POST)
@@ -142,19 +165,19 @@ namespace SeatsioDotNet.Events
             var result = RetrieveObjectInfos(eventKey, new[] {objectLabel});
             return result[objectLabel];
         }
-        
+
         public Dictionary<string, EventObjectInfo> RetrieveObjectInfos(string eventKey, string[] objectLabels)
         {
             var restRequest = new RestRequest("/events/{key}/objects", Method.GET)
                 .AddUrlSegment("key", eventKey);
-            
+
             foreach (var objectLabel in objectLabels)
             {
                 restRequest.AddQueryParameter("label", objectLabel);
             }
-            
+
             return AssertOk(_restClient.Execute<Dictionary<string, EventObjectInfo>>(restRequest));
-            
+
         }
 
         public ChangeObjectStatusResult Book(string eventKey, IEnumerable<string> objects, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null)
@@ -242,7 +265,7 @@ namespace SeatsioDotNet.Events
             return ChangeObjectStatus(events, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing);
         }
 
-        public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null) 
+        public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, bool? ignoreSocialDistancing = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null)
         {
             var requestBody = ChangeObjectStatusRequest(events, objects, status, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys, ignoreSocialDistancing, allowedPreviousStatuses, rejectedPreviousStatuses);
             var restRequest = new RestRequest("/events/groups/actions/change-object-status", Method.POST)
@@ -296,7 +319,7 @@ namespace SeatsioDotNet.Events
             {
                 requestBody.Add("keepExtraData", keepExtraData);
             }
-            
+
             if (ignoreChannels != null)
             {
                 requestBody.Add("ignoreChannels", ignoreChannels);
@@ -306,7 +329,7 @@ namespace SeatsioDotNet.Events
             {
                 requestBody.Add("channelKeys", channelKeys);
             }
-            
+
             if (ignoreSocialDistancing != null)
             {
                 requestBody.Add("ignoreSocialDistancing", ignoreSocialDistancing);
@@ -346,12 +369,12 @@ namespace SeatsioDotNet.Events
             {
                 requestBody.Add("keepExtraData", keepExtraData);
             }
-            
+
             if (ignoreChannels != null)
             {
                 requestBody.Add("ignoreChannels", ignoreChannels);
             }
-            
+
             if (channelKeys != null)
             {
                 requestBody.Add("channelKeys", channelKeys);

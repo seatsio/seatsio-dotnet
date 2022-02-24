@@ -85,5 +85,41 @@ namespace SeatsioDotNet.Test.Events
             var retrievedEvent = Client.Events.Retrieve(evnt.Key);
             Assert.Null(retrievedEvent.SocialDistancingRulesetKey);
         }
+        
+        [Fact]
+        public void UpdateObjectCategories()
+        {
+            var chartKey = CreateTestChart();
+            var objectCategories = new Dictionary<string, object>()
+            {
+                {"A-1", 10L}
+            };
+            var evnt = Client.Events.Create(chartKey, null, null, null, objectCategories);
+
+            var newObjectCategories = new Dictionary<string, object>()
+            {
+                {"A-2", 9L}
+            };
+            Client.Events.Update(evnt.Key, null, null, null, null, newObjectCategories);
+
+            var retrievedEvent = Client.Events.Retrieve(evnt.Key);
+            Assert.Equal(newObjectCategories, retrievedEvent.ObjectCategories);
+        }      
+        
+        [Fact]
+        public void RemoveObjectCategories()
+        {
+            var chartKey = CreateTestChart();
+            var objectCategories = new Dictionary<string, object>()
+            {
+                {"A-1", 10L}
+            };
+            var evnt = Client.Events.Create(chartKey, null, null, null, objectCategories);
+
+            Client.Events.Update(evnt.Key, null, null, null, null, new Dictionary<string, object>());
+
+            var retrievedEvent = Client.Events.Retrieve(evnt.Key);
+            Assert.Null(retrievedEvent.ObjectCategories);
+        }
     }
 }

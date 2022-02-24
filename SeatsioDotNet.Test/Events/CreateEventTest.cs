@@ -85,11 +85,7 @@ namespace SeatsioDotNet.Test.Events
                 {"A-1", 10L}
             };
             var evnt = Client.Events.Create(chartKey, null, null, null, objectCategories);
-            var expectedObjectCategories = new Dictionary<string, object>()
-            {
-                {"A-1", 10L}
-            };
-            Assert.Equal(expectedObjectCategories, evnt.ObjectCategories);
+            Assert.Equal(objectCategories, evnt.ObjectCategories);
         }
     }
 }

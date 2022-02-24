@@ -28,7 +28,8 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
             var extraData = new Dictionary<string, object> {{"foo", "bar"}};
-            Client.Events.ChangeObjectStatus(evnt.Key, new[] {new ObjectProperties("A-1", extraData)}, "s1", null, "order1");
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {new ObjectProperties("A-1", extraData)}, "s1", null,
+                "order1");
 
             var statusChanges = Client.Events.StatusChanges(evnt.Key).All();
             var statusChange = statusChanges.First();
@@ -42,8 +43,25 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(extraData, statusChange.ExtraData);
             Assert.Equal("API_CALL", statusChange.Origin.Type);
             Assert.NotNull(statusChange.Origin.Ip);
+            Assert.True(statusChange.IsPresentOnChart);
+            Assert.Null(statusChange.NotPresentOnChartReason);
         }
-        
+
+        [Fact]
+        public void NotPresentOnChartAnymore()
+        {
+            var chartKey = CreateTestChartWithTables();
+            var evnt = Client.Events.Create(chartKey, null, TableBookingConfig.AllByTable());
+            Client.Events.Book(evnt.Key, new[] {"T1"});
+            Client.Events.Update(evnt.Key, null, null, TableBookingConfig.AllBySeat());
+
+            var statusChanges = Client.Events.StatusChanges(evnt.Key).All();
+            var statusChange = statusChanges.First();
+
+            Assert.False(statusChange.IsPresentOnChart);
+            Assert.Equal("SWITCHED_TO_BOOK_BY_SEAT", statusChange.NotPresentOnChartReason);
+        }
+
         [Fact]
         public void Filter()
         {
@@ -57,8 +75,8 @@ namespace SeatsioDotNet.Test.Events
             var statusChanges = Client.Events.StatusChanges(evnt.Key, filter: "A-").All();
 
             Assert.Equal(new[] {"A-3", "A-2", "A-1"}, statusChanges.Select(s => s.ObjectLabel));
-        }    
-        
+        }
+
         [Fact]
         public void SortAsc()
         {
@@ -72,8 +90,8 @@ namespace SeatsioDotNet.Test.Events
             var statusChanges = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel").All();
 
             Assert.Equal(new[] {"A-1", "A-2", "A-3", "B-1"}, statusChanges.Select(s => s.ObjectLabel));
-        }     
-        
+        }
+
         [Fact]
         public void SortAscPageBefore()
         {
@@ -89,8 +107,8 @@ namespace SeatsioDotNet.Test.Events
             var statusChanges = statusChangeLister.PageBefore(statusChangeA3.Id, 2).Items;
 
             Assert.Equal(new[] {"A-1", "A-2"}, statusChanges.Select(s => s.ObjectLabel));
-        }    
-        
+        }
+
         [Fact]
         public void SortAscPageAfter()
         {
@@ -106,8 +124,8 @@ namespace SeatsioDotNet.Test.Events
             var statusChanges = statusChangeLister.PageAfter(statusChangeA1.Id, 2).Items;
 
             Assert.Equal(new[] {"A-2", "A-3"}, statusChanges.Select(s => s.ObjectLabel));
-        }       
-        
+        }
+
         [Fact]
         public void SortDesc()
         {
@@ -118,7 +136,8 @@ namespace SeatsioDotNet.Test.Events
             Client.Events.Book(evnt.Key, new[] {"B-1"});
             Client.Events.Book(evnt.Key, new[] {"A-3"});
 
-            var statusChanges = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel", sortDirection: "DESC").All();
+            var statusChanges = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel", sortDirection: "DESC")
+                .All();
 
             Assert.Equal(new[] {"B-1", "A-3", "A-2", "A-1"}, statusChanges.Select(s => s.ObjectLabel));
         }

@@ -80,9 +80,9 @@ namespace SeatsioDotNet.Test.Events
         {
             var chartKey = CreateTestChart();
 
-            var objectCategories = new Dictionary<string, CategoryKey>()
+            var objectCategories = new Dictionary<string, object>()
             {
-                {"A-1", CategoryKey.Of(10)}
+                {"A-1", 10L}
             };
             var evnt = Client.Events.Create(chartKey, null, null, null, objectCategories);
             var expectedObjectCategories = new Dictionary<string, object>()

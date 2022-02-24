@@ -39,7 +39,7 @@ namespace SeatsioDotNet.Events
             return Create(chartKey, eventKey, tableBookingConfig, socialDistancingRulesetKey, null);
         }
 
-        public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig, string socialDistancingRulesetKey, Dictionary<string, CategoryKey> objectCategories)
+        public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig, string socialDistancingRulesetKey, Dictionary<string, object> objectCategories)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("chartKey", chartKey);
@@ -61,7 +61,7 @@ namespace SeatsioDotNet.Events
 
             if (objectCategories != null)
             {
-                requestBody.Add("objectCategories", objectCategories.ToDictionary(i => i.Key, i => i.Value.ToJson()));
+                requestBody.Add("objectCategories", objectCategories);
             }
 
             var restRequest = new RestRequest("/events", Method.POST).AddJsonBody(requestBody);

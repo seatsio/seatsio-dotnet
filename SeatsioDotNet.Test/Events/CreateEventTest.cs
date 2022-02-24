@@ -46,8 +46,8 @@ namespace SeatsioDotNet.Test.Events
             Assert.NotNull(evnt.Key);
             Assert.Equal("CUSTOM", evnt.TableBookingConfig.Mode);
             Assert.Equal(new Dictionary<string, string> {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}}, evnt.TableBookingConfig.Tables);
-        }   
-        
+        }
+
         [Fact]
         public void TableBookingModeInheritCanBeUsed()
         {
@@ -57,8 +57,8 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.NotNull(evnt.Key);
             Assert.Equal("INHERIT", evnt.TableBookingConfig.Mode);
-        }   
-        
+        }
+
         [Fact]
         public void SocialDistancingRulesetKeyCanBepassedIn()
         {
@@ -70,8 +70,26 @@ namespace SeatsioDotNet.Test.Events
             Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
 
             var evnt = Client.Events.Create(chartKey, null, null, "ruleset1");
-            
+
             Assert.Equal("ruleset1", evnt.SocialDistancingRulesetKey);
+        }
+
+
+        [Fact]
+        public void ObjectCategoriesCanBepassedIn()
+        {
+            var chartKey = CreateTestChart();
+
+            var objectCategories = new Dictionary<string, CategoryKey>()
+            {
+                {"A-1", CategoryKey.Of(10)}
+            };
+            var evnt = Client.Events.Create(chartKey, null, null, null, objectCategories);
+            var expectedObjectCategories = new Dictionary<string, object>()
+            {
+                {"A-1", 10L}
+            };
+            Assert.Equal(expectedObjectCategories, evnt.ObjectCategories);
         }
     }
 }

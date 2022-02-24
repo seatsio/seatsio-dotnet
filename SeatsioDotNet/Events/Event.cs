@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SeatsioDotNet.Charts;
 
 namespace SeatsioDotNet.Events
 {
@@ -15,6 +16,7 @@ namespace SeatsioDotNet.Events
         public DateTimeOffset? UpdatedOn { get; set; }
         public List<Channel> Channels { get; set; }
         public string SocialDistancingRulesetKey { get; set; }
+        public Dictionary<string, object> ObjectCategories { get; set; }
         public List<string> PartialSeasonKeys { get; set; }
         public List<Event> Events { get; set; }
         public bool IsSeason { get; set; }

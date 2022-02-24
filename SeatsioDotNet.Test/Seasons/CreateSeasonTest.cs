@@ -18,6 +18,8 @@ namespace SeatsioDotNet.Test.Seasons
 
             Assert.NotNull(season.Key);
             Assert.NotEqual(0, season.Id);
+            Assert.True(season.IsTopLevelSeason);
+            Assert.Null(season.TopLevelSeasonKey);
             Assert.Empty(season.PartialSeasonKeys);
             Assert.Empty(season.Events);
             Assert.Equal(chartKey, season.ChartKey);

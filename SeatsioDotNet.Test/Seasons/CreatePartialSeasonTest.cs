@@ -14,6 +14,8 @@ namespace SeatsioDotNet.Test.Seasons
             var partialSeason = Client.Seasons.CreatePartialSeason(topLevelSeason.Key, partialSeasonKey: "aPartialSeason");
 
             Assert.Equal("aPartialSeason", partialSeason.Key);
+            Assert.True(partialSeason.IsPartialSeason);
+            Assert.Equal(topLevelSeason.Key, partialSeason.TopLevelSeasonKey);
         }
 
         [Fact]

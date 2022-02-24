@@ -13,5 +13,7 @@ namespace SeatsioDotNet.Events
         public long EventId { get; set; }
         public Dictionary<string, object> ExtraData { get; set; }
         public StatusChangeOrigin Origin { get; set; }
+        public bool IsPresentOnChart { get; set; }
+        public string NotPresentOnChartReason { get; set; }
     }
 }

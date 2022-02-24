@@ -18,7 +18,7 @@ namespace SeatsioDotNet.Test
 
             var duration = DateTimeOffset.Now.ToUnixTimeSeconds() - start.ToUnixTimeSeconds();
             Assert.True(duration > 10);
-            Assert.True(duration < 20);
+            Assert.True(duration < 30);
         }
 
         [Fact]

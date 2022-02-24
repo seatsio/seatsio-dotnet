@@ -17,6 +17,7 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.NotNull(retrievedEvent.Key);
             Assert.NotEqual(0, retrievedEvent.Id);
+            Assert.False(retrievedEvent.IsEventInSeason);
             Assert.Equal(chartKey, retrievedEvent.ChartKey);
             Assert.Equal("INHERIT", evnt.TableBookingConfig.Mode);
             Assert.True(retrievedEvent.SupportsBestAvailable);
@@ -38,6 +39,8 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.NotNull(retrievedSeason.Key);
             Assert.NotEqual(0, retrievedSeason.Id);
+            Assert.True(retrievedSeason.IsTopLevelSeason);
+            Assert.Null(retrievedSeason.TopLevelSeasonKey);
             Assert.Equal(new[] {partialSeason1.Key, partialSeason2.Key}, retrievedSeason.PartialSeasonKeys);
             Assert.Empty(retrievedSeason.Events);
             Assert.Equal(chartKey, season.ChartKey);

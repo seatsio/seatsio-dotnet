@@ -20,5 +20,9 @@ namespace SeatsioDotNet.Events
         public List<string> PartialSeasonKeys { get; set; }
         public List<Event> Events { get; set; }
         public bool IsSeason { get; set; }
+        public bool IsTopLevelSeason { get; set; }
+        public bool IsPartialSeason { get; set; }
+        public bool IsEventInSeason { get; set; }
+        public string TopLevelSeasonKey { get; set; }
     }
 }

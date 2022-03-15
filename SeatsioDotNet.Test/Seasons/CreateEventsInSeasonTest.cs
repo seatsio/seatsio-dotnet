@@ -11,11 +11,11 @@ namespace SeatsioDotNet.Test.Seasons
             var chartKey = CreateTestChart();
             var season = Client.Seasons.Create(chartKey);
 
-            var updatedSeason = Client.Seasons.CreateEvents(season.Key, eventKeys: new[] {"event1", "event2"});
+            var events = Client.Seasons.CreateEvents(season.Key, eventKeys: new[] {"event1", "event2"});
 
-            Assert.Equal(new[] {"event2", "event1"}, updatedSeason.Events.Select(e => e.Key));
-            Assert.True(updatedSeason.Events[0].IsEventInSeason);
-            Assert.Equal(season.Key, updatedSeason.Events[0].TopLevelSeasonKey);
+            Assert.Equal(new[] {"event2", "event1"}, events.Select(e => e.Key));
+            Assert.True(events[0].IsEventInSeason);
+            Assert.Equal(season.Key, events[0].TopLevelSeasonKey);
         }
 
         [Fact]
@@ -24,9 +24,9 @@ namespace SeatsioDotNet.Test.Seasons
             var chartKey = CreateTestChart();
             var season = Client.Seasons.Create(chartKey);
 
-            var updatedSeason = Client.Seasons.CreateEvents(season.Key, numberOfEvents: 2);
+            var events = Client.Seasons.CreateEvents(season.Key, numberOfEvents: 2);
 
-            Assert.Equal(2, updatedSeason.Events.Count);
+            Assert.Equal(2, events.Length);
         }
     }
 }

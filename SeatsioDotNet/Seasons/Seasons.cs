@@ -96,7 +96,7 @@ namespace SeatsioDotNet.Seasons
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }
 
-        public Event CreateEvents(string key, string[] eventKeys = null, int? numberOfEvents = null)
+        public Event[] CreateEvents(string key, string[] eventKeys = null, int? numberOfEvents = null)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
 
@@ -113,7 +113,7 @@ namespace SeatsioDotNet.Seasons
             var restRequest = new RestRequest("/seasons/{key}/actions/create-events", Method.POST)
                 .AddUrlSegment("key", key)
                 .AddJsonBody(requestBody);
-            return AssertOk(_restClient.Execute<Event>(restRequest));
+            return AssertOk(_restClient.Execute<MultipleEvents>(restRequest)).events.ToArray();
         }
     }
 }

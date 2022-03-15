@@ -24,6 +24,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Null(retrievedEvent.ForSaleConfig);
             CustomAssert.CloseTo(DateTimeOffset.Now, retrievedEvent.CreatedOn.Value);
             Assert.Null(retrievedEvent.UpdatedOn);
+            Assert.Equal(3, retrievedEvent.Categories.Count);
         }
 
         [Fact]

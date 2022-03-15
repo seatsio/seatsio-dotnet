@@ -72,9 +72,10 @@ namespace SeatsioDotNet.Test.ChartReports
         {
             var chartKey = CreateTestChart();
             var report = Client.ChartReports.ByCategoryKey(chartKey);
-            Assert.Equal(3, report.Count);
+            Assert.Equal(4, report.Count);
             Assert.Equal(17, report["9"].Count());
             Assert.Equal(17, report["10"].Count());
+            Assert.Empty(report["string11"]);
             Assert.Empty(report["NO_CATEGORY"]);
         }
 
@@ -83,9 +84,10 @@ namespace SeatsioDotNet.Test.ChartReports
         {
             var chartKey = CreateTestChart();
             var report = Client.ChartReports.ByCategoryLabel(chartKey);
-            Assert.Equal(3, report.Count);
+            Assert.Equal(4, report.Count);
             Assert.Equal(17, report["Cat1"].Count());
             Assert.Equal(17, report["Cat2"].Count());
+            Assert.Empty(report["Cat3"]);
             Assert.Empty(report["NO_CATEGORY"]);
         }  
         

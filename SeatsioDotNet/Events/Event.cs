@@ -17,6 +17,7 @@ namespace SeatsioDotNet.Events
         public List<Channel> Channels { get; set; }
         public string SocialDistancingRulesetKey { get; set; }
         public Dictionary<string, object> ObjectCategories { get; set; }
+        public List<Category> Categories { get; set; }
         public List<string> PartialSeasonKeys { get; set; }
         public List<Event> Events { get; set; }
         public bool IsSeason { get; set; }

@@ -62,6 +62,22 @@ namespace SeatsioDotNet.Charts
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
+        
+        public void AddCategory(string chartKey, Category category)
+        {
+            var restRequest = new RestRequest("/charts/{chartKey}/categories", Method.POST)
+                .AddUrlSegment("chartKey", chartKey)
+                .AddJsonBody(category.AsDictionary());
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }
+
+        public void RemoveCategory(string chartKey, object categoryKey)
+        {
+            var restRequest = new RestRequest("/charts/{chartKey}/categories/{categoryKey}", Method.DELETE)
+                .AddUrlSegment("chartKey", chartKey)
+                .AddUrlSegment("categoryKey", categoryKey);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }
 
         public Chart Copy(string chartKey)
         {

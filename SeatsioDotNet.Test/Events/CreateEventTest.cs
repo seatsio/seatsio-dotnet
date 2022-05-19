@@ -23,6 +23,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Null(evnt.ForSaleConfig);
             CustomAssert.CloseTo(DateTimeOffset.Now, evnt.CreatedOn.Value);
             Assert.Null(evnt.UpdatedOn);
+            Assert.Equal(TestChartCategories, evnt.Categories);
         }
 
         [Fact]

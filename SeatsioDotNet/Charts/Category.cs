@@ -13,7 +13,7 @@ namespace SeatsioDotNet.Charts
         {
         }
 
-        public Category(int key, string label, string color, bool? accessible = false)
+        public Category(long key, string label, string color, bool? accessible = false)
         {
             Key = key;
             Label = label;
@@ -46,14 +46,28 @@ namespace SeatsioDotNet.Charts
             if (Color != null)
             {
                 dictionary.Add("color", Color);
-            }  
-            
+            }
+
             if (Accessible != null)
             {
                 dictionary.Add("accessible", Accessible);
             }
 
             return dictionary;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || obj.GetType() != typeof(Category))
+            {
+                return false;
+            }
+
+            Category cat = (Category) obj;
+            return Key.Equals(cat.Key) &&
+                   Label.Equals(cat.Label) &&
+                   Color.Equals(cat.Color) &&
+                   Accessible.Equals(cat.Accessible);
         }
     }
 }

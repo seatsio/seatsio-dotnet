@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using RestSharp;
 using RestSharp.Authenticators;
+using SeatsioDotNet.Charts;
 using SeatsioDotNet.Subaccounts;
 using SeatsioDotNet.Util;
 
@@ -10,6 +12,13 @@ namespace SeatsioDotNet.Test
     public class SeatsioClientTest
     {
         protected static readonly string BaseUrl = "https://api-staging-eu.seatsio.net";
+
+        protected static readonly List<Category> TestChartCategories = new List<Category>()
+        {
+            new Category(9, "Cat1", "#87A9CD", false),
+            new Category(10, "Cat2", "#5E42ED", false),
+            new Category("string11", "Cat3", "#5E42BB", false)
+        };
 
         protected readonly User User;
         protected readonly Subaccount Subaccount;

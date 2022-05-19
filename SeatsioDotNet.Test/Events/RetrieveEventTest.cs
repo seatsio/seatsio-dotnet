@@ -1,6 +1,4 @@
 ﻿using System;
-using SeatsioDotNet.Events;
-using SeatsioDotNet.Seasons;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events
@@ -24,7 +22,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Null(retrievedEvent.ForSaleConfig);
             CustomAssert.CloseTo(DateTimeOffset.Now, retrievedEvent.CreatedOn.Value);
             Assert.Null(retrievedEvent.UpdatedOn);
-            Assert.Equal(3, retrievedEvent.Categories.Count);
+            Assert.Equal(TestChartCategories, retrievedEvent.Categories);
         }
 
         [Fact]
@@ -50,6 +48,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Null(season.ForSaleConfig);
             CustomAssert.CloseTo(DateTimeOffset.Now, season.CreatedOn.Value);
             Assert.Null(season.UpdatedOn);
+            Assert.Equal(TestChartCategories, season.Categories);
         }
     }
 }

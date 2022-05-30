@@ -14,4 +14,4 @@ jobs:
         with:
           dotnet-version: 6.x
       - run: dotnet pack --configuration Release SeatsioDotNet/SeatsioDotNet.csproj -o SeatsioDotNet
-      - run: dotnet nuget push --source SeatsioDotNet --api-key ${{secrets.NUGET_API_KEY}}
+      - run: dotnet nuget push SeatsioDotNet/*.nupkg --api-key ${{secrets.NUGET_API_KEY}}

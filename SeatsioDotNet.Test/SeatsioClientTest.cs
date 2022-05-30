@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using RestSharp;
 using RestSharp.Authenticators;
 using SeatsioDotNet.Charts;
+using SeatsioDotNet.Events;
 using SeatsioDotNet.Subaccounts;
 using SeatsioDotNet.Util;
 
@@ -84,6 +87,31 @@ namespace SeatsioDotNet.Test
         protected SeatsioClient CreateSeatsioClient(string secretKey, string workspaceKey)
         {
             return new SeatsioClient(secretKey, workspaceKey, BaseUrl);
+        }
+
+        protected void WaitForStatusChanges(SeatsioClient client, Event evnt)
+        {
+            var start = DateTimeOffset.Now;
+            while (true)
+            {
+                var statusChanges = client.Events.StatusChanges(evnt.Key).All();
+                if (statusChanges.ToList().Count == 0)
+                {
+                    var duration = DateTimeOffset.Now.ToUnixTimeSeconds() - start.ToUnixTimeSeconds();
+                    if (duration > 10)
+                    {
+                        throw new Exception("Event has no status changes: " + evnt.Key);
+                    }
+                    else
+                    {
+                        Thread.Sleep(1000);
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 name: 'Release'
 
 on:
+  workflow_dispatch
   release:
     types: [created]
     
@@ -13,4 +14,4 @@ jobs:
         with:
           dotnet-version: 6.x
       - run: dotnet pack SeatsioDotNet/SeatsioDotNet.csproj
-      - run: dotnet nuget push SeatsioDotNet --api-key ${{secrets.NUGET_API_KEY}}
+      - run: dotnet nuget push --source SeatsioDotNet --api-key ${{secrets.NUGET_API_KEY}}

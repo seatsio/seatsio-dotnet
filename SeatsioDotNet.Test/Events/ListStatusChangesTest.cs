@@ -20,7 +20,7 @@ namespace SeatsioDotNet.Test.Events
                 new StatusChangeRequest(evnt.Key, new[] {"A-2"}, "s2"),
                 new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "s3"),
             });
-            WaitForStatusChanges(Client, evnt);
+            WaitForStatusChanges(Client, evnt, 3);
 
             var statusChanges = Client.Events.StatusChanges(evnt.Key).All();
 
@@ -33,8 +33,9 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
             var extraData = new Dictionary<string, object> {{"foo", "bar"}};
-            Client.Events.ChangeObjectStatus(evnt.Key, new[] {new ObjectProperties("A-1", extraData)}, "s1", null, "order1");
-            WaitForStatusChanges(Client, evnt);
+            Client.Events.ChangeObjectStatus(evnt.Key, new[] {new ObjectProperties("A-1", extraData)}, "s1", null,
+                "order1");
+            WaitForStatusChanges(Client, evnt, 1);
 
             var statusChanges = Client.Events.StatusChanges(evnt.Key).All();
             var statusChange = statusChanges.First();
@@ -59,7 +60,7 @@ namespace SeatsioDotNet.Test.Events
             var evnt = Client.Events.Create(chartKey, null, TableBookingConfig.AllByTable());
             Client.Events.Book(evnt.Key, new[] {"T1"});
             Client.Events.Update(evnt.Key, null, null, TableBookingConfig.AllBySeat());
-            WaitForStatusChanges(Client, evnt);
+            WaitForStatusChanges(Client, evnt, 1);
 
             var statusChanges = Client.Events.StatusChanges(evnt.Key).All();
             var statusChange = statusChanges.First();
@@ -80,7 +81,7 @@ namespace SeatsioDotNet.Test.Events
                 new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
                 new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
             });
-            WaitForStatusChanges(Client, evnt);
+            WaitForStatusChanges(Client, evnt, 4);
 
             var statusChanges = Client.Events.StatusChanges(evnt.Key, filter: "A-").All();
 
@@ -99,7 +100,7 @@ namespace SeatsioDotNet.Test.Events
                 new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
                 new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
             });
-            WaitForStatusChanges(Client, evnt);
+            WaitForStatusChanges(Client, evnt, 4);
 
             var statusChanges = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel").All();
 
@@ -118,7 +119,7 @@ namespace SeatsioDotNet.Test.Events
                 new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
                 new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
             });
-            WaitForStatusChanges(Client, evnt);
+            WaitForStatusChanges(Client, evnt, 4);
 
             var statusChangeLister = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel");
             var statusChangeA3 = statusChangeLister.All().ToList()[2];
@@ -139,7 +140,7 @@ namespace SeatsioDotNet.Test.Events
                 new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
                 new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
             });
-            WaitForStatusChanges(Client, evnt);
+            WaitForStatusChanges(Client, evnt, 4);
 
             var statusChangeLister = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel");
             var statusChangeA1 = statusChangeLister.All().ToList()[0];
@@ -160,9 +161,10 @@ namespace SeatsioDotNet.Test.Events
                 new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
                 new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
             });
-            WaitForStatusChanges(Client, evnt);
+            WaitForStatusChanges(Client, evnt, 4);
 
-            var statusChanges = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel", sortDirection: "DESC").All();
+            var statusChanges = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel", sortDirection: "DESC")
+                .All();
 
             Assert.Equal(new[] {"B-1", "A-3", "A-2", "A-1"}, statusChanges.Select(s => s.ObjectLabel));
         }

@@ -89,13 +89,13 @@ namespace SeatsioDotNet.Test
             return new SeatsioClient(secretKey, workspaceKey, BaseUrl);
         }
 
-        protected void WaitForStatusChanges(SeatsioClient client, Event evnt)
+        protected void WaitForStatusChanges(SeatsioClient client, Event evnt, int numStatusChanges)
         {
             var start = DateTimeOffset.Now;
             while (true)
             {
                 var statusChanges = client.Events.StatusChanges(evnt.Key).All();
-                if (statusChanges.ToList().Count == 0)
+                if (statusChanges.ToList().Count != numStatusChanges)
                 {
                     var duration = DateTimeOffset.Now.ToUnixTimeSeconds() - start.ToUnixTimeSeconds();
                     if (duration > 10)

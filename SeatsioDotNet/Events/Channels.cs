@@ -100,5 +100,18 @@ namespace SeatsioDotNet.Events
                 .AddJsonBody(body);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
+
+        public void Update(string eventKey, string channelKey, string channelName, string color, string[] objects)
+        {
+            var body = new Dictionary<string, object>();
+            if (channelName != null) body.Add("name", channelName);
+            if (color != null) body.Add("color", color);
+            if (objects != null) body.Add("objects", objects);
+            var restRequest = new RestRequest($"/events/{{eventKey}}/channels/{channelKey}", Method.POST)
+                .AddUrlSegment("eventKey", eventKey)
+                .AddUrlSegment("channelKey", channelKey)
+                .AddJsonBody(body);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }
     }
 }

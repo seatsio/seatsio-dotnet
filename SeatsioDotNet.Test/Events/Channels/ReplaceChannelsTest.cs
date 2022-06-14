@@ -6,7 +6,7 @@ using Xunit;
 
 namespace SeatsioDotNet.Test.Events
 {
-    public class SetChannelsTest : SeatsioClientTest
+    public class ReplaceChannelsTest : SeatsioClientTest
     {
 
         [Fact]

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace SeatsioDotNet.Test.Events
 {
-    public class UpdateChannelsTest : SeatsioClientTest
+    public class SetChannelsTest : SeatsioClientTest
     {
 
         [Fact]
@@ -20,7 +20,7 @@ namespace SeatsioDotNet.Test.Events
                 { "channelKey2", new Channel("channel 2", "#00FFFF", 2) }
             };
 
-            Client.Events.UpdateChannels(event1.Key, channels);
+            Client.Events.Channels.Replace(event1.Key, channels);
 
             var retrievedEvent = Client.Events.Retrieve(event1.Key);
             Assert.Equal(2, retrievedEvent.Channels.Count);

@@ -76,8 +76,8 @@ namespace SeatsioDotNet.Test.Events
             {
                 { "channelKey1", new Channel("channel 1", "#FFFF00", 1) }
             };
-            Client.Events.UpdateChannels(evnt.Key, channels);
-            Client.Events.AssignObjectsToChannel(evnt.Key, new
+            Client.Events.Channels.Replace(evnt.Key, channels);
+            Client.Events.Channels.SetObjects(evnt.Key, new
             {
                 channelKey1 = new [] {"A-1", "A-2"}
             });
@@ -98,8 +98,8 @@ namespace SeatsioDotNet.Test.Events
             {
                 { "channelKey1", new Channel("channel 1", "#FFFF00", 1) }
             };
-            Client.Events.UpdateChannels(evnt.Key, channels);
-            Client.Events.AssignObjectsToChannel(evnt.Key, new
+            Client.Events.Channels.Replace(evnt.Key, channels);
+            Client.Events.Channels.SetObjects(evnt.Key, new
             {
                 channelKey1 = new [] {"A-1", "A-2"}
             });

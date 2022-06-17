@@ -45,5 +45,6 @@ namespace SeatsioDotNet.EventReports
         public string Channel { get; set; }
         public float? DistanceToFocalPoint { get; set; }
         public Dictionary<string, Dictionary<string, int>> Holds { get; set; }
+        public int? NumSeats { get; set; }
     }
 }

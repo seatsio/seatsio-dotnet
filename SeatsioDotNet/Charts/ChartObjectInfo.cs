@@ -17,5 +17,6 @@ namespace SeatsioDotNet.ChartReports
         public string LeftNeighbour { get; set; }
         public string RightNeighbour { get; set; }
         public float? DistanceToFocalPoint { get; set; }
+        public int? NumSeats { get; set; }
     }
 }

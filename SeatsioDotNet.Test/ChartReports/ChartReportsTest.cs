@@ -41,6 +41,18 @@ namespace SeatsioDotNet.Test.ChartReports
             Assert.Equal(100, reportItem.Capacity);
             Assert.Equal("generalAdmission", reportItem.ObjectType);
             Assert.False(reportItem.BookAsAWhole);
+        }     
+        
+        [Fact]
+        public void ReportItemPropertiesForTable()
+        {
+            var chartKey = CreateTestChartWithTables();
+
+            var report = Client.ChartReports.ByLabel(chartKey, "true");
+
+            var reportItem = report["T1"].First();
+            Assert.Equal(6, reportItem.NumSeats);
+            Assert.False(reportItem.BookAsAWhole);
         }
 
         [Fact]

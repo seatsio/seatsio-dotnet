@@ -94,6 +94,19 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Null(reportItem.HasRestrictedView);
             Assert.Null(reportItem.DisplayedObjectType);
             Assert.False(reportItem.BookAsAWhole);
+        }   
+        
+        [Fact]
+        public void ReportItemPropertiesForTable()
+        {
+            var chartKey = CreateTestChartWithTables();
+            var evnt = Client.Events.Create(chartKey, null, TableBookingConfig.AllByTable());
+
+            var report = Client.EventReports.ByLabel(evnt.Key);
+
+            var reportItem = report["T1"].First();
+            Assert.Equal(6, reportItem.NumSeats);
+            Assert.False(reportItem.BookAsAWhole);
         }
 
         [Fact]

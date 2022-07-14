@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 using RestSharp;
 using RestSharp.Authenticators;
-using RestSharp.Deserializers;
-using SeatsioDotNet.Events;
-using SeatsioDotNet.Seasons;
+using RestSharp.Serializers.Json;
 
 namespace SeatsioDotNet
 {
@@ -53,12 +53,6 @@ namespace SeatsioDotNet
         {
         }
 
-        public SeatsioClient SetMaxRetries(int maxRetries)
-        {
-            RestClient.SetMaxRetries(maxRetries);
-            return this;
-        }
-
         private static SeatsioRestClient CreateRestClient(string secretKey, string workspaceKey, string baseUrl)
         {
             var client = new SeatsioRestClient(baseUrl);
@@ -75,30 +69,62 @@ namespace SeatsioDotNet
 
 public class SeatsioRestClient : RestClient
 {
-    private int MaxRetries = 5;
-
-    public SeatsioRestClient(string baseUrl) : base(baseUrl)
+    public SeatsioRestClient(string baseUrl, int maxRetries = 5) : base(
+        new HttpClient(new SeatsioMessageHandler(maxRetries)), new RestClientOptions {BaseUrl = new Uri(baseUrl)})
     {
+        var options = SeatsioJsonSerializerOptions();
+        UseSerializer(() => new SystemTextJsonSerializer(options));
     }
 
-    public override IRestResponse<T> Execute<T>(IRestRequest request)
+    public static JsonSerializerOptions SeatsioJsonSerializerOptions()
+    {
+        var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+        options.Converters.Add(new ObjectToInferredTypesConverter());
+        return options;
+    }
+}
+
+public class SeatsioMessageHandler : HttpClientHandler
+{
+    private int MaxRetries;
+
+    public SeatsioMessageHandler(int maxRetries)
+    {
+        MaxRetries = maxRetries;
+    }
+
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+        CancellationToken cancellationToken)
     {
         var retryCount = 0;
-        var response = base.Execute<T>(request);
+        var response = await base.SendAsync(request, cancellationToken);
         while (retryCount < MaxRetries && (int) response.StatusCode == 429)
         {
             var waitTime = (int) Math.Pow(2, retryCount + 2) * 100;
             retryCount++;
             Thread.Sleep(waitTime);
-            response = base.Execute<T>(request);
+            response = await base.SendAsync(request, cancellationToken);
         }
 
         return response;
     }
+}
 
-    public SeatsioRestClient SetMaxRetries(int maxRetries)
+public class ObjectToInferredTypesConverter : JsonConverter<object>
+{
+    public override object Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.TokenType switch
     {
-        MaxRetries = maxRetries;
-        return this;
-    }
+        JsonTokenType.True => true,
+        JsonTokenType.False => false,
+        JsonTokenType.Number when reader.TryGetInt64(out long l) => l,
+        JsonTokenType.Number => reader.GetDouble(),
+        JsonTokenType.String => reader.GetString()!,
+        _ => JsonDocument.ParseValue(ref reader).RootElement.Clone()
+    };
+
+    public override void Write(
+        Utf8JsonWriter writer,
+        object objectToWrite,
+        JsonSerializerOptions options) =>
+        JsonSerializer.Serialize(writer, objectToWrite, objectToWrite.GetType(), options);
 }

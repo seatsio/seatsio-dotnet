@@ -12,7 +12,7 @@ namespace SeatsioDotNet.Test
             var start = DateTimeOffset.Now;
             var client = new SeatsioRestClient("https://httpbin.org");
 
-            var response = client.Execute<object>(new RestRequest("/status/429", Method.GET));
+            var response = client.Execute<object>(new RestRequest("/status/429", Method.Get));
 
             Assert.Equal(429, (int) response.StatusCode);
 
@@ -27,7 +27,7 @@ namespace SeatsioDotNet.Test
             var start = DateTimeOffset.Now;
             var client = new SeatsioRestClient("https://httpbin.org");
 
-            var response = client.Execute<object>(new RestRequest("/status/400", Method.GET));
+            var response = client.Execute<object>(new RestRequest("/status/400", Method.Get));
 
             Assert.Equal(400, (int) response.StatusCode);
 
@@ -39,9 +39,9 @@ namespace SeatsioDotNet.Test
         public void AbortsDirectlyIfServerReturnsError429ButMaxRetries0()
         {
             var start = DateTimeOffset.Now;
-            var client = new SeatsioRestClient("https://httpbin.org").SetMaxRetries(0);
+            var client = new SeatsioRestClient("https://httpbin.org", 0);
 
-            var response = client.Execute<object>(new RestRequest("/status/429", Method.GET));
+            var response = client.Execute<object>(new RestRequest("/status/429", Method.Get));
 
             Assert.Equal(429, (int) response.StatusCode);
 
@@ -55,7 +55,7 @@ namespace SeatsioDotNet.Test
             var client = new SeatsioRestClient("https://httpbin.org");
             for (var i = 0; i < 20; ++i)
             {
-                var response = client.Execute<object>(new RestRequest("/status/429:0.25,204:0.75", Method.GET));
+                var response = client.Execute<object>(new RestRequest("/status/429:0.25,204:0.75", Method.Get));
                 Assert.Equal(204, (int) response.StatusCode);
             }
         }

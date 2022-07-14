@@ -28,14 +28,14 @@ namespace SeatsioDotNet.Subaccounts
                 requestBody.Add("name", name);
             }
 
-            var restRequest = new RestRequest("/subaccounts", Method.POST)
+            var restRequest = new RestRequest("/subaccounts", Method.Post)
                 .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Subaccount>(restRequest));
         }
 
         public Subaccount Retrieve(long id)
         {
-            var restRequest = new RestRequest("/subaccounts/{id}", Method.GET)
+            var restRequest = new RestRequest("/subaccounts/{id}", Method.Get)
                 .AddUrlSegment("id", id);
             return AssertOk(_restClient.Execute<Subaccount>(restRequest));
         }
@@ -48,7 +48,7 @@ namespace SeatsioDotNet.Subaccounts
                 requestBody.Add("name", name);
             }
 
-            var restRequest = new RestRequest("/subaccounts/{id}", Method.POST)
+            var restRequest = new RestRequest("/subaccounts/{id}", Method.Post)
                 .AddUrlSegment("id", id)
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
@@ -56,41 +56,41 @@ namespace SeatsioDotNet.Subaccounts
 
         public Subaccount Create()
         {
-            var restRequest = new RestRequest("/subaccounts", Method.POST);
+            var restRequest = new RestRequest("/subaccounts", Method.Post);
             return AssertOk(_restClient.Execute<Subaccount>(restRequest));
         }
 
         public void Activate(long id)
         {
-            var restRequest = new RestRequest("/subaccounts/{id}/actions/activate", Method.POST)
+            var restRequest = new RestRequest("/subaccounts/{id}/actions/activate", Method.Post)
                 .AddUrlSegment("id", id);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
         public void Deactivate(long id)
         {
-            var restRequest = new RestRequest("/subaccounts/{id}/actions/deactivate", Method.POST)
+            var restRequest = new RestRequest("/subaccounts/{id}/actions/deactivate", Method.Post)
                 .AddUrlSegment("id", id);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
         public void RegenerateSecretKey(long id)
         {
-            var restRequest = new RestRequest("/subaccounts/{id}/secret-key/actions/regenerate", Method.POST)
+            var restRequest = new RestRequest("/subaccounts/{id}/secret-key/actions/regenerate", Method.Post)
                 .AddUrlSegment("id", id);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
         public void RegenerateDesignerKey(long id)
         {
-            var restRequest = new RestRequest("/subaccounts/{id}/designer-key/actions/regenerate", Method.POST)
+            var restRequest = new RestRequest("/subaccounts/{id}/designer-key/actions/regenerate", Method.Post)
                 .AddUrlSegment("id", id);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
         public Chart CopyChartToParent(long id, string chartKey)
         {
-            var restRequest = new RestRequest("/subaccounts/{id}/charts/{chartKey}/actions/copy-to/parent", Method.POST)
+            var restRequest = new RestRequest("/subaccounts/{id}/charts/{chartKey}/actions/copy-to/parent", Method.Post)
                 .AddUrlSegment("id", id)
                 .AddUrlSegment("chartKey", chartKey);
             return AssertOk(_restClient.Execute<Chart>(restRequest));
@@ -99,7 +99,7 @@ namespace SeatsioDotNet.Subaccounts
         public Chart CopyChartToSubaccount(long fromId, long toId, string chartKey)
         {
             var restRequest =
-                new RestRequest("/subaccounts/{fromId}/charts/{chartKey}/actions/copy-to/{toId}", Method.POST)
+                new RestRequest("/subaccounts/{fromId}/charts/{chartKey}/actions/copy-to/{toId}", Method.Post)
                     .AddUrlSegment("fromId", fromId)
                     .AddUrlSegment("chartKey", chartKey)
                     .AddUrlSegment("toId", toId.ToString());

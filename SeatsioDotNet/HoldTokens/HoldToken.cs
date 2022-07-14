@@ -1,11 +1,11 @@
 ﻿using System;
-using RestSharp.Deserializers;
+using System.Text.Json.Serialization;
 
 namespace SeatsioDotNet.HoldTokens
 {
     public class HoldToken
     {
-        [DeserializeAs(Name = "holdToken")]
+        [JsonPropertyName("holdToken")]
         public string Token { get; set; }
         public DateTimeOffset ExpiresAt { get; set; }
         public int ExpiresInSeconds { get; set; }

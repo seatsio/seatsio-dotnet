@@ -4,7 +4,7 @@ namespace SeatsioDotNet.Util
 {
     public class RestUtil
     {
-        public static T AssertOk<T>(IRestResponse<T> response)
+        public static T AssertOk<T>(RestResponse<T> response)
         {
             if ((int) response.StatusCode < 200 || (int) response.StatusCode >= 300)
             {

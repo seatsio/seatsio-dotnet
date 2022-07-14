@@ -60,7 +60,7 @@ namespace SeatsioDotNet.ChartReports
 
         private Dictionary<string, IEnumerable<ChartObjectInfo>> FetchReport(string reportType, string chartKey, string bookWholeTablesMode)
         {
-            var restRequest = new RestRequest("/reports/charts/{key}/{reportType}", Method.GET)
+            var restRequest = new RestRequest("/reports/charts/{key}/{reportType}", Method.Get)
                 .AddUrlSegment("key", chartKey)
                 .AddUrlSegment("reportType", reportType);
             
@@ -74,7 +74,7 @@ namespace SeatsioDotNet.ChartReports
         
         private Dictionary<string, ChartReportSummaryItem> FetchSummaryReport(string reportType, string chartKey, string bookWholeTablesMode)
         {
-            var restRequest = new RestRequest("/reports/charts/{key}/{reportType}/summary", Method.GET)
+            var restRequest = new RestRequest("/reports/charts/{key}/{reportType}/summary", Method.Get)
                 .AddUrlSegment("key", chartKey)
                 .AddUrlSegment("reportType", reportType);
             

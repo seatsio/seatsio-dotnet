@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json;
 using RestSharp;
 using SeatsioDotNet.EventReports;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
-using SeatsioDotNet.Charts;
-using System;
 
 namespace SeatsioDotNet.Events
 {
@@ -68,7 +66,7 @@ namespace SeatsioDotNet.Events
                 requestBody.Add("objectCategories", objectCategories);
             }
 
-            var restRequest = new RestRequest("/events", Method.POST).AddJsonBody(requestBody);
+            var restRequest = new RestRequest("/events", Method.Post).AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }
 
@@ -99,7 +97,7 @@ namespace SeatsioDotNet.Events
             }
 
             requestBody.Add("events", events.ToArray());
-            var restRequest = new RestRequest("/events/actions/create-multiple", Method.POST).AddJsonBody(requestBody);
+            var restRequest = new RestRequest("/events/actions/create-multiple", Method.Post).AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<MultipleEvents>(restRequest)).events.ToArray();
         }
 
@@ -149,7 +147,7 @@ namespace SeatsioDotNet.Events
                 requestBody.Add("objectCategories", objectCategories);
             }
 
-            var restRequest = new RestRequest("/events/{key}", Method.POST)
+            var restRequest = new RestRequest("/events/{key}", Method.Post)
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
@@ -157,14 +155,14 @@ namespace SeatsioDotNet.Events
 
         public void Delete(string eventKey)
         {
-            var restRequest = new RestRequest("/events/{key}", Method.DELETE)
+            var restRequest = new RestRequest("/events/{key}", Method.Delete)
                 .AddUrlSegment("key", eventKey);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
         public Event Retrieve(string eventKey)
         {
-            var restRequest = new RestRequest("/events/{key}", Method.GET)
+            var restRequest = new RestRequest("/events/{key}", Method.Get)
                 .AddUrlSegment("key", eventKey);
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }
@@ -177,7 +175,7 @@ namespace SeatsioDotNet.Events
 
         public Dictionary<string, EventObjectInfo> RetrieveObjectInfos(string eventKey, string[] objectLabels)
         {
-            var restRequest = new RestRequest("/events/{key}/objects", Method.GET)
+            var restRequest = new RestRequest("/events/{key}/objects", Method.Get)
                 .AddUrlSegment("key", eventKey);
 
             foreach (var objectLabel in objectLabels)
@@ -331,7 +329,7 @@ namespace SeatsioDotNet.Events
         {
             var requestBody = ChangeObjectStatusRequest(events, objects, status, holdToken, orderId, keepExtraData,
                 ignoreChannels, channelKeys, ignoreSocialDistancing, allowedPreviousStatuses, rejectedPreviousStatuses);
-            var restRequest = new RestRequest("/events/groups/actions/change-object-status", Method.POST)
+            var restRequest = new RestRequest("/events/groups/actions/change-object-status", Method.Post)
                 .AddQueryParameter("expand", "objects")
                 .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<ChangeObjectStatusResult>(restRequest));
@@ -342,7 +340,7 @@ namespace SeatsioDotNet.Events
             var serializedRequests = requests.Select(r => ChangeObjectStatusRequest(r.EventKey, r.Objects, r.Status,
                 r.HoldToken, r.OrderId, r.KeepExtraData, r.IgnoreChannels, r.ChannelKeys, null,
                 r.AllowedPreviousStatuses, r.RejectedPreviousStatuses));
-            var restRequest = new RestRequest("/events/actions/change-object-status", Method.POST)
+            var restRequest = new RestRequest("/events/actions/change-object-status", Method.Post)
                 .AddQueryParameter("expand", "objects")
                 .AddJsonBody(new Dictionary<string, object> {{"statusChanges", serializedRequests}});
             return AssertOk(_restClient.Execute<ChangeObjectStatusInBatchResult>(restRequest)).Results;
@@ -459,7 +457,7 @@ namespace SeatsioDotNet.Events
                 requestBody.Add("channelKeys", channelKeys);
             }
 
-            var restRequest = new RestRequest("/events/{key}/actions/change-object-status", Method.POST)
+            var restRequest = new RestRequest("/events/{key}/actions/change-object-status", Method.Post)
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
@@ -467,7 +465,7 @@ namespace SeatsioDotNet.Events
 
         public void UpdateExtraData(string eventKey, string objectLabel, Dictionary<string, object> extraData)
         {
-            var restRequest = new RestRequest("/events/{key}/objects/{object}/actions/update-extra-data", Method.POST)
+            var restRequest = new RestRequest("/events/{key}/objects/{object}/actions/update-extra-data", Method.Post)
                 .AddUrlSegment("key", eventKey)
                 .AddUrlSegment("object", objectLabel)
                 .AddJsonBody(new {extraData});
@@ -476,9 +474,9 @@ namespace SeatsioDotNet.Events
 
         public void UpdateExtraDatas(string eventKey, Dictionary<string, Dictionary<string, object>> extraData)
         {
-            var restRequest = new RestRequest("/events/{key}/actions/update-extra-data", Method.POST)
+            var restRequest = new RestRequest("/events/{key}/actions/update-extra-data", Method.Post)
                 .AddUrlSegment("key", eventKey)
-                .AddParameter("application/json", JsonConvert.SerializeObject(new {extraData}),
+                .AddParameter("application/json", JsonSerializer.Serialize(new {extraData}),
                     ParameterType.RequestBody); // default serializer doesn't convert extraData to JSON properly
             AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
         }
@@ -486,7 +484,7 @@ namespace SeatsioDotNet.Events
         public void MarkAsForSale(string eventKey, IEnumerable<string> objects, IEnumerable<string> categories)
         {
             var requestBody = ForSaleRequest(objects, categories);
-            var restRequest = new RestRequest("/events/{key}/actions/mark-as-for-sale", Method.POST)
+            var restRequest = new RestRequest("/events/{key}/actions/mark-as-for-sale", Method.Post)
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
@@ -495,7 +493,7 @@ namespace SeatsioDotNet.Events
         public void MarkAsNotForSale(string eventKey, IEnumerable<string> objects, IEnumerable<string> categories)
         {
             var requestBody = ForSaleRequest(objects, categories);
-            var restRequest = new RestRequest("/events/{key}/actions/mark-as-not-for-sale", Method.POST)
+            var restRequest = new RestRequest("/events/{key}/actions/mark-as-not-for-sale", Method.Post)
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
@@ -503,7 +501,7 @@ namespace SeatsioDotNet.Events
 
         public void MarkEverythingAsForSale(string eventKey)
         {
-            var restRequest = new RestRequest("/events/{key}/actions/mark-everything-as-for-sale", Method.POST)
+            var restRequest = new RestRequest("/events/{key}/actions/mark-everything-as-for-sale", Method.Post)
                 .AddUrlSegment("key", eventKey);
             AssertOk(_restClient.Execute<object>(restRequest));
         }

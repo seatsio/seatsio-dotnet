@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using RestSharp.Deserializers;
+using System.Text.Json.Serialization;
 
 namespace SeatsioDotNet.Charts
 {
@@ -7,9 +7,10 @@ namespace SeatsioDotNet.Charts
     {
         public string Name { get; set; }
         public string VenueType { get; set; }
+        [JsonIgnore]
         public List<Category> Categories => _categories.List;
 
-        [DeserializeAs(Name = "categories")]
+        [JsonPropertyName("categories")]
         public Categories _categories { get; set; }
     }
 

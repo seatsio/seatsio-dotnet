@@ -1,12 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
 using RestSharp;
-using SeatsioDotNet.EventReports;
-using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
-using SeatsioDotNet.Charts;
-using System;
 
 namespace SeatsioDotNet.Events
 {
@@ -22,7 +16,7 @@ namespace SeatsioDotNet.Events
         public void Replace(string eventKey, Dictionary<string, Channel> channels)
         {
             var requestBody = UpdateChannelsRequest(channels);
-            var restRequest = new RestRequest("/events/{key}/channels/update", Method.POST)
+            var restRequest = new RestRequest("/events/{key}/channels/update", Method.Post)
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
@@ -44,7 +38,7 @@ namespace SeatsioDotNet.Events
         public void SetObjects(string eventKey, object channelsConfig)
         {
             var requestBody = AssignObjectsToChannelsRequest(channelsConfig);
-            var restRequest = new RestRequest("/events/{key}/channels/assign-objects", Method.POST)
+            var restRequest = new RestRequest("/events/{key}/channels/assign-objects", Method.Post)
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
@@ -65,7 +59,7 @@ namespace SeatsioDotNet.Events
             body.Add("color", color);
             if (index != null) body.Add("index", index);
             if (objects != null) body.Add("objects", objects);
-            var restRequest = new RestRequest("/events/{key}/channels", Method.POST)
+            var restRequest = new RestRequest("/events/{key}/channels", Method.Post)
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(body);
             AssertOk(_restClient.Execute<object>(restRequest));
@@ -73,7 +67,7 @@ namespace SeatsioDotNet.Events
 
         public void Remove(string eventKey, string channelKey)
         {
-            var restRequest = new RestRequest("/events/{eventKey}/channels/{channelKey}", Method.DELETE)
+            var restRequest = new RestRequest("/events/{eventKey}/channels/{channelKey}", Method.Delete)
                 .AddUrlSegment("eventKey", eventKey)
                 .AddUrlSegment("channelKey", channelKey);
             AssertOk(_restClient.Execute<object>(restRequest));
@@ -83,7 +77,7 @@ namespace SeatsioDotNet.Events
         {
             var body = new Dictionary<string, object>();
             body.Add("objects", objects);
-            var restRequest = new RestRequest("/events/{eventKey}/channels/{channelKey}/objects", Method.POST)
+            var restRequest = new RestRequest("/events/{eventKey}/channels/{channelKey}/objects", Method.Post)
                 .AddUrlSegment("eventKey", eventKey)
                 .AddUrlSegment("channelKey", channelKey)
                 .AddJsonBody(body);
@@ -94,7 +88,7 @@ namespace SeatsioDotNet.Events
         {
             var body = new Dictionary<string, object>();
             body.Add("objects", objects);
-            var restRequest = new RestRequest("/events/{eventKey}/channels/{channelKey}/objects", Method.DELETE)
+            var restRequest = new RestRequest("/events/{eventKey}/channels/{channelKey}/objects", Method.Delete)
                 .AddUrlSegment("eventKey", eventKey)
                 .AddUrlSegment("channelKey", channelKey)
                 .AddJsonBody(body);
@@ -107,7 +101,7 @@ namespace SeatsioDotNet.Events
             if (channelName != null) body.Add("name", channelName);
             if (color != null) body.Add("color", color);
             if (objects != null) body.Add("objects", objects);
-            var restRequest = new RestRequest($"/events/{{eventKey}}/channels/{channelKey}", Method.POST)
+            var restRequest = new RestRequest($"/events/{{eventKey}}/channels/{channelKey}", Method.Post)
                 .AddUrlSegment("eventKey", eventKey)
                 .AddUrlSegment("channelKey", channelKey)
                 .AddJsonBody(body);

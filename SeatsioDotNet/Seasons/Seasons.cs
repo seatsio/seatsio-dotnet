@@ -47,7 +47,7 @@ namespace SeatsioDotNet.Seasons
                 requestBody.Add("socialDistancingRulesetKey", socialDistancingRulesetKey);
             }
 
-            var restRequest = new RestRequest("/seasons", Method.POST).AddJsonBody(requestBody);
+            var restRequest = new RestRequest("/seasons", Method.Post).AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }
 
@@ -65,7 +65,7 @@ namespace SeatsioDotNet.Seasons
                 requestBody.Add("eventKeys", eventKeys);
             }
 
-            var restRequest = new RestRequest("/seasons/{topLevelSeasonKey}/partial-seasons", Method.POST)
+            var restRequest = new RestRequest("/seasons/{topLevelSeasonKey}/partial-seasons", Method.Post)
                 .AddUrlSegment("topLevelSeasonKey", topLevelSeasonKey)
                 .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Event>(restRequest));
@@ -80,7 +80,7 @@ namespace SeatsioDotNet.Seasons
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("eventKeys", eventKeys);
-            var restRequest = new RestRequest("/seasons/{topLevelSeasonKey}/partial-seasons/{partialSeasonKey}/actions/add-events", Method.POST)
+            var restRequest = new RestRequest("/seasons/{topLevelSeasonKey}/partial-seasons/{partialSeasonKey}/actions/add-events", Method.Post)
                 .AddUrlSegment("topLevelSeasonKey", topLevelSeasonKey)
                 .AddUrlSegment("partialSeasonKey", partialSeasonKey)
                 .AddJsonBody(requestBody);
@@ -89,7 +89,7 @@ namespace SeatsioDotNet.Seasons
 
         public Event RemoveEventFromPartialSeason(string topLevelSeasonKey, string partialSeasonKey, string eventKey)
         {
-            var restRequest = new RestRequest("/seasons/{topLevelSeasonKey}/partial-seasons/{partialSeasonKey}/events/{eventKey}", Method.DELETE)
+            var restRequest = new RestRequest("/seasons/{topLevelSeasonKey}/partial-seasons/{partialSeasonKey}/events/{eventKey}", Method.Delete)
                     .AddUrlSegment("topLevelSeasonKey", topLevelSeasonKey)
                     .AddUrlSegment("partialSeasonKey", partialSeasonKey)
                     .AddUrlSegment("eventKey", eventKey);
@@ -110,7 +110,7 @@ namespace SeatsioDotNet.Seasons
                 requestBody.Add("eventKeys", eventKeys);
             }
             
-            var restRequest = new RestRequest("/seasons/{key}/actions/create-events", Method.POST)
+            var restRequest = new RestRequest("/seasons/{key}/actions/create-events", Method.Post)
                 .AddUrlSegment("key", key)
                 .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<MultipleEvents>(restRequest)).events.ToArray();

@@ -84,7 +84,8 @@ namespace SeatsioDotNet.Test.Events
 
             Client.Events.Book(evnt.Key, new[] {"A-1"}, null, null, true);
 
-            Assert.Equal(extraData, Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
+            var loadedExtraData = Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData;
+            Assert.Equal(extraData, loadedExtraData);
         }
 
        [Fact]

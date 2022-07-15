@@ -60,7 +60,7 @@ namespace SeatsioDotNet.Test.Subaccounts
 
             Assert.Equal(new[] {subaccount3.Id, subaccount2.Id, subaccount1.Id}, page.Items.Select(s => s.Id));
             Assert.Null(page.NextPageStartsAfter);
-            Assert.Equal(subaccount3.Id, page.PreviousPageEndsBefore.Value);
+            Assert.Equal(subaccount3.Id, page.PreviousPageEndsBefore);
         }
         
         [Fact]

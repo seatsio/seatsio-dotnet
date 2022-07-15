@@ -38,7 +38,7 @@ namespace SeatsioDotNet.Test
         private TestCompany CreateTestCompany()
         {
             var restClient = new RestClient(BaseUrl);
-            var request = new RestRequest("/system/public/users/actions/create-test-company", Method.POST);
+            var request = new RestRequest("/system/public/users/actions/create-test-company", Method.Post);
             return RestUtil.AssertOk(restClient.Execute<TestCompany>(request));
         }
 
@@ -72,7 +72,7 @@ namespace SeatsioDotNet.Test
             var restClient = new RestClient(BaseUrl);
             restClient.Authenticator = new HttpBasicAuthenticator(User.SecretKey, null);
             var chartKey = Guid.NewGuid().ToString();
-            var request = new RestRequest("/system/public/charts/{chartKey}", Method.POST)
+            var request = new RestRequest("/system/public/charts/{chartKey}", Method.Post)
                 .AddUrlSegment("chartKey", chartKey)
                 .AddParameter("application/json", json, ParameterType.RequestBody);
             RestUtil.AssertOk(restClient.Execute<object>(request));

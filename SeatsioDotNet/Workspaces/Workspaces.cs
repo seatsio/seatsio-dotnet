@@ -35,13 +35,13 @@ namespace SeatsioDotNet.Workspaces
                 requestBody.Add("isTest", isTest);
             }
 
-            var restRequest = new RestRequest("/workspaces", Method.POST).AddJsonBody(requestBody);
+            var restRequest = new RestRequest("/workspaces", Method.Post).AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Workspace>(restRequest));
         }
 
         public Workspace Retrieve(string key)
         {
-            var restRequest = new RestRequest("/workspaces/{key}", Method.GET)
+            var restRequest = new RestRequest("/workspaces/{key}", Method.Get)
                 .AddUrlSegment("key", key);
             return AssertOk(_restClient.Execute<Workspace>(restRequest));
         }
@@ -51,14 +51,14 @@ namespace SeatsioDotNet.Workspaces
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("name", name);
 
-            var restRequest = new RestRequest("/workspaces/{key}", Method.POST).AddJsonBody(requestBody)
+            var restRequest = new RestRequest("/workspaces/{key}", Method.Post).AddJsonBody(requestBody)
                 .AddUrlSegment("key", key);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
         public string RegenerateSecretKey(string key)
         {
-            var restRequest = new RestRequest("/workspaces/{key}/actions/regenerate-secret-key", Method.POST)
+            var restRequest = new RestRequest("/workspaces/{key}/actions/regenerate-secret-key", Method.Post)
                 .AddUrlSegment("key", key);
             var response = AssertOk(_restClient.Execute<Dictionary<string, string>>(restRequest));
             return response["secretKey"];
@@ -66,21 +66,21 @@ namespace SeatsioDotNet.Workspaces
         
         public void Activate(string key)
         {
-            var restRequest = new RestRequest("/workspaces/{key}/actions/activate", Method.POST)
+            var restRequest = new RestRequest("/workspaces/{key}/actions/activate", Method.Post)
                 .AddUrlSegment("key", key);
             AssertOk(_restClient.Execute<Dictionary<string, string>>(restRequest));
         }   
         
         public void Deactivate(string key)
         {
-            var restRequest = new RestRequest("/workspaces/{key}/actions/deactivate", Method.POST)
+            var restRequest = new RestRequest("/workspaces/{key}/actions/deactivate", Method.Post)
                 .AddUrlSegment("key", key);
             AssertOk(_restClient.Execute<Dictionary<string, string>>(restRequest));
         }  
         
         public void SetDefault(string key)
         {
-            var restRequest = new RestRequest("/workspaces/actions/set-default/{key}", Method.POST)
+            var restRequest = new RestRequest("/workspaces/actions/set-default/{key}", Method.Post)
                 .AddUrlSegment("key", key);
             AssertOk(_restClient.Execute<Dictionary<string, string>>(restRequest));
         }

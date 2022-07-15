@@ -2,8 +2,8 @@ namespace SeatsioDotNet
 {
     public class SeatsioApiError
     {
-        public readonly string Code;
-        public readonly string Message;
+        public string Code { get; }
+        public string Message { get; }
 
         public SeatsioApiError(string code, string message)
         {

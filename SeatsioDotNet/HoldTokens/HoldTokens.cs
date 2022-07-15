@@ -14,20 +14,20 @@ namespace SeatsioDotNet.HoldTokens
 
         public HoldToken Create()
         {
-            var restRequest = new RestRequest("/hold-tokens", Method.POST);
+            var restRequest = new RestRequest("/hold-tokens", Method.Post);
             return AssertOk(_restClient.Execute<HoldToken>(restRequest));
         }
 
         public HoldToken Create(int expiresInMinutes)
         {
-            var restRequest = new RestRequest("/hold-tokens", Method.POST)
+            var restRequest = new RestRequest("/hold-tokens", Method.Post)
                 .AddJsonBody(new {expiresInMinutes});
             return AssertOk(_restClient.Execute<HoldToken>(restRequest));
         }
 
         public HoldToken ExpiresInMinutes(string token, int expiresInMinutes)
         {
-            var restRequest = new RestRequest("/hold-tokens/{token}", Method.POST)
+            var restRequest = new RestRequest("/hold-tokens/{token}", Method.Post)
                 .AddUrlSegment("token", token)
                 .AddJsonBody(new {expiresInMinutes});
             return AssertOk(_restClient.Execute<HoldToken>(restRequest));
@@ -35,7 +35,7 @@ namespace SeatsioDotNet.HoldTokens
 
         public HoldToken Retrieve(string token)
         {
-            var restRequest = new RestRequest("/hold-tokens/{token}", Method.GET)
+            var restRequest = new RestRequest("/hold-tokens/{token}", Method.Get)
                 .AddUrlSegment("token", token);
             return AssertOk(_restClient.Execute<HoldToken>(restRequest));
         }

@@ -5,7 +5,7 @@ namespace SeatsioDotNet
 {
     public class RateLimitExceededException : SeatsioException
     {
-        public RateLimitExceededException(List<SeatsioApiError> errors, string requestId, IRestResponse response) :
+        public RateLimitExceededException(List<SeatsioApiError> errors, string requestId, RestResponse response) :
             base(errors, requestId, response)
         {
         }

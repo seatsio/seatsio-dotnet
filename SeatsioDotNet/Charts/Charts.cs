@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using RestSharp;
-using RestSharp.Deserializers;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
 
@@ -38,7 +38,7 @@ namespace SeatsioDotNet.Charts
                 requestBody.Add("categories", categories.Select(c => c.AsDictionary()));
             }
 
-            var restRequest = new RestRequest("/charts", Method.POST)
+            var restRequest = new RestRequest("/charts", Method.Post)
                 .AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Chart>(restRequest));
         }
@@ -57,7 +57,7 @@ namespace SeatsioDotNet.Charts
                 requestBody.Add("categories", categories.Select(c => c.AsDictionary()));
             }
 
-            var restRequest = new RestRequest("/charts/{key}", Method.POST)
+            var restRequest = new RestRequest("/charts/{key}", Method.Post)
                 .AddUrlSegment("key", chartKey)
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
@@ -65,7 +65,7 @@ namespace SeatsioDotNet.Charts
         
         public void AddCategory(string chartKey, Category category)
         {
-            var restRequest = new RestRequest("/charts/{chartKey}/categories", Method.POST)
+            var restRequest = new RestRequest("/charts/{chartKey}/categories", Method.Post)
                 .AddUrlSegment("chartKey", chartKey)
                 .AddJsonBody(category.AsDictionary());
             AssertOk(_restClient.Execute<object>(restRequest));
@@ -73,22 +73,22 @@ namespace SeatsioDotNet.Charts
 
         public void RemoveCategory(string chartKey, object categoryKey)
         {
-            var restRequest = new RestRequest("/charts/{chartKey}/categories/{categoryKey}", Method.DELETE)
+            var restRequest = new RestRequest("/charts/{chartKey}/categories/{categoryKey}", Method.Delete)
                 .AddUrlSegment("chartKey", chartKey)
-                .AddUrlSegment("categoryKey", categoryKey);
+                .AddUrlSegment("categoryKey", categoryKey.ToString());
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
         public Chart Copy(string chartKey)
         {
-            var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy", Method.POST)
+            var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy", Method.Post)
                 .AddUrlSegment("key", chartKey);
             return AssertOk(_restClient.Execute<Chart>(restRequest));
         }
 
         public Chart CopyToSubaccount(string chartKey, long subaccountId)
         {
-            var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy-to/{subaccountId}", Method.POST)
+            var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy-to/{subaccountId}", Method.Post)
                 .AddUrlSegment("key", chartKey)
                 .AddUrlSegment("subaccountId", subaccountId.ToString());
             return AssertOk(_restClient.Execute<Chart>(restRequest));
@@ -96,7 +96,7 @@ namespace SeatsioDotNet.Charts
         
         public Chart CopyToWorkspace(string chartKey, string toWorkspaceKey)
         {
-            var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy-to-workspace/{toWorkspaceKey}", Method.POST)
+            var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy-to-workspace/{toWorkspaceKey}", Method.Post)
                 .AddUrlSegment("key", chartKey)
                 .AddUrlSegment("toWorkspaceKey", toWorkspaceKey);
             return AssertOk(_restClient.Execute<Chart>(restRequest));
@@ -104,14 +104,14 @@ namespace SeatsioDotNet.Charts
 
         public Chart CopyDraftVersion(string chartKey)
         {
-            var restRequest = new RestRequest("/charts/{key}/version/draft/actions/copy", Method.POST)
+            var restRequest = new RestRequest("/charts/{key}/version/draft/actions/copy", Method.Post)
                 .AddUrlSegment("key", chartKey);
             return AssertOk(_restClient.Execute<Chart>(restRequest));
         }
 
         public void AddTag(string chartKey, string tag)
         {
-            var restRequest = new RestRequest("/charts/{key}/tags/{tag}", Method.POST)
+            var restRequest = new RestRequest("/charts/{key}/tags/{tag}", Method.Post)
                 .AddUrlSegment("key", chartKey)
                 .AddUrlSegment("tag", tag);
             AssertOk(_restClient.Execute<object>(restRequest));
@@ -119,7 +119,7 @@ namespace SeatsioDotNet.Charts
 
         public void RemoveTag(string chartKey, string tag)
         {
-            var restRequest = new RestRequest("/charts/{key}/tags/{tag}", Method.DELETE)
+            var restRequest = new RestRequest("/charts/{key}/tags/{tag}", Method.Delete)
                 .AddUrlSegment("key", chartKey)
                 .AddUrlSegment("tag", tag);
             AssertOk(_restClient.Execute<object>(restRequest));
@@ -127,7 +127,7 @@ namespace SeatsioDotNet.Charts
         
         public void SaveSocialDistancingRulesets(string chartKey, Dictionary<string, SocialDistancingRuleset> rulesets)
         {
-            var restRequest = new RestRequest("/charts/{key}/social-distancing-rulesets", Method.POST)
+            var restRequest = new RestRequest("/charts/{key}/social-distancing-rulesets", Method.Post)
                 .AddUrlSegment("key", chartKey)
                 .AddJsonBody(SaveSocialDistancingRulesetsRequest(rulesets));
             AssertOk(_restClient.Execute<object>(restRequest));
@@ -147,7 +147,7 @@ namespace SeatsioDotNet.Charts
 
         public Chart Retrieve(string chartKey, bool? expandEvents = null)
         {
-            var restRequest = new RestRequest("/charts/{key}", Method.GET)
+            var restRequest = new RestRequest("/charts/{key}", Method.Get)
                 .AddUrlSegment("key", chartKey);
 
             if (expandEvents != null && expandEvents.Value)
@@ -160,40 +160,40 @@ namespace SeatsioDotNet.Charts
 
         public IEnumerable<string> ListAllTags()
         {
-            var restRequest = new RestRequest("/charts/tags", Method.GET);
+            var restRequest = new RestRequest("/charts/tags", Method.Get);
             return AssertOk(_restClient.Execute<Tags>(restRequest)).List;
         }
 
         private class Tags
         {
-            [DeserializeAs(Name = "tags")]
+            [JsonPropertyName("tags")]
             public IEnumerable<string> List { get; set; }
         }
 
         public void MoveToArchive(string chartKey)
         {
-            var restRequest = new RestRequest("/charts/{key}/actions/move-to-archive", Method.POST)
+            var restRequest = new RestRequest("/charts/{key}/actions/move-to-archive", Method.Post)
                 .AddUrlSegment("key", chartKey);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
         public void MoveOutOfArchive(string chartKey)
         {
-            var restRequest = new RestRequest("/charts/{key}/actions/move-out-of-archive", Method.POST)
+            var restRequest = new RestRequest("/charts/{key}/actions/move-out-of-archive", Method.Post)
                 .AddUrlSegment("key", chartKey);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
         public Drawing RetrievePublishedVersion(string chartKey)
         {
-            var restRequest = new RestRequest("/charts/{key}/version/published", Method.GET)
+            var restRequest = new RestRequest("/charts/{key}/version/published", Method.Get)
                 .AddUrlSegment("key", chartKey);
             return AssertOk(_restClient.Execute<Drawing>(restRequest));
         }
 
         public byte[] RetrievePublishedVersionThumbnail(string chartKey)
         {
-            var restRequest = new RestRequest("/charts/{key}/version/published/thumbnail", Method.GET)
+            var restRequest = new RestRequest("/charts/{key}/version/published/thumbnail", Method.Get)
                 .AddUrlSegment("key", chartKey);
             var restResponse = _restClient.Execute<object>(restRequest);
             AssertOk(restResponse);
@@ -202,14 +202,14 @@ namespace SeatsioDotNet.Charts
 
         public Drawing RetrieveDraftVersion(string chartKey)
         {
-            var restRequest = new RestRequest("/charts/{key}/version/draft", Method.GET)
+            var restRequest = new RestRequest("/charts/{key}/version/draft", Method.Get)
                 .AddUrlSegment("key", chartKey);
             return AssertOk(_restClient.Execute<Drawing>(restRequest));
         }
 
         public byte[] RetrieveDraftVersionThumbnail(string chartKey)
         {
-            var restRequest = new RestRequest("/charts/{key}/version/draft/thumbnail", Method.GET)
+            var restRequest = new RestRequest("/charts/{key}/version/draft/thumbnail", Method.Get)
                 .AddUrlSegment("key", chartKey);
             var restResponse = _restClient.Execute<object>(restRequest);
             AssertOk(restResponse);
@@ -218,28 +218,28 @@ namespace SeatsioDotNet.Charts
 
         public void PublishDraftVersion(string chartKey)
         {
-            var restRequest = new RestRequest("/charts/{key}/version/draft/actions/publish", Method.POST)
+            var restRequest = new RestRequest("/charts/{key}/version/draft/actions/publish", Method.Post)
                 .AddUrlSegment("key", chartKey);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
         public void DiscardDraftVersion(string chartKey)
         {
-            var restRequest = new RestRequest("/charts/{key}/version/draft/actions/discard", Method.POST)
+            var restRequest = new RestRequest("/charts/{key}/version/draft/actions/discard", Method.Post)
                 .AddUrlSegment("key", chartKey);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
         public ChartValidationResult ValidatePublishedVersion(string chartKey)
         {
-            var restRequest = new RestRequest("/charts/{key}/version/published/actions/validate", Method.POST)
+            var restRequest = new RestRequest("/charts/{key}/version/published/actions/validate", Method.Post)
                 .AddUrlSegment("key",chartKey);
             return AssertOk(_restClient.Execute<ChartValidationResult>(restRequest));
         }
 
         public ChartValidationResult ValidateDraftVersion(string chartKey)
         {
-            var restRequest = new RestRequest("/charts/{key}/version/draft/actions/validate", Method.POST)
+            var restRequest = new RestRequest("/charts/{key}/version/draft/actions/validate", Method.Post)
                 .AddUrlSegment("key",chartKey);
             return AssertOk(_restClient.Execute<ChartValidationResult>(restRequest));
         }

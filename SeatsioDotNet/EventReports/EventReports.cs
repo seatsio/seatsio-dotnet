@@ -195,7 +195,7 @@ namespace SeatsioDotNet.EventReports
 
         private Dictionary<string, IEnumerable<EventObjectInfo>> FetchReport(string reportType, string eventKey)
         {
-            var restRequest = new RestRequest("/reports/events/{key}/{reportType}", Method.GET)
+            var restRequest = new RestRequest("/reports/events/{key}/{reportType}", Method.Get)
                 .AddUrlSegment("key", eventKey)
                 .AddUrlSegment("reportType", reportType);
             return AssertOk(_restClient.Execute<Dictionary<string, IEnumerable<EventObjectInfo>>>(restRequest));
@@ -203,7 +203,7 @@ namespace SeatsioDotNet.EventReports
 
         private Dictionary<string, EventReportSummaryItem> FetchSummaryReport(string reportType, string eventKey)
         {
-            var restRequest = new RestRequest("/reports/events/{key}/{reportType}/summary", Method.GET)
+            var restRequest = new RestRequest("/reports/events/{key}/{reportType}/summary", Method.Get)
                 .AddUrlSegment("key", eventKey)
                 .AddUrlSegment("reportType", reportType);
             return AssertOk(_restClient.Execute<Dictionary<string, EventReportSummaryItem>>(restRequest));
@@ -212,7 +212,7 @@ namespace SeatsioDotNet.EventReports
         private Dictionary<string, EventReportDeepSummaryItem> FetchDeepSummaryReport(string reportType,
             string eventKey)
         {
-            var restRequest = new RestRequest("/reports/events/{key}/{reportType}/summary/deep", Method.GET)
+            var restRequest = new RestRequest("/reports/events/{key}/{reportType}/summary/deep", Method.Get)
                 .AddUrlSegment("key", eventKey)
                 .AddUrlSegment("reportType", reportType);
             return AssertOk(_restClient.Execute<Dictionary<string, EventReportDeepSummaryItem>>(restRequest));
@@ -220,7 +220,7 @@ namespace SeatsioDotNet.EventReports
 
         private IEnumerable<EventObjectInfo> FetchReport(string reportType, string eventKey, string filter)
         {
-            var restRequest = new RestRequest("/reports/events/{key}/{reportType}/{filter}", Method.GET)
+            var restRequest = new RestRequest("/reports/events/{key}/{reportType}/{filter}", Method.Get)
                 .AddUrlSegment("key", eventKey)
                 .AddUrlSegment("reportType", reportType)
                 .AddUrlSegment("filter", filter);

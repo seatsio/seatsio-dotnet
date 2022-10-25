@@ -9,7 +9,7 @@ namespace SeatsioDotNet.Test.Events
         {
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
-            Client.Events.MarkAsNotForSale(evnt.Key, new[] {"o1", "o2"}, new[] {"cat1", "cat2"});
+            Client.Events.MarkAsNotForSale(evnt.Key, new[] {"o1", "o2"}, null, new[] {"cat1", "cat2"});
 
             Client.Events.MarkEverythingAsForSale(evnt.Key);
             

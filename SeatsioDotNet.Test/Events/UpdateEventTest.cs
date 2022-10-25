@@ -40,15 +40,15 @@ namespace SeatsioDotNet.Test.Events
         public void UpdateTableBookingConfig()
         {
             var chartKey = CreateTestChartWithTables();
-            var evnt = Client.Events.Create(chartKey, null, TableBookingConfig.Custom(new Dictionary<string, string> {{"T1", "BY_TABLE"}}));
+            var evnt = Client.Events.Create(chartKey, null, TableBookingConfig.Custom(new() {{"T1", "BY_TABLE"}}));
 
-            Client.Events.Update(evnt.Key, null, null, TableBookingConfig.Custom(new Dictionary<string, string> {{"T1", "BY_SEAT"}}));
+            Client.Events.Update(evnt.Key, null, null, TableBookingConfig.Custom(new() {{"T1", "BY_SEAT"}}));
 
             var retrievedEvent = Client.Events.Retrieve(evnt.Key);
             Assert.Equal(evnt.Key, retrievedEvent.Key);
             Assert.Equal(chartKey, retrievedEvent.ChartKey);
             Assert.Equal("CUSTOM", retrievedEvent.TableBookingConfig.Mode);
-            Assert.Equal(new Dictionary<string, string> {{"T1", "BY_SEAT"}}, retrievedEvent.TableBookingConfig.Tables);
+            Assert.Equal(new() {{"T1", "BY_SEAT"}}, retrievedEvent.TableBookingConfig.Tables);
         }     
         
         [Fact]

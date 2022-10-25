@@ -30,7 +30,7 @@ namespace SeatsioDotNet.Test.Events
             var objectInfos = Client.Events.RetrieveObjectInfos(evnt.Key, new string[] {"GA1"});
 
             Dictionary<string, Dictionary<string, int>> expectedHolds = new Dictionary<string, Dictionary<string, int>>();
-            expectedHolds.Add(holdToken.Token, new Dictionary<string, int> {{"NO_TICKET_TYPE", 1}});
+            expectedHolds.Add(holdToken.Token, new() {{"NO_TICKET_TYPE", 1}});
             Assert.Equal(expectedHolds, objectInfos["GA1"].Holds);
         }
     }

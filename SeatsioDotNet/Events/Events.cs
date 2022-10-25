@@ -162,7 +162,7 @@ namespace SeatsioDotNet.Events
 
         public Event Retrieve(string eventKey)
         {
-            var restRequest = new RestRequest("/events/{key}", Method.Get)
+            var restRequest = new RestRequest("/events/{key}")
                 .AddUrlSegment("key", eventKey);
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }
@@ -175,7 +175,7 @@ namespace SeatsioDotNet.Events
 
         public Dictionary<string, EventObjectInfo> RetrieveObjectInfos(string eventKey, string[] objectLabels)
         {
-            var restRequest = new RestRequest("/events/{key}/objects", Method.Get)
+            var restRequest = new RestRequest("/events/{key}/objects")
                 .AddUrlSegment("key", eventKey);
 
             foreach (var objectLabel in objectLabels)
@@ -481,18 +481,18 @@ namespace SeatsioDotNet.Events
             AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
         }
 
-        public void MarkAsForSale(string eventKey, IEnumerable<string> objects, IEnumerable<string> categories)
+        public void MarkAsForSale(string eventKey, IEnumerable<string> objects, Dictionary<string, int> areaPlaces, IEnumerable<string> categories)
         {
-            var requestBody = ForSaleRequest(objects, categories);
+            var requestBody = ForSaleRequest(objects, areaPlaces, categories);
             var restRequest = new RestRequest("/events/{key}/actions/mark-as-for-sale", Method.Post)
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
-        public void MarkAsNotForSale(string eventKey, IEnumerable<string> objects, IEnumerable<string> categories)
+        public void MarkAsNotForSale(string eventKey, IEnumerable<string> objects, Dictionary<string, int> areaPlaces, IEnumerable<string> categories)
         {
-            var requestBody = ForSaleRequest(objects, categories);
+            var requestBody = ForSaleRequest(objects, areaPlaces, categories);
             var restRequest = new RestRequest("/events/{key}/actions/mark-as-not-for-sale", Method.Post)
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(requestBody);
@@ -506,13 +506,18 @@ namespace SeatsioDotNet.Events
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
-        private Dictionary<string, object> ForSaleRequest(IEnumerable<string> objects, IEnumerable<string> categories)
+        private Dictionary<string, object> ForSaleRequest(IEnumerable<string> objects, Dictionary<string, int> areaPlaces, IEnumerable<string> categories)
         {
             var request = new Dictionary<string, object>();
 
             if (objects != null)
             {
                 request.Add("objects", objects);
+            }     
+            
+            if (areaPlaces != null)
+            {
+                request.Add("areaPlaces", areaPlaces);
             }
 
             if (categories != null)
@@ -554,8 +559,8 @@ namespace SeatsioDotNet.Events
             return new Lister<StatusChange>(new PageFetcher<StatusChange>(
                 _restClient,
                 "/events/{key}/status-changes",
-                request => (RestRequest) request.AddUrlSegment("key", eventKey),
-                new Dictionary<string, string> {{"filter", filter}, {"sort", ToSort(sortField, sortDirection)}}
+                request => request.AddUrlSegment("key", eventKey),
+                new() {{"filter", filter}, {"sort", ToSort(sortField, sortDirection)}}
             ));
         }
 
@@ -579,7 +584,7 @@ namespace SeatsioDotNet.Events
             return new Lister<StatusChange>(new PageFetcher<StatusChange>(
                 _restClient,
                 "/events/{key}/objects/{objectId}/status-changes",
-                request => (RestRequest) request.AddUrlSegment("key", eventKey).AddUrlSegment("objectId", objectLabel)
+                request => request.AddUrlSegment("key", eventKey).AddUrlSegment("objectId", objectLabel)
             ));
         }
 

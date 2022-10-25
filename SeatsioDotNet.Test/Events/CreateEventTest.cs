@@ -40,7 +40,7 @@ namespace SeatsioDotNet.Test.Events
         public void TableBookingModeCustomCanBeUsed()
         {
             var chartKey = CreateTestChartWithTables();
-            var tableBookingConfig = TableBookingConfig.Custom(new Dictionary<string, string> {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}});
+            var tableBookingConfig = TableBookingConfig.Custom(new() {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}});
 
             var evnt = Client.Events.Create(chartKey, null, tableBookingConfig);
 

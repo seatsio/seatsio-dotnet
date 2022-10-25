@@ -67,16 +67,16 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChartWithTables();
             var eventCreationParams = new[]
             {
-                new EventCreationParams(null, TableBookingConfig.Custom(new Dictionary<string, string> {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}})),
-                new EventCreationParams(null, TableBookingConfig.Custom(new Dictionary<string, string> {{"T1", "BY_SEAT"}, {"T2", "BY_TABLE"}}))
+                new EventCreationParams(null, TableBookingConfig.Custom(new() {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}})),
+                new EventCreationParams(null, TableBookingConfig.Custom(new() {{"T1", "BY_SEAT"}, {"T2", "BY_TABLE"}}))
             };
 
             var events = Client.Events.Create(chartKey, eventCreationParams);
             
             Assert.Equal("CUSTOM", events[0].TableBookingConfig.Mode);
-            Assert.Equal(new Dictionary<string, string> {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}}, events[0].TableBookingConfig.Tables);
+            Assert.Equal(new() {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}}, events[0].TableBookingConfig.Tables);
             Assert.Equal("CUSTOM", events[1].TableBookingConfig.Mode);
-            Assert.Equal(new Dictionary<string, string> {{"T1", "BY_SEAT"}, {"T2", "BY_TABLE"}}, events[1].TableBookingConfig.Tables);
+            Assert.Equal(new() {{"T1", "BY_SEAT"}, {"T2", "BY_TABLE"}}, events[1].TableBookingConfig.Tables);
         }   
         
         [Fact]

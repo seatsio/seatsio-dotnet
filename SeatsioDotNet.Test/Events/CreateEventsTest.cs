@@ -39,7 +39,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.NotNull(e.Key);
             Assert.Equal(chartKey, e.ChartKey);
             Assert.Equal("INHERIT", e.TableBookingConfig.Mode);
-            Assert.False(e.SupportsBestAvailable);
+            Assert.True(e.SupportsBestAvailable);
             Assert.Null(e.ForSaleConfig);
             Assert.NotNull(e.CreatedOn);
             Assert.Null(e.UpdatedOn);

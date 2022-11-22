@@ -110,6 +110,11 @@ namespace SeatsioDotNet.Events
                     e.Add("objectCategories", param.ObjectCategories);
                 }
 
+                if (param.Categories != null)
+                {
+                    e.Add("categories", param.Categories);
+                }
+
                 events.Add(e);
             }
 

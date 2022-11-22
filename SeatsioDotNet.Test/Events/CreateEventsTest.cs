@@ -119,6 +119,23 @@ namespace SeatsioDotNet.Test.Events
         }
 
         [Fact]
+        public void CategoriesCanBePassedIn()
+        {
+            var chartKey = CreateTestChart();
+            var eventCategory = new Category("eventCategory", "event-level category", "#AAABBB");
+            var categories = new[] {eventCategory};
+            var eventCreationParams = new[]
+            {
+                new EventCreationParams(null, categories)
+            };
+            var events = Client.Events.Create(chartKey, eventCreationParams);
+            
+            Assert.Equal(1, events.Length);
+            Assert.Equal(TestChartCategories.Count + categories.Length, events[0].Categories.Count);
+            Assert.Contains(eventCategory, events[0].Categories);
+        }
+
+        [Fact]
         public void ErrorOnDuplicateKeys()
         {
             var chartKey = CreateTestChart();

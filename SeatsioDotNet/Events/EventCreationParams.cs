@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SeatsioDotNet.Charts;
 
 namespace SeatsioDotNet.Events
 {
@@ -8,6 +9,7 @@ namespace SeatsioDotNet.Events
         public TableBookingConfig TableBookingConfig { get; set; }
         public string SocialDistancingRulesetKey { get; set; }
         public Dictionary<string, object> ObjectCategories { get; set; }
+        public Category[] Categories { get; set; }
 
 
         public EventCreationParams()
@@ -35,6 +37,12 @@ namespace SeatsioDotNet.Events
         {
             Key = key;
             ObjectCategories = objectCategories;
+        }
+
+        public EventCreationParams(string key, Category[] categories)
+        {
+            Key = key;
+            Categories = categories;
         }
     }
 }

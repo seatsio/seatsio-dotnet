@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.Json;
 using RestSharp;
+using SeatsioDotNet.Charts;
 using SeatsioDotNet.EventReports;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
@@ -43,6 +44,12 @@ namespace SeatsioDotNet.Events
         public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig,
             string socialDistancingRulesetKey, Dictionary<string, object> objectCategories)
         {
+            return Create(chartKey, eventKey, tableBookingConfig, socialDistancingRulesetKey, objectCategories, null);
+        }
+
+        public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig,
+            string socialDistancingRulesetKey, Dictionary<string, object> objectCategories, Category[] categories)
+        {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("chartKey", chartKey);
 
@@ -64,6 +71,11 @@ namespace SeatsioDotNet.Events
             if (objectCategories != null)
             {
                 requestBody.Add("objectCategories", objectCategories);
+            }
+
+            if (categories != null)
+            {
+                requestBody.Add("categories", categories);
             }
 
             var restRequest = new RestRequest("/events", Method.Post).AddJsonBody(requestBody);

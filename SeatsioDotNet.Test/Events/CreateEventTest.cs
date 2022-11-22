@@ -46,7 +46,8 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.NotNull(evnt.Key);
             Assert.Equal("CUSTOM", evnt.TableBookingConfig.Mode);
-            Assert.Equal(new Dictionary<string, string> {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}}, evnt.TableBookingConfig.Tables);
+            Assert.Equal(new Dictionary<string, string> {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}},
+                evnt.TableBookingConfig.Tables);
         }
 
         [Fact]
@@ -61,12 +62,12 @@ namespace SeatsioDotNet.Test.Events
         }
 
         [Fact]
-        public void SocialDistancingRulesetKeyCanBepassedIn()
+        public void SocialDistancingRulesetKeyCanBePassedIn()
         {
             var chartKey = CreateTestChart();
             var rulesets = new Dictionary<string, SocialDistancingRuleset>()
             {
-                { "ruleset1", SocialDistancingRuleset.RuleBased("My first ruleset").Build() },
+                {"ruleset1", SocialDistancingRuleset.RuleBased("My first ruleset").Build()},
             };
             Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
 
@@ -77,7 +78,7 @@ namespace SeatsioDotNet.Test.Events
 
 
         [Fact]
-        public void ObjectCategoriesCanBepassedIn()
+        public void ObjectCategoriesCanBePassedIn()
         {
             var chartKey = CreateTestChart();
 
@@ -87,6 +88,19 @@ namespace SeatsioDotNet.Test.Events
             };
             var evnt = Client.Events.Create(chartKey, null, null, null, objectCategories);
             Assert.Equal(objectCategories, evnt.ObjectCategories);
+        }
+
+        [Fact]
+        public void CategoriesCanBePassedIn()
+        {
+            var chartKey = CreateTestChart();
+            var eventCategory = new Category("eventCategory", "event-level category", "#AAABBB");
+            var categories = new[] {eventCategory};
+
+            var evnt = Client.Events.Create(chartKey, null, null, null, null, categories);
+            
+            Assert.Equal(TestChartCategories.Count + categories.Length, evnt.Categories.Count);
+            Assert.Contains(eventCategory, evnt.Categories);
         }
     }
 }

@@ -59,7 +59,7 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChartWithTables();
             var evnt = Client.Events.Create(chartKey, null, TableBookingConfig.AllByTable());
             Client.Events.Book(evnt.Key, new[] {"T1"});
-            Client.Events.Update(evnt.Key, null, null, TableBookingConfig.AllBySeat());
+            Client.Events.UpdateTableBookingConfig(evnt.Key, TableBookingConfig.AllBySeat());
             WaitForStatusChanges(Client, evnt, 1);
 
             var statusChanges = Client.Events.StatusChanges(evnt.Key).All();

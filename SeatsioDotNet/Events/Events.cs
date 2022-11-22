@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using RestSharp;
@@ -123,28 +124,51 @@ namespace SeatsioDotNet.Events
             return AssertOk(_restClient.Execute<MultipleEvents>(restRequest)).events.ToArray();
         }
 
-        public void Update(string eventKey, string chartKey, string newEventKey)
+        public void UpdateChartKey(string eventKey, string newChartKey)
         {
-            Update(eventKey, chartKey, newEventKey, null, null);
+            Update(eventKey, newChartKey, null, null, null, null, null);
         }
 
-        public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig)
+        public void UpdateEventKey(string oldEventKey, string newEventKey)
         {
-            Update(eventKey, chartKey, newEventKey, tableBookingConfig, null);
+            Update(oldEventKey, null, newEventKey, null, null, null, null);
         }
 
-        public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig,
-            string socialDistancingRulesetKey)
+        public void UpdateTableBookingConfig(string eventKey, TableBookingConfig newTableBookingConfig)
         {
-            Update(eventKey, chartKey, newEventKey, tableBookingConfig, socialDistancingRulesetKey, null);
+            Update(eventKey, null, null, newTableBookingConfig, null, null, null);
         }
 
-        public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig,
-            string socialDistancingRulesetKey, Dictionary<string, object> objectCategories)
+        public void UpdateSocialDistancingRulesetKey(string eventKey, string newSocialDistancingRulesetKey)
         {
-            Update(eventKey, chartKey, newEventKey, tableBookingConfig, socialDistancingRulesetKey, objectCategories, null);
+            Update(eventKey, null, null, null, newSocialDistancingRulesetKey, null, null);
         }
 
+        public void RemoveSocialDistancingRulesetKey(string eventKey)
+        {
+            UpdateSocialDistancingRulesetKey(eventKey, "");
+        }
+
+        public void UpdateObjectCategories(string eventKey, Dictionary<string, object> newObjectCategories)
+        {
+            Update(eventKey, null, null, null, null, newObjectCategories, null);
+        }
+        
+        public void RemoveObjectCategories(string eventKey)
+        {
+            UpdateObjectCategories(eventKey, new Dictionary<string, object>());
+        }
+
+        public void UpdateCategories(string eventKey, Category[] categories)
+        {
+            Update(eventKey, null, null, null, null, null, categories);
+        }
+
+        public void RemoveCategories(string eventKey)
+        {
+            UpdateCategories(eventKey, Array.Empty<Category>());
+        }
+        
         public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig,
             string socialDistancingRulesetKey, Dictionary<string, object> objectCategories, Category[] categories)
         {

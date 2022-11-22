@@ -142,6 +142,12 @@ namespace SeatsioDotNet.Events
         public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig,
             string socialDistancingRulesetKey, Dictionary<string, object> objectCategories)
         {
+            Update(eventKey, chartKey, newEventKey, tableBookingConfig, socialDistancingRulesetKey, objectCategories, null);
+        }
+
+        public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig,
+            string socialDistancingRulesetKey, Dictionary<string, object> objectCategories, Category[] categories)
+        {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
 
             if (chartKey != null)
@@ -167,6 +173,11 @@ namespace SeatsioDotNet.Events
             if (objectCategories != null)
             {
                 requestBody.Add("objectCategories", objectCategories);
+            }
+
+            if (categories != null)
+            {
+                requestBody.Add("categories", categories);
             }
 
             var restRequest = new RestRequest("/events/{key}", Method.Post)

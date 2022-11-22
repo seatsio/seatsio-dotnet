@@ -18,8 +18,8 @@ namespace SeatsioDotNet.Test.Events
             };
 
             var events = Client.Events.Create(chartKey, eventCreationParams);
-            
-            Assert.Equal(2, events.Length);            
+
+            Assert.Equal(2, events.Length);
         }
 
         [Fact]
@@ -56,11 +56,11 @@ namespace SeatsioDotNet.Test.Events
             };
 
             var events = Client.Events.Create(chartKey, eventCreationParams);
-            
+
             Assert.Equal("event1", events[0].Key);
             Assert.Equal("event2", events[1].Key);
         }
-        
+
         [Fact]
         public void TableBookingModesCanBePassedIn()
         {
@@ -72,20 +72,20 @@ namespace SeatsioDotNet.Test.Events
             };
 
             var events = Client.Events.Create(chartKey, eventCreationParams);
-            
+
             Assert.Equal("CUSTOM", events[0].TableBookingConfig.Mode);
             Assert.Equal(new() {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}}, events[0].TableBookingConfig.Tables);
             Assert.Equal("CUSTOM", events[1].TableBookingConfig.Mode);
             Assert.Equal(new() {{"T1", "BY_SEAT"}, {"T2", "BY_TABLE"}}, events[1].TableBookingConfig.Tables);
-        }   
-        
+        }
+
         [Fact]
         public void SocialDistancingRulesetKeyCanBePassedIn()
         {
             var chartKey = CreateTestChart();
             var rulesets = new Dictionary<string, SocialDistancingRuleset>()
             {
-                { "ruleset1", SocialDistancingRuleset.RuleBased("My first ruleset").Build() },
+                {"ruleset1", SocialDistancingRuleset.RuleBased("My first ruleset").Build()},
             };
             Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
             var eventCreationParams = new[]
@@ -95,12 +95,30 @@ namespace SeatsioDotNet.Test.Events
             };
 
             var events = Client.Events.Create(chartKey, eventCreationParams);
-            
+
             Assert.Equal("ruleset1", events[0].SocialDistancingRulesetKey);
             Assert.Equal("ruleset1", events[1].SocialDistancingRulesetKey);
         }
 
-        [Fact]               
+        [Fact]
+        public void ObjectCategoriesCanBePassedIn()
+        {
+            var chartKey = CreateTestChart();
+            var objectCategories = new Dictionary<string, object>()
+            {
+                {"A-1", 10L}
+            };
+            var eventCreationParams = new[]
+            {
+                new EventCreationParams(null, objectCategories)
+            };
+
+            var events = Client.Events.Create(chartKey, eventCreationParams);
+
+            Assert.Equal(objectCategories, events[0].ObjectCategories);
+        }
+
+        [Fact]
         public void ErrorOnDuplicateKeys()
         {
             var chartKey = CreateTestChart();
@@ -112,7 +130,5 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.Throws<SeatsioException>(() => Client.Events.Create(chartKey, eventCreationParams));
         }
-        
-    }    
-    
+    }
 }

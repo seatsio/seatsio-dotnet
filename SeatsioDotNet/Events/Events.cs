@@ -93,6 +93,11 @@ namespace SeatsioDotNet.Events
                     e.Add("socialDistancingRulesetKey", param.SocialDistancingRulesetKey);
                 }
 
+                if (param.ObjectCategories != null)
+                {
+                    e.Add("objectCategories", param.ObjectCategories);
+                }
+
                 events.Add(e);
             }
 

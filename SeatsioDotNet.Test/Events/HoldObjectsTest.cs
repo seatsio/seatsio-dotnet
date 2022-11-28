@@ -126,7 +126,7 @@ namespace SeatsioDotNet.Test.Events
                 {"ruleset", ruleset},
             };
             Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
-            Client.Events.Update(evnt.Key, null, null, null, "ruleset");
+            Client.Events.UpdateSocialDistancingRulesetKey(evnt.Key, "ruleset");
             HoldToken holdToken = Client.HoldTokens.Create();
 
             Client.Events.Hold(evnt.Key, new[] {"A-1"}, holdToken.Token, null, null, null, null, true);

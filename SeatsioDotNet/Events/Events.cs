@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using RestSharp;
+using SeatsioDotNet.Charts;
 using SeatsioDotNet.EventReports;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
@@ -43,6 +45,12 @@ namespace SeatsioDotNet.Events
         public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig,
             string socialDistancingRulesetKey, Dictionary<string, object> objectCategories)
         {
+            return Create(chartKey, eventKey, tableBookingConfig, socialDistancingRulesetKey, objectCategories, null);
+        }
+
+        public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig,
+            string socialDistancingRulesetKey, Dictionary<string, object> objectCategories, Category[] categories)
+        {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("chartKey", chartKey);
 
@@ -64,6 +72,11 @@ namespace SeatsioDotNet.Events
             if (objectCategories != null)
             {
                 requestBody.Add("objectCategories", objectCategories);
+            }
+
+            if (categories != null)
+            {
+                requestBody.Add("categories", categories);
             }
 
             var restRequest = new RestRequest("/events", Method.Post).AddJsonBody(requestBody);
@@ -93,6 +106,16 @@ namespace SeatsioDotNet.Events
                     e.Add("socialDistancingRulesetKey", param.SocialDistancingRulesetKey);
                 }
 
+                if (param.ObjectCategories != null)
+                {
+                    e.Add("objectCategories", param.ObjectCategories);
+                }
+
+                if (param.Categories != null)
+                {
+                    e.Add("categories", param.Categories);
+                }
+
                 events.Add(e);
             }
 
@@ -101,24 +124,53 @@ namespace SeatsioDotNet.Events
             return AssertOk(_restClient.Execute<MultipleEvents>(restRequest)).events.ToArray();
         }
 
-        public void Update(string eventKey, string chartKey, string newEventKey)
+        public void UpdateChartKey(string eventKey, string newChartKey)
         {
-            Update(eventKey, chartKey, newEventKey, null, null);
+            Update(eventKey, newChartKey, null, null, null, null, null);
         }
 
-        public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig)
+        public void UpdateEventKey(string oldEventKey, string newEventKey)
         {
-            Update(eventKey, chartKey, newEventKey, tableBookingConfig, null);
+            Update(oldEventKey, null, newEventKey, null, null, null, null);
         }
 
+        public void UpdateTableBookingConfig(string eventKey, TableBookingConfig newTableBookingConfig)
+        {
+            Update(eventKey, null, null, newTableBookingConfig, null, null, null);
+        }
+
+        public void UpdateSocialDistancingRulesetKey(string eventKey, string newSocialDistancingRulesetKey)
+        {
+            Update(eventKey, null, null, null, newSocialDistancingRulesetKey, null, null);
+        }
+
+        public void RemoveSocialDistancingRulesetKey(string eventKey)
+        {
+            UpdateSocialDistancingRulesetKey(eventKey, "");
+        }
+
+        public void UpdateObjectCategories(string eventKey, Dictionary<string, object> newObjectCategories)
+        {
+            Update(eventKey, null, null, null, null, newObjectCategories, null);
+        }
+        
+        public void RemoveObjectCategories(string eventKey)
+        {
+            UpdateObjectCategories(eventKey, new Dictionary<string, object>());
+        }
+
+        public void UpdateCategories(string eventKey, Category[] categories)
+        {
+            Update(eventKey, null, null, null, null, null, categories);
+        }
+
+        public void RemoveCategories(string eventKey)
+        {
+            UpdateCategories(eventKey, Array.Empty<Category>());
+        }
+        
         public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig,
-            string socialDistancingRulesetKey)
-        {
-            Update(eventKey, chartKey, newEventKey, tableBookingConfig, socialDistancingRulesetKey, null);
-        }
-
-        public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig,
-            string socialDistancingRulesetKey, Dictionary<string, object> objectCategories)
+            string socialDistancingRulesetKey, Dictionary<string, object> objectCategories, Category[] categories)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
 
@@ -145,6 +197,11 @@ namespace SeatsioDotNet.Events
             if (objectCategories != null)
             {
                 requestBody.Add("objectCategories", objectCategories);
+            }
+
+            if (categories != null)
+            {
+                requestBody.Add("categories", categories);
             }
 
             var restRequest = new RestRequest("/events/{key}", Method.Post)

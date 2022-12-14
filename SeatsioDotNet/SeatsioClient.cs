@@ -56,6 +56,7 @@ namespace SeatsioDotNet
         private static SeatsioRestClient CreateRestClient(string secretKey, string workspaceKey, string baseUrl)
         {
             var client = new SeatsioRestClient(baseUrl);
+            client.AddDefaultHeader("X-Client-Lib", ".NET");
             client.Authenticator = new HttpBasicAuthenticator(secretKey, null);
             if (workspaceKey != null)
             {

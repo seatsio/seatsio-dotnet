@@ -21,10 +21,6 @@ namespace SeatsioDotNet.Test.Charts
             Assert.Null(retrievedChart.Events);
             Assert.Empty(retrievedChart.Tags);
             Assert.False(retrievedChart.Archived);
-
-            var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
-            Assert.Equal("MIXED", drawing.VenueType);
-            Assert.Empty(drawing.Categories);
         }
 
         [Fact]
@@ -35,9 +31,6 @@ namespace SeatsioDotNet.Test.Charts
             Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
 
             Assert.Equal("aChart", retrievedChart.Name);
-            var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
-            Assert.Equal("aChart", drawing.Name);
-            Assert.Empty(drawing.Categories);
         }
 
         [Fact]
@@ -48,9 +41,6 @@ namespace SeatsioDotNet.Test.Charts
             Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
 
             Assert.Equal("Untitled chart", retrievedChart.Name);
-            var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
-            Assert.Equal("BOOTHS", drawing.VenueType);
-            Assert.Empty(drawing.Categories);
         }
 
         [Fact]
@@ -66,22 +56,6 @@ namespace SeatsioDotNet.Test.Charts
             Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
 
             Assert.Equal("Untitled chart", retrievedChart.Name);
-            var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
-            var actualCategories = drawing.Categories;
-            
-            Assert.Equal(3, actualCategories.Count);
-            
-            Assert.Equal(1L, actualCategories[0].Key);
-            Assert.Equal("Category 1", actualCategories[0].Label);
-            Assert.Equal("#aaaaaa", actualCategories[0].Color);
-            Assert.False(actualCategories[0].Accessible);
-            
-            Assert.Equal(2L, actualCategories[1].Key);
-            Assert.Equal("Category 2", actualCategories[1].Label);
-            Assert.Equal("#bbbbbb", actualCategories[1].Color);
-            Assert.True(actualCategories[1].Accessible);
-            
-            Assert.Equal("cat-3", actualCategories[2].Key);
         }
     }
 }

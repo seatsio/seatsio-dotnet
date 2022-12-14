@@ -16,8 +16,6 @@ namespace SeatsioDotNet.Test.Charts
             var chart = Client.Charts.Create("aChart", "BOOTHS", null);
             
             Client.Charts.AddCategory(chart.Key, new Category(1, "cat 1", "#aaaaaa", true));
-            var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
-            Assert.Equal(1, drawing.Categories.Count);
         }
 
         [Fact]
@@ -32,8 +30,6 @@ namespace SeatsioDotNet.Test.Charts
             
             Client.Charts.RemoveCategory(chart.Key, 1);
             
-            var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
-            Assert.Equal(1, drawing.Categories.Count);
         }
     }
 }

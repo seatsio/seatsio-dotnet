@@ -12,8 +12,6 @@ namespace SeatsioDotNet.Test.Charts
             var copiedChart = Client.Charts.Copy(chart.Key);
 
             Assert.Equal("my chart (copy)", copiedChart.Name);
-            var drawing = Client.Charts.RetrievePublishedVersion(copiedChart.Key);
-            Assert.Equal("BOOTHS", drawing.VenueType);
         }
     }
 }

@@ -51,6 +51,21 @@ namespace SeatsioDotNet.Test.Events
             Assert.NotNull(statusChange.Origin.Ip);
             Assert.True(statusChange.IsPresentOnChart);
             Assert.Null(statusChange.NotPresentOnChartReason);
+        }   
+        
+        [Fact]
+        public void PropertiesOfStatusChange_HoldToken()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            var holdToken = Client.HoldTokens.Create();
+            Client.Events.Hold(evnt.Key, new[] {"A-1"}, holdToken.Token);
+            WaitForStatusChanges(Client, evnt, 1);
+
+            var statusChanges = Client.Events.StatusChanges(evnt.Key).All();
+            var statusChange = statusChanges.First();
+
+            Assert.Equal(holdToken.Token, statusChange.HoldToken);
         }
 
         [Fact]

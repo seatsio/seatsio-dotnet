@@ -15,5 +15,6 @@ namespace SeatsioDotNet.Events
         public StatusChangeOrigin Origin { get; set; }
         public bool IsPresentOnChart { get; set; }
         public string NotPresentOnChartReason { get; set; }
+        public string HoldToken { get; set; }
     }
 }

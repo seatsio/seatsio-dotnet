@@ -1,4 +1,6 @@
-﻿using Xunit;
+﻿using RestSharp;
+using SeatsioDotNet.Util;
+using Xunit;
 
 namespace SeatsioDotNet.Test
 {
@@ -10,9 +12,19 @@ namespace SeatsioDotNet.Test
             var e = Assert.Throws<SeatsioException>(() =>
                 Client.Events.RetrieveObjectInfo("unexistingEvent", "unexistingObject"));
 
-            Assert.StartsWith("Get " + BaseUrl + "/events/unexistingEvent/objects?label=unexistingObject resulted in a 404 Not Found response. Reason: Event not found: unexistingEvent. Request ID:", e.Message);
-            Assert.Contains(new SeatsioApiError("EVENT_NOT_FOUND", "Event not found: unexistingEvent"), e.Errors);            
+            Assert.Equal("Event not found: unexistingEvent.", e.Message);
+            Assert.Contains(new SeatsioApiError("EVENT_NOT_FOUND", "Event not found: unexistingEvent"), e.Errors);
             Assert.NotNull(e.RequestId);
+        }
+
+        [Fact]
+        public void Test5xx()
+        {
+            var client = new SeatsioRestClient("https://httpbin.seatsio.net");
+
+            var e = Assert.Throws<SeatsioException>(() => RestUtil.AssertOk(client.Execute<object>(new RestRequest("/status/500"))));
+            
+            Assert.Equal("Get https://httpbin.seatsio.net/status/500 resulted in a 500 Internal Server Error response. Body: ", e.Message);
         }
 
         [Fact]
@@ -21,7 +33,7 @@ namespace SeatsioDotNet.Test
             var e = Assert.Throws<SeatsioException>(() =>
                 new SeatsioClient("", null, "unknownProtocol://").Events.RetrieveObjectInfo("unexistingEvent", "unexistingObject"));
 
-            Assert.Equal("Get  resulted in a 0  response.", e.Message);
+            Assert.Equal("Get  resulted in a 0  response. Body: ", e.Message);
             Assert.Null(e.Errors);
             Assert.Null(e.RequestId);
         }

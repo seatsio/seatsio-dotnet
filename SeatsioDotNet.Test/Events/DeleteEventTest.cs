@@ -15,7 +15,7 @@ namespace SeatsioDotNet.Test.Events
 
             Exception ex = Assert.Throws<SeatsioException>(() => Client.Events.Retrieve(evnt.Key));
 
-            Assert.Contains("404", ex.Message);
+            Assert.Equal("Event not found: " + evnt.Key + ".", ex.Message);
         }
     }
 }

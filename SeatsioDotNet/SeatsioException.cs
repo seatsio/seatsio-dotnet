@@ -11,7 +11,8 @@ namespace SeatsioDotNet
         public readonly List<SeatsioApiError> Errors;
         public readonly string RequestId;
 
-        protected SeatsioException(List<SeatsioApiError> errors, string requestId, RestResponse response) : base(ExceptionMessage(errors, requestId, response))
+        protected SeatsioException(List<SeatsioApiError> errors, string requestId) : base(
+            ExceptionMessage(errors))
         {
             Errors = errors;
             RequestId = requestId;
@@ -21,30 +22,29 @@ namespace SeatsioDotNet
         {
         }
 
-        private static string ExceptionMessage(List<SeatsioApiError> errors, string requestId, RestResponse response)
+        private static string ExceptionMessage(List<SeatsioApiError> errors)
         {
-            string exceptionMessage = ExceptionMessage(response);            
-            exceptionMessage += " Reason: " + String.Join(", ", errors.Select(x => x.Message)) + ".";
-            exceptionMessage += " Request ID: " + requestId;
-            return exceptionMessage;
+            return String.Join(", ", errors.Select(x => x.Message)) + ".";
         }
 
         private static string ExceptionMessage(RestResponse response)
         {
             var request = response.Request;
-            return request.Method + " " + response.ResponseUri + " resulted in a " + (int) response.StatusCode + " " + response.StatusDescription + " response.";
+            return request.Method + " " + response.ResponseUri + " resulted in a " + (int) response.StatusCode + " " + response.StatusDescription + " response. Body: " + response.Content;
         }
-
+        
         public static SeatsioException From(RestResponse response)
         {
             if (response.ContentType != null && response.ContentType.Contains("application/json"))
             {
-                var parsedException = JsonSerializer.Deserialize<SeatsioExceptionTo>(response.Content, SeatsioRestClient.SeatsioJsonSerializerOptions());
+                var parsedException = JsonSerializer.Deserialize<SeatsioExceptionTo>(response.Content,
+                    SeatsioRestClient.SeatsioJsonSerializerOptions());
                 if ((int) response.StatusCode == 429)
                 {
-                    return new RateLimitExceededException(parsedException.Errors, parsedException.RequestId, response);
+                    return new RateLimitExceededException(parsedException.Errors, parsedException.RequestId);
                 }
-                return new SeatsioException(parsedException.Errors, parsedException.RequestId, response);
+
+                return new SeatsioException(parsedException.Errors, parsedException.RequestId);
             }
 
             return new SeatsioException(response);

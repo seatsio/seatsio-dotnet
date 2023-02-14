@@ -65,6 +65,46 @@ namespace SeatsioDotNet.Events
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
+        public void Add(string eventKey, ChannelCreationParams[] channelCreationParams)
+        {
+            var channels = new List<Dictionary<string, object>>();
+            foreach (var param in channelCreationParams)
+            {
+                var channelToCreate = new Dictionary<string, object>();
+                if (param.Key != null)
+                {
+                    channelToCreate.Add("key", param.Key);
+                }
+
+                if (param.Name != null)
+                {
+                    channelToCreate.Add("name", param.Name);
+                }
+
+                if (param.Color != null)
+                {
+                    channelToCreate.Add("color", param.Color);
+                }
+
+                if (param.Index != null)
+                {
+                    channelToCreate.Add("index", param.Index);
+                }
+
+                if (param.Objects != null)
+                {
+                    channelToCreate.Add("objects", param.Objects);
+                }
+
+                channels.Add(channelToCreate);
+            }
+
+            var restRequest = new RestRequest("/events/{key}/channels", Method.Post)
+                .AddUrlSegment("key", eventKey)
+                .AddJsonBody(channels);
+            AssertOk(_restClient.Execute<object>(restRequest));
+        }
+
         public void Remove(string eventKey, string channelKey)
         {
             var restRequest = new RestRequest("/events/{eventKey}/channels/{channelKey}", Method.Delete)

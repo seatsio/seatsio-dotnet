@@ -134,6 +134,17 @@ Console.WriteLine(objectInfos["A-2"].CategoryLabel);
 Console.WriteLine(objectInfos["A-2"].Status);
 ```
 
+### Listing a chart's categories
+
+```csharp
+var client = new SeatsioClient(Region.EU, "<WORKSPACE SECRET KEY>");
+IEnumerable<Category> categoryList = client.Charts.ListCategories(<chart key>);
+foreach (var category in categoryList)
+{
+    Console.Write(category.Label);
+}
+```
+
 ### Listing all charts
 
 ```csharp

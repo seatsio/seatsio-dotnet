@@ -79,6 +79,18 @@ namespace SeatsioDotNet.Charts
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
+        public IEnumerable<Category> ListCategories(string chartKey)
+        {
+            var restRequest = new RestRequest($"/charts/{chartKey}/categories", Method.Get);
+            return _restClient.Execute<CategoryList>(restRequest).Data.List;
+        }
+
+        private class CategoryList
+        {
+            [JsonPropertyName("categories")]
+            public IEnumerable<Category> List { get; set; }
+        }
+
         public Chart Copy(string chartKey)
         {
             var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy", Method.Post)

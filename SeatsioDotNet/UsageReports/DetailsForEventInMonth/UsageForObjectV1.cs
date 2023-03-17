@@ -2,7 +2,7 @@ using System;
 
 namespace SeatsioDotNet.UsageReports.DetailsForEventInMonth
 {
-    public class UsageForObject
+    public class UsageForObjectV1
     {
         public string Object { get; set; }
         public int NumFirstBookings { get; set; }

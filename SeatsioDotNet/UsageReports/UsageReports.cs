@@ -27,12 +27,19 @@ namespace SeatsioDotNet.UsageReports
             return AssertOk(_restClient.Execute<List<UsageDetails>>(restRequest));
         }
 
-        public IEnumerable<UsageForObject> DetailsForEventInMonth(long eventId, UsageMonth month)
+        public IEnumerable<object> DetailsForEventInMonth(long eventId, UsageMonth month)
         {
             var restRequest = new RestRequest("/reports/usage/month/{month}/event/{event}")
                 .AddUrlSegment("month", month.Serialize())
                 .AddUrlSegment("event", eventId.ToString());
-            return AssertOk(_restClient.Execute<List<UsageForObject>>(restRequest));
+            if (month.Before(2022, 12))
+            {
+                return AssertOk(_restClient.Execute<List<UsageForObjectV1>>(restRequest));
+            }
+            else
+            {
+                return AssertOk(_restClient.Execute<List<UsageForObjectV2>>(restRequest));
+            }
         }
     }
 }

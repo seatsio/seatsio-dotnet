@@ -19,5 +19,20 @@ namespace SeatsioDotNet.UsageReports
         {
             return Year + "-" + Month.ToString().PadLeft(2, '0');
         }
+
+        public bool Before(int year, int month)
+        {
+            if (Year > year)
+            {
+                return false;
+            }
+
+            if (Year == year)
+            {
+                return Month < month;
+            }
+
+            return true;
+        }
     }
 }

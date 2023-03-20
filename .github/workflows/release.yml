@@ -32,13 +32,9 @@ jobs:
         env:
           VERSION_TO_BUMP: ${{ inputs.versionToBump }}
           GH_TOKEN: ${{ github.token }}
-  publish:
-    needs: [release]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.x
       - run: dotnet pack --configuration Release SeatsioDotNet/SeatsioDotNet.csproj -o SeatsioDotNet
       - run: dotnet nuget push SeatsioDotNet/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_API_KEY}}
+      

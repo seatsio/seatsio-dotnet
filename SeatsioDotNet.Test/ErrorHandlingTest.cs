@@ -20,7 +20,7 @@ namespace SeatsioDotNet.Test
         [Fact]
         public void Test5xx()
         {
-            var client = new SeatsioRestClient("https://httpbin.seatsio.net");
+            var client = new SeatsioRestClient(new RestClientOptions("https://httpbin.seatsio.net"));
 
             var e = Assert.Throws<SeatsioException>(() => RestUtil.AssertOk(client.Execute<object>(new RestRequest("/status/500"))));
             

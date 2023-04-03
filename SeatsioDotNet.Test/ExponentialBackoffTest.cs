@@ -10,7 +10,7 @@ namespace SeatsioDotNet.Test
         public void AbortsEventuallyIfServerKeepsReturning429()
         {
             var start = DateTimeOffset.Now;
-            var client = new SeatsioRestClient("https://httpbin.seatsio.net");
+            var client = new SeatsioRestClient(new RestClientOptions("https://httpbin.seatsio.net"));
 
             var response = client.Execute<object>(new RestRequest("/status/429", Method.Get));
 
@@ -25,7 +25,7 @@ namespace SeatsioDotNet.Test
         public void AbortsDirectlyIfServerReturnsOtherErrorThan429()
         {
             var start = DateTimeOffset.Now;
-            var client = new SeatsioRestClient("https://httpbin.seatsio.net");
+            var client = new SeatsioRestClient(new RestClientOptions("https://httpbin.seatsio.net"));
 
             var response = client.Execute<object>(new RestRequest("/status/400", Method.Get));
 
@@ -39,7 +39,7 @@ namespace SeatsioDotNet.Test
         public void AbortsDirectlyIfServerReturnsError429ButMaxRetries0()
         {
             var start = DateTimeOffset.Now;
-            var client = new SeatsioRestClient("https://httpbin.seatsio.net", 0);
+            var client = new SeatsioRestClient(new RestClientOptions("https://httpbin.seatsio.net"), 0);
 
             var response = client.Execute<object>(new RestRequest("/status/429", Method.Get));
 
@@ -52,7 +52,7 @@ namespace SeatsioDotNet.Test
         [Fact]
         public void ReturnsSuccessfullyWhenTheServerSendsA429FirstAndThenASuccessfulResponse()
         {
-            var client = new SeatsioRestClient("https://httpbin.seatsio.net");
+            var client = new SeatsioRestClient(new RestClientOptions("https://httpbin.seatsio.net"));
             for (var i = 0; i < 20; ++i)
             {
                 var response = client.Execute<object>(new RestRequest("/status/429:0.25,204:0.75", Method.Get));

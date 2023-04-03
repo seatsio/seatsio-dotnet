@@ -69,8 +69,11 @@ namespace SeatsioDotNet.Test
 
         protected string CreateTestChartFromJson(String json)
         {
-            var restClient = new RestClient(BaseUrl);
-            restClient.Authenticator = new HttpBasicAuthenticator(User.SecretKey, null);
+            var options = new RestClientOptions(BaseUrl)
+            {
+                Authenticator = new HttpBasicAuthenticator(User.SecretKey, null)
+            };
+            var restClient = new RestClient(options);
             var chartKey = Guid.NewGuid().ToString();
             var request = new RestRequest("/system/public/charts/{chartKey}", Method.Post)
                 .AddUrlSegment("chartKey", chartKey)

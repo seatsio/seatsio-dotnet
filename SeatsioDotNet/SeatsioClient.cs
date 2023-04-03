@@ -55,9 +55,12 @@ namespace SeatsioDotNet
 
         private static SeatsioRestClient CreateRestClient(string secretKey, string workspaceKey, string baseUrl)
         {
-            var client = new SeatsioRestClient(baseUrl);
+            var options = new RestClientOptions(baseUrl)
+            {
+                Authenticator = new HttpBasicAuthenticator(secretKey, null)
+            };
+            var client = new SeatsioRestClient(options);
             client.AddDefaultHeader("X-Client-Lib", ".NET");
-            client.Authenticator = new HttpBasicAuthenticator(secretKey, null);
             if (workspaceKey != null)
             {
                 client.AddDefaultHeader("X-Workspace-Key", workspaceKey.ToString());
@@ -70,11 +73,12 @@ namespace SeatsioDotNet
 
 public class SeatsioRestClient : RestClient
 {
-    public SeatsioRestClient(string baseUrl, int maxRetries = 5) : base(
-        new HttpClient(new SeatsioMessageHandler(maxRetries)), new RestClientOptions {BaseUrl = new Uri(baseUrl)})
+    public SeatsioRestClient(RestClientOptions restClientOptions, int maxRetries = 5) : base(
+        new HttpClient(new SeatsioMessageHandler(maxRetries)),
+        restClientOptions,
+        configureSerialization: s =>
+            s.UseSerializer(() => new SystemTextJsonSerializer(SeatsioJsonSerializerOptions())))
     {
-        var options = SeatsioJsonSerializerOptions();
-        UseSerializer(() => new SystemTextJsonSerializer(options));
     }
 
     public static JsonSerializerOptions SeatsioJsonSerializerOptions()
@@ -113,15 +117,16 @@ public class SeatsioMessageHandler : HttpClientHandler
 
 public class ObjectToInferredTypesConverter : JsonConverter<object>
 {
-    public override object Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.TokenType switch
-    {
-        JsonTokenType.True => true,
-        JsonTokenType.False => false,
-        JsonTokenType.Number when reader.TryGetInt64(out long l) => l,
-        JsonTokenType.Number => reader.GetDouble(),
-        JsonTokenType.String => reader.GetString()!,
-        _ => JsonDocument.ParseValue(ref reader).RootElement.Clone()
-    };
+    public override object Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+        reader.TokenType switch
+        {
+            JsonTokenType.True => true,
+            JsonTokenType.False => false,
+            JsonTokenType.Number when reader.TryGetInt64(out long l) => l,
+            JsonTokenType.Number => reader.GetDouble(),
+            JsonTokenType.String => reader.GetString()!,
+            _ => JsonDocument.ParseValue(ref reader).RootElement.Clone()
+        };
 
     public override void Write(
         Utf8JsonWriter writer,

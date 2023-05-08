@@ -52,8 +52,8 @@ namespace SeatsioDotNet.Test.Events
             var bestAvailableResult = Client.Events.Hold(evnt.Key, new BestAvailable(3), holdToken.Token, "order1");
 
             Assert.True(bestAvailableResult.NextToEachOther);
-            Assert.Equal(new[] {"B-4", "B-5", "B-6"}, bestAvailableResult.Objects);
-            Assert.Equal("order1", Client.Events.RetrieveObjectInfo(evnt.Key, "B-4").OrderId);
+            Assert.Equal(new[] {"A-4", "A-5", "A-6"}, bestAvailableResult.Objects);
+            Assert.Equal("order1", Client.Events.RetrieveObjectInfo(evnt.Key, "A-4").OrderId);
         }
 
         [Fact]

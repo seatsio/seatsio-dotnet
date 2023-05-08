@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SeatsioDotNet.Events
 {
@@ -8,13 +9,15 @@ namespace SeatsioDotNet.Events
         public IEnumerable<string> Categories { get; }
         public IEnumerable<Dictionary<string, object>> ExtraData { get; }
         public string[] TicketTypes { get; }
+        public bool? TryToPreventOrphanSeats;
 
-        public BestAvailable(int number, IEnumerable<string> categories = null, IEnumerable<Dictionary<string, object>> extraData = null, string[] ticketTypes = null)
+        public BestAvailable(int number, IEnumerable<string> categories = null, IEnumerable<Dictionary<string, object>> extraData = null, string[] ticketTypes = null, bool? tryToPreventOrphanSeats = null)
         {
             Categories = categories;
             Number = number;
             ExtraData = extraData;
             TicketTypes = ticketTypes;
+            TryToPreventOrphanSeats = tryToPreventOrphanSeats;
         }
 
         public Dictionary<string, object> AsDictionary()
@@ -34,6 +37,10 @@ namespace SeatsioDotNet.Events
             if (TicketTypes != null)
             {
                 dictionary.Add("ticketTypes", TicketTypes);
+            }
+            if (TryToPreventOrphanSeats != null)
+            {
+                dictionary.Add("tryToPreventOrphanSeats", TryToPreventOrphanSeats);
             }
 
             return dictionary;

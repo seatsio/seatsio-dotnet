@@ -16,7 +16,7 @@ namespace SeatsioDotNet.Test.Events
             var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(3), "foo");
 
             Assert.True(bestAvailableResult.NextToEachOther);
-            Assert.Equal(new[] {"B-4", "B-5", "B-6"}, bestAvailableResult.Objects);
+            Assert.Equal(new[] {"A-4", "A-5", "A-6"}, bestAvailableResult.Objects);
         }
 
         [Fact]
@@ -27,10 +27,10 @@ namespace SeatsioDotNet.Test.Events
 
             var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2), "foo");
 
-            var reportItem = bestAvailableResult.ObjectDetails["B-4"];
-            Assert.Equal("B-4", reportItem.Label);
-            reportItem.Labels.Should().BeEquivalentTo(new Labels("4", "seat", "B", "row"));
-            reportItem.IDs.Should().BeEquivalentTo(new IDs("4", "B", null));
+            var reportItem = bestAvailableResult.ObjectDetails["A-4"];
+            Assert.Equal("A-4", reportItem.Label);
+            reportItem.Labels.Should().BeEquivalentTo(new Labels("4", "seat", "A", "row"));
+            reportItem.IDs.Should().BeEquivalentTo(new IDs("4", "A", null));
             Assert.Equal("foo", reportItem.Status);
             Assert.Equal("Cat1", reportItem.CategoryLabel);
             Assert.Equal("9", reportItem.CategoryKey);
@@ -42,8 +42,8 @@ namespace SeatsioDotNet.Test.Events
             Assert.Null(reportItem.Entrance);
             Assert.Null(reportItem.NumBooked);
             Assert.Null(reportItem.Capacity);
-            Assert.Equal("B-3", reportItem.LeftNeighbour);
-            Assert.Equal("B-5", reportItem.RightNeighbour);
+            Assert.Equal("A-3", reportItem.LeftNeighbour);
+            Assert.Equal("A-5", reportItem.RightNeighbour);
         }
 
         [Fact]
@@ -71,9 +71,21 @@ namespace SeatsioDotNet.Test.Events
 
             var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2, extraData: extraData), "foo");
 
-            Assert.Equal(new[] {"B-4", "B-5"}, bestAvailableResult.Objects);
-            Assert.Equal(new Dictionary<string, object> {{"foo", "bar"}}, Client.Events.RetrieveObjectInfo(evnt.Key, "B-4").ExtraData);
-            Assert.Equal(new Dictionary<string, object> {{"foo", "baz"}}, Client.Events.RetrieveObjectInfo(evnt.Key, "B-5").ExtraData);
+            Assert.Equal(new[] {"A-4", "A-5"}, bestAvailableResult.Objects);
+            Assert.Equal(new Dictionary<string, object> {{"foo", "bar"}}, Client.Events.RetrieveObjectInfo(evnt.Key, "A-4").ExtraData);
+            Assert.Equal(new Dictionary<string, object> {{"foo", "baz"}}, Client.Events.RetrieveObjectInfo(evnt.Key, "A-5").ExtraData);
+        }   
+        
+        [Fact]
+        public void DoNotTryToPreventOrphanSeats()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey);
+            Client.Events.Book(evnt.Key, new[] {"A-4", "A-5"});
+
+            var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2, tryToPreventOrphanSeats: false), "foo");
+
+            Assert.Equal(new[] {"A-2", "A-3"}, bestAvailableResult.Objects);
         }
 
         [Fact]
@@ -89,9 +101,9 @@ namespace SeatsioDotNet.Test.Events
 
             var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(2, ticketTypes: new[]{"adult", "child"}), "foo");
 
-            Assert.Equal(new[] {"B-4", "B-5"}, bestAvailableResult.Objects);
-            Assert.Equal("adult", Client.Events.RetrieveObjectInfo(evnt.Key, "B-4").TicketType);
-            Assert.Equal("child", Client.Events.RetrieveObjectInfo(evnt.Key, "B-5").TicketType);
+            Assert.Equal(new[] {"A-4", "A-5"}, bestAvailableResult.Objects);
+            Assert.Equal("adult", Client.Events.RetrieveObjectInfo(evnt.Key, "A-4").TicketType);
+            Assert.Equal("child", Client.Events.RetrieveObjectInfo(evnt.Key, "A-5").TicketType);
         }
 
         [Fact]
@@ -100,11 +112,11 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
             var extraData = new Dictionary<string, object> {{"foo1", "bar1"}};
-            Client.Events.UpdateExtraData(evnt.Key, "B-5", extraData);
+            Client.Events.UpdateExtraData(evnt.Key, "A-5", extraData);
 
             Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus", null, null, true);
 
-            Assert.Equal(extraData, Client.Events.RetrieveObjectInfo(evnt.Key, "B-5").ExtraData);
+            Assert.Equal(extraData, Client.Events.RetrieveObjectInfo(evnt.Key, "A-5").ExtraData);
         }
 
         [Fact]
@@ -113,11 +125,11 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
             var extraData = new Dictionary<string, object> {{"foo1", "bar1"}};
-            Client.Events.UpdateExtraData(evnt.Key, "B-5", extraData);
+            Client.Events.UpdateExtraData(evnt.Key, "A-5", extraData);
 
             Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus", null, null, false);
 
-            Assert.Null(Client.Events.RetrieveObjectInfo(evnt.Key, "B-5").ExtraData);
+            Assert.Null(Client.Events.RetrieveObjectInfo(evnt.Key, "A-5").ExtraData);
         }
 
         [Fact]
@@ -126,11 +138,11 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
             var extraData = new Dictionary<string, object> {{"foo1", "bar1"}};
-            Client.Events.UpdateExtraData(evnt.Key, "B-5", extraData);
+            Client.Events.UpdateExtraData(evnt.Key, "A-5", extraData);
 
             Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus");
 
-            Assert.Null(Client.Events.RetrieveObjectInfo(evnt.Key, "B-5").ExtraData);
+            Assert.Null(Client.Events.RetrieveObjectInfo(evnt.Key, "A-5").ExtraData);
         }
 
         [Fact]
@@ -145,12 +157,12 @@ namespace SeatsioDotNet.Test.Events
             Client.Events.Channels.Replace(evnt.Key, channels);
             Client.Events.Channels.SetObjects(evnt.Key, new
             {
-                channelKey1 = new[] {"B-6"}
+                channelKey1 = new[] {"A-6"}
             });
 
             var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus", channelKeys: new[] {"channelKey1"});
 
-            Assert.Equal(new[] {"B-6"}, bestAvailableResult.Objects);
+            Assert.Equal(new[] {"A-6"}, bestAvailableResult.Objects);
         }   
         
         [Fact]
@@ -165,12 +177,12 @@ namespace SeatsioDotNet.Test.Events
             Client.Events.Channels.Replace(evnt.Key, channels);
             Client.Events.Channels.SetObjects(evnt.Key, new
             {
-                channelKey1 = new[] {"B-5"}
+                channelKey1 = new[] {"A-5"}
             });
 
             var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus", ignoreChannels: true);
 
-            Assert.Equal(new[] {"B-5"}, bestAvailableResult.Objects);
+            Assert.Equal(new[] {"A-5"}, bestAvailableResult.Objects);
         }
     }
 }

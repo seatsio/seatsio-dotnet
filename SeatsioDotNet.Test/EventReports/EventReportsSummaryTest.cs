@@ -29,8 +29,8 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(new() {{"Cat1", 115}, {"Cat2", 116}}, report[Free].byCategoryLabel);
             Assert.Equal(new() {{Available, 231}}, report[Free].byAvailability);
             Assert.Equal(new() {{NoChannel, 231}}, report[Free].byChannel);
-        } 
-        
+        }
+
         [Fact]
         public void SummaryByObjectType()
         {
@@ -52,8 +52,8 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(new() {{"Cat1", 100}, {"Cat2", 100}}, report["generalAdmission"].byCategoryLabel);
             Assert.Equal(new() {{Available, 200}}, report["generalAdmission"].byAvailability);
             Assert.Equal(new() {{NoChannel, 200}}, report["generalAdmission"].byChannel);
-        }  
-        
+        }
+
         [Fact]
         public void SummaryByCategoryKey()
         {
@@ -74,10 +74,10 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(new() {{Free, 116}}, report["10"].byStatus);
             Assert.Equal(new() {{Available, 116}}, report["10"].byAvailability);
             Assert.Equal(new() {{NoChannel, 116}}, report["10"].byChannel);
-            
+
             Assert.Equal(0, report["NO_CATEGORY"].Count);
-        }  
-        
+        }
+
         [Fact]
         public void SummaryByCategoryLabel()
         {
@@ -99,7 +99,7 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(new() {{Free, 116}}, report["Cat2"].byStatus);
             Assert.Equal(new() {{Available, 116}}, report["Cat2"].byAvailability);
             Assert.Equal(new() {{NoChannel, 116}}, report["Cat2"].byChannel);
-            
+
             Assert.Equal(0, report["NO_CATEGORY"].Count);
         }
 
@@ -119,7 +119,7 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(new() {{Available, 231}, {NotAvailable, 1}}, report[NoSection].byAvailability);
             Assert.Equal(new() {{NoChannel, 232}}, report[NoSection].byChannel);
         }
-        
+
         [Fact]
         public void SummaryByAvailability()
         {
@@ -140,8 +140,8 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(new() {{Booked, 1}}, report[NotAvailable].byStatus);
             Assert.Equal(new() {{"9", 1}}, report[NotAvailable].byCategoryKey);
             Assert.Equal(new() {{NoChannel, 1}}, report[NotAvailable].byChannel);
-        }    
-                
+        }
+
         [Fact]
         public void SummaryByAvailabilityReason()
         {
@@ -162,23 +162,18 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal(new() {{Booked, 1}}, report[Booked].byStatus);
             Assert.Equal(new() {{"9", 1}}, report[Booked].byCategoryKey);
             Assert.Equal(new() {{NoChannel, 1}}, report[Booked].byChannel);
-        }    
-        
+        }
+
         [Fact]
         public void SummaryByChannel()
         {
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
-            var channels = new Dictionary<string, Channel>()
+            Client.Events.Channels.Replace(evnt.Key, new List<Channel>
             {
-                {"channelKey1", new Channel("channel 1", "#FFFF00", 1)}
-            };
-            Client.Events.Channels.Replace(evnt.Key, channels);
-            Client.Events.Channels.SetObjects(evnt.Key, new
-            {
-                channelKey1 = new[] {"A-1", "A-2"}
+                new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"})
             });
-            
+
             var report = Client.EventReports.SummaryByChannel(evnt.Key);
 
             Assert.Equal(230, report[NoChannel].Count);

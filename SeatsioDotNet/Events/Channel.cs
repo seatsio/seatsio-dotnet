@@ -10,24 +10,17 @@ namespace SeatsioDotNet.Events
         public int Index { get; set; }
         public IEnumerable<string> Objects { get; set; }
 
-        public Channel() {}
-
-        public Channel(string name, string color, int index)
+        public Channel()
         {
+        }
+
+        public Channel(string key, string name, string color, int index, IEnumerable<string> objects)
+        {
+            Key = key;
             Name = name;
             Color = color;
             Index = index;
+            Objects = objects;
         }
-
-        public object AsJsonObject()
-        {
-            return new
-            {
-                name = Name,
-                index = Index,
-                color = Color
-            };
-        }
-
     }
 }

@@ -150,14 +150,9 @@ namespace SeatsioDotNet.Test.Events
         {
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
-            var channels = new Dictionary<string, Channel>()
+            Client.Events.Channels.Replace(evnt.Key, new List<Channel>
             {
-                {"channelKey1", new Channel("channel 1", "#FFFF00", 1)}
-            };
-            Client.Events.Channels.Replace(evnt.Key, channels);
-            Client.Events.Channels.SetObjects(evnt.Key, new
-            {
-                channelKey1 = new[] {"A-6"}
+                new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-6"})
             });
 
             var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus", channelKeys: new[] {"channelKey1"});
@@ -170,14 +165,9 @@ namespace SeatsioDotNet.Test.Events
         {
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
-            var channels = new Dictionary<string, Channel>()
+            Client.Events.Channels.Replace(evnt.Key, new List<Channel>
             {
-                {"channelKey1", new Channel("channel 1", "#FFFF00", 1)}
-            };
-            Client.Events.Channels.Replace(evnt.Key, channels);
-            Client.Events.Channels.SetObjects(evnt.Key, new
-            {
-                channelKey1 = new[] {"A-5"}
+                new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-5"})
             });
 
             var bestAvailableResult = Client.Events.ChangeObjectStatus(evnt.Key, new BestAvailable(1), "someStatus", ignoreChannels: true);

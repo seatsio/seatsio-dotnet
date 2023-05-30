@@ -13,41 +13,19 @@ namespace SeatsioDotNet.Events
             _restClient = restClient;
         }
 
-        public void Replace(string eventKey, Dictionary<string, Channel> channels)
+        public void Replace(string eventKey, List<Channel> channels)
         {
-            var requestBody = UpdateChannelsRequest(channels);
-            var restRequest = new RestRequest("/events/{key}/channels/update", Method.Post)
+            var requestBody = ReplaceChannelsRequest(channels);
+            var restRequest = new RestRequest("/events/{key}/channels/replace", Method.Post)
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(requestBody);
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
-        private Dictionary<string, object> UpdateChannelsRequest(Dictionary<string, Channel> channels)
-        {
-            var channelsJson = new Dictionary<string, object>();
-            foreach (KeyValuePair<string, Channel> entry in channels)
-            {
-                channelsJson.Add(entry.Key, entry.Value.AsJsonObject());
-            }
-
-            var request = new Dictionary<string, object>();
-            request.Add("channels", channelsJson);
-            return request;
-        }
-
-        public void SetObjects(string eventKey, object channelsConfig)
-        {
-            var requestBody = AssignObjectsToChannelsRequest(channelsConfig);
-            var restRequest = new RestRequest("/events/{key}/channels/assign-objects", Method.Post)
-                .AddUrlSegment("key", eventKey)
-                .AddJsonBody(requestBody);
-            AssertOk(_restClient.Execute<object>(restRequest));
-        }
-
-        private Dictionary<string, object> AssignObjectsToChannelsRequest(object channelsConfig)
+        private Dictionary<string, object> ReplaceChannelsRequest(List<Channel> channels)
         {
             var request = new Dictionary<string, object>();
-            request.Add("channelConfig", channelsConfig);
+            request.Add("channels", channels);
             return request;
         }
 

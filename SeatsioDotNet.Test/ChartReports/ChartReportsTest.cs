@@ -28,6 +28,9 @@ namespace SeatsioDotNet.Test.ChartReports
             Assert.Equal("A-2", reportItem.RightNeighbour);
             Assert.Null(reportItem.BookAsAWhole);
             Assert.NotNull(reportItem.DistanceToFocalPoint);
+            Assert.NotNull(reportItem.IsAccessible);
+            Assert.NotNull(reportItem.IsCompanionSeat);
+            Assert.NotNull(reportItem.HasRestrictedView);
         }
 
         [Fact]

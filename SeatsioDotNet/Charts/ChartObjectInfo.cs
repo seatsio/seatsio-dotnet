@@ -18,5 +18,8 @@ namespace SeatsioDotNet.ChartReports
         public string RightNeighbour { get; set; }
         public float? DistanceToFocalPoint { get; set; }
         public int? NumSeats { get; set; }
+        public bool? IsAccessible { get; set; }
+        public bool? IsCompanionSeat { get; set; }
+        public bool? HasRestrictedView { get; set; }
     }
 }

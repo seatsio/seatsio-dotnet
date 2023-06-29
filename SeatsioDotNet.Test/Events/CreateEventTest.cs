@@ -31,7 +31,7 @@ namespace SeatsioDotNet.Test.Events
         {
             var chartKey = CreateTestChart();
 
-            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withKey("eventje"));
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithKey("eventje"));
 
             Assert.Equal("eventje", evnt.Key);
         }
@@ -42,7 +42,7 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChartWithTables();
             var tableBookingConfig = TableBookingConfig.Custom(new() {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}});
 
-            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withTableBookingConfig(tableBookingConfig));
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithTableBookingConfig(tableBookingConfig));
 
             Assert.NotNull(evnt.Key);
             Assert.Equal("CUSTOM", evnt.TableBookingConfig.Mode);
@@ -55,7 +55,7 @@ namespace SeatsioDotNet.Test.Events
         {
             var chartKey = CreateTestChartWithTables();
 
-            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withTableBookingConfig(TableBookingConfig.Inherit()));
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithTableBookingConfig(TableBookingConfig.Inherit()));
 
             Assert.NotNull(evnt.Key);
             Assert.Equal("INHERIT", evnt.TableBookingConfig.Mode);
@@ -71,7 +71,7 @@ namespace SeatsioDotNet.Test.Events
             };
             Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
 
-            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withSocialDistancingRulesetKey("ruleset1"));
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithSocialDistancingRulesetKey("ruleset1"));
 
             Assert.Equal("ruleset1", evnt.SocialDistancingRulesetKey);
         }
@@ -86,7 +86,7 @@ namespace SeatsioDotNet.Test.Events
             {
                 {"A-1", 10L}
             };
-            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withObjectCategories(objectCategories));
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithObjectCategories(objectCategories));
             Assert.Equal(objectCategories, evnt.ObjectCategories);
         }
 
@@ -97,7 +97,7 @@ namespace SeatsioDotNet.Test.Events
             var eventCategory = new Category("eventCategory", "event-level category", "#AAABBB");
             var categories = new[] {eventCategory};
 
-            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withCategories(categories));
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithCategories(categories));
             
             Assert.Equal(TestChartCategories.Count + categories.Length, evnt.Categories.Count);
             Assert.Contains(eventCategory, evnt.Categories);
@@ -108,7 +108,7 @@ namespace SeatsioDotNet.Test.Events
         {
             var chartKey = CreateTestChart();
 
-            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withName("My event"));
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithName("My event"));
          
             Assert.Equal("My event", evnt.Name);
         }  
@@ -118,7 +118,7 @@ namespace SeatsioDotNet.Test.Events
         {
             var chartKey = CreateTestChart();
 
-            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withDate(new DateOnly(2022, 1, 10)));
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithDate(new DateOnly(2022, 1, 10)));
          
             Assert.Equal(new DateOnly(2022, 1, 10), evnt.Date);
         }

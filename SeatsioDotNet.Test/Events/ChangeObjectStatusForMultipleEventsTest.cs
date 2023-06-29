@@ -83,8 +83,8 @@ namespace SeatsioDotNet.Test.Events
                 {"ruleset", ruleset},
             };
             Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
-            var event1 = Client.Events.Create(chartKey, new CreateEventParams().withSocialDistancingRulesetKey("ruleset"));
-            var event2 = Client.Events.Create(chartKey, new CreateEventParams().withSocialDistancingRulesetKey("ruleset"));
+            var event1 = Client.Events.Create(chartKey, new CreateEventParams().WithSocialDistancingRulesetKey("ruleset"));
+            var event2 = Client.Events.Create(chartKey, new CreateEventParams().WithSocialDistancingRulesetKey("ruleset"));
 
             Client.Events.Book(new[] {event1.Key, event2.Key}, new[] {"A-1"}, null, null, null, null, null, true);
 

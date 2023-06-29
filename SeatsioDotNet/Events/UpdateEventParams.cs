@@ -15,49 +15,49 @@ namespace SeatsioDotNet.Events
         public Dictionary<string, object> ObjectCategories { get; set; }
         public Category[] Categories { get; set; }
 
-        public UpdateEventParams withKey(string key)
+        public UpdateEventParams WithKey(string key)
         {
             Key = key;
             return this;
         }    
         
-        public UpdateEventParams withChartKey(string chartKey)
+        public UpdateEventParams WithChartKey(string chartKey)
         {
             ChartKey = chartKey;
             return this;
         }
 
-        public UpdateEventParams withTableBookingConfig(TableBookingConfig tableBookingConfig)
+        public UpdateEventParams WithTableBookingConfig(TableBookingConfig tableBookingConfig)
         {
             TableBookingConfig = tableBookingConfig;
             return this;
         }
 
-        public UpdateEventParams withSocialDistancingRulesetKey(string socialDistancingRulesetKey)
+        public UpdateEventParams WithSocialDistancingRulesetKey(string socialDistancingRulesetKey)
         {
             SocialDistancingRulesetKey = socialDistancingRulesetKey;
             return this;
         }
 
-        public UpdateEventParams withObjectCategories(Dictionary<string, object> objectCategories)
+        public UpdateEventParams WithObjectCategories(Dictionary<string, object> objectCategories)
         {
             ObjectCategories = objectCategories;
             return this;
         }
 
-        public UpdateEventParams withCategories(Category[] categories)
+        public UpdateEventParams WithCategories(Category[] categories)
         {
             Categories = categories;
             return this;
         }
 
-        public UpdateEventParams withName(string name)
+        public UpdateEventParams WithName(string name)
         {
             Name = name;
             return this;
         }
 
-        public UpdateEventParams withDate(DateOnly date)
+        public UpdateEventParams WithDate(DateOnly date)
         {
             Date = date;
             return this;

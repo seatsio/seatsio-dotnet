@@ -72,9 +72,9 @@ namespace SeatsioDotNet.Test.Events
         public void NotPresentOnChartAnymore()
         {
             var chartKey = CreateTestChartWithTables();
-            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withTableBookingConfig(TableBookingConfig.AllByTable()));
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithTableBookingConfig(TableBookingConfig.AllByTable()));
             Client.Events.Book(evnt.Key, new[] {"T1"});
-            Client.Events.Update(evnt.Key, new UpdateEventParams().withTableBookingConfig(TableBookingConfig.AllBySeat()));
+            Client.Events.Update(evnt.Key, new UpdateEventParams().WithTableBookingConfig(TableBookingConfig.AllBySeat()));
             WaitForStatusChanges(Client, evnt, 1);
 
             var statusChanges = Client.Events.StatusChanges(evnt.Key).All();

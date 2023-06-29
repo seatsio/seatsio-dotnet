@@ -132,7 +132,7 @@ namespace SeatsioDotNet.Test.Events
                 {"ruleset", ruleset},
             };
             Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
-            Client.Events.Update(evnt.Key, new UpdateEventParams().withSocialDistancingRulesetKey("ruleset"));
+            Client.Events.Update(evnt.Key, new UpdateEventParams().WithSocialDistancingRulesetKey("ruleset"));
 
             Client.Events.Book(evnt.Key, new[] {"A-1"}, null, null, null, null, null, true);
 

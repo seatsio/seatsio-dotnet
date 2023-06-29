@@ -14,43 +14,43 @@ namespace SeatsioDotNet.Events
         public Dictionary<string, object> ObjectCategories { get; set; }
         public Category[] Categories { get; set; }
 
-        public CreateEventParams withKey(string key)
+        public CreateEventParams WithKey(string key)
         {
             Key = key;
             return this;
         }
 
-        public CreateEventParams withTableBookingConfig(TableBookingConfig tableBookingConfig)
+        public CreateEventParams WithTableBookingConfig(TableBookingConfig tableBookingConfig)
         {
             TableBookingConfig = tableBookingConfig;
             return this;
         }
 
-        public CreateEventParams withSocialDistancingRulesetKey(string socialDistancingRulesetKey)
+        public CreateEventParams WithSocialDistancingRulesetKey(string socialDistancingRulesetKey)
         {
             SocialDistancingRulesetKey = socialDistancingRulesetKey;
             return this;
         }
 
-        public CreateEventParams withObjectCategories(Dictionary<string, object> objectCategories)
+        public CreateEventParams WithObjectCategories(Dictionary<string, object> objectCategories)
         {
             ObjectCategories = objectCategories;
             return this;
         }
 
-        public CreateEventParams withCategories(Category[] categories)
+        public CreateEventParams WithCategories(Category[] categories)
         {
             Categories = categories;
             return this;
         }
 
-        public CreateEventParams withName(string name)
+        public CreateEventParams WithName(string name)
         {
             Name = name;
             return this;
         }
 
-        public CreateEventParams withDate(DateOnly date)
+        public CreateEventParams WithDate(DateOnly date)
         {
             Date = date;
             return this;

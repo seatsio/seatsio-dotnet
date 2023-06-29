@@ -84,6 +84,7 @@ public class SeatsioRestClient : RestClient
     public static JsonSerializerOptions SeatsioJsonSerializerOptions()
     {
         var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+        options.Converters.Add(new DateOnlyConverter());
         options.Converters.Add(new ObjectToInferredTypesConverter());
         return options;
     }
@@ -133,4 +134,16 @@ public class ObjectToInferredTypesConverter : JsonConverter<object>
         object objectToWrite,
         JsonSerializerOptions options) =>
         JsonSerializer.Serialize(writer, objectToWrite, objectToWrite.GetType(), options);
+}
+
+public class DateOnlyConverter : JsonConverter<DateOnly>
+{
+    public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var value = reader.GetString();
+        return DateOnly.Parse(value!);
+    }
+
+    public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options)
+        => writer.WriteStringValue(value.ToString("yyyy-MM-dd"));
 }

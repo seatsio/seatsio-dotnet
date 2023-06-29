@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using SeatsioDotNet.Charts;
 
 namespace SeatsioDotNet.Events
@@ -9,6 +10,8 @@ namespace SeatsioDotNet.Events
         public long Id { get; set; }
         public string Key { get; set; }
         public string ChartKey { get; set; }
+        public string Name { get; set; }
+        public DateOnly Date { get; set; }
         public TableBookingConfig TableBookingConfig { get; set; }
         public bool SupportsBestAvailable { get; set; }
         public ForSaleConfig ForSaleConfig { get; set; }

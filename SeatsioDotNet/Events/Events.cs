@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using RestSharp;
-using SeatsioDotNet.Charts;
 using SeatsioDotNet.EventReports;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
@@ -23,67 +21,54 @@ namespace SeatsioDotNet.Events
 
         public Event Create(string chartKey)
         {
-            return Create(chartKey, null, null, null, null);
+            return Create(chartKey, new CreateEventParams());
         }
 
-        public Event Create(string chartKey, string eventKey)
+        public Event Create(string chartKey, CreateEventParams p)
         {
-            return Create(chartKey, eventKey, null, null, null);
-        }
-
-        public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig)
-        {
-            return Create(chartKey, eventKey, tableBookingConfig, null, null);
-        }
-
-        public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig,
-            string socialDistancingRulesetKey)
-        {
-            return Create(chartKey, eventKey, tableBookingConfig, socialDistancingRulesetKey, null);
-        }
-
-        public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig,
-            string socialDistancingRulesetKey, Dictionary<string, object> objectCategories)
-        {
-            return Create(chartKey, eventKey, tableBookingConfig, socialDistancingRulesetKey, objectCategories, null);
-        }
-
-        public Event Create(string chartKey, string eventKey, TableBookingConfig tableBookingConfig,
-            string socialDistancingRulesetKey, Dictionary<string, object> objectCategories, Category[] categories)
-        {
-            Dictionary<string, object> requestBody = new Dictionary<string, object>();
+            var requestBody = new Dictionary<string, object>();
             requestBody.Add("chartKey", chartKey);
 
-            if (eventKey != null)
+            if (p.Key != null)
             {
-                requestBody.Add("eventKey", eventKey);
+                requestBody.Add("eventKey", p.Key);
             }
 
-            if (tableBookingConfig != null)
+            if (p.Name != null)
             {
-                requestBody.Add("tableBookingConfig", tableBookingConfig.AsJsonObject());
+                requestBody.Add("name", p.Name);
             }
 
-            if (socialDistancingRulesetKey != null)
+            if (p.Date != null)
             {
-                requestBody.Add("socialDistancingRulesetKey", socialDistancingRulesetKey);
+                requestBody.Add("date", p.Date);
             }
 
-            if (objectCategories != null)
+            if (p.TableBookingConfig != null)
             {
-                requestBody.Add("objectCategories", objectCategories);
+                requestBody.Add("tableBookingConfig", p.TableBookingConfig.AsJsonObject());
             }
 
-            if (categories != null)
+            if (p.SocialDistancingRulesetKey != null)
             {
-                requestBody.Add("categories", categories);
+                requestBody.Add("socialDistancingRulesetKey", p.SocialDistancingRulesetKey);
+            }
+
+            if (p.ObjectCategories != null)
+            {
+                requestBody.Add("objectCategories", p.ObjectCategories);
+            }
+
+            if (p.Categories != null)
+            {
+                requestBody.Add("categories", p.Categories);
             }
 
             var restRequest = new RestRequest("/events", Method.Post).AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }
 
-        public Event[] Create(string chartKey, EventCreationParams[] eventCreationParams)
+        public Event[] Create(string chartKey, CreateEventParams[] eventCreationParams)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("chartKey", chartKey);
@@ -94,6 +79,16 @@ namespace SeatsioDotNet.Events
                 if (param.Key != null)
                 {
                     e.Add("eventKey", param.Key);
+                }
+
+                if (param.Name != null)
+                {
+                    e.Add("name", param.Name);
+                }
+
+                if (param.Date != null)
+                {
+                    e.Add("date", param.Date);
                 }
 
                 if (param.TableBookingConfig != null)
@@ -124,84 +119,48 @@ namespace SeatsioDotNet.Events
             return AssertOk(_restClient.Execute<MultipleEvents>(restRequest)).events.ToArray();
         }
 
-        public void UpdateChartKey(string eventKey, string newChartKey)
-        {
-            Update(eventKey, newChartKey, null, null, null, null, null);
-        }
-
-        public void UpdateEventKey(string oldEventKey, string newEventKey)
-        {
-            Update(oldEventKey, null, newEventKey, null, null, null, null);
-        }
-
-        public void UpdateTableBookingConfig(string eventKey, TableBookingConfig newTableBookingConfig)
-        {
-            Update(eventKey, null, null, newTableBookingConfig, null, null, null);
-        }
-
-        public void UpdateSocialDistancingRulesetKey(string eventKey, string newSocialDistancingRulesetKey)
-        {
-            Update(eventKey, null, null, null, newSocialDistancingRulesetKey, null, null);
-        }
-
-        public void RemoveSocialDistancingRulesetKey(string eventKey)
-        {
-            UpdateSocialDistancingRulesetKey(eventKey, "");
-        }
-
-        public void UpdateObjectCategories(string eventKey, Dictionary<string, object> newObjectCategories)
-        {
-            Update(eventKey, null, null, null, null, newObjectCategories, null);
-        }
-        
-        public void RemoveObjectCategories(string eventKey)
-        {
-            UpdateObjectCategories(eventKey, new Dictionary<string, object>());
-        }
-
-        public void UpdateCategories(string eventKey, Category[] categories)
-        {
-            Update(eventKey, null, null, null, null, null, categories);
-        }
-
-        public void RemoveCategories(string eventKey)
-        {
-            UpdateCategories(eventKey, Array.Empty<Category>());
-        }
-        
-        public void Update(string eventKey, string chartKey, string newEventKey, TableBookingConfig tableBookingConfig,
-            string socialDistancingRulesetKey, Dictionary<string, object> objectCategories, Category[] categories)
+        public void Update(string eventKey, UpdateEventParams p)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
 
-            if (chartKey != null)
+            if (p.ChartKey != null)
             {
-                requestBody.Add("chartKey", chartKey);
+                requestBody.Add("chartKey", p.ChartKey);
             }
 
-            if (newEventKey != null)
+            if (p.Key != null)
             {
-                requestBody.Add("eventKey", newEventKey);
+                requestBody.Add("eventKey", p.Key);
             }
 
-            if (tableBookingConfig != null)
+            if (p.Name != null)
             {
-                requestBody.Add("tableBookingConfig", tableBookingConfig.AsJsonObject());
+                requestBody.Add("name", p.Name);
             }
 
-            if (socialDistancingRulesetKey != null)
+            if (p.Date != null)
             {
-                requestBody.Add("socialDistancingRulesetKey", socialDistancingRulesetKey);
+                requestBody.Add("date", p.Date);
             }
 
-            if (objectCategories != null)
+            if (p.TableBookingConfig != null)
             {
-                requestBody.Add("objectCategories", objectCategories);
+                requestBody.Add("tableBookingConfig", p.TableBookingConfig.AsJsonObject());
             }
 
-            if (categories != null)
+            if (p.SocialDistancingRulesetKey != null)
             {
-                requestBody.Add("categories", categories);
+                requestBody.Add("socialDistancingRulesetKey", p.SocialDistancingRulesetKey);
+            }
+
+            if (p.ObjectCategories != null)
+            {
+                requestBody.Add("objectCategories", p.ObjectCategories);
+            }
+
+            if (p.Categories != null)
+            {
+                requestBody.Add("categories", p.Categories);
             }
 
             var restRequest = new RestRequest("/events/{key}", Method.Post)
@@ -538,7 +497,8 @@ namespace SeatsioDotNet.Events
             AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
         }
 
-        public void MarkAsForSale(string eventKey, IEnumerable<string> objects, Dictionary<string, int> areaPlaces, IEnumerable<string> categories)
+        public void MarkAsForSale(string eventKey, IEnumerable<string> objects, Dictionary<string, int> areaPlaces,
+            IEnumerable<string> categories)
         {
             var requestBody = ForSaleRequest(objects, areaPlaces, categories);
             var restRequest = new RestRequest("/events/{key}/actions/mark-as-for-sale", Method.Post)
@@ -547,7 +507,8 @@ namespace SeatsioDotNet.Events
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
-        public void MarkAsNotForSale(string eventKey, IEnumerable<string> objects, Dictionary<string, int> areaPlaces, IEnumerable<string> categories)
+        public void MarkAsNotForSale(string eventKey, IEnumerable<string> objects, Dictionary<string, int> areaPlaces,
+            IEnumerable<string> categories)
         {
             var requestBody = ForSaleRequest(objects, areaPlaces, categories);
             var restRequest = new RestRequest("/events/{key}/actions/mark-as-not-for-sale", Method.Post)
@@ -563,15 +524,16 @@ namespace SeatsioDotNet.Events
             AssertOk(_restClient.Execute<object>(restRequest));
         }
 
-        private Dictionary<string, object> ForSaleRequest(IEnumerable<string> objects, Dictionary<string, int> areaPlaces, IEnumerable<string> categories)
+        private Dictionary<string, object> ForSaleRequest(IEnumerable<string> objects,
+            Dictionary<string, int> areaPlaces, IEnumerable<string> categories)
         {
             var request = new Dictionary<string, object>();
 
             if (objects != null)
             {
                 request.Add("objects", objects);
-            }     
-            
+            }
+
             if (areaPlaces != null)
             {
                 request.Add("areaPlaces", areaPlaces);

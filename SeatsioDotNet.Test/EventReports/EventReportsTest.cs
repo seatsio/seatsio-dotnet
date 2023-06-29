@@ -95,7 +95,7 @@ namespace SeatsioDotNet.Test.EventReports
         public void ReportItemPropertiesForTable()
         {
             var chartKey = CreateTestChartWithTables();
-            var evnt = Client.Events.Create(chartKey, null, TableBookingConfig.AllByTable());
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withTableBookingConfig(TableBookingConfig.AllByTable()));
 
             var report = Client.EventReports.ByLabel(evnt.Key);
 

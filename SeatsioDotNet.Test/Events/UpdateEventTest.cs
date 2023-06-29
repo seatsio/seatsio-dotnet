@@ -15,7 +15,7 @@ namespace SeatsioDotNet.Test.Events
             var chartKey2 = CreateTestChart();
             var evnt = Client.Events.Create(chartKey1);
 
-            Client.Events.UpdateChartKey(evnt.Key, chartKey2);
+            Client.Events.Update(evnt.Key, new UpdateEventParams().withChartKey(chartKey2));
 
             var retrievedEvent = Client.Events.Retrieve(evnt.Key);
             Assert.Equal(evnt.Key, retrievedEvent.Key);
@@ -29,7 +29,7 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var evnt = Client.Events.Create(chartKey);
 
-            Client.Events.UpdateEventKey(evnt.Key, "newKey");
+            Client.Events.Update(evnt.Key, new UpdateEventParams().withKey("newKey"));
 
             var retrievedEvent = Client.Events.Retrieve("newKey");
             Assert.Equal("newKey", retrievedEvent.Key);
@@ -40,9 +40,10 @@ namespace SeatsioDotNet.Test.Events
         public void UpdateTableBookingConfig()
         {
             var chartKey = CreateTestChartWithTables();
-            var evnt = Client.Events.Create(chartKey, null, TableBookingConfig.Custom(new() {{"T1", "BY_TABLE"}}));
+            var evnt = Client.Events.Create(chartKey,
+                new CreateEventParams().withTableBookingConfig(TableBookingConfig.Custom(new() {{"T1", "BY_TABLE"}})));
 
-            Client.Events.UpdateTableBookingConfig(evnt.Key, TableBookingConfig.Custom(new() {{"T1", "BY_SEAT"}}));
+            Client.Events.Update(evnt.Key, new UpdateEventParams().withTableBookingConfig(TableBookingConfig.Custom(new() {{"T1", "BY_SEAT"}})));
 
             var retrievedEvent = Client.Events.Retrieve(evnt.Key);
             Assert.Equal(evnt.Key, retrievedEvent.Key);
@@ -61,9 +62,10 @@ namespace SeatsioDotNet.Test.Events
                 {"ruleset2", SocialDistancingRuleset.RuleBased("My second ruleset").Build()}
             };
             Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
-            var evnt = Client.Events.Create(chartKey, null, null, "ruleset1");
+            var evnt = Client.Events.Create(chartKey,
+                new CreateEventParams().withSocialDistancingRulesetKey("ruleset1"));
 
-            Client.Events.UpdateSocialDistancingRulesetKey(evnt.Key, "ruleset2");
+            Client.Events.Update(evnt.Key, new UpdateEventParams().withSocialDistancingRulesetKey("ruleset2"));
 
             var retrievedEvent = Client.Events.Retrieve(evnt.Key);
             Assert.Equal(retrievedEvent.SocialDistancingRulesetKey, "ruleset2");
@@ -78,9 +80,10 @@ namespace SeatsioDotNet.Test.Events
                 {"ruleset1", SocialDistancingRuleset.RuleBased("My first ruleset").Build()}
             };
             Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
-            var evnt = Client.Events.Create(chartKey, null, null, "ruleset1");
+            var evnt = Client.Events.Create(chartKey,
+                new CreateEventParams().withSocialDistancingRulesetKey("ruleset1"));
 
-            Client.Events.RemoveSocialDistancingRulesetKey(evnt.Key);
+            Client.Events.Update(evnt.Key, new UpdateEventParams().withSocialDistancingRulesetKey(""));
 
             var retrievedEvent = Client.Events.Retrieve(evnt.Key);
             Assert.Null(retrievedEvent.SocialDistancingRulesetKey);
@@ -94,13 +97,13 @@ namespace SeatsioDotNet.Test.Events
             {
                 {"A-1", 10L}
             };
-            var evnt = Client.Events.Create(chartKey, null, null, null, objectCategories);
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withObjectCategories(objectCategories));
 
             var newObjectCategories = new Dictionary<string, object>()
             {
                 {"A-2", 9L}
             };
-            Client.Events.UpdateObjectCategories(evnt.Key, newObjectCategories);
+            Client.Events.Update(evnt.Key, new UpdateEventParams().withObjectCategories(newObjectCategories));
 
             var retrievedEvent = Client.Events.Retrieve(evnt.Key);
             Assert.Equal(newObjectCategories, retrievedEvent.ObjectCategories);
@@ -114,9 +117,9 @@ namespace SeatsioDotNet.Test.Events
             {
                 {"A-1", 10L}
             };
-            var evnt = Client.Events.Create(chartKey, null, null, null, objectCategories);
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withObjectCategories(objectCategories));
 
-            Client.Events.RemoveObjectCategories(evnt.Key);
+            Client.Events.Update(evnt.Key, new UpdateEventParams().withObjectCategories(new Dictionary<string, object>()));
 
             var retrievedEvent = Client.Events.Retrieve(evnt.Key);
             Assert.Null(retrievedEvent.ObjectCategories);
@@ -130,7 +133,7 @@ namespace SeatsioDotNet.Test.Events
             Category eventCategory = new Category("eventCategory", "event-level category", "#AAABBB");
             Category[] categories = new[] {eventCategory};
 
-            Client.Events.UpdateCategories(evnt.Key, categories);
+            Client.Events.Update(evnt.Key, new UpdateEventParams().withCategories(categories));
 
             var retrievedEvent = Client.Events.Retrieve(evnt.Key);
             Assert.Equal(TestChartCategories.Count + categories.Length, retrievedEvent.Categories.Count);
@@ -144,13 +147,37 @@ namespace SeatsioDotNet.Test.Events
             Category eventCategory = new Category("eventCategory", "event-level category", "#AAABBB");
             Category[] categories = new[] {eventCategory};
 
-            var evnt = Client.Events.Create(chartKey, null, null, null, null, categories);
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withCategories(categories));
 
-            Client.Events.RemoveCategories(evnt.Key);
+            Client.Events.Update(evnt.Key, new UpdateEventParams().withCategories(new Category[] {}));
 
             var retrievedEvent = Client.Events.Retrieve(evnt.Key);
             Assert.Equal(TestChartCategories.Count, retrievedEvent.Categories.Count);
             Assert.DoesNotContain(eventCategory, retrievedEvent.Categories);
+        }
+
+        [Fact]
+        public void UpdateName()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withName("An event"));
+
+            Client.Events.Update(evnt.Key, new UpdateEventParams().withName("Another event"));
+
+            var retrievedEvent = Client.Events.Retrieve(evnt.Key);
+            Assert.Equal("Another event", retrievedEvent.Name);
+        }  
+        
+        [Fact]
+        public void UpdateDate()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().withName("An event"));
+
+            Client.Events.Update(evnt.Key, new UpdateEventParams().withDate(new DateOnly(2022, 1, 10)));
+
+            var retrievedEvent = Client.Events.Retrieve(evnt.Key);
+            Assert.Equal(new DateOnly(2022, 1, 10), retrievedEvent.Date);
         }
     }
 }

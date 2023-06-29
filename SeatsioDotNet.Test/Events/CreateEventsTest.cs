@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SeatsioDotNet.Charts;
 using SeatsioDotNet.Events;
@@ -13,8 +14,8 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var eventCreationParams = new[]
             {
-                new EventCreationParams(),
-                new EventCreationParams()
+                new CreateEventParams(),
+                new CreateEventParams()
             };
 
             var events = Client.Events.Create(chartKey, eventCreationParams);
@@ -28,7 +29,7 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var eventCreationParams = new[]
             {
-                new EventCreationParams()
+                new CreateEventParams()
             };
 
             var events = Client.Events.Create(chartKey, eventCreationParams);
@@ -51,8 +52,8 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var eventCreationParams = new[]
             {
-                new EventCreationParams("event1"),
-                new EventCreationParams("event2")
+                new CreateEventParams().withKey("event1"),
+                new CreateEventParams().withKey("event2")
             };
 
             var events = Client.Events.Create(chartKey, eventCreationParams);
@@ -67,8 +68,10 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChartWithTables();
             var eventCreationParams = new[]
             {
-                new EventCreationParams(null, TableBookingConfig.Custom(new() {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}})),
-                new EventCreationParams(null, TableBookingConfig.Custom(new() {{"T1", "BY_SEAT"}, {"T2", "BY_TABLE"}}))
+                new CreateEventParams().withTableBookingConfig(TableBookingConfig.Custom(new()
+                    {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}})),
+                new CreateEventParams().withTableBookingConfig(TableBookingConfig.Custom(new()
+                    {{"T1", "BY_SEAT"}, {"T2", "BY_TABLE"}}))
             };
 
             var events = Client.Events.Create(chartKey, eventCreationParams);
@@ -90,8 +93,8 @@ namespace SeatsioDotNet.Test.Events
             Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
             var eventCreationParams = new[]
             {
-                new EventCreationParams(null, "ruleset1"),
-                new EventCreationParams(null, "ruleset1")
+                new CreateEventParams().withSocialDistancingRulesetKey("ruleset1"),
+                new CreateEventParams().withSocialDistancingRulesetKey("ruleset1")
             };
 
             var events = Client.Events.Create(chartKey, eventCreationParams);
@@ -110,7 +113,7 @@ namespace SeatsioDotNet.Test.Events
             };
             var eventCreationParams = new[]
             {
-                new EventCreationParams(null, objectCategories)
+                new CreateEventParams().withObjectCategories(objectCategories)
             };
 
             var events = Client.Events.Create(chartKey, eventCreationParams);
@@ -126,10 +129,10 @@ namespace SeatsioDotNet.Test.Events
             var categories = new[] {eventCategory};
             var eventCreationParams = new[]
             {
-                new EventCreationParams(null, categories)
+                new CreateEventParams().withCategories(categories)
             };
             var events = Client.Events.Create(chartKey, eventCreationParams);
-            
+
             Assert.Equal(1, events.Length);
             Assert.Equal(TestChartCategories.Count + categories.Length, events[0].Categories.Count);
             Assert.Contains(eventCategory, events[0].Categories);
@@ -141,11 +144,39 @@ namespace SeatsioDotNet.Test.Events
             var chartKey = CreateTestChart();
             var eventCreationParams = new[]
             {
-                new EventCreationParams("e1"),
-                new EventCreationParams("e1")
+                new CreateEventParams().withKey("e1"),
+                new CreateEventParams().withKey("e1")
             };
 
             Assert.Throws<SeatsioException>(() => Client.Events.Create(chartKey, eventCreationParams));
+        }
+
+        [Fact]
+        public void NameCanBePassedIn()
+        {
+            var chartKey = CreateTestChart();
+            var eventCreationParams = new[]
+            {
+                new CreateEventParams().withName("My event")
+            };
+
+            var events = Client.Events.Create(chartKey, eventCreationParams);
+
+            Assert.Equal("My event", events[0].Name);
+        }
+
+        [Fact]
+        public void DateCanBePassedIn()
+        {
+            var chartKey = CreateTestChart();
+            var eventCreationParams = new[]
+            {
+                new CreateEventParams().withDate(new DateOnly(2022, 1, 10))
+            };
+
+            var events = Client.Events.Create(chartKey, eventCreationParams);
+
+            Assert.Equal(new DateOnly(2022, 1, 10), events[0].Date);
         }
     }
 }

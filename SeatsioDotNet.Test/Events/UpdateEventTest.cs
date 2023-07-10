@@ -51,44 +51,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal("CUSTOM", retrievedEvent.TableBookingConfig.Mode);
             Assert.Equal(new() {{"T1", "BY_SEAT"}}, retrievedEvent.TableBookingConfig.Tables);
         }
-
-        [Fact]
-        public void UpdateSocialDistancingRulesetKey()
-        {
-            var chartKey = CreateTestChart();
-            var rulesets = new Dictionary<string, SocialDistancingRuleset>()
-            {
-                {"ruleset1", SocialDistancingRuleset.RuleBased("My first ruleset").Build()},
-                {"ruleset2", SocialDistancingRuleset.RuleBased("My second ruleset").Build()}
-            };
-            Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
-            var evnt = Client.Events.Create(chartKey,
-                new CreateEventParams().WithSocialDistancingRulesetKey("ruleset1"));
-
-            Client.Events.Update(evnt.Key, new UpdateEventParams().WithSocialDistancingRulesetKey("ruleset2"));
-
-            var retrievedEvent = Client.Events.Retrieve(evnt.Key);
-            Assert.Equal(retrievedEvent.SocialDistancingRulesetKey, "ruleset2");
-        }
-
-        [Fact]
-        public void RemoveSocialDistancingRulesetKey()
-        {
-            var chartKey = CreateTestChart();
-            var rulesets = new Dictionary<string, SocialDistancingRuleset>()
-            {
-                {"ruleset1", SocialDistancingRuleset.RuleBased("My first ruleset").Build()}
-            };
-            Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
-            var evnt = Client.Events.Create(chartKey,
-                new CreateEventParams().WithSocialDistancingRulesetKey("ruleset1"));
-
-            Client.Events.Update(evnt.Key, new UpdateEventParams().WithSocialDistancingRulesetKey(""));
-
-            var retrievedEvent = Client.Events.Retrieve(evnt.Key);
-            Assert.Null(retrievedEvent.SocialDistancingRulesetKey);
-        }
-
+        
         [Fact]
         public void UpdateObjectCategories()
         {

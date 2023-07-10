@@ -10,7 +10,6 @@ namespace SeatsioDotNet.Events
         public string Name { get; set; }
         public DateOnly? Date { get; set; }
         public TableBookingConfig TableBookingConfig { get; set; }
-        public string SocialDistancingRulesetKey { get; set; }
         public Dictionary<string, object> ObjectCategories { get; set; }
         public Category[] Categories { get; set; }
 
@@ -23,12 +22,6 @@ namespace SeatsioDotNet.Events
         public CreateEventParams WithTableBookingConfig(TableBookingConfig tableBookingConfig)
         {
             TableBookingConfig = tableBookingConfig;
-            return this;
-        }
-
-        public CreateEventParams WithSocialDistancingRulesetKey(string socialDistancingRulesetKey)
-        {
-            SocialDistancingRulesetKey = socialDistancingRulesetKey;
             return this;
         }
 

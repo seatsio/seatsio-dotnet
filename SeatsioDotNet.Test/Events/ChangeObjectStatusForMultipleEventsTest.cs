@@ -70,27 +70,5 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(EventObjectInfo.Free, Client.Events.RetrieveObjectInfo(event2.Key, "A-1").Status);
             Assert.Equal(EventObjectInfo.Free, Client.Events.RetrieveObjectInfo(event2.Key, "A-2").Status);
         }
-        
-        [Fact]
-        public void IgnoreSocialDistancing()
-        {
-            var chartKey = CreateTestChart();
-            var ruleset = SocialDistancingRuleset.Fixed("ruleset")
-                .WithDisabledSeats(new List<string> {"A-1"})
-                .Build();
-            var rulesets = new Dictionary<string, SocialDistancingRuleset>
-            {
-                {"ruleset", ruleset},
-            };
-            Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
-            var event1 = Client.Events.Create(chartKey, new CreateEventParams().WithSocialDistancingRulesetKey("ruleset"));
-            var event2 = Client.Events.Create(chartKey, new CreateEventParams().WithSocialDistancingRulesetKey("ruleset"));
-
-            Client.Events.Book(new[] {event1.Key, event2.Key}, new[] {"A-1"}, null, null, null, null, null, true);
-
-            Assert.Equal(EventObjectInfo.Booked, Client.Events.RetrieveObjectInfo(event1.Key, "A-1").Status);
-            Assert.Equal(EventObjectInfo.Booked, Client.Events.RetrieveObjectInfo(event2.Key, "A-1").Status);
-        }
-
     }
 }

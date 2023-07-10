@@ -15,6 +15,5 @@ namespace SeatsioDotNet.Charts
         public string DraftVersionThumbnailUrl { get; set; }
         public IEnumerable<Event> Events { get; set; }
         public ChartValidationResult Validation { get; set; }
-        public Dictionary<string, SocialDistancingRuleset> SocialDistancingRulesets { get; set; }
     }
 }

@@ -62,22 +62,6 @@ namespace SeatsioDotNet.Test.Events
         }
 
         [Fact]
-        public void SocialDistancingRulesetKeyCanBePassedIn()
-        {
-            var chartKey = CreateTestChart();
-            var rulesets = new Dictionary<string, SocialDistancingRuleset>()
-            {
-                {"ruleset1", SocialDistancingRuleset.RuleBased("My first ruleset").Build()},
-            };
-            Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
-
-            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithSocialDistancingRulesetKey("ruleset1"));
-
-            Assert.Equal("ruleset1", evnt.SocialDistancingRulesetKey);
-        }
-
-
-        [Fact]
         public void ObjectCategoriesCanBePassedIn()
         {
             var chartKey = CreateTestChart();

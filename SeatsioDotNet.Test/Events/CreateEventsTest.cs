@@ -81,28 +81,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal("CUSTOM", events[1].TableBookingConfig.Mode);
             Assert.Equal(new() {{"T1", "BY_SEAT"}, {"T2", "BY_TABLE"}}, events[1].TableBookingConfig.Tables);
         }
-
-        [Fact]
-        public void SocialDistancingRulesetKeyCanBePassedIn()
-        {
-            var chartKey = CreateTestChart();
-            var rulesets = new Dictionary<string, SocialDistancingRuleset>()
-            {
-                {"ruleset1", SocialDistancingRuleset.RuleBased("My first ruleset").Build()},
-            };
-            Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
-            var eventCreationParams = new[]
-            {
-                new CreateEventParams().WithSocialDistancingRulesetKey("ruleset1"),
-                new CreateEventParams().WithSocialDistancingRulesetKey("ruleset1")
-            };
-
-            var events = Client.Events.Create(chartKey, eventCreationParams);
-
-            Assert.Equal("ruleset1", events[0].SocialDistancingRulesetKey);
-            Assert.Equal("ruleset1", events[1].SocialDistancingRulesetKey);
-        }
-
+        
         [Fact]
         public void ObjectCategoriesCanBePassedIn()
         {

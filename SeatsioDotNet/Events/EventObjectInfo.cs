@@ -41,7 +41,6 @@ namespace SeatsioDotNet.EventReports
         public string LeftNeighbour { get; set; }
         public string RightNeighbour { get; set; }
         public bool IsAvailable { get; set; }
-        public bool? IsDisabledBySocialDistancing { get; set; }
         public string Channel { get; set; }
         public float? DistanceToFocalPoint { get; set; }
         public Dictionary<string, Dictionary<string, int>> Holds { get; set; }

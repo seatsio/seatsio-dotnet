@@ -101,27 +101,5 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.Equal(EventObjectInfo.Held, Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").Status);
         }
-        
-        [Fact]
-        public void IgnoreSocialDistancing()
-        {
-            var chartKey = CreateTestChart();
-            var evnt = Client.Events.Create(chartKey);
-            var ruleset = SocialDistancingRuleset.Fixed("ruleset")
-                .WithDisabledSeats(new List<string> {"A-1"})
-                .Build();
-            
-            var rulesets = new Dictionary<string, SocialDistancingRuleset>
-            {
-                {"ruleset", ruleset},
-            };
-            Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
-            Client.Events.Update(evnt.Key, new UpdateEventParams().WithSocialDistancingRulesetKey("ruleset"));
-            HoldToken holdToken = Client.HoldTokens.Create();
-
-            Client.Events.Hold(evnt.Key, new[] {"A-1"}, holdToken.Token, null, null, null, null, true);
-
-            Assert.Equal(EventObjectInfo.Held, Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").Status);
-        }
     }
 }

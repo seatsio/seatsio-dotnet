@@ -164,25 +164,6 @@ namespace SeatsioDotNet.Test.Events
         }
         
         [Fact]
-        public void IgnoreSocialDistancing()
-        {
-            var chartKey = CreateTestChart();
-            var ruleset = SocialDistancingRuleset.Fixed("ruleset")
-                .WithDisabledSeats(new List<string> {"A-1"})
-                .Build();
-            var rulesets = new Dictionary<string, SocialDistancingRuleset>
-            {
-                {"ruleset", ruleset},
-            };
-            Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
-            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithSocialDistancingRulesetKey("ruleset"));
-
-            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", null, null, null, null, null, true);
-
-            Assert.Null(Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
-        }
-
-        [Fact]
         public void AllowedPreviousStatuses()
         {
             var chartKey = CreateTestChart();
@@ -191,7 +172,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Throws<SeatsioException>(() =>
             {
                 Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", 
-                    null, null, null, null, null, true,
+                    null, null, null, null, null,
                     new []{"somePreviousStatus"}
                     );
             });
@@ -206,7 +187,7 @@ namespace SeatsioDotNet.Test.Events
             Assert.Throws<SeatsioException>(() =>
             {
                 Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", 
-                    null, null, null, null, null, true, 
+                    null, null, null, null, null, 
                     null, new []{"free"}
                 );
             });

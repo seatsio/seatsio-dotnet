@@ -68,21 +68,6 @@ namespace SeatsioDotNet.Test.Seasons
             var season = Client.Seasons.Create(chartKey, tableBookingConfig: TableBookingConfig.AllBySeat());
 
             Assert.Equal(TableBookingConfig.AllBySeat().Mode, season.TableBookingConfig.Mode);
-        }  
-        
-        [Fact]
-        public void SocialDistancingRulesetKeyCanBePassedIn()
-        {
-            var chartKey = CreateTestChart();
-            var rulesets = new Dictionary<string, SocialDistancingRuleset>()
-            {
-                { "ruleset1", SocialDistancingRuleset.RuleBased("My first ruleset").Build() },
-            };
-            Client.Charts.SaveSocialDistancingRulesets(chartKey, rulesets);
-
-            var season = Client.Seasons.Create(chartKey, socialDistancingRulesetKey: "ruleset1");
-
-            Assert.Equal("ruleset1", season.SocialDistancingRulesetKey);
         }
     }
 }

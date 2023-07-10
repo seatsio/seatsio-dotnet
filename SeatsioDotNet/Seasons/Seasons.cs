@@ -17,7 +17,7 @@ namespace SeatsioDotNet.Seasons
             _seatsioClient = seatsioClient;
         }
 
-        public Event Create(string chartKey, string key = null, int? numberOfEvents = null, IEnumerable<string> eventKeys = null, TableBookingConfig tableBookingConfig = null, string socialDistancingRulesetKey = null)
+        public Event Create(string chartKey, string key = null, int? numberOfEvents = null, IEnumerable<string> eventKeys = null, TableBookingConfig tableBookingConfig = null)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("chartKey", chartKey);
@@ -42,11 +42,6 @@ namespace SeatsioDotNet.Seasons
                 requestBody.Add("tableBookingConfig", tableBookingConfig.AsJsonObject());
             }
             
-            if (socialDistancingRulesetKey != null)
-            {
-                requestBody.Add("socialDistancingRulesetKey", socialDistancingRulesetKey);
-            }
-
             var restRequest = new RestRequest("/seasons", Method.Post).AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }

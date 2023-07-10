@@ -137,26 +137,6 @@ namespace SeatsioDotNet.Charts
             AssertOk(_restClient.Execute<object>(restRequest));
         }
         
-        public void SaveSocialDistancingRulesets(string chartKey, Dictionary<string, SocialDistancingRuleset> rulesets)
-        {
-            var restRequest = new RestRequest("/charts/{key}/social-distancing-rulesets", Method.Post)
-                .AddUrlSegment("key", chartKey)
-                .AddJsonBody(SaveSocialDistancingRulesetsRequest(rulesets));
-            AssertOk(_restClient.Execute<object>(restRequest));
-        }
-        
-        private Dictionary<string, object> SaveSocialDistancingRulesetsRequest(Dictionary<string, SocialDistancingRuleset> rulesets)
-        {
-            var json = new Dictionary<string, object>();
-            foreach(KeyValuePair<string, SocialDistancingRuleset> entry in rulesets)
-            {
-                json.Add(entry.Key, entry.Value.AsJsonObject());
-            }
-            var request = new Dictionary<string, object>();
-            request.Add("socialDistancingRulesets", json);
-            return request;
-        }
-
         public Chart Retrieve(string chartKey, bool? expandEvents = null)
         {
             var restRequest = new RestRequest("/charts/{key}", Method.Get)

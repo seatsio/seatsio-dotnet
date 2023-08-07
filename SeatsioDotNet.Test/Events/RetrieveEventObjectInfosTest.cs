@@ -31,7 +31,7 @@ namespace SeatsioDotNet.Test.Events
 
             Dictionary<string, Dictionary<string, int>> expectedHolds = new Dictionary<string, Dictionary<string, int>>();
             expectedHolds.Add(holdToken.Token, new() {{"NO_TICKET_TYPE", 1}});
-            Assert.Equal(expectedHolds, objectInfos["GA1"].Holds);
+            Assert.Equivalent(expectedHolds, objectInfos["GA1"].Holds);
         }
     }
 }

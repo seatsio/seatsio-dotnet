@@ -45,5 +45,8 @@ namespace SeatsioDotNet.EventReports
         public float? DistanceToFocalPoint { get; set; }
         public Dictionary<string, Dictionary<string, int>> Holds { get; set; }
         public int? NumSeats { get; set; }
+        public bool? VariableOccupancy { get; set; }
+        public int? MinOccupancy { get; set; }
+        public int? MaxOccupancy { get; set; }
     }
 }

@@ -50,6 +50,11 @@ namespace SeatsioDotNet.Test.EventReports
             Assert.Equal("channelKey1", reportItem.Channel);
             Assert.Null(reportItem.BookAsAWhole);
             Assert.NotNull(reportItem.DistanceToFocalPoint);
+            
+            var gaItem = report["GA1"].First();
+            Assert.True(gaItem.VariableOccupancy);
+            Assert.Equal(1, gaItem.MinOccupancy);
+            Assert.Equal(100, gaItem.MaxOccupancy);
         }
 
         [Fact]

@@ -13,14 +13,13 @@ namespace SeatsioDotNet.Test.EventReports
         public void ReportItemProperties()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events.Create(chartKey);
-            var extraData = new Dictionary<string, object> {{"foo", "bar"}};
-            Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1", "ticketType1", extraData)}, null, "order1");
-
-            Client.Events.Channels.Replace(evnt.Key, new List<Channel>
+            var channels = new List<Channel>
             {
-                new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1"})
-            });
+                new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"})
+            };
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithChannels(channels));
+            var extraData = new Dictionary<string, object> {{"foo", "bar"}};
+            Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1", "ticketType1", extraData)}, null, "order1", null, true);
 
             var report = Client.EventReports.ByLabel(evnt.Key);
 
@@ -354,11 +353,11 @@ namespace SeatsioDotNet.Test.EventReports
         public void ByChannel()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events.Create(chartKey);
-            Client.Events.Channels.Replace(evnt.Key, new List<Channel>
+            var channels = new List<Channel>
             {
                 new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"})
-            });
+            };
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithChannels(channels));
 
             var report = Client.EventReports.ByChannel(evnt.Key);
 
@@ -370,11 +369,11 @@ namespace SeatsioDotNet.Test.EventReports
         public void BySpecificChannel()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events.Create(chartKey);
-            Client.Events.Channels.Replace(evnt.Key, new List<Channel>
+            var channels = new List<Channel>
             {
                 new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"})
-            });
+            };
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithChannels(channels));
 
             var report = Client.EventReports.ByChannel(evnt.Key, "channelKey1");
 

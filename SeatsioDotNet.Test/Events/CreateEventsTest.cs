@@ -156,6 +156,24 @@ namespace SeatsioDotNet.Test.Events
             var events = Client.Events.Create(chartKey, eventCreationParams);
 
             Assert.Equal(new DateOnly(2022, 1, 10), events[0].Date);
+        }    
+        
+        [Fact]
+        public void ChannelsCanBePassedIn()
+        {
+            var chartKey = CreateTestChart();
+            var channels = new List<Channel>
+            {
+                new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}),
+                new("channelKey2", "channel 2", "#00FFFF", 2, new String[] {})
+            };
+
+            var events = Client.Events.Create(chartKey, new[]
+            {
+                new CreateEventParams().WithChannels(channels)
+            });
+
+            Assert.Equivalent(channels, events[0].Channels);
         }
     }
 }

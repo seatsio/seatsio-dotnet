@@ -92,11 +92,11 @@ namespace SeatsioDotNet.Test.Events
         public void ChannelKeys()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events.Create(chartKey);
-            Client.Events.Channels.Replace(evnt.Key, new List<Channel>
+            var channels = new List<Channel>
             {
                 new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"})
-            });
+            };
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithChannels(channels));
 
             Client.Events.Book(evnt.Key, new[] {"A-1"}, null, null, true, null, new[] {"channelKey1"});
 
@@ -107,11 +107,11 @@ namespace SeatsioDotNet.Test.Events
         public void IgnoreChannels()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events.Create(chartKey);
-            Client.Events.Channels.Replace(evnt.Key, new List<Channel>
+            var channels = new List<Channel>
             {
                 new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"})
-            });
+            };
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithChannels(channels));
 
             Client.Events.Book(evnt.Key, new[] {"A-1"}, null, null, true, true);
 

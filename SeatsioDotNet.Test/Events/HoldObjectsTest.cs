@@ -74,12 +74,12 @@ namespace SeatsioDotNet.Test.Events
         public void ChannelKeys()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events.Create(chartKey);
-            HoldToken holdToken = Client.HoldTokens.Create();
-            Client.Events.Channels.Replace(evnt.Key, new List<Channel>
+            var channels = new List<Channel>
             {
                 new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"})
-            });
+            };
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithChannels(channels));
+            HoldToken holdToken = Client.HoldTokens.Create();
 
             Client.Events.Hold(evnt.Key, new[] {"A-1"}, holdToken.Token, null, true, null, new[] {"channelKey1"});
 
@@ -90,12 +90,12 @@ namespace SeatsioDotNet.Test.Events
         public void IgnoreChannels()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events.Create(chartKey);
-            HoldToken holdToken = Client.HoldTokens.Create();
-            Client.Events.Channels.Replace(evnt.Key, new List<Channel>
+            var channels = new List<Channel>
             {
                 new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"})
-            });
+            };
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithChannels(channels));
+            HoldToken holdToken = Client.HoldTokens.Create();
 
             Client.Events.Hold(evnt.Key, new[] {"A-1"}, holdToken.Token, null, true, true);
 

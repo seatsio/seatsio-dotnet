@@ -17,7 +17,7 @@ namespace SeatsioDotNet.Seasons
             _seatsioClient = seatsioClient;
         }
 
-        public Event Create(string chartKey, string key = null, int? numberOfEvents = null, IEnumerable<string> eventKeys = null, TableBookingConfig tableBookingConfig = null)
+        public Event Create(string chartKey, string key = null, int? numberOfEvents = null, IEnumerable<string> eventKeys = null, TableBookingConfig tableBookingConfig = null, IEnumerable<Channel> channels = null)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("chartKey", chartKey);
@@ -40,6 +40,11 @@ namespace SeatsioDotNet.Seasons
             if (tableBookingConfig != null)
             {
                 requestBody.Add("tableBookingConfig", tableBookingConfig.AsJsonObject());
+            }    
+            
+            if (channels != null)
+            {
+                requestBody.Add("channels", channels);
             }
             
             var restRequest = new RestRequest("/seasons", Method.Post).AddJsonBody(requestBody);

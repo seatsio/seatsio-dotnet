@@ -59,6 +59,11 @@ namespace SeatsioDotNet.Events
                 requestBody.Add("categories", p.Categories);
             }
 
+            if (p.Channels != null)
+            {
+                requestBody.Add("channels", p.Channels);
+            }
+
             var restRequest = new RestRequest("/events", Method.Post).AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }
@@ -99,6 +104,11 @@ namespace SeatsioDotNet.Events
                 if (param.Categories != null)
                 {
                     e.Add("categories", param.Categories);
+                }      
+                
+                if (param.Channels != null)
+                {
+                    e.Add("channels", param.Channels);
                 }
 
                 events.Add(e);

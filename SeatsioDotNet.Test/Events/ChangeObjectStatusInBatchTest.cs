@@ -31,11 +31,11 @@ namespace SeatsioDotNet.Test.Events
         public void ChannelKeys()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events.Create(chartKey);
-            Client.Events.Channels.Replace(evnt.Key, new List<Channel>
+            var channels = new List<Channel>
             {
                 new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1"})
-            });
+            };
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithChannels(channels));
 
             var result = Client.Events.ChangeObjectStatus(new[]
             {
@@ -49,12 +49,12 @@ namespace SeatsioDotNet.Test.Events
         public void IgnoreChannels()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events.Create(chartKey);
-            Client.Events.Channels.Replace(evnt.Key, new List<Channel>
+            var channels = new List<Channel>
             {
                 new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1"})
-            });
-
+            };
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithChannels(channels));
+            
             var result = Client.Events.ChangeObjectStatus(new[]
             {
                 new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "lolzor", ignoreChannels: true),

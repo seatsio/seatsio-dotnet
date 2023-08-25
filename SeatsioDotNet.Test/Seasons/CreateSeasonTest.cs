@@ -68,6 +68,21 @@ namespace SeatsioDotNet.Test.Seasons
             var season = Client.Seasons.Create(chartKey, tableBookingConfig: TableBookingConfig.AllBySeat());
 
             Assert.Equal(TableBookingConfig.AllBySeat().Mode, season.TableBookingConfig.Mode);
+        }   
+        
+        [Fact]
+        public void ChannelsCanBePassedIn()
+        {
+            var chartKey = CreateTestChart();
+            var channels = new List<Channel>
+            {
+                new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}),
+                new("channelKey2", "channel 2", "#00FFFF", 2, new String[] {})
+            };
+            
+            var season = Client.Seasons.Create(chartKey, channels: channels);
+
+            Assert.Equivalent(channels, season.Channels);
         }
     }
 }

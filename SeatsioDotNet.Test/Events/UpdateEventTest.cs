@@ -142,5 +142,20 @@ namespace SeatsioDotNet.Test.Events
             var retrievedEvent = Client.Events.Retrieve(evnt.Key);
             Assert.Equal(new DateOnly(2022, 1, 10), retrievedEvent.Date);
         }
+        
+        [Fact]
+        public void UpdateIsInThePast()
+        {
+            var chartKey = CreateTestChart();
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithName("An event"));
+
+            Client.Events.Update(evnt.Key, new UpdateEventParams().WithIsInThePast(true));
+            var retrievedEvent1 = Client.Events.Retrieve(evnt.Key);
+            Assert.True(retrievedEvent1.IsInThePast);
+
+            Client.Events.Update(evnt.Key, new UpdateEventParams().WithIsInThePast(false));
+            var retrievedEvent2 = Client.Events.Retrieve(evnt.Key);
+            Assert.False(retrievedEvent2.IsInThePast);
+        }
     }
 }

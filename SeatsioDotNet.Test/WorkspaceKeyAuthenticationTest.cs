@@ -7,12 +7,12 @@ namespace SeatsioDotNet.Test
         [Fact]
         public void Test()
         {
-            var subaccount = Client.Subaccounts.Create();
+            var workspace = Client.Workspaces.Create("some workspace");
 
-            var subaccountClient = CreateSeatsioClient(User.SecretKey, subaccount.PublicKey);
-            var holdToken = subaccountClient.HoldTokens.Create();
+            var workspaceClient = CreateSeatsioClient(User.SecretKey, workspace.Key);
+            var holdToken = workspaceClient.HoldTokens.Create();
 
-            Assert.Equal(subaccount.PublicKey, holdToken.workspaceKey);
+            Assert.Equal(workspace.Key, holdToken.workspaceKey);
         }
     }
 }

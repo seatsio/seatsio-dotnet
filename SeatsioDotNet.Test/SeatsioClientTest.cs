@@ -7,7 +7,6 @@ using RestSharp;
 using RestSharp.Authenticators;
 using SeatsioDotNet.Charts;
 using SeatsioDotNet.Events;
-using SeatsioDotNet.Subaccounts;
 using SeatsioDotNet.Util;
 
 namespace SeatsioDotNet.Test
@@ -24,14 +23,12 @@ namespace SeatsioDotNet.Test
         };
 
         protected readonly User User;
-        protected readonly Subaccount Subaccount;
         protected readonly SeatsioClient Client;
 
         protected SeatsioClientTest()
         {
             TestCompany testCompany = CreateTestCompany();
             User = testCompany.admin;
-            Subaccount = testCompany.subaccount;
             Client = CreateSeatsioClient(User.SecretKey);
         }
 

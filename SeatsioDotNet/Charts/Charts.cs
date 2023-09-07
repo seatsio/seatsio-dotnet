@@ -98,14 +98,6 @@ namespace SeatsioDotNet.Charts
             return AssertOk(_restClient.Execute<Chart>(restRequest));
         }
 
-        public Chart CopyToSubaccount(string chartKey, long subaccountId)
-        {
-            var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy-to/{subaccountId}", Method.Post)
-                .AddUrlSegment("key", chartKey)
-                .AddUrlSegment("subaccountId", subaccountId.ToString());
-            return AssertOk(_restClient.Execute<Chart>(restRequest));
-        }    
-        
         public Chart CopyToWorkspace(string chartKey, string toWorkspaceKey)
         {
             var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy-to-workspace/{toWorkspaceKey}", Method.Post)

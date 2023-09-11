@@ -1,18 +1,31 @@
-﻿using System.Collections.Generic;
-using SeatsioDotNet.Events;
+﻿using System;
+using System.Collections.Generic;
+using SeatsioDotNet.ChartReports;
 using Xunit;
+using static SeatsioDotNet.ChartReports.ChartReports.Version;
 using static SeatsioDotNet.EventReports.EventObjectInfo;
 
 namespace SeatsioDotNet.Test.ChartReports
 {
     public class ChartReportsSummaryTest : SeatsioClientTest
     {
-        [Fact]
-        public void SummaryByObjectType()
+        public static IEnumerable<object[]> SummaryByObjectTypeTestCases
+        {
+            get
+            {
+                yield return new object[] { (Action<SeatsioClient, string>)((_, _) => { }), (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>)((client, chartKey) => client.ChartReports.SummaryByObjectType(chartKey))};
+                yield return new object[] { (Action<SeatsioClient, string>)(CreateDraftChart), (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>)((client, chartKey) => client.ChartReports.SummaryByObjectType(chartKey, version: Draft))};
+            }
+        }
+        
+        [Theory]
+        [MemberData(nameof(SummaryByObjectTypeTestCases), MemberType = typeof(ChartReportsSummaryTest))]
+        public void SummaryByObjectType(Action<SeatsioClient, string> updateChart, Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>> getReport)
         {
             var chartKey = CreateTestChart();
+            updateChart(Client, chartKey);
 
-            var report = Client.ChartReports.SummaryByObjectType(chartKey);
+            var report = getReport(Client, chartKey);
 
             Assert.Equal(32, report["seat"].Count);
             Assert.Equal(new() {{NoSection, 32}}, report["seat"].bySection);
@@ -27,23 +40,45 @@ namespace SeatsioDotNet.Test.ChartReports
                 report["generalAdmission"].byCategoryLabel);
         }     
         
-        [Fact]
-        public void SummaryByObjectType_BookWholeTablesTrue()
+        public static IEnumerable<object[]> SummaryByObjectType_BookWholeTablesTrueTestCases
+        {
+            get
+            {
+                yield return new object[] { (Action<SeatsioClient, string>)((_, _) => { }), (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>)((client, chartKey) => client.ChartReports.SummaryByObjectType(chartKey, bookWholeTablesMode: "true"))};
+                yield return new object[] { (Action<SeatsioClient, string>)(CreateDraftChart), (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>)((client, chartKey) => client.ChartReports.SummaryByObjectType(chartKey, bookWholeTablesMode: "true", version: Draft))};
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(SummaryByObjectType_BookWholeTablesTrueTestCases), MemberType = typeof(ChartReportsSummaryTest))]
+        public void SummaryByObjectType_BookWholeTablesTrue(Action<SeatsioClient, string> updateChart, Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>> getReport)
         {
             var chartKey = CreateTestChartWithTables();
+            updateChart(Client, chartKey);
 
-            var report = Client.ChartReports.SummaryByObjectType(chartKey, "true");
+            var report = getReport(Client, chartKey);
 
             Assert.Equal(0, report["seat"].Count);
             Assert.Equal(2, report["table"].Count);
         }
 
-        [Fact]
-        public void SummaryByCategoryKey()
+        public static IEnumerable<object[]> SummaryByCategoryKeyTestCases
+        {
+            get
+            {
+                yield return new object[] { (Action<SeatsioClient, string>)((_, _) => { }), (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>)((client, chartKey) => client.ChartReports.SummaryByCategoryKey(chartKey))};
+                yield return new object[] { (Action<SeatsioClient, string>)(CreateDraftChart), (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>)((client, chartKey) => client.ChartReports.SummaryByCategoryKey(chartKey, version: Draft))};
+            }
+        }
+        
+        [Theory]
+        [MemberData(nameof(SummaryByCategoryKeyTestCases), MemberType = typeof(ChartReportsSummaryTest))]
+        public void SummaryByCategoryKey(Action<SeatsioClient, string> updateChart, Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>> getReport)
         {
             var chartKey = CreateTestChart();
+            updateChart(Client, chartKey);
 
-            var report = Client.ChartReports.SummaryByCategoryKey(chartKey);
+            var report = getReport(Client, chartKey);
 
             Assert.Equal(116, report["9"].Count);
             Assert.Equal(new() {{NoSection, 116}}, report["9"].bySection);
@@ -54,12 +89,23 @@ namespace SeatsioDotNet.Test.ChartReports
             Assert.Equal(0, report["NO_CATEGORY"].Count);
         }
 
-        [Fact]
-        public void SummaryByCategoryLabel()
+        public static IEnumerable<object[]> SummaryByCategoryLabelTestCases
+        {
+            get
+            {
+                yield return new object[] { (Action<SeatsioClient, string>)((_, _) => { }), (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>)((client, chartKey) => client.ChartReports.SummaryByCategoryLabel(chartKey))};
+                yield return new object[] { (Action<SeatsioClient, string>)(CreateDraftChart), (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>)((client, chartKey) => client.ChartReports.SummaryByCategoryLabel(chartKey, version: Draft))};
+            }
+        }
+        
+        [Theory]
+        [MemberData(nameof(SummaryByCategoryLabelTestCases), MemberType = typeof(ChartReportsSummaryTest))]
+        public void SummaryByCategoryLabel(Action<SeatsioClient, string> updateChart, Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>> getReport)
         {
             var chartKey = CreateTestChart();
+            updateChart(Client, chartKey);
 
-            var report = Client.ChartReports.SummaryByCategoryLabel(chartKey);
+            var report = getReport(Client, chartKey);
 
             Assert.Equal(116, report["Cat1"].Count);
             Assert.Equal(new() {{NoSection, 116}}, report["Cat1"].bySection);
@@ -71,16 +117,33 @@ namespace SeatsioDotNet.Test.ChartReports
             Assert.Equal(0, report["NO_CATEGORY"].Count);
         }
 
-        [Fact]
-        public void SummaryBySection()
+        public static IEnumerable<object[]> SummaryBySectionTestCases
+        {
+            get
+            {
+                yield return new object[] { (Action<SeatsioClient, string>)((_, _) => { }), (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>)((client, chartKey) => client.ChartReports.SummaryBySection(chartKey))};
+                yield return new object[] { (Action<SeatsioClient, string>)(CreateDraftChart), (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>)((client, chartKey) => client.ChartReports.SummaryBySection(chartKey, version: Draft))};
+            }
+        }
+        
+        [Theory]
+        [MemberData(nameof(SummaryBySectionTestCases), MemberType = typeof(ChartReportsSummaryTest))]
+        public void SummaryBySection(Action<SeatsioClient, string> updateChart, Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>> getReport)
         {
             var chartKey = CreateTestChart();
+            updateChart(Client, chartKey);
 
-            var report = Client.ChartReports.SummaryBySection(chartKey);
+            var report = getReport(Client, chartKey);
 
             Assert.Equal(232, report[NoSection].Count);
             Assert.Equal(new() {{"9", 116}, {"10", 116}}, report[NoSection].byCategoryKey);
             Assert.Equal(new() {{"Cat1", 116}, {"Cat2", 116}}, report[NoSection].byCategoryLabel);
+        }
+        
+        private static void CreateDraftChart(SeatsioClient client, string chartKey)
+        {
+            client.Events.Create(chartKey);
+            client.Charts.Update(chartKey, "foo");
         }
     }
 }

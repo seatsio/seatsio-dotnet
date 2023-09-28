@@ -147,15 +147,15 @@ namespace SeatsioDotNet.Test.Events
         public void UpdateIsInThePast()
         {
             var chartKey = CreateTestChart();
-            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithName("An event"));
+            Client.Seasons.Create(chartKey, eventKeys: new[] {"event1"});
 
-            Client.Events.Update(evnt.Key, new UpdateEventParams().WithIsInThePast(true));
-            var retrievedEvent1 = Client.Events.Retrieve(evnt.Key);
+            Client.Events.Update("event1", new UpdateEventParams().WithIsInThePast(true));
+            var retrievedEvent1 = Client.Events.Retrieve("event1");
             Assert.True(retrievedEvent1.IsInThePast);
 
-            Client.Events.Update(evnt.Key, new UpdateEventParams().WithIsInThePast(false));
-            var retrievedEvent2 = Client.Events.Retrieve(evnt.Key);
-            Assert.False(retrievedEvent2.IsInThePast);
+            var e = Assert.Throws<SeatsioException>(() =>
+                Client.Events.Update("event1", new UpdateEventParams().WithIsInThePast(false)));
+            Assert.Contains(new SeatsioApiError("EVENT_IS_IN_THE_PAST", "Events in the past cannot be updated"), e.Errors);
         }
     }
 }

@@ -158,6 +158,11 @@ namespace SeatsioDotNet.Events
                 requestBody.Add("categories", p.Categories);
             }
 
+            if (p.IsInThePast != null)
+            {
+                requestBody.Add("isInThePast", p.IsInThePast);
+            }
+
             var restRequest = new RestRequest("/events/{key}", Method.Post)
                 .AddUrlSegment("key", eventKey)
                 .AddJsonBody(requestBody);

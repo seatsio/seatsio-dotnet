@@ -13,6 +13,7 @@ namespace SeatsioDotNet.Events
         public TableBookingConfig TableBookingConfig { get; set; }
         public Dictionary<string, object> ObjectCategories { get; set; }
         public Category[] Categories { get; set; }
+        public bool? IsInThePast { get; set; }
 
         public UpdateEventParams WithKey(string key)
         {
@@ -53,6 +54,12 @@ namespace SeatsioDotNet.Events
         public UpdateEventParams WithDate(DateOnly date)
         {
             Date = date;
+            return this;
+        }
+
+        public UpdateEventParams WithIsInThePast(bool isInThePast)
+        {
+            IsInThePast = isInThePast;
             return this;
         }
     }

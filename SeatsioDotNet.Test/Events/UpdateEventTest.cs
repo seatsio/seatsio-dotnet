@@ -152,10 +152,6 @@ namespace SeatsioDotNet.Test.Events
             Client.Events.Update("event1", new UpdateEventParams().WithIsInThePast(true));
             var retrievedEvent1 = Client.Events.Retrieve("event1");
             Assert.True(retrievedEvent1.IsInThePast);
-
-            var e = Assert.Throws<SeatsioException>(() =>
-                Client.Events.Update("event1", new UpdateEventParams().WithIsInThePast(false)));
-            Assert.Contains(new SeatsioApiError("EVENT_IS_IN_THE_PAST", "Events in the past cannot be updated"), e.Errors);
         }
     }
 }

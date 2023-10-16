@@ -23,12 +23,14 @@ namespace SeatsioDotNet.Test
         };
 
         protected readonly User User;
+        protected readonly Workspace Workspace;
         protected readonly SeatsioClient Client;
 
         protected SeatsioClientTest()
         {
             TestCompany testCompany = CreateTestCompany();
             User = testCompany.admin;
+            Workspace = testCompany.Workspace;
             Client = CreateSeatsioClient(User.SecretKey);
         }
 

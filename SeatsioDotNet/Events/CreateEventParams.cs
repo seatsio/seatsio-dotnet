@@ -13,6 +13,7 @@ namespace SeatsioDotNet.Events
         public Dictionary<string, object> ObjectCategories { get; set; }
         public Category[] Categories { get; set; }
         public List<Channel> Channels { get; set; }
+        public ForSaleConfig ForSaleConfig { get; set; }
 
         public CreateEventParams WithKey(string key)
         {
@@ -53,6 +54,12 @@ namespace SeatsioDotNet.Events
         public CreateEventParams WithChannels(List<Channel> channels)
         {
             Channels = channels;
+            return this;
+        }
+
+        public CreateEventParams WithForSaleConfig(ForSaleConfig forSaleConfig)
+        {
+            ForSaleConfig = forSaleConfig;
             return this;
         }
     }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SeatsioDotNet.Charts;
 using SeatsioDotNet.Events;
 using Xunit;
 
@@ -68,7 +67,7 @@ namespace SeatsioDotNet.Test.Seasons
             var season = Client.Seasons.Create(chartKey, tableBookingConfig: TableBookingConfig.AllBySeat());
 
             Assert.Equal(TableBookingConfig.AllBySeat().Mode, season.TableBookingConfig.Mode);
-        }   
+        }
         
         [Fact]
         public void ChannelsCanBePassedIn()
@@ -83,6 +82,17 @@ namespace SeatsioDotNet.Test.Seasons
             var season = Client.Seasons.Create(chartKey, channels: channels);
 
             Assert.Equivalent(channels, season.Channels);
+        }
+        
+        [Fact]
+        public void ForSaleConfigCanBePassedIn()
+        {
+            var chartKey = CreateTestChart();
+            var forSaleConfig = new ForSaleConfig().WithForSale(false).WithObjects(new []{"A-1"}).WithAreaPlaces(new(){{"GA1", 5}}).WithCategories(new []{"Cat1"});
+            
+            var season = Client.Seasons.Create(chartKey, forSaleConfig: forSaleConfig);
+
+            Assert.Equivalent(forSaleConfig, season.ForSaleConfig);
         }
     }
 }

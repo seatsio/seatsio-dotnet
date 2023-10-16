@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using RestSharp;
 using SeatsioDotNet.Events;
-using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
 
 namespace SeatsioDotNet.Seasons
@@ -17,7 +16,7 @@ namespace SeatsioDotNet.Seasons
             _seatsioClient = seatsioClient;
         }
 
-        public Event Create(string chartKey, string key = null, int? numberOfEvents = null, IEnumerable<string> eventKeys = null, TableBookingConfig tableBookingConfig = null, IEnumerable<Channel> channels = null)
+        public Event Create(string chartKey, string key = null, int? numberOfEvents = null, IEnumerable<string> eventKeys = null, TableBookingConfig tableBookingConfig = null, IEnumerable<Channel> channels = null, ForSaleConfig forSaleConfig = null)
         {
             Dictionary<string, object> requestBody = new Dictionary<string, object>();
             requestBody.Add("chartKey", chartKey);
@@ -45,6 +44,11 @@ namespace SeatsioDotNet.Seasons
             if (channels != null)
             {
                 requestBody.Add("channels", channels);
+            }
+            
+            if (forSaleConfig != null)
+            {
+                requestBody.Add("forSaleConfig", forSaleConfig.AsJsonObject());
             }
             
             var restRequest = new RestRequest("/seasons", Method.Post).AddJsonBody(requestBody);

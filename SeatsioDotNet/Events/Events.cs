@@ -64,6 +64,11 @@ namespace SeatsioDotNet.Events
                 requestBody.Add("channels", p.Channels);
             }
 
+            if (p.ForSaleConfig != null)
+            {
+                requestBody.Add("forSaleConfig", p.ForSaleConfig.AsJsonObject());
+            }
+
             var restRequest = new RestRequest("/events", Method.Post).AddJsonBody(requestBody);
             return AssertOk(_restClient.Execute<Event>(restRequest));
         }
@@ -109,6 +114,11 @@ namespace SeatsioDotNet.Events
                 if (param.Channels != null)
                 {
                     e.Add("channels", param.Channels);
+                }
+
+                if (param.ForSaleConfig != null)
+                {
+                    e.Add("forSaleConfig", param.ForSaleConfig.AsJsonObject());
                 }
 
                 events.Add(e);

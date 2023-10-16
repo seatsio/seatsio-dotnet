@@ -123,5 +123,16 @@ namespace SeatsioDotNet.Test.Events
 
             Assert.Equivalent(channels, evnt.Channels);
         }
+
+        [Fact]
+        public void ForSaleConfigCanBePassedIn()
+        {
+            var chartKey = CreateTestChart();
+            var forSaleConfig = new ForSaleConfig().WithForSale(false).WithObjects(new []{"A-1"}).WithAreaPlaces(new(){{"GA1", 5}}).WithCategories(new []{"Cat1"});
+
+            var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithForSaleConfig(forSaleConfig));
+
+            Assert.Equivalent(forSaleConfig, evnt.ForSaleConfig);
+        }
     }
 }

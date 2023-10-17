@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using SeatsioDotNet.EventReports;
 
-namespace SeatsioDotNet.Events
+namespace SeatsioDotNet.Events;
+
+public class BestAvailableResult
 {
-    public class BestAvailableResult
-    {
-        public bool NextToEachOther { get; set; }
-        public IEnumerable<string> Objects { get; set; }
-        public Dictionary<string, EventObjectInfo> ObjectDetails { get; set; }
-    }
+    public bool NextToEachOther { get; set; }
+    public IEnumerable<string> Objects { get; set; }
+    public Dictionary<string, EventObjectInfo> ObjectDetails { get; set; }
 }

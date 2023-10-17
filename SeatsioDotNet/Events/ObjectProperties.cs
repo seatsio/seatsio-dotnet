@@ -1,63 +1,62 @@
 ﻿using System.Collections.Generic;
 
-namespace SeatsioDotNet.Events
+namespace SeatsioDotNet.Events;
+
+public class ObjectProperties
 {
-    public class ObjectProperties
+    public string ObjectLabel { get; }
+    public int? Quantity { get; }
+    public string TicketType { get; }
+    public Dictionary<string, object> ExtraData { get; }
+
+    public ObjectProperties(string objectLabel)
     {
-        public string ObjectLabel { get; }
-        public int? Quantity { get; }
-        public string TicketType { get; }
-        public Dictionary<string, object> ExtraData { get; }
+        ObjectLabel = objectLabel;
+    }
 
-        public ObjectProperties(string objectLabel)
+    public ObjectProperties(string objectLabel, string ticketType)
+    {
+        ObjectLabel = objectLabel;
+        TicketType = ticketType;
+    }
+
+    public ObjectProperties(string objectLabel, string ticketType, Dictionary<string, object> extraData)
+    {
+        ObjectLabel = objectLabel;
+        TicketType = ticketType;
+        ExtraData = extraData;
+    }
+
+    public ObjectProperties(string objectLabel, Dictionary<string, object> extraData)
+    {
+        ObjectLabel = objectLabel;
+        ExtraData = extraData;
+    }
+
+    public ObjectProperties(string objectLabel, int quantity)
+    {
+        ObjectLabel = objectLabel;
+        Quantity = quantity;
+    }
+
+    public Dictionary<string, object> AsDictionary()
+    {
+        var dictionary = new Dictionary<string, object> {{"objectId", ObjectLabel}};
+        if (TicketType != null)
         {
-            ObjectLabel = objectLabel;
+            dictionary.Add("ticketType", TicketType);
         }
 
-        public ObjectProperties(string objectLabel, string ticketType)
+        if (Quantity != null)
         {
-            ObjectLabel = objectLabel;
-            TicketType = ticketType;
+            dictionary.Add("quantity", Quantity);
         }
 
-        public ObjectProperties(string objectLabel, string ticketType, Dictionary<string, object> extraData)
+        if (ExtraData != null)
         {
-            ObjectLabel = objectLabel;
-            TicketType = ticketType;
-            ExtraData = extraData;
+            dictionary.Add("extraData", ExtraData);
         }
 
-        public ObjectProperties(string objectLabel, Dictionary<string, object> extraData)
-        {
-            ObjectLabel = objectLabel;
-            ExtraData = extraData;
-        }
-
-        public ObjectProperties(string objectLabel, int quantity)
-        {
-            ObjectLabel = objectLabel;
-            Quantity = quantity;
-        }
-
-        public Dictionary<string, object> AsDictionary()
-        {
-            var dictionary = new Dictionary<string, object> {{"objectId", ObjectLabel}};
-            if (TicketType != null)
-            {
-                dictionary.Add("ticketType", TicketType);
-            }
-
-            if (Quantity != null)
-            {
-                dictionary.Add("quantity", Quantity);
-            }
-
-            if (ExtraData != null)
-            {
-                dictionary.Add("extraData", ExtraData);
-            }
-
-            return dictionary;
-        }
+        return dictionary;
     }
 }

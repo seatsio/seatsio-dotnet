@@ -5,43 +5,42 @@ using SeatsioDotNet.Reports.Usage.DetailsForMonth;
 using SeatsioDotNet.Reports.Usage.SummaryForMonths;
 using static SeatsioDotNet.Util.RestUtil;
 
-namespace SeatsioDotNet.Reports.Usage
+namespace SeatsioDotNet.Reports.Usage;
+
+public class UsageReports
 {
-    public class UsageReports
+    private readonly RestClient _restClient;
+
+    public UsageReports(RestClient restClient)
     {
-        private readonly RestClient _restClient;
+        _restClient = restClient;
+    }
 
-        public UsageReports(RestClient restClient)
+    public IEnumerable<UsageSummaryForMonth> SummaryForAllMonths()
+    {
+        var restRequest = new RestRequest("/reports/usage");
+        return AssertOk(_restClient.Execute<List<UsageSummaryForMonth>>(restRequest));
+    }
+
+    public IEnumerable<UsageDetails> DetailsForMonth(UsageMonth month)
+    {
+        var restRequest = new RestRequest("/reports/usage/month/{month}")
+            .AddUrlSegment("month", month.Serialize());
+        return AssertOk(_restClient.Execute<List<UsageDetails>>(restRequest));
+    }
+
+    public IEnumerable<object> DetailsForEventInMonth(long eventId, UsageMonth month)
+    {
+        var restRequest = new RestRequest("/reports/usage/month/{month}/event/{event}")
+            .AddUrlSegment("month", month.Serialize())
+            .AddUrlSegment("event", eventId.ToString());
+        if (month.Before(2022, 12))
         {
-            _restClient = restClient;
+            return AssertOk(_restClient.Execute<List<UsageForObjectV1>>(restRequest));
         }
-
-        public IEnumerable<UsageSummaryForMonth> SummaryForAllMonths()
+        else
         {
-            var restRequest = new RestRequest("/reports/usage");
-            return AssertOk(_restClient.Execute<List<UsageSummaryForMonth>>(restRequest));
-        }
-
-        public IEnumerable<UsageDetails> DetailsForMonth(UsageMonth month)
-        {
-            var restRequest = new RestRequest("/reports/usage/month/{month}")
-                .AddUrlSegment("month", month.Serialize());
-            return AssertOk(_restClient.Execute<List<UsageDetails>>(restRequest));
-        }
-
-        public IEnumerable<object> DetailsForEventInMonth(long eventId, UsageMonth month)
-        {
-            var restRequest = new RestRequest("/reports/usage/month/{month}/event/{event}")
-                .AddUrlSegment("month", month.Serialize())
-                .AddUrlSegment("event", eventId.ToString());
-            if (month.Before(2022, 12))
-            {
-                return AssertOk(_restClient.Execute<List<UsageForObjectV1>>(restRequest));
-            }
-            else
-            {
-                return AssertOk(_restClient.Execute<List<UsageForObjectV2>>(restRequest));
-            }
+            return AssertOk(_restClient.Execute<List<UsageForObjectV2>>(restRequest));
         }
     }
 }

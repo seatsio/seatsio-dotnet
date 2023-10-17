@@ -1,8 +1,7 @@
-namespace SeatsioDotNet.Reports.Usage.DetailsForMonth
+namespace SeatsioDotNet.Reports.Usage.DetailsForMonth;
+
+public class UsageByEvent
 {
-    public class UsageByEvent
-    {
-        public UsageEvent Event { get; set; }
-        public int NumUsedObjects { get; set; }
-    }
+    public UsageEvent Event { get; set; }
+    public int NumUsedObjects { get; set; }
 }

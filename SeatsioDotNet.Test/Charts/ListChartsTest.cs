@@ -1,80 +1,79 @@
 ﻿using System.Linq;
 using Xunit;
 
-namespace SeatsioDotNet.Test.Charts
+namespace SeatsioDotNet.Test.Charts;
+
+public class ListChartsTest : SeatsioClientTest
 {
-    public class ListChartsTest : SeatsioClientTest
+    [Fact]
+    public void All()
     {
-        [Fact]
-        public void All()
-        {
-            var chart1 = Client.Charts.Create();
-            var chart2 = Client.Charts.Create();
-            var chart3 = Client.Charts.Create();
+        var chart1 = Client.Charts.Create();
+        var chart2 = Client.Charts.Create();
+        var chart3 = Client.Charts.Create();
 
-            var charts = Client.Charts.ListAll();
+        var charts = Client.Charts.ListAll();
 
-            Assert.Equal(new[] {chart3.Key, chart2.Key, chart1.Key}, charts.Select(c => c.Key));
-        }
+        Assert.Equal(new[] {chart3.Key, chart2.Key, chart1.Key}, charts.Select(c => c.Key));
+    }
 
-        [Fact]
-        public void MultiplePages()
-        {
-            var charts = Enumerable.Repeat("", 30).Select(x => Client.Charts.Create());
+    [Fact]
+    public void MultiplePages()
+    {
+        var charts = Enumerable.Repeat("", 30).Select(x => Client.Charts.Create());
 
-            var retrievedCharts = Client.Charts.ListAll();
+        var retrievedCharts = Client.Charts.ListAll();
 
-            Assert.Equal(charts.Reverse().Select(c => c.Key), retrievedCharts.Select(c => c.Key));
-        }
+        Assert.Equal(charts.Reverse().Select(c => c.Key), retrievedCharts.Select(c => c.Key));
+    }
 
-        [Fact]
-        public void Filter()
-        {
-            var chart1 = Client.Charts.Create("foo");
-            var chart2 = Client.Charts.Create("bar");
-            var chart3 = Client.Charts.Create("foofoo");
+    [Fact]
+    public void Filter()
+    {
+        var chart1 = Client.Charts.Create("foo");
+        var chart2 = Client.Charts.Create("bar");
+        var chart3 = Client.Charts.Create("foofoo");
 
-            var charts = Client.Charts.ListAll(filter: "foo");
+        var charts = Client.Charts.ListAll(filter: "foo");
 
-            Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
-        }
+        Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
+    }
 
-        [Fact]
-        public void Tag()
-        {
-            var chart1 = Client.Charts.Create();
-            Client.Charts.AddTag(chart1.Key, "foo");
+    [Fact]
+    public void Tag()
+    {
+        var chart1 = Client.Charts.Create();
+        Client.Charts.AddTag(chart1.Key, "foo");
 
-            var chart2 = Client.Charts.Create();
+        var chart2 = Client.Charts.Create();
 
-            var chart3 = Client.Charts.Create();
-            Client.Charts.AddTag(chart3.Key, "foo");
+        var chart3 = Client.Charts.Create();
+        Client.Charts.AddTag(chart3.Key, "foo");
 
-            var charts = Client.Charts.ListAll(tag: "foo");
+        var charts = Client.Charts.ListAll(tag: "foo");
 
-            Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
-        }
+        Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
+    }
 
-        [Fact]
-        public void Expand()
-        {
-            var chart = Client.Charts.Create();
-            var event1 = Client.Events.Create(chart.Key);
-            var event2 = Client.Events.Create(chart.Key);
+    [Fact]
+    public void Expand()
+    {
+        var chart = Client.Charts.Create();
+        var event1 = Client.Events.Create(chart.Key);
+        var event2 = Client.Events.Create(chart.Key);
 
-            var charts = Client.Charts.ListAll(expandEvents: true);
+        var charts = Client.Charts.ListAll(expandEvents: true);
 
-            Assert.Equal(new[] {event2.Id, event1.Id}, charts.First().Events.Select(c => c.Id));
-        }   
+        Assert.Equal(new[] {event2.Id, event1.Id}, charts.First().Events.Select(c => c.Id));
+    }   
         
-        [Fact]
-        public void Validation()
-        {
-            CreateTestChartWithErrors();
+    [Fact]
+    public void Validation()
+    {
+        CreateTestChartWithErrors();
             
-            var charts = Client.Charts.ListAll(withValidation: true);
+        var charts = Client.Charts.ListAll(withValidation: true);
 
-            Assert.NotNull(charts.First().Validation);
-        }
+        Assert.NotNull(charts.First().Validation);
     }
 }

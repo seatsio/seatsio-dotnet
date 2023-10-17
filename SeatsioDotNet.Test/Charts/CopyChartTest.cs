@@ -1,19 +1,18 @@
 ﻿using Xunit;
 
-namespace SeatsioDotNet.Test.Charts
+namespace SeatsioDotNet.Test.Charts;
+
+public class CopyChartTest : SeatsioClientTest
 {
-    public class CopyChartTest : SeatsioClientTest
+    [Fact]
+    public void Test()
     {
-        [Fact]
-        public void Test()
-        {
-            var chart = Client.Charts.Create("my chart", "BOOTHS");
+        var chart = Client.Charts.Create("my chart", "BOOTHS");
 
-            var copiedChart = Client.Charts.Copy(chart.Key);
+        var copiedChart = Client.Charts.Copy(chart.Key);
 
-            Assert.Equal("my chart (copy)", copiedChart.Name);
-            var drawing = Client.Charts.RetrievePublishedVersion(copiedChart.Key);
-            Assert.Equal("BOOTHS", drawing.VenueType);
-        }
+        Assert.Equal("my chart (copy)", copiedChart.Name);
+        var drawing = Client.Charts.RetrievePublishedVersion(copiedChart.Key);
+        Assert.Equal("BOOTHS", drawing.VenueType);
     }
 }

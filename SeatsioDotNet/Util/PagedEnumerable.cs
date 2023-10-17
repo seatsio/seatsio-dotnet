@@ -1,25 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace SeatsioDotNet.Util
+namespace SeatsioDotNet.Util;
+
+public class PagedEnumerable<T> : IEnumerable<T>
 {
-    public class PagedEnumerable<T> : IEnumerable<T>
+    private readonly PagedEnumerator<T> _pagedEnumerator;
+
+    public PagedEnumerable(PageFetcher<T> pageFetcher, Dictionary<string, object> listParams)
     {
-        private readonly PagedEnumerator<T> _pagedEnumerator;
+        _pagedEnumerator = new PagedEnumerator<T>(pageFetcher, listParams);
+    }
 
-        public PagedEnumerable(PageFetcher<T> pageFetcher, Dictionary<string, object> listParams)
-        {
-            _pagedEnumerator = new PagedEnumerator<T>(pageFetcher, listParams);
-        }
+    public IEnumerator<T> GetEnumerator()
+    {
+        return _pagedEnumerator;
+    }
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            return _pagedEnumerator;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

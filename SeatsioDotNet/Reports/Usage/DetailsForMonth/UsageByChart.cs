@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 
-namespace SeatsioDotNet.Reports.Usage.DetailsForMonth
+namespace SeatsioDotNet.Reports.Usage.DetailsForMonth;
+
+public class UsageByChart
 {
-    public class UsageByChart
-    {
-        public UsageChart Chart { get; set; }
-        public IEnumerable<UsageByEvent> UsageByEvent { get; set; }
-    }
+    public UsageChart Chart { get; set; }
+    public IEnumerable<UsageByEvent> UsageByEvent { get; set; }
 }

@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using RestSharp;
 
-namespace SeatsioDotNet
+namespace SeatsioDotNet;
+
+public class RateLimitExceededException : SeatsioException
 {
-    public class RateLimitExceededException : SeatsioException
+    public RateLimitExceededException(List<SeatsioApiError> errors, string requestId) :
+        base(errors, requestId)
     {
-        public RateLimitExceededException(List<SeatsioApiError> errors, string requestId) :
-            base(errors, requestId)
-        {
-        }
     }
 }

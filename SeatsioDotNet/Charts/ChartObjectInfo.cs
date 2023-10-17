@@ -1,25 +1,24 @@
 ﻿using SeatsioDotNet.Events;
 
-namespace SeatsioDotNet.ChartReports
+namespace SeatsioDotNet.ChartReports;
+
+public class ChartObjectInfo
 {
-    public class ChartObjectInfo
-    {
-        public string Label { get; set; }
-        public Labels Labels { get; set; }
-        public IDs IDs { get; set; }
-        public string CategoryLabel { get; set; }
-        public int? CategoryKey { get; set; }
-        public string ObjectType { get; set; }
-        public string Section { get; set; }
-        public string Entrance { get; set; }
-        public int? Capacity { get; set; }
-        public bool? BookAsAWhole { get; set; }
-        public string LeftNeighbour { get; set; }
-        public string RightNeighbour { get; set; }
-        public float? DistanceToFocalPoint { get; set; }
-        public int? NumSeats { get; set; }
-        public bool? IsAccessible { get; set; }
-        public bool? IsCompanionSeat { get; set; }
-        public bool? HasRestrictedView { get; set; }
-    }
+    public string Label { get; set; }
+    public Labels Labels { get; set; }
+    public IDs IDs { get; set; }
+    public string CategoryLabel { get; set; }
+    public int? CategoryKey { get; set; }
+    public string ObjectType { get; set; }
+    public string Section { get; set; }
+    public string Entrance { get; set; }
+    public int? Capacity { get; set; }
+    public bool? BookAsAWhole { get; set; }
+    public string LeftNeighbour { get; set; }
+    public string RightNeighbour { get; set; }
+    public float? DistanceToFocalPoint { get; set; }
+    public int? NumSeats { get; set; }
+    public bool? IsAccessible { get; set; }
+    public bool? IsCompanionSeat { get; set; }
+    public bool? HasRestrictedView { get; set; }
 }

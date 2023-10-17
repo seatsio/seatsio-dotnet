@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace SeatsioDotNet.EventReports
+namespace SeatsioDotNet.Reports.Charts
 {
-    public class EventReportSummaryItem
+    public class ChartReportSummaryItem
     {
         public int Count { get; set; }
-        public Dictionary<string, int> byStatus { get; set; }
         public Dictionary<string, int> byCategoryKey { get; set; }
         public Dictionary<string, int> byCategoryLabel { get; set; }
         public Dictionary<string, int> bySection { get; set; }
-        public Dictionary<string, int> byAvailability { get; set; }
-        public Dictionary<string, int> byChannel { get; set; }
+        public Dictionary<string, int> byObjectType { get; set; }
     }
 }

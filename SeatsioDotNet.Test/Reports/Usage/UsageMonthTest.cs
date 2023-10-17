@@ -1,7 +1,7 @@
-using SeatsioDotNet.UsageReports;
+using SeatsioDotNet.Reports.Usage;
 using Xunit;
 
-namespace SeatsioDotNet.Test.UsageReports;
+namespace SeatsioDotNet.Test.Reports.Usage;
 
 public class UsageMonthTest
 {

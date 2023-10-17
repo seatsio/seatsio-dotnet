@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using RestSharp;
+using SeatsioDotNet.EventReports;
 using static SeatsioDotNet.Util.RestUtil;
 
-namespace SeatsioDotNet.EventReports
+namespace SeatsioDotNet.Reports.Events
 {
     public class EventReports
     {
@@ -151,8 +152,8 @@ namespace SeatsioDotNet.EventReports
         public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryByAvailability(string eventKey)
         {
             return FetchDeepSummaryReport("byAvailability", eventKey);
-        }   
-        
+        }
+
         public Dictionary<string, IEnumerable<EventObjectInfo>> ByAvailabilityReason(string eventKey)
         {
             return FetchReport("byAvailabilityReason", eventKey);

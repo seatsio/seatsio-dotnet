@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using RestSharp;
-using SeatsioDotNet.UsageReports.DetailsForEventInMonth;
+using SeatsioDotNet.Reports.Usage.DetailsForEventInMonth;
+using SeatsioDotNet.Reports.Usage.DetailsForMonth;
+using SeatsioDotNet.Reports.Usage.SummaryForMonths;
 using static SeatsioDotNet.Util.RestUtil;
 
-namespace SeatsioDotNet.UsageReports
+namespace SeatsioDotNet.Reports.Usage
 {
     public class UsageReports
     {

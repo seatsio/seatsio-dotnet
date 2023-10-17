@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SeatsioDotNet.UsageReports.DetailsForEventInMonth
+namespace SeatsioDotNet.Reports.Usage.DetailsForEventInMonth
 {
     public class UsageForObjectV2
     {

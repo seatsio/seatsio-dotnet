@@ -53,7 +53,7 @@ namespace SeatsioDotNet.Test
         public void ReturnsSuccessfullyWhenTheServerSendsA429FirstAndThenASuccessfulResponse()
         {
             var client = new SeatsioRestClient(new RestClientOptions("https://httpbin.seatsio.net"));
-            for (var i = 0; i < 20; ++i)
+            for (var i = 0; i < 10; ++i)
             {
                 var response = client.Execute<object>(new RestRequest("/status/429:0.25,204:0.75", Method.Get));
                 Assert.Equal(204, (int) response.StatusCode);

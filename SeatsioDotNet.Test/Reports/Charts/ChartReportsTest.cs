@@ -5,9 +5,9 @@ using FluentAssertions;
 using SeatsioDotNet.ChartReports;
 using SeatsioDotNet.Events;
 using Xunit;
-using static SeatsioDotNet.ChartReports.ChartReports.Version;
+using static SeatsioDotNet.Reports.Charts.ChartReports.Version;
 
-namespace SeatsioDotNet.Test.ChartReports
+namespace SeatsioDotNet.Test.Reports.Charts
 {
     public class ChartReportsTest : SeatsioClientTest
     {

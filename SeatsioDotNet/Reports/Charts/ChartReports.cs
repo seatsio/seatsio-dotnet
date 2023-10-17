@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using RestSharp;
+using SeatsioDotNet.ChartReports;
 using static SeatsioDotNet.Util.RestUtil;
 
-namespace SeatsioDotNet.ChartReports
+namespace SeatsioDotNet.Reports.Charts
 {
     public class ChartReports
     {

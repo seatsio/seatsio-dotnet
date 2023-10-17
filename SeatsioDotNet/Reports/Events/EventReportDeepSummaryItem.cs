@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SeatsioDotNet.EventReports
+namespace SeatsioDotNet.Reports.Events
 {
     public class EventReportDeepSummaryItem
     {

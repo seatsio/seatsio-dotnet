@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace SeatsioDotNet.UsageReports
+namespace SeatsioDotNet.Reports.Usage.SummaryForMonths
 {
     public class UsageSummaryForMonth
     {

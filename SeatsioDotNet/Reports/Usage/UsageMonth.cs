@@ -1,4 +1,4 @@
-namespace SeatsioDotNet.UsageReports
+namespace SeatsioDotNet.Reports.Usage
 {
     public class UsageMonth
     {

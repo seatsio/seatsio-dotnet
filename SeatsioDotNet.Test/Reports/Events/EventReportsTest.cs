@@ -5,7 +5,7 @@ using SeatsioDotNet.Events;
 using Xunit;
 using static SeatsioDotNet.EventReports.EventObjectInfo;
 
-namespace SeatsioDotNet.Test.EventReports
+namespace SeatsioDotNet.Test.Reports.Events
 {
     public class EventReportsTest : SeatsioClientTest
     {

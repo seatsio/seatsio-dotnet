@@ -1,8 +1,7 @@
-namespace SeatsioDotNet.Events
+namespace SeatsioDotNet.Events;
+
+public class StatusChangeOrigin
 {
-    public class StatusChangeOrigin
-    {
-        public string Type { get; set; }
-        public string Ip { get; set; }
-    }
+    public string Type { get; set; }
+    public string Ip { get; set; }
 }

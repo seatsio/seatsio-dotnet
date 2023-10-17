@@ -1,17 +1,15 @@
 ﻿using Xunit;
-using static System.Text.Encoding;
 
-namespace SeatsioDotNet.Test.Charts
+namespace SeatsioDotNet.Test.Charts;
+
+public class RetrievePublishedVersionThumbnailTest : SeatsioClientTest
 {
-    public class RetrievePublishedVersionThumbnailTest : SeatsioClientTest
+    [Fact]
+    public void Test()
     {
-        [Fact]
-        public void Test()
-        {
-            var chart = Client.Charts.Create();
+        var chart = Client.Charts.Create();
 
-            byte[] thumbnail = Client.Charts.RetrievePublishedVersionThumbnail(chart.Key);
-            Assert.NotEmpty(thumbnail);
-        }
+        byte[] thumbnail = Client.Charts.RetrievePublishedVersionThumbnail(chart.Key);
+        Assert.NotEmpty(thumbnail);
     }
 }

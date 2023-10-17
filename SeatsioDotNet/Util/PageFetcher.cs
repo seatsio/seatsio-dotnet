@@ -3,84 +3,83 @@ using System.Collections.Generic;
 using RestSharp;
 using static SeatsioDotNet.Util.RestUtil;
 
-namespace SeatsioDotNet.Util
+namespace SeatsioDotNet.Util;
+
+public class PageFetcher<T>
 {
-    public class PageFetcher<T>
+    private readonly RestClient _restClient;
+    private readonly string _path;
+    private readonly Func<RestRequest, RestRequest> _requestAdapter;
+    private readonly Dictionary<string, string> _queryParams;
+
+    public PageFetcher(RestClient restClient, String path)
     {
-        private readonly RestClient _restClient;
-        private readonly string _path;
-        private readonly Func<RestRequest, RestRequest> _requestAdapter;
-        private readonly Dictionary<string, string> _queryParams;
+        _restClient = restClient;
+        _path = path;
+    }
 
-        public PageFetcher(RestClient restClient, String path)
+    public PageFetcher(RestClient restClient, String path, Func<RestRequest, RestRequest> requestAdapter)
+    {
+        _restClient = restClient;
+        _path = path;
+        _requestAdapter = requestAdapter;
+    }
+
+    public PageFetcher(RestClient restClient, String path, Func<RestRequest, RestRequest> requestAdapter, Dictionary<String, String> queryParams)
+    {
+        _restClient = restClient;
+        _path = path;
+        _requestAdapter = requestAdapter;
+        _queryParams = queryParams;
+    }
+
+    public Page<T> FetchFirstPage(Dictionary<string, object> listParams = null, int? pageSize = null)
+    {
+        var restRequest = BuildRequest(listParams, pageSize);
+        return AssertOk(_restClient.Execute<Page<T>>(restRequest));
+    }
+
+    public Page<T> FetchAfter(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
+    {
+        var restRequest = BuildRequest(listParams, pageSize).AddQueryParameter("start_after_id", id.ToString());
+        return AssertOk(_restClient.Execute<Page<T>>(restRequest));
+    }
+
+    public Page<T> FetchBefore(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
+    {
+        var restRequest = BuildRequest(listParams, pageSize).AddQueryParameter("end_before_id", id.ToString());
+        return AssertOk(_restClient.Execute<Page<T>>(restRequest));
+    }
+
+    private RestRequest BuildRequest(Dictionary<string, object> listParams, int? pageSize)
+    {
+        var restRequest = new RestRequest(_path);
+        if (_requestAdapter != null)
         {
-            _restClient = restClient;
-            _path = path;
+            restRequest = _requestAdapter.Invoke(restRequest);
         }
 
-        public PageFetcher(RestClient restClient, String path, Func<RestRequest, RestRequest> requestAdapter)
+        if (listParams != null)
         {
-            _restClient = restClient;
-            _path = path;
-            _requestAdapter = requestAdapter;
-        }
-
-        public PageFetcher(RestClient restClient, String path, Func<RestRequest, RestRequest> requestAdapter, Dictionary<String, String> queryParams)
-        {
-            _restClient = restClient;
-            _path = path;
-            _requestAdapter = requestAdapter;
-            _queryParams = queryParams;
-        }
-
-        public Page<T> FetchFirstPage(Dictionary<string, object> listParams = null, int? pageSize = null)
-        {
-            var restRequest = BuildRequest(listParams, pageSize);
-            return AssertOk(_restClient.Execute<Page<T>>(restRequest));
-        }
-
-        public Page<T> FetchAfter(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
-        {
-            var restRequest = BuildRequest(listParams, pageSize).AddQueryParameter("start_after_id", id.ToString());
-            return AssertOk(_restClient.Execute<Page<T>>(restRequest));
-        }
-
-        public Page<T> FetchBefore(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
-        {
-            var restRequest = BuildRequest(listParams, pageSize).AddQueryParameter("end_before_id", id.ToString());
-            return AssertOk(_restClient.Execute<Page<T>>(restRequest));
-        }
-
-        private RestRequest BuildRequest(Dictionary<string, object> listParams, int? pageSize)
-        {
-            var restRequest = new RestRequest(_path);
-            if (_requestAdapter != null)
+            foreach (var param in listParams)
             {
-                restRequest = _requestAdapter.Invoke(restRequest);
+                restRequest.AddQueryParameter(param.Key, param.Value.ToString());
             }
-
-            if (listParams != null)
-            {
-                foreach (var param in listParams)
-                {
-                    restRequest.AddQueryParameter(param.Key, param.Value.ToString());
-                }
-            }
-
-            if (pageSize != null)
-            {
-                restRequest.AddQueryParameter("limit", pageSize.ToString());
-            }
-
-            if (_queryParams != null)
-            {
-                foreach (var queryParam in _queryParams)
-                {
-                    restRequest.AddQueryParameter(queryParam.Key, queryParam.Value);
-                }
-            }
-
-            return restRequest;
         }
+
+        if (pageSize != null)
+        {
+            restRequest.AddQueryParameter("limit", pageSize.ToString());
+        }
+
+        if (_queryParams != null)
+        {
+            foreach (var queryParam in _queryParams)
+            {
+                restRequest.AddQueryParameter(queryParam.Key, queryParam.Value);
+            }
+        }
+
+        return restRequest;
     }
 }

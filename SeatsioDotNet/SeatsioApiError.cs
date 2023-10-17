@@ -1,34 +1,35 @@
-namespace SeatsioDotNet
+using System;
+
+namespace SeatsioDotNet;
+
+public class SeatsioApiError
 {
-    public class SeatsioApiError
+    public string Code { get; }
+    public string Message { get; }
+
+    public SeatsioApiError(string code, string message)
     {
-        public string Code { get; }
-        public string Message { get; }
+        Code = code;
+        Message = message;
+    }
 
-        public SeatsioApiError(string code, string message)
+    public override bool Equals(Object obj)
+    {
+        if (obj == null)
         {
-            Code = code;
-            Message = message;
+            return false;
         }
 
-        public override bool Equals(System.Object obj)
+        if (!(obj is SeatsioApiError p))
         {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            if (!(obj is SeatsioApiError p))
-            {
-                return false;
-            }
-
-            return (Code.Equals(p.Code)) && (Message.Equals(p.Message));
+            return false;
         }
 
-        public override int GetHashCode()
-        {
-            return Code.GetHashCode() ^ Message.GetHashCode();
-        }
+        return (Code.Equals(p.Code)) && (Message.Equals(p.Message));
+    }
+
+    public override int GetHashCode()
+    {
+        return Code.GetHashCode() ^ Message.GetHashCode();
     }
 }

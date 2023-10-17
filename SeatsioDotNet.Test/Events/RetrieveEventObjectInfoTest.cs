@@ -1,21 +1,19 @@
 ﻿using SeatsioDotNet.EventReports;
-using SeatsioDotNet.Events;
 using Xunit;
 
-namespace SeatsioDotNet.Test.Events
+namespace SeatsioDotNet.Test.Events;
+
+public class RetrieveEventObjectInfoTest : SeatsioClientTest
 {
-    public class RetrieveEventObjectInfoTest : SeatsioClientTest
+    [Fact]
+    public void Test()
     {
-        [Fact]
-        public void Test()
-        {
-            var chartKey = CreateTestChart();
-            var evnt = Client.Events.Create(chartKey);
+        var chartKey = CreateTestChart();
+        var evnt = Client.Events.Create(chartKey);
 
-            var objectInfo = Client.Events.RetrieveObjectInfo(evnt.Key, "A-1");
+        var objectInfo = Client.Events.RetrieveObjectInfo(evnt.Key, "A-1");
 
-            Assert.Equal(EventObjectInfo.Free, objectInfo.Status);
-            Assert.True(objectInfo.ForSale);
-        }
+        Assert.Equal(EventObjectInfo.Free, objectInfo.Status);
+        Assert.True(objectInfo.ForSale);
     }
 }

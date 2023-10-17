@@ -1,18 +1,17 @@
 using Xunit;
 
-namespace SeatsioDotNet.Test
+namespace SeatsioDotNet.Test;
+
+public class WorkspaceKeyAuthenticationTest : SeatsioClientTest
 {
-    public class WorkspaceKeyAuthenticationTest : SeatsioClientTest
+    [Fact]
+    public void Test()
     {
-        [Fact]
-        public void Test()
-        {
-            var workspace = Client.Workspaces.Create("some workspace");
+        var workspace = Client.Workspaces.Create("some workspace");
 
-            var workspaceClient = CreateSeatsioClient(User.SecretKey, workspace.Key);
-            var holdToken = workspaceClient.HoldTokens.Create();
+        var workspaceClient = CreateSeatsioClient(User.SecretKey, workspace.Key);
+        var holdToken = workspaceClient.HoldTokens.Create();
 
-            Assert.Equal(workspace.Key, holdToken.workspaceKey);
-        }
+        Assert.Equal(workspace.Key, holdToken.workspaceKey);
     }
 }

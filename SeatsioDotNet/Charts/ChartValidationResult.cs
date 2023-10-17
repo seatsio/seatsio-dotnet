@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 
-namespace SeatsioDotNet.Charts
+namespace SeatsioDotNet.Charts;
+
+public class ChartValidationResult
 {
-    public class ChartValidationResult
-    {
-        public List<string> Errors { get; set; }
-        public List<string> Warnings { get; set; }
-    }
+    public List<string> Errors { get; set; }
+    public List<string> Warnings { get; set; }
 }

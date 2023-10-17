@@ -1,31 +1,30 @@
 ﻿using SeatsioDotNet.Charts;
 using Xunit;
 
-namespace SeatsioDotNet.Test.Charts
+namespace SeatsioDotNet.Test.Charts;
+
+public class AddTagTest : SeatsioClientTest
 {
-    public class AddTagTest : SeatsioClientTest
+    [Fact]
+    public void Test()
     {
-        [Fact]
-        public void Test()
-        {
-            var chart = Client.Charts.Create();
+        var chart = Client.Charts.Create();
 
-            Client.Charts.AddTag(chart.Key, "tag1");
-            Client.Charts.AddTag(chart.Key, "tag2");
+        Client.Charts.AddTag(chart.Key, "tag1");
+        Client.Charts.AddTag(chart.Key, "tag2");
 
-            Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
-            CustomAssert.ContainsOnly(new[] {"tag1", "tag2"}, retrievedChart.Tags);
-        }   
+        Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
+        CustomAssert.ContainsOnly(new[] {"tag1", "tag2"}, retrievedChart.Tags);
+    }   
         
-        [Fact]
-        public void SpecialCharacters()
-        {
-            var chart = Client.Charts.Create();
+    [Fact]
+    public void SpecialCharacters()
+    {
+        var chart = Client.Charts.Create();
 
-            Client.Charts.AddTag(chart.Key, "'tag1:-'/&?<>");
+        Client.Charts.AddTag(chart.Key, "'tag1:-'/&?<>");
 
-            Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
-            CustomAssert.ContainsOnly(new[] {"'tag1:-'/&?<>"}, retrievedChart.Tags);
-        }
+        Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
+        CustomAssert.ContainsOnly(new[] {"'tag1:-'/&?<>"}, retrievedChart.Tags);
     }
 }

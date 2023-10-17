@@ -1,20 +1,19 @@
 ﻿using System.Collections.Generic;
 using Xunit;
 
-namespace SeatsioDotNet.Test.Events
+namespace SeatsioDotNet.Test.Events;
+
+public class UpdateExtraDataTest : SeatsioClientTest
 {
-    public class UpdateExtraDataTest : SeatsioClientTest
+    [Fact]
+    public void Test()
     {
-        [Fact]
-        public void Test()
-        {
-            var chartKey = CreateTestChart();
-            var evnt = Client.Events.Create(chartKey);
-            var extraData = new Dictionary<string, object> {{"foo", "bar"}};
+        var chartKey = CreateTestChart();
+        var evnt = Client.Events.Create(chartKey);
+        var extraData = new Dictionary<string, object> {{"foo", "bar"}};
 
-            Client.Events.UpdateExtraData(evnt.Key, "A-1", extraData);
+        Client.Events.UpdateExtraData(evnt.Key, "A-1", extraData);
 
-            Assert.Equal(extraData, Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
-        }
+        Assert.Equal(extraData, Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
     }
 }

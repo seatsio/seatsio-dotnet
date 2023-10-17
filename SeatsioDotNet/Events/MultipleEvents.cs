@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 
-namespace SeatsioDotNet.Events
+namespace SeatsioDotNet.Events;
+
+public class MultipleEvents
 {
-    public class MultipleEvents
-    {
-        public List<Event> events { get; set; }
-    }
+    public List<Event> events { get; set; }
 }

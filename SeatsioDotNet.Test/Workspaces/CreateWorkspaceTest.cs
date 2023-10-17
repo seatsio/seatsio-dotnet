@@ -1,31 +1,30 @@
 ﻿using Xunit;
 
-namespace SeatsioDotNet.Test.Workspaces
+namespace SeatsioDotNet.Test.Workspaces;
+
+public class CreateWorkspaceTest : SeatsioClientTest
 {
-    public class CreateWorkspaceTest : SeatsioClientTest
+    [Fact]
+    public void CreateWorkspace()
     {
-        [Fact]
-        public void CreateWorkspace()
-        {
-            var workspace = Client.Workspaces.Create("my workspace");
+        var workspace = Client.Workspaces.Create("my workspace");
 
-            Assert.Equal("my workspace", workspace.Name);
-            Assert.NotNull(workspace.Key);
-            Assert.NotNull(workspace.SecretKey);
-            Assert.False(workspace.IsTest);
-            Assert.True(workspace.IsActive);
-        } 
+        Assert.Equal("my workspace", workspace.Name);
+        Assert.NotNull(workspace.Key);
+        Assert.NotNull(workspace.SecretKey);
+        Assert.False(workspace.IsTest);
+        Assert.True(workspace.IsActive);
+    } 
         
-        [Fact]
-        public void CreateTestWorkspace()
-        {
-            var workspace = Client.Workspaces.Create("my workspace", true);
+    [Fact]
+    public void CreateTestWorkspace()
+    {
+        var workspace = Client.Workspaces.Create("my workspace", true);
 
-            Assert.Equal("my workspace", workspace.Name);
-            Assert.NotNull(workspace.Key);
-            Assert.NotNull(workspace.SecretKey);
-            Assert.True(workspace.IsTest);
-            Assert.True(workspace.IsActive);
-        }
+        Assert.Equal("my workspace", workspace.Name);
+        Assert.NotNull(workspace.Key);
+        Assert.NotNull(workspace.SecretKey);
+        Assert.True(workspace.IsTest);
+        Assert.True(workspace.IsActive);
     }
 }

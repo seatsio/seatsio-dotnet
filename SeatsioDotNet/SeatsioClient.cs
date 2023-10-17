@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using RestSharp;
 using RestSharp.Authenticators;
 using RestSharp.Serializers.Json;
+using SeatsioDotNet.Reports.Usage;
 
 namespace SeatsioDotNet
 {
@@ -17,9 +18,9 @@ namespace SeatsioDotNet
         public Events.Events Events { get; }
         public Workspaces.Workspaces Workspaces { get; }
         public HoldTokens.HoldTokens HoldTokens { get; }
-        public EventReports.EventReports EventReports { get; }
-        public ChartReports.ChartReports ChartReports { get; }
-        public UsageReports.UsageReports UsageReports { get; }
+        public Reports.Events.EventReports EventReports { get; }
+        public Reports.Charts.ChartReports ChartReports { get; }
+        public UsageReports UsageReports { get; }
         public Seasons.Seasons Seasons { get; }
 
         private SeatsioRestClient RestClient;
@@ -36,9 +37,9 @@ namespace SeatsioDotNet
             Events = new Events.Events(RestClient);
             Workspaces = new Workspaces.Workspaces(RestClient);
             HoldTokens = new HoldTokens.HoldTokens(RestClient);
-            EventReports = new EventReports.EventReports(RestClient);
-            ChartReports = new ChartReports.ChartReports(RestClient);
-            UsageReports = new UsageReports.UsageReports(RestClient);
+            EventReports = new Reports.Events.EventReports(RestClient);
+            ChartReports = new Reports.Charts.ChartReports(RestClient);
+            UsageReports = new UsageReports(RestClient);
             Seasons = new Seasons.Seasons(RestClient, this);
         }
 

@@ -115,4 +115,15 @@ public class SeatsioClientTest
             }
         }
     }
+
+    protected string DemoCompanySecretKey()
+    {
+        return Environment.GetEnvironmentVariable("DEMO_COMPANY_SECRET_KEY");
+    }
+
+    protected bool DemoCompanySecretKeySet()
+    {
+        var demoCompanySecretKey = Environment.GetEnvironmentVariable("DEMO_COMPANY_SECRET_KEY");
+        return demoCompanySecretKey != null;
+    }
 }

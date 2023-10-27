@@ -109,8 +109,8 @@ public class Events
             if (param.Categories != null)
             {
                 e.Add("categories", param.Categories);
-            }      
-                
+            }
+
             if (param.Channels != null)
             {
                 e.Add("channels", param.Channels);
@@ -344,7 +344,8 @@ public class Events
 
     public ChangeObjectStatusResult ChangeObjectStatus(IEnumerable<string> events,
         IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null,
-        bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, string[] allowedPreviousStatuses = null,
+        bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null,
+        string[] allowedPreviousStatuses = null,
         string[] rejectedPreviousStatuses = null)
     {
         var requestBody = ChangeObjectStatusRequest(events, objects, status, holdToken, orderId, keepExtraData,
@@ -476,6 +477,22 @@ public class Events
             .AddUrlSegment("key", eventKey)
             .AddJsonBody(requestBody);
         return AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
+    }
+
+    public void OverrideSeasonObjectStatus(string eventKey, string[] objects)
+    {
+        var restRequest = new RestRequest("/events/{key}/actions/override-season-status", Method.Post)
+            .AddUrlSegment("key", eventKey)
+            .AddJsonBody(new {objects});
+        AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
+    }  
+    
+    public void UseSeasonObjectStatus(string eventKey, string[] objects)
+    {
+        var restRequest = new RestRequest("/events/{key}/actions/use-season-status", Method.Post)
+            .AddUrlSegment("key", eventKey)
+            .AddJsonBody(new {objects});
+        AssertOk(_restClient.Execute<BestAvailableResult>(restRequest));
     }
 
     public void UpdateExtraData(string eventKey, string objectLabel, Dictionary<string, object> extraData)

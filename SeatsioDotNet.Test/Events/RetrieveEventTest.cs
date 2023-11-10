@@ -23,6 +23,7 @@ public class RetrieveEventTest : SeatsioClientTest
         CustomAssert.CloseTo(DateTimeOffset.Now, retrievedEvent.CreatedOn.Value);
         Assert.Null(retrievedEvent.UpdatedOn);
         Assert.Equal(TestChartCategories, retrievedEvent.Categories);
+        Assert.Null(retrievedEvent.PartialSeasonKeysForEvent);
     }
 
     [Fact]
@@ -49,5 +50,6 @@ public class RetrieveEventTest : SeatsioClientTest
         CustomAssert.CloseTo(DateTimeOffset.Now, season.CreatedOn.Value);
         Assert.Null(season.UpdatedOn);
         Assert.Equal(TestChartCategories, season.Categories);
+        Assert.Null(season.PartialSeasonKeysForEvent);
     }
 }

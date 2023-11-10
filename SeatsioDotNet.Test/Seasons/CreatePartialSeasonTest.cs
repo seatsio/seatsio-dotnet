@@ -27,5 +27,6 @@ public class CreatePartialSeasonTest : SeatsioClientTest
         var partialSeason = Client.Seasons.CreatePartialSeason(topLevelSeason.Key, eventKeys: new[] {"event1", "event2"});
 
         Assert.Equal(new[] {"event1", "event2"}, partialSeason.Events.Select(e => e.Key));
+        Assert.Equal(new[] {partialSeason.Key}, partialSeason.Events[0].PartialSeasonKeysForEvent);
     }
 }

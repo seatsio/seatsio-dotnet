@@ -27,4 +27,5 @@ public class Event
     public bool IsEventInSeason { get; set; }
     public string TopLevelSeasonKey { get; set; }
     public bool IsInThePast { get; set; }
+    public string[] PartialSeasonKeysForEvent { get; set; }
 }

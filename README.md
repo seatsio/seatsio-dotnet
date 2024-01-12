@@ -1,4 +1,4 @@
-# seatsio-dotnet, the official Seats.io .NET API client library
+# seatsio-dotnet, the official Seats.io .NET SDK
 
 [![Build](https://github.com/seatsio/seatsio-dotnet/workflows/Build/badge.svg)](https://github.com/seatsio/seatsio-dotnet/actions/workflows/build.yml)
 [![NuGet version](https://badge.fury.io/nu/seatsiodotnet.svg)](https://badge.fury.io/nu/seatsiodotnet)

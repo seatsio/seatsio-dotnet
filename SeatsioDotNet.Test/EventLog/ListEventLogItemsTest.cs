@@ -31,7 +31,6 @@ public class ListEventLogItemsTest : SeatsioClientTest
 
         Assert.True(eventLogItem.Id > 0);
         Assert.Equal("chart.created", eventLogItem.Type);
-        Assert.Equal(Workspace.Key, eventLogItem.WorkspaceKey);
-        Assert.Equal(new Dictionary<string, object> {{"key", chart.Key}}, eventLogItem.Data);
+        Assert.Equal(new Dictionary<string, object> {{"key", chart.Key}, {"workspaceKey", Workspace.Key}}, eventLogItem.Data);
     }
 }

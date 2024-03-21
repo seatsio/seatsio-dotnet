@@ -44,7 +44,7 @@ To use this library, you'll need to create a `SeatsioClient`:
 ```csharp
 using SeatsioDotNet;
 
-var client = new SeatsioClient(Region.EU, "<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
 ...
 ```
 
@@ -52,10 +52,10 @@ You can find your _workspace secret key_ in the [settings section of the workspa
 
 The region should correspond to the region of your account:
 
-- `Region.EU`: Europe
-- `Region.NA`: North-America
-- `Region.SA`: South-America
-- `Region.OC`: Oceania
+- `Region.EU()`: Europe
+- `Region.NA()`: North-America
+- `Region.SA()`: South-America
+- `Region.OC()`: Oceania
 
 If you're unsure about your region, have a look at your [company settings page](https://app.seats.io/company-settings).
 
@@ -66,7 +66,7 @@ using SeatsioDotNet;
 using SeatsioDotNet.Charts;
 using SeatsioDotNet.Events;
 
-var client = new SeatsioClient(Region.EU, "<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
 var chart = client.Charts.Create();
 var evnt = client.Events.Create(chart.Key);
 ```
@@ -76,7 +76,7 @@ var evnt = client.Events.Create(chart.Key);
 ```csharp
 using SeatsioDotNet;
 
-var client = new SeatsioClient(Region.EU, "<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
 client.Events.Book(<EVENT KEY>, new [] { "A-1", "A-2"});
 ```
 
@@ -85,7 +85,7 @@ client.Events.Book(<EVENT KEY>, new [] { "A-1", "A-2"});
 ```csharp
 using SeatsioDotNet;
 
-var client = new SeatsioClient(Region.EU, "<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
 client.Events.Release(<EVENT KEY>, new [] { "A-1", "A-2"});
 ```
 
@@ -94,7 +94,7 @@ client.Events.Release(<EVENT KEY>, new [] { "A-1", "A-2"});
 ```csharp
 using SeatsioDotNet;
 
-var client = new SeatsioClient(Region.EU, "<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
 client.Events.Book(<EVENT KEY>, new [] { "A-1", "A-2"}, <A HOLD TOKEN>);
 ```
 
@@ -103,7 +103,7 @@ client.Events.Book(<EVENT KEY>, new [] { "A-1", "A-2"}, <A HOLD TOKEN>);
 ```csharp
 using SeatsioDotNet;
 
-var client = new SeatsioClient(Region.EU, "<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
 client.Events.ChangeObjectStatus(""<EVENT KEY>"", new [] { "A-1", "A-2"}, "unavailable");
 ```
 
@@ -112,7 +112,7 @@ client.Events.ChangeObjectStatus(""<EVENT KEY>"", new [] { "A-1", "A-2"}, "unava
 ```csharp
 using SeatsioDotNet;
 
-var client = new SeatsioClient(Region.EU, "<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
 var drawing = client.Charts.RetrievePublishedVersion(<CHART KEY>);
 Console.WriteLine(drawing.VenueType);
 ```
@@ -122,7 +122,7 @@ Console.WriteLine(drawing.VenueType);
 ```csharp
 using SeatsioDotNet;
 
-var client = new SeatsioClient(Region.EU, "<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
 var objectInfos = Client.Events.RetrieveObjectInfos(evnt.Key, new string[] {"A-1", "A-2"});
 
 Console.WriteLine(objectInfos["A-1"].CategoryKey);
@@ -137,7 +137,7 @@ Console.WriteLine(objectInfos["A-2"].Status);
 ### Listing a chart's categories
 
 ```csharp
-var client = new SeatsioClient(Region.EU, "<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
 IEnumerable<Category> categoryList = client.Charts.ListCategories(<chart key>);
 foreach (var category in categoryList)
 {
@@ -150,7 +150,7 @@ foreach (var category in categoryList)
 ```csharp
 using SeatsioDotNet;
 
-var client = new SeatsioClient(Region.EU, "<WORKSPACE SECRET KEY>");
+var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
 
 var charts = client.Charts.ListAll();
 foreach (var chart in charts)
@@ -200,7 +200,7 @@ foreach (var chart in previousPage.Items)
 ```csharp
 using SeatsioDotNet;
 
-var client = new SeatsioClient(Region.EU, "<COMPANY ADMIN KEY>");
+var client = new SeatsioClient(Region.EU(), "<COMPANY ADMIN KEY>");
 client.Workspaces.Create("a workspace");
 ```
 
@@ -209,7 +209,7 @@ client.Workspaces.Create("a workspace");
 ```csharp
 using SeatsioDotNet;
 
-var client = new SeatsioClient(Region.EU, "<COMPANY ADMIN KEY>", "<WORKSPACE PUBLIC KEY>"); // workspace public key can be found on https://app.seats.io/workspace-settings
+var client = new SeatsioClient(Region.EU(), "<COMPANY ADMIN KEY>", "<WORKSPACE PUBLIC KEY>"); // workspace public key can be found on https://app.seats.io/workspace-settings
 var chart = client.Charts.Create();
 var evnt = client.Events.Create(chart.Key);
 ```
@@ -236,7 +236,7 @@ We throw a `RateLimitExceededException` (which is a subclass of `SeatsioExceptio
 To change the maximum number of retries, create the `SeatsioClient` as follows:
 
 ```csharp
-var client = new SeatsioClient(Region.EU, "<WORKSPACE SECRET KEY>").SetMaxRetries(3);
+var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>").SetMaxRetries(3);
 ```
 
 Passing in 0 disables exponential backoff completely. In that case, the client will never retry a failed request.

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using SeatsioDotNet.Charts;
 using Xunit;
 
@@ -7,13 +8,13 @@ namespace SeatsioDotNet.Test.Charts;
 public class RetrieveChartTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var chart = Client.Charts.Create();
-        Client.Charts.AddTag(chart.Key, "tag1");
-        Client.Charts.AddTag(chart.Key, "tag2");
+        var chart = await Client.Charts.CreateAsync();
+        await Client.Charts.AddTagAsync(chart.Key, "tag1");
+        await Client.Charts.AddTagAsync(chart.Key, "tag2");
 
-        Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
+        Chart retrievedChart = await Client.Charts.RetrieveAsync(chart.Key);
 
         Assert.NotEqual(0, retrievedChart.Id);
         Assert.NotNull(retrievedChart.Key);
@@ -27,13 +28,13 @@ public class RetrieveChartTest : SeatsioClientTest
     }
 
     [Fact]
-    public void WithEvents()
+    public async Task WithEvents()
     {
-        var chart = Client.Charts.Create();
-        var event1 = Client.Events.Create(chart.Key);
-        var event2 = Client.Events.Create(chart.Key);
+        var chart = await Client.Charts.CreateAsync();
+        var event1 = await Client.Events.CreateAsync(chart.Key);
+        var event2 = await Client.Events.CreateAsync(chart.Key);
 
-        Chart retrievedChart = Client.Charts.Retrieve(chart.Key, expandEvents: true);
+        Chart retrievedChart = await Client.Charts.RetrieveAsync(chart.Key, expandEvents: true);
 
         Assert.Equal(new[] {event2.Id, event1.Id}, retrievedChart.Events.Select(e => e.Id));
     }

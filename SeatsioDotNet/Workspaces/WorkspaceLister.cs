@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using SeatsioDotNet.Events;
 using SeatsioDotNet.Util;
 
@@ -13,24 +14,24 @@ public class WorkspaceLister
         _pageFetcher = pageFetcher;
     }
 
-    public IEnumerable<Workspace> All(string filter = null)
+    public IAsyncEnumerable<Workspace> All(string filter = null)
     {
         return new PagedEnumerable<Workspace>(_pageFetcher, WorkspaceListParams(filter));
     }
 
-    public Page<Workspace> FirstPage(string filter = null, int? pageSize = null)
+    public async Task<Page<Workspace>> FirstPage(string filter = null, int? pageSize = null)
     {
-        return _pageFetcher.FetchFirstPage(WorkspaceListParams(filter), pageSize);
+        return await _pageFetcher.FetchFirstPageAsync(WorkspaceListParams(filter), pageSize);
     }
 
-    public Page<Workspace> PageAfter(long id, string filter = null, int? pageSize = null)
+    public async Task<Page<Workspace>> PageAfter(long id, string filter = null, int? pageSize = null)
     {
-        return _pageFetcher.FetchAfter(id, WorkspaceListParams(filter), pageSize);
+        return await _pageFetcher.FetchAfterAsync(id, WorkspaceListParams(filter), pageSize);
     }
 
-    public Page<Workspace> PageBefore(long id, string filter = null, int? pageSize = null)
+    public async Task<Page<Workspace>> PageBefore(long id, string filter = null, int? pageSize = null)
     {
-        return _pageFetcher.FetchBefore(id, WorkspaceListParams(filter), pageSize);
+        return await _pageFetcher.FetchBeforeAsync(id, WorkspaceListParams(filter), pageSize);
     }
         
     private static Dictionary<string, object> WorkspaceListParams(string filter)

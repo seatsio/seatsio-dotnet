@@ -1,13 +1,14 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
+using Xunit;
 
 namespace SeatsioDotNet.Test.Workspaces;
 
 public class CreateWorkspaceTest : SeatsioClientTest
 {
     [Fact]
-    public void CreateWorkspace()
+    public async Task CreateWorkspace()
     {
-        var workspace = Client.Workspaces.Create("my workspace");
+        var workspace = await Client.Workspaces.CreateAsync("my workspace");
 
         Assert.Equal("my workspace", workspace.Name);
         Assert.NotNull(workspace.Key);
@@ -17,9 +18,9 @@ public class CreateWorkspaceTest : SeatsioClientTest
     } 
         
     [Fact]
-    public void CreateTestWorkspace()
+    public async Task CreateTestWorkspace()
     {
-        var workspace = Client.Workspaces.Create("my workspace", true);
+        var workspace = await Client.Workspaces.CreateAsync("my workspace", true);
 
         Assert.Equal("my workspace", workspace.Name);
         Assert.NotNull(workspace.Key);

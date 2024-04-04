@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using SeatsioDotNet.Util;
 
 namespace SeatsioDotNet.EventLog;
@@ -12,23 +13,23 @@ public class EventLogItemLister
         _pageFetcher = pageFetcher;
     }
 
-    public IEnumerable<EventLogItem> All()
+    public IAsyncEnumerable<EventLogItem> All()
     {
         return new PagedEnumerable<EventLogItem>(_pageFetcher, null);
     }
 
-    public Page<EventLogItem> FirstPage(int? pageSize = null)
+    public async Task<Page<EventLogItem>> FirstPage(int? pageSize = null)
     {
-        return _pageFetcher.FetchFirstPage(null, pageSize);
+        return await _pageFetcher.FetchFirstPageAsync(null, pageSize);
     }
 
-    public Page<EventLogItem> PageAfter(long id, int? pageSize = null)
+    public async Task<Page<EventLogItem>> PageAfter(long id, int? pageSize = null)
     {
-        return _pageFetcher.FetchAfter(id, null, pageSize);
+        return await _pageFetcher.FetchAfterAsync(id, null, pageSize);
     }
 
-    public Page<EventLogItem> PageBefore(long id, int? pageSize = null)
+    public async Task<Page<EventLogItem>> PageBefore(long id, int? pageSize = null)
     {
-        return _pageFetcher.FetchBefore(id, null, pageSize);
+        return await _pageFetcher.FetchBeforeAsync(id, null, pageSize);
     }
 }

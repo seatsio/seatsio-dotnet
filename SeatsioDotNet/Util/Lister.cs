@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SeatsioDotNet.Util;
 
@@ -11,23 +12,23 @@ public class Lister<T>
         _pageFetcher = pageFetcher;
     }
 
-    public IEnumerable<T> All(Dictionary<string, object> listParams = null)
+    public IAsyncEnumerable<T> AllAsync(Dictionary<string, object> listParams = null)
     {
         return new PagedEnumerable<T>(_pageFetcher, listParams);
     }
 
-    public Page<T> FirstPage(int? pageSize = null)
+    public async Task<Page<T>> FirstPageAsync(int? pageSize = null)
     {
-        return _pageFetcher.FetchFirstPage(pageSize: pageSize);
+        return await _pageFetcher.FetchFirstPageAsync(pageSize: pageSize);
     }
 
-    public Page<T> PageAfter(long id, int? pageSize = null)
+    public async Task<Page<T>> PageAfterAsync(long id, int? pageSize = null)
     {
-        return _pageFetcher.FetchAfter(id, pageSize: pageSize);
+        return await _pageFetcher.FetchAfterAsync(id, pageSize: pageSize);
     }
 
-    public Page<T> PageBefore(long id, int? pageSize = null)
+    public async Task<Page<T>> PageBeforeAsync(long id, int? pageSize = null)
     {
-        return _pageFetcher.FetchBefore(id, pageSize: pageSize);
+        return await _pageFetcher.FetchBeforeAsync(id, pageSize: pageSize);
     }
 }

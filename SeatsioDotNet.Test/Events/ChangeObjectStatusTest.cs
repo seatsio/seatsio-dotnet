@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentAssertions;
 using SeatsioDotNet.EventReports;
 using SeatsioDotNet.Events;
@@ -10,16 +11,16 @@ namespace SeatsioDotNet.Test.Events;
 public class ChangeObjectStatusTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var result = Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "foo");
+        var result = await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {"A-1", "A-2"}, "foo");
 
-        Assert.Equal("foo", Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").Status);
-        Assert.Equal("foo", Client.Events.RetrieveObjectInfo(evnt.Key, "A-2").Status);
-        Assert.Equal(EventObjectInfo.Free, Client.Events.RetrieveObjectInfo(evnt.Key, "A-3").Status);
+        Assert.Equal("foo", (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1")).Status);
+        Assert.Equal("foo", (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-2")).Status);
+        Assert.Equal(EventObjectInfo.Free, (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-3")).Status);
         CustomAssert.ContainsOnly(new[] {"A-1", "A-2"}, result.Objects.Keys);
 
         var reportItem = result.Objects["A-1"];
@@ -42,152 +43,152 @@ public class ChangeObjectStatusTest : SeatsioClientTest
     }
 
     [Fact]
-    public void HoldToken()
+    public async Task HoldToken()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        HoldToken holdToken = Client.HoldTokens.Create();
-        Client.Events.Hold(evnt.Key, new[] {"A-1", "A-2"}, holdToken.Token);
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        HoldToken holdToken = await Client.HoldTokens.CreateAsync();
+        await Client.Events.HoldAsync(evnt.Key, new[] {"A-1", "A-2"}, holdToken.Token);
 
-        Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "foo", holdToken.Token);
+        await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {"A-1", "A-2"}, "foo", holdToken.Token);
 
-        var objectInfo1 = Client.Events.RetrieveObjectInfo(evnt.Key, "A-1");
+        var objectInfo1 = await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1");
         Assert.Equal("foo", objectInfo1.Status);
         Assert.Null(objectInfo1.HoldToken);
 
-        var objectInfo2 = Client.Events.RetrieveObjectInfo(evnt.Key, "A-2");
+        var objectInfo2 = await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-2");
         Assert.Equal("foo", objectInfo2.Status);
         Assert.Null(objectInfo2.HoldToken);
     }
 
     [Fact]
-    public void OrderId()
+    public async Task OrderId()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "foo", null, "order1");
+        await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {"A-1", "A-2"}, "foo", null, "order1");
 
-        Assert.Equal("order1", Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").OrderId);
-        Assert.Equal("order1", Client.Events.RetrieveObjectInfo(evnt.Key, "A-2").OrderId);
+        Assert.Equal("order1", (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1")).OrderId);
+        Assert.Equal("order1", (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-2")).OrderId);
     }
 
     [Fact]
-    public void TicketType()
+    public async Task TicketType()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
         ObjectProperties object1 = new ObjectProperties("A-1", "T1");
         ObjectProperties object2 = new ObjectProperties("A-2", "T2");
 
-        Client.Events.ChangeObjectStatus(evnt.Key, new[] {object1, object2}, "foo");
+        await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {object1, object2}, "foo");
 
-        var objectInfo1 = Client.Events.RetrieveObjectInfo(evnt.Key, "A-1");
+        var objectInfo1 = await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1");
         Assert.Equal("foo", objectInfo1.Status);
         Assert.Equal("T1", objectInfo1.TicketType);
 
-        var objectInfo2 = Client.Events.RetrieveObjectInfo(evnt.Key, "A-2");
+        var objectInfo2 = await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-2");
         Assert.Equal("foo", objectInfo2.Status);
         Assert.Equal("T2", objectInfo2.TicketType);
     }
 
     [Fact]
-    public void Quantity()
+    public async Task Quantity()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
         ObjectProperties object1 = new ObjectProperties("GA1", 5);
 
-        Client.Events.ChangeObjectStatus(evnt.Key, new[] {object1}, "foo");
+        await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {object1}, "foo");
 
-        var objectInfo1 = Client.Events.RetrieveObjectInfo(evnt.Key, "GA1");
+        var objectInfo1 = await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "GA1");
         Assert.Equal(5, objectInfo1.NumBooked);
     }
 
     [Fact]
-    public void ExtraData()
+    public async Task ExtraData()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
         var extraData1 = new Dictionary<string, object> {{"foo", "bar"}};
         ObjectProperties object1 = new ObjectProperties("A-1", extraData1);
         var extraData2 = new Dictionary<string, object> {{"foo", "baz"}};
         ObjectProperties object2 = new ObjectProperties("A-2", extraData2);
 
-        Client.Events.ChangeObjectStatus(evnt.Key, new[] {object1, object2}, "foo");
+        await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {object1, object2}, "foo");
 
-        var objectInfo1 = Client.Events.RetrieveObjectInfo(evnt.Key, "A-1");
+        var objectInfo1 = await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1");
         Assert.Equal(extraData1, objectInfo1.ExtraData);
 
-        var objectInfo2 = Client.Events.RetrieveObjectInfo(evnt.Key, "A-2");
+        var objectInfo2 = await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-2");
         Assert.Equal(extraData2, objectInfo2.ExtraData);
     }
 
     [Fact]
-    public void KeepExtraDataTrue()
+    public async Task KeepExtraDataTrue()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
         var extraData = new Dictionary<string, object> {{"foo1", "bar1"}};
-        Client.Events.UpdateExtraData(evnt.Key, "A-1", extraData);
+        await Client.Events.UpdateExtraDataAsync(evnt.Key, "A-1", extraData);
 
-        Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", null, null, true);
+        await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {"A-1"}, "someStatus", null, null, true);
 
-        Assert.Equal(extraData, Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
+        Assert.Equal(extraData, (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1")).ExtraData);
     }
 
     [Fact]
-    public void KeepExtraDataFalse()
+    public async Task KeepExtraDataFalse()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
         var extraData = new Dictionary<string, object> {{"foo1", "bar1"}};
-        Client.Events.UpdateExtraData(evnt.Key, "A-1", extraData);
+        await Client.Events.UpdateExtraDataAsync(evnt.Key, "A-1", extraData);
 
-        Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", null, null, false);
+        await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {"A-1"}, "someStatus", null, null, false);
 
-        Assert.Null(Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
+        Assert.Null((await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1")).ExtraData);
     }
 
     [Fact]
-    public void NoKeepExtraData()
+    public async Task NoKeepExtraData()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
         var extraData = new Dictionary<string, object> {{"foo1", "bar1"}};
-        Client.Events.UpdateExtraData(evnt.Key, "A-1", extraData);
+        await Client.Events.UpdateExtraDataAsync(evnt.Key, "A-1", extraData);
 
-        Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus");
+        await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {"A-1"}, "someStatus");
 
-        Assert.Null(Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
+        Assert.Null((await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1")).ExtraData);
     }
-        
+
     [Fact]
-    public void AllowedPreviousStatuses()
+    public async Task AllowedPreviousStatuses()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        Assert.Throws<SeatsioException>(() =>
+        await Assert.ThrowsAsync<SeatsioException>(async () =>
         {
-            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", 
+            await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {"A-1"}, "someStatus",
                 null, null, null, null, null,
-                new []{"somePreviousStatus"}
+                new[] {"somePreviousStatus"}
             );
         });
     }
 
     [Fact]
-    public void RejectedPreviousStatuses()
+    public async Task RejectedPreviousStatuses()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        Assert.Throws<SeatsioException>(() =>
+        await Assert.ThrowsAsync<SeatsioException>(async () =>
         {
-            Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1"}, "someStatus", 
-                null, null, null, null, null, 
-                null, new []{"free"}
+            await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {"A-1"}, "someStatus",
+                null, null, null, null, null,
+                null, new[] {"free"}
             );
         });
     }

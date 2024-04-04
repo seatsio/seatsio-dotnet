@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using RestSharp;
 using static SeatsioDotNet.Util.RestUtil;
 
@@ -33,22 +34,22 @@ public class PageFetcher<T>
         _queryParams = queryParams;
     }
 
-    public Page<T> FetchFirstPage(Dictionary<string, object> listParams = null, int? pageSize = null)
+    public async Task<Page<T>> FetchFirstPageAsync(Dictionary<string, object> listParams = null, int? pageSize = null)
     {
         var restRequest = BuildRequest(listParams, pageSize);
-        return AssertOk(_restClient.Execute<Page<T>>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Page<T>>(restRequest));
     }
 
-    public Page<T> FetchAfter(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
+    public async Task<Page<T>> FetchAfterAsync(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
     {
         var restRequest = BuildRequest(listParams, pageSize).AddQueryParameter("start_after_id", id.ToString());
-        return AssertOk(_restClient.Execute<Page<T>>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Page<T>>(restRequest));
     }
 
-    public Page<T> FetchBefore(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
+    public async Task<Page<T>> FetchBeforeAsync(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
     {
         var restRequest = BuildRequest(listParams, pageSize).AddQueryParameter("end_before_id", id.ToString());
-        return AssertOk(_restClient.Execute<Page<T>>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Page<T>>(restRequest));
     }
 
     private RestRequest BuildRequest(Dictionary<string, object> listParams, int? pageSize)

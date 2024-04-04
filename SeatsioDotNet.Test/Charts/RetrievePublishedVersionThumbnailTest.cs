@@ -1,15 +1,16 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
+using Xunit;
 
 namespace SeatsioDotNet.Test.Charts;
 
 public class RetrievePublishedVersionThumbnailTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var chart = Client.Charts.Create();
+        var chart = await Client.Charts.CreateAsync();
 
-        byte[] thumbnail = Client.Charts.RetrievePublishedVersionThumbnail(chart.Key);
+        byte[] thumbnail = await Client.Charts.RetrievePublishedVersionThumbnailAsync(chart.Key);
         Assert.NotEmpty(thumbnail);
     }
 }

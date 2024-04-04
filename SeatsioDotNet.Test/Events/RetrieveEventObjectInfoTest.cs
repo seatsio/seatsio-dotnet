@@ -1,4 +1,5 @@
-﻿using SeatsioDotNet.EventReports;
+﻿using System.Threading.Tasks;
+using SeatsioDotNet.EventReports;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events;
@@ -6,12 +7,12 @@ namespace SeatsioDotNet.Test.Events;
 public class RetrieveEventObjectInfoTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var objectInfo = Client.Events.RetrieveObjectInfo(evnt.Key, "A-1");
+        var objectInfo = await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1");
 
         Assert.Equal(EventObjectInfo.Free, objectInfo.Status);
         Assert.True(objectInfo.ForSale);

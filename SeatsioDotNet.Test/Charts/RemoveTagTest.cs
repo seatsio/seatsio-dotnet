@@ -1,4 +1,5 @@
-﻿using SeatsioDotNet.Charts;
+﻿using System.Threading.Tasks;
+using SeatsioDotNet.Charts;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Charts;
@@ -6,15 +7,15 @@ namespace SeatsioDotNet.Test.Charts;
 public class RemoveTagTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var chart = Client.Charts.Create();
-        Client.Charts.AddTag(chart.Key, "tag1");
-        Client.Charts.AddTag(chart.Key, "tag2");
+        var chart = await Client.Charts.CreateAsync();
+        await Client.Charts.AddTagAsync(chart.Key, "tag1");
+        await Client.Charts.AddTagAsync(chart.Key, "tag2");
 
-        Client.Charts.RemoveTag(chart.Key, "tag2");
+        await Client.Charts.RemoveTagAsync(chart.Key, "tag2");
 
-        Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
+        Chart retrievedChart = await Client.Charts.RetrieveAsync(chart.Key);
         CustomAssert.ContainsOnly(new[] {"tag1"}, retrievedChart.Tags);
     }
 }

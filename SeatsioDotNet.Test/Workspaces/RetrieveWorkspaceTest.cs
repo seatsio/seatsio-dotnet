@@ -1,15 +1,16 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
+using Xunit;
 
 namespace SeatsioDotNet.Test.Workspaces;
 
 public class RetrieveWorkspaceTest : SeatsioClientTest
 {
     [Fact]
-    public void RetrieveWorkspace()
+    public async Task RetrieveWorkspace()
     {
-        var workspace = Client.Workspaces.Create("my workspace");
+        var workspace = await Client.Workspaces.CreateAsync("my workspace");
 
-        var retrievedWorkspace = Client.Workspaces.Retrieve(workspace.Key);
+        var retrievedWorkspace = await Client.Workspaces.RetrieveAsync(workspace.Key);
 
         Assert.Equal("my workspace", retrievedWorkspace.Name);
         Assert.NotNull(retrievedWorkspace.Key);

@@ -1,15 +1,16 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
+using Xunit;
 
 namespace SeatsioDotNet.Test.Charts;
 
 public class RetrievePublishedVersionTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var chart = Client.Charts.Create("aChart");
+        var chart = await Client.Charts.CreateAsync("aChart");
 
-        var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
+        var drawing = await Client.Charts.RetrievePublishedVersionAsync(chart.Key);
         Assert.Equal("aChart", drawing.Name);
     }
 

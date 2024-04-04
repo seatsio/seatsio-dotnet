@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Seasons;
@@ -6,12 +7,12 @@ namespace SeatsioDotNet.Test.Seasons;
 public class CreatePartialSeasonTest : SeatsioClientTest
 {
     [Fact]
-    public void KeyCanBePassedIn()
+    public async Task KeyCanBePassedIn()
     {
         var chartKey = CreateTestChart();
-        var topLevelSeason = Client.Seasons.Create(chartKey);
+        var topLevelSeason = await Client.Seasons.CreateAsync(chartKey);
 
-        var partialSeason = Client.Seasons.CreatePartialSeason(topLevelSeason.Key, partialSeasonKey: "aPartialSeason");
+        var partialSeason = await Client.Seasons.CreatePartialSeasonAsync(topLevelSeason.Key, partialSeasonKey: "aPartialSeason");
 
         Assert.Equal("aPartialSeason", partialSeason.Key);
         Assert.True(partialSeason.IsPartialSeason);
@@ -19,12 +20,12 @@ public class CreatePartialSeasonTest : SeatsioClientTest
     }
 
     [Fact]
-    public void EventKeysCanBePassedIn()
+    public async Task EventKeysCanBePassedIn()
     {
         var chartKey = CreateTestChart();
-        var topLevelSeason = Client.Seasons.Create(chartKey, eventKeys: new[] {"event1", "event2"});
+        var topLevelSeason = await Client.Seasons.CreateAsync(chartKey, eventKeys: new[] {"event1", "event2"});
 
-        var partialSeason = Client.Seasons.CreatePartialSeason(topLevelSeason.Key, eventKeys: new[] {"event1", "event2"});
+        var partialSeason = await Client.Seasons.CreatePartialSeasonAsync(topLevelSeason.Key, eventKeys: new[] {"event1", "event2"});
 
         Assert.Equal(new[] {"event1", "event2"}, partialSeason.Events.Select(e => e.Key));
         Assert.Equal(new[] {partialSeason.Key}, partialSeason.Events[0].PartialSeasonKeysForEvent);

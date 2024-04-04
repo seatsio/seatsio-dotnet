@@ -1,17 +1,18 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
+using Xunit;
 
 namespace SeatsioDotNet.Test.Workspaces;
 
 public class SetDefaultWorkspaceTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var workspace = Client.Workspaces.Create("a ws");
+        var workspace = await Client.Workspaces.CreateAsync("a ws");
             
-        Client.Workspaces.SetDefault(workspace.Key);
+        await Client.Workspaces.SetDefaultAsync(workspace.Key);
 
-        var retrievedWorkspace = Client.Workspaces.Retrieve(workspace.Key);
+        var retrievedWorkspace = await Client.Workspaces.RetrieveAsync(workspace.Key);
         Assert.True(retrievedWorkspace.IsDefault);
     }
 }

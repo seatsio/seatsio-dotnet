@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace SeatsioDotNet.Test.EventLog;
@@ -8,26 +9,26 @@ namespace SeatsioDotNet.Test.EventLog;
 public class ListEventLogItemsTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var chart = Client.Charts.Create();
-        Client.Charts.Update(chart.Key, "a chart");
+        var chart = await Client.Charts.CreateAsync();
+        await Client.Charts.UpdateAsync(chart.Key, "a chart");
 
         Thread.Sleep(2000);
 
-        var eventLogItems = Client.EventLog.ListAll();
+        var eventLogItems = Client.EventLog.ListAllAsync();
 
         Assert.Equal(new[] {"chart.created", "chart.published"}, eventLogItems.Select(e => e.Type));
     }
 
     [Fact]
-    public void Properties()
+    public async Task Properties()
     {
-        var chart = Client.Charts.Create();
+        var chart = await Client.Charts.CreateAsync();
 
         Thread.Sleep(2000);
 
-        var eventLogItem = Client.EventLog.ListAll().ToList()[0];
+        var eventLogItem = (await Client.EventLog.ListAllAsync().ToListAsync()).First();
 
         Assert.True(eventLogItem.Id > 0);
         Assert.Equal("chart.created", eventLogItem.Type);

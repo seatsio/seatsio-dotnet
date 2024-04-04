@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using System.Threading.Tasks;
+using RestSharp;
 using static SeatsioDotNet.Util.RestUtil;
 
 namespace SeatsioDotNet.HoldTokens;
@@ -12,31 +13,31 @@ public class HoldTokens
         _restClient = restClient;
     }
 
-    public HoldToken Create()
+    public async Task<HoldToken> CreateAsync()
     {
         var restRequest = new RestRequest("/hold-tokens", Method.Post);
-        return AssertOk(_restClient.Execute<HoldToken>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<HoldToken>(restRequest));
     }
 
-    public HoldToken Create(int expiresInMinutes)
+    public async Task<HoldToken> CreateAsync(int expiresInMinutes)
     {
         var restRequest = new RestRequest("/hold-tokens", Method.Post)
             .AddJsonBody(new {expiresInMinutes});
-        return AssertOk(_restClient.Execute<HoldToken>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<HoldToken>(restRequest));
     }
 
-    public HoldToken ExpiresInMinutes(string token, int expiresInMinutes)
+    public async Task<HoldToken> ExpiresInMinutesAsync(string token, int expiresInMinutes)
     {
         var restRequest = new RestRequest("/hold-tokens/{token}", Method.Post)
             .AddUrlSegment("token", token)
             .AddJsonBody(new {expiresInMinutes});
-        return AssertOk(_restClient.Execute<HoldToken>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<HoldToken>(restRequest));
     }
 
-    public HoldToken Retrieve(string token)
+    public async Task<HoldToken> RetrieveAsync(string token)
     {
         var restRequest = new RestRequest("/hold-tokens/{token}", Method.Get)
             .AddUrlSegment("token", token);
-        return AssertOk(_restClient.Execute<HoldToken>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<HoldToken>(restRequest));
     }
 }

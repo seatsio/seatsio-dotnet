@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SeatsioDotNet.Events;
 using Xunit;
 
@@ -9,11 +10,11 @@ namespace SeatsioDotNet.Test.Seasons;
 public class CreateSeasonTest : SeatsioClientTest
 {
     [Fact]
-    public void ChartKeyIsMandatory()
+    public async Task ChartKeyIsMandatory()
     {
         var chartKey = CreateTestChart();
 
-        var season = Client.Seasons.Create(chartKey);
+        var season = await Client.Seasons.CreateAsync(chartKey);
 
         Assert.NotNull(season.Key);
         Assert.NotEqual(0, season.Id);
@@ -30,47 +31,47 @@ public class CreateSeasonTest : SeatsioClientTest
     }
 
     [Fact]
-    public void KeyCanBePassedIn()
+    public async Task KeyCanBePassedIn()
     {
         var chartKey = CreateTestChart();
 
-        var season = Client.Seasons.Create(chartKey, key: "aSeason");
+        var season = await Client.Seasons.CreateAsync(chartKey, key: "aSeason");
 
         Assert.Equal("aSeason", season.Key);
     }    
         
     [Fact]
-    public void NumberOfEventsCanBePassedIn()
+    public async Task NumberOfEventsCanBePassedIn()
     {
         var chartKey = CreateTestChart();
 
-        var season = Client.Seasons.Create(chartKey, numberOfEvents: 2);
+        var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 2);
 
         Assert.Equal(2, season.Events.Count);
     }   
         
     [Fact]
-    public void EventKeysCanBePassedIn()
+    public async Task EventKeysCanBePassedIn()
     {
         var chartKey = CreateTestChart();
 
-        var season = Client.Seasons.Create(chartKey, eventKeys: new[] {"event1", "event2"});
+        var season = await Client.Seasons.CreateAsync(chartKey, eventKeys: new[] {"event1", "event2"});
 
         Assert.Equal(new[] {"event1", "event2"}, season.Events.Select(e => e.Key));
     }   
         
     [Fact]
-    public void TableBookingConfigCanBePassedIn()
+    public async Task TableBookingConfigCanBePassedIn()
     {
         var chartKey = CreateTestChart();
 
-        var season = Client.Seasons.Create(chartKey, tableBookingConfig: TableBookingConfig.AllBySeat());
+        var season = await Client.Seasons.CreateAsync(chartKey, tableBookingConfig: TableBookingConfig.AllBySeat());
 
         Assert.Equal(TableBookingConfig.AllBySeat().Mode, season.TableBookingConfig.Mode);
     }
         
     [Fact]
-    public void ChannelsCanBePassedIn()
+    public async Task ChannelsCanBePassedIn()
     {
         var chartKey = CreateTestChart();
         var channels = new List<Channel>
@@ -79,18 +80,18 @@ public class CreateSeasonTest : SeatsioClientTest
             new("channelKey2", "channel 2", "#00FFFF", 2, new String[] {})
         };
             
-        var season = Client.Seasons.Create(chartKey, channels: channels);
+        var season = await Client.Seasons.CreateAsync(chartKey, channels: channels);
 
         Assert.Equivalent(channels, season.Channels);
     }
         
     [Fact]
-    public void ForSaleConfigCanBePassedIn()
+    public async Task ForSaleConfigCanBePassedIn()
     {
         var chartKey = CreateTestChart();
         var forSaleConfig = new ForSaleConfig().WithForSale(false).WithObjects(new []{"A-1"}).WithAreaPlaces(new(){{"GA1", 5}}).WithCategories(new []{"Cat1"});
             
-        var season = Client.Seasons.Create(chartKey, forSaleConfig: forSaleConfig);
+        var season = await Client.Seasons.CreateAsync(chartKey, forSaleConfig: forSaleConfig);
 
         Assert.Equivalent(forSaleConfig, season.ForSaleConfig);
     }

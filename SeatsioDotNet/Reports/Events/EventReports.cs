@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using RestSharp;
 using SeatsioDotNet.EventReports;
 using static SeatsioDotNet.Util.RestUtil;
@@ -14,218 +15,218 @@ public class EventReports
         _restClient = restClient;
     }
 
-    public Dictionary<string, IEnumerable<EventObjectInfo>> ByLabel(string eventKey)
+    public async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> ByLabelAsync(string eventKey)
     {
-        return FetchReport("byLabel", eventKey);
+        return await FetchReportAsync("byLabel", eventKey);
     }
 
-    public IEnumerable<EventObjectInfo> ByLabel(string eventKey, string label)
+    public async Task<IEnumerable<EventObjectInfo>> ByLabelAsync(string eventKey, string label)
     {
-        return FetchReport("byLabel", eventKey, label);
+        return await FetchReport("byLabel", eventKey, label);
     }
 
-    public Dictionary<string, IEnumerable<EventObjectInfo>> ByStatus(string eventKey)
+    public async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> ByStatusAsync(string eventKey)
     {
-        return FetchReport("byStatus", eventKey);
+        return await FetchReportAsync("byStatus", eventKey);
     }
 
-    public Dictionary<string, EventReportSummaryItem> SummaryByStatus(string eventKey)
+    public async Task<Dictionary<string, EventReportSummaryItem>> SummaryByStatusAsync(string eventKey)
     {
-        return FetchSummaryReport("byStatus", eventKey);
+        return await FetchSummaryReport("byStatus", eventKey);
     }
 
-    public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryByStatus(string eventKey)
+    public async Task<Dictionary<string, EventReportDeepSummaryItem>> DeepSummaryByStatusAsync(string eventKey)
     {
-        return FetchDeepSummaryReport("byStatus", eventKey);
+        return await FetchDeepSummaryReport("byStatus", eventKey);
     }
 
-    public IEnumerable<EventObjectInfo> ByStatus(string eventKey, string status)
+    public async Task<IEnumerable<EventObjectInfo>> ByStatusAsync(string eventKey, string status)
     {
-        return FetchReport("byStatus", eventKey, status);
+        return await FetchReport("byStatus", eventKey, status);
     }
 
-    public Dictionary<string, IEnumerable<EventObjectInfo>> ByObjectType(string eventKey)
+    public async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> ByObjectTypeAsync(string eventKey)
     {
-        return FetchReport("byObjectType", eventKey);
+        return await FetchReportAsync("byObjectType", eventKey);
     }
 
-    public Dictionary<string, EventReportSummaryItem> SummaryByObjectType(string eventKey)
+    public async Task<Dictionary<string, EventReportSummaryItem>> SummaryByObjectTypeAsync(string eventKey)
     {
-        return FetchSummaryReport("byObjectType", eventKey);
+        return await FetchSummaryReport("byObjectType", eventKey);
     }
 
-    public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryByObjectType(string eventKey)
+    public async Task<Dictionary<string, EventReportDeepSummaryItem>> DeepSummaryByObjectTypeAsync(string eventKey)
     {
-        return FetchDeepSummaryReport("byObjectType", eventKey);
+        return await FetchDeepSummaryReport("byObjectType", eventKey);
     }
 
-    public IEnumerable<EventObjectInfo> ByObjectType(string eventKey, string objectType)
+    public async Task<IEnumerable<EventObjectInfo>> ByObjectTypeAsync(string eventKey, string objectType)
     {
-        return FetchReport("byObjectType", eventKey, objectType);
+        return await FetchReport("byObjectType", eventKey, objectType);
     }
 
-    public Dictionary<string, IEnumerable<EventObjectInfo>> ByCategoryLabel(string eventKey)
+    public async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> ByCategoryLabelAsync(string eventKey)
     {
-        return FetchReport("byCategoryLabel", eventKey);
+        return await FetchReportAsync("byCategoryLabel", eventKey);
     }
 
-    public Dictionary<string, EventReportSummaryItem> SummaryByCategoryLabel(string eventKey)
+    public async Task<Dictionary<string, EventReportSummaryItem>> SummaryByCategoryLabeAsync(string eventKey)
     {
-        return FetchSummaryReport("byCategoryLabel", eventKey);
+        return await FetchSummaryReport("byCategoryLabel", eventKey);
     }
 
-    public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryByCategoryLabel(string eventKey)
+    public async Task<Dictionary<string, EventReportDeepSummaryItem>> DeepSummaryByCategoryLabelAsync(string eventKey)
     {
-        return FetchDeepSummaryReport("byCategoryLabel", eventKey);
+        return await FetchDeepSummaryReport("byCategoryLabel", eventKey);
     }
 
-    public IEnumerable<EventObjectInfo> ByCategoryLabel(string eventKey, string categoryLabel)
+    public async Task<IEnumerable<EventObjectInfo>> ByCategoryLabelAsync(string eventKey, string categoryLabel)
     {
-        return FetchReport("byCategoryLabel", eventKey, categoryLabel);
+        return await FetchReport("byCategoryLabel", eventKey, categoryLabel);
     }
 
-    public Dictionary<string, IEnumerable<EventObjectInfo>> ByCategoryKey(string eventKey)
+    public async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> ByCategoryKeyAsync(string eventKey)
     {
-        return FetchReport("byCategoryKey", eventKey);
+        return await FetchReportAsync("byCategoryKey", eventKey);
     }
 
-    public Dictionary<string, EventReportSummaryItem> SummaryByCategoryKey(string eventKey)
+    public async Task<Dictionary<string, EventReportSummaryItem>> SummaryByCategoryKeyAsync(string eventKey)
     {
-        return FetchSummaryReport("byCategoryKey", eventKey);
+        return await FetchSummaryReport("byCategoryKey", eventKey);
     }
 
-    public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryByCategoryKey(string eventKey)
+    public async Task<Dictionary<string, EventReportDeepSummaryItem>> DeepSummaryByCategoryKeyAsync(string eventKey)
     {
-        return FetchDeepSummaryReport("byCategoryKey", eventKey);
+        return await FetchDeepSummaryReport("byCategoryKey", eventKey);
     }
 
-    public IEnumerable<EventObjectInfo> ByCategoryKey(string eventKey, string categoryKey)
+    public async Task<IEnumerable<EventObjectInfo>> ByCategoryKeyAsync(string eventKey, string categoryKey)
     {
-        return FetchReport("byCategoryKey", eventKey, categoryKey);
+        return await FetchReport("byCategoryKey", eventKey, categoryKey);
     }
 
-    public Dictionary<string, IEnumerable<EventObjectInfo>> ByOrderId(string eventKey)
+    public async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> ByOrderIdAsync(string eventKey)
     {
-        return FetchReport("byOrderId", eventKey);
+        return await FetchReportAsync("byOrderId", eventKey);
     }
 
-    public IEnumerable<EventObjectInfo> ByOrderId(string eventKey, string categoryKey)
+    public async Task<IEnumerable<EventObjectInfo>> ByOrderIdAsync(string eventKey, string categoryKey)
     {
-        return FetchReport("byOrderId", eventKey, categoryKey);
+        return await FetchReport("byOrderId", eventKey, categoryKey);
     }
 
-    public Dictionary<string, IEnumerable<EventObjectInfo>> BySection(string eventKey)
+    public async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> BySectionAsync(string eventKey)
     {
-        return FetchReport("bySection", eventKey);
+        return await FetchReportAsync("bySection", eventKey);
     }
 
-    public Dictionary<string, EventReportSummaryItem> SummaryBySection(string eventKey)
+    public async Task<Dictionary<string, EventReportSummaryItem>> SummaryBySectionAsync(string eventKey)
     {
-        return FetchSummaryReport("bySection", eventKey);
+        return await FetchSummaryReport("bySection", eventKey);
     }
 
-    public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryBySection(string eventKey)
+    public async Task<Dictionary<string, EventReportDeepSummaryItem>> DeepSummaryBySectionAsync(string eventKey)
     {
-        return FetchDeepSummaryReport("bySection", eventKey);
+        return await FetchDeepSummaryReport("bySection", eventKey);
     }
 
-    public IEnumerable<EventObjectInfo> BySection(string eventKey, string section)
+    public async Task<IEnumerable<EventObjectInfo>> BySection(string eventKey, string section)
     {
-        return FetchReport("bySection", eventKey, section);
+        return await FetchReport("bySection", eventKey, section);
     }
 
-    public Dictionary<string, IEnumerable<EventObjectInfo>> ByAvailability(string eventKey)
+    public async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> ByAvailabilityAsync(string eventKey)
     {
-        return FetchReport("byAvailability", eventKey);
+        return await FetchReportAsync("byAvailability", eventKey);
     }
 
-    public IEnumerable<EventObjectInfo> ByAvailability(string eventKey, string availability)
+    public async Task<IEnumerable<EventObjectInfo>> ByAvailabilityAsync(string eventKey, string availability)
     {
-        return FetchReport("byAvailability", eventKey, availability);
+        return await FetchReport("byAvailability", eventKey, availability);
     }
 
-    public Dictionary<string, EventReportSummaryItem> SummaryByAvailability(string eventKey)
+    public async Task<Dictionary<string, EventReportSummaryItem>> SummaryByAvailabilityAsync(string eventKey)
     {
-        return FetchSummaryReport("byAvailability", eventKey);
+        return await FetchSummaryReport("byAvailability", eventKey);
     }
 
-    public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryByAvailability(string eventKey)
+    public async Task<Dictionary<string, EventReportDeepSummaryItem>> DeepSummaryByAvailabilityAsync(string eventKey)
     {
-        return FetchDeepSummaryReport("byAvailability", eventKey);
+        return await FetchDeepSummaryReport("byAvailability", eventKey);
     }
 
-    public Dictionary<string, IEnumerable<EventObjectInfo>> ByAvailabilityReason(string eventKey)
+    public async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> ByAvailabilityReasonAsync(string eventKey)
     {
-        return FetchReport("byAvailabilityReason", eventKey);
+        return await FetchReportAsync("byAvailabilityReason", eventKey);
     }
 
-    public IEnumerable<EventObjectInfo> ByAvailabilityReason(string eventKey, string availabilityReason)
+    public async Task<IEnumerable<EventObjectInfo>> ByAvailabilityReasonAsync(string eventKey, string availabilityReason)
     {
-        return FetchReport("byAvailabilityReason", eventKey, availabilityReason);
+        return await FetchReport("byAvailabilityReason", eventKey, availabilityReason);
     }
 
-    public Dictionary<string, EventReportSummaryItem> SummaryByAvailabilityReason(string eventKey)
+    public async Task<Dictionary<string, EventReportSummaryItem>> SummaryByAvailabilityReasonAsync(string eventKey)
     {
-        return FetchSummaryReport("byAvailabilityReason", eventKey);
+        return await FetchSummaryReport("byAvailabilityReason", eventKey);
     }
 
-    public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryByAvailabilityReason(string eventKey)
+    public async Task<Dictionary<string, EventReportDeepSummaryItem>> DeepSummaryByAvailabilityReasonAsync(string eventKey)
     {
-        return FetchDeepSummaryReport("byAvailabilityReason", eventKey);
+        return await FetchDeepSummaryReport("byAvailabilityReason", eventKey);
     }
 
-    public Dictionary<string, IEnumerable<EventObjectInfo>> ByChannel(string eventKey)
+    public async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> ByChannelAsync(string eventKey)
     {
-        return FetchReport("byChannel", eventKey);
+        return await FetchReportAsync("byChannel", eventKey);
     }
 
-    public Dictionary<string, EventReportSummaryItem> SummaryByChannel(string eventKey)
+    public async Task<Dictionary<string, EventReportSummaryItem>> SummaryByChannelAsync(string eventKey)
     {
-        return FetchSummaryReport("byChannel", eventKey);
+        return await FetchSummaryReport("byChannel", eventKey);
     }
 
-    public Dictionary<string, EventReportDeepSummaryItem> DeepSummaryByChannel(string eventKey)
+    public async Task<Dictionary<string, EventReportDeepSummaryItem>> DeepSummaryByChannelAsync(string eventKey)
     {
-        return FetchDeepSummaryReport("byChannel", eventKey);
+        return await FetchDeepSummaryReport("byChannel", eventKey);
     }
 
-    public IEnumerable<EventObjectInfo> ByChannel(string eventKey, string channelKey)
+    public async Task<IEnumerable<EventObjectInfo>> ByChannelAsync(string eventKey, string channelKey)
     {
-        return FetchReport("byChannel", eventKey, channelKey);
+        return await FetchReport("byChannel", eventKey, channelKey);
     }
 
-    private Dictionary<string, IEnumerable<EventObjectInfo>> FetchReport(string reportType, string eventKey)
+    private async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> FetchReportAsync(string reportType, string eventKey)
     {
         var restRequest = new RestRequest("/reports/events/{key}/{reportType}", Method.Get)
             .AddUrlSegment("key", eventKey)
             .AddUrlSegment("reportType", reportType);
-        return AssertOk(_restClient.Execute<Dictionary<string, IEnumerable<EventObjectInfo>>>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Dictionary<string, IEnumerable<EventObjectInfo>>>(restRequest));
     }
 
-    private Dictionary<string, EventReportSummaryItem> FetchSummaryReport(string reportType, string eventKey)
+    private async Task<Dictionary<string, EventReportSummaryItem>> FetchSummaryReport(string reportType, string eventKey)
     {
         var restRequest = new RestRequest("/reports/events/{key}/{reportType}/summary", Method.Get)
             .AddUrlSegment("key", eventKey)
             .AddUrlSegment("reportType", reportType);
-        return AssertOk(_restClient.Execute<Dictionary<string, EventReportSummaryItem>>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Dictionary<string, EventReportSummaryItem>>(restRequest));
     }
 
-    private Dictionary<string, EventReportDeepSummaryItem> FetchDeepSummaryReport(string reportType,
+    private async Task<Dictionary<string, EventReportDeepSummaryItem>> FetchDeepSummaryReport(string reportType,
         string eventKey)
     {
         var restRequest = new RestRequest("/reports/events/{key}/{reportType}/summary/deep", Method.Get)
             .AddUrlSegment("key", eventKey)
             .AddUrlSegment("reportType", reportType);
-        return AssertOk(_restClient.Execute<Dictionary<string, EventReportDeepSummaryItem>>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Dictionary<string, EventReportDeepSummaryItem>>(restRequest));
     }
 
-    private IEnumerable<EventObjectInfo> FetchReport(string reportType, string eventKey, string filter)
+    private async Task<IEnumerable<EventObjectInfo>> FetchReport(string reportType, string eventKey, string filter)
     {
         var restRequest = new RestRequest("/reports/events/{key}/{reportType}/{filter}", Method.Get)
             .AddUrlSegment("key", eventKey)
             .AddUrlSegment("reportType", reportType)
             .AddUrlSegment("filter", filter);
-        var report = AssertOk(_restClient.Execute<Dictionary<string, IEnumerable<EventObjectInfo>>>(restRequest));
+        var report = AssertOk(await _restClient.ExecuteAsync<Dictionary<string, IEnumerable<EventObjectInfo>>>(restRequest));
         if (report.ContainsKey(filter))
         {
             return report[filter];

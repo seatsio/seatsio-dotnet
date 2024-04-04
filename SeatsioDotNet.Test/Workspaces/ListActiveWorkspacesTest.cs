@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Workspaces;
@@ -6,14 +7,14 @@ namespace SeatsioDotNet.Test.Workspaces;
 public class ListActiveWorkspacesTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        Client.Workspaces.Create("ws1");
+        await Client.Workspaces.CreateAsync("ws1");
 
-        var ws2 = Client.Workspaces.Create("ws2");
-        Client.Workspaces.Deactivate(ws2.Key);
+        var ws2 = await Client.Workspaces.CreateAsync("ws2");
+        await Client.Workspaces.DeactivateAsync(ws2.Key);
 
-        Client.Workspaces.Create("ws3");
+        await Client.Workspaces.CreateAsync("ws3");
 
         var workspaces = Client.Workspaces.Active.All();
 
@@ -21,13 +22,13 @@ public class ListActiveWorkspacesTest : SeatsioClientTest
     }
 
     [Fact]
-    public void Filter()
+    public async Task Filter()
     {
-        Client.Workspaces.Create("someWorkspace");
-        Client.Workspaces.Create("anotherWorkspace");
-        Client.Workspaces.Create("anotherAnotherWorkspace");
-        var ws = Client.Workspaces.Create("anoherAnotherAnotherWorkspace");
-        Client.Workspaces.Deactivate(ws.Key);
+        await Client.Workspaces.CreateAsync("someWorkspace");
+        await Client.Workspaces.CreateAsync("anotherWorkspace");
+        await Client.Workspaces.CreateAsync("anotherAnotherWorkspace");
+        var ws = await Client.Workspaces.CreateAsync("anoherAnotherAnotherWorkspace");
+        await Client.Workspaces.DeactivateAsync(ws.Key);
 
         var workspaces = Client.Workspaces.Active.All("another");
 

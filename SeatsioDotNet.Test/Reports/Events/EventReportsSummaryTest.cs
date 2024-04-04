@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using SeatsioDotNet.Events;
 using Xunit;
 using static SeatsioDotNet.EventReports.EventObjectInfo;
@@ -8,13 +9,13 @@ namespace SeatsioDotNet.Test.Reports.Events;
 public class EventReportsSummaryTest : SeatsioClientTest
 {
     [Fact]
-    public void SummaryByStatus()
+    public async Task SummaryByStatus()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1")});
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.BookAsync(evnt.Key, new[] {new ObjectProperties("A-1")});
 
-        var report = Client.EventReports.SummaryByStatus(evnt.Key);
+        var report = await Client.EventReports.SummaryByStatusAsync(evnt.Key);
 
         Assert.Equal(1, report[Booked].Count);
         Assert.Equal(new() {{NoSection, 1}}, report[Booked].bySection);
@@ -32,12 +33,12 @@ public class EventReportsSummaryTest : SeatsioClientTest
     }
 
     [Fact]
-    public void SummaryByObjectType()
+    public async Task SummaryByObjectType()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var report = Client.EventReports.SummaryByObjectType(evnt.Key);
+        var report = await Client.EventReports.SummaryByObjectTypeAsync(evnt.Key);
 
         Assert.Equal(32, report["seat"].Count);
         Assert.Equal(new() {{NoSection, 32}}, report["seat"].bySection);
@@ -55,13 +56,13 @@ public class EventReportsSummaryTest : SeatsioClientTest
     }
 
     [Fact]
-    public void SummaryByCategoryKey()
+    public async Task SummaryByCategoryKey()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1")});
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.BookAsync(evnt.Key, new[] {new ObjectProperties("A-1")});
 
-        var report = Client.EventReports.SummaryByCategoryKey(evnt.Key);
+        var report = await Client.EventReports.SummaryByCategoryKeyAsync(evnt.Key);
 
         Assert.Equal(116, report["9"].Count);
         Assert.Equal(new() {{NoSection, 116}}, report["9"].bySection);
@@ -79,13 +80,13 @@ public class EventReportsSummaryTest : SeatsioClientTest
     }
 
     [Fact]
-    public void SummaryByCategoryLabel()
+    public async Task SummaryByCategoryLabel()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1")});
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.BookAsync(evnt.Key, new[] {new ObjectProperties("A-1")});
 
-        var report = Client.EventReports.SummaryByCategoryLabel(evnt.Key);
+        var report = await Client.EventReports.SummaryByCategoryLabeAsync(evnt.Key);
 
         Assert.Equal(116, report["Cat1"].Count);
         Assert.Equal(new() {{NoSection, 116}}, report["Cat1"].bySection);
@@ -104,13 +105,13 @@ public class EventReportsSummaryTest : SeatsioClientTest
     }
 
     [Fact]
-    public void SummaryBySection()
+    public async Task SummaryBySection()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1")});
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.BookAsync(evnt.Key, new[] {new ObjectProperties("A-1")});
 
-        var report = Client.EventReports.SummaryBySection(evnt.Key);
+        var report = await Client.EventReports.SummaryBySectionAsync(evnt.Key);
 
         Assert.Equal(232, report[NoSection].Count);
         Assert.Equal(new() {{Booked, 1}, {Free, 231}}, report[NoSection].byStatus);
@@ -121,13 +122,13 @@ public class EventReportsSummaryTest : SeatsioClientTest
     }
 
     [Fact]
-    public void SummaryByAvailability()
+    public async Task SummaryByAvailability()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1")});
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.BookAsync(evnt.Key, new[] {new ObjectProperties("A-1")});
 
-        var report = Client.EventReports.SummaryByAvailability(evnt.Key);
+        var report = await Client.EventReports.SummaryByAvailabilityAsync(evnt.Key);
 
         Assert.Equal(231, report[Available].Count);
         Assert.Equal(new() {{NoSection, 231}}, report[Available].bySection);
@@ -143,13 +144,13 @@ public class EventReportsSummaryTest : SeatsioClientTest
     }
 
     [Fact]
-    public void SummaryByAvailabilityReason()
+    public async Task SummaryByAvailabilityReason()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1")});
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.BookAsync(evnt.Key, new[] {new ObjectProperties("A-1")});
 
-        var report = Client.EventReports.SummaryByAvailabilityReason(evnt.Key);
+        var report = await Client.EventReports.SummaryByAvailabilityReasonAsync(evnt.Key);
 
         Assert.Equal(231, report[Available].Count);
         Assert.Equal(new() {{NoSection, 231}}, report[Available].bySection);
@@ -165,16 +166,16 @@ public class EventReportsSummaryTest : SeatsioClientTest
     }
 
     [Fact]
-    public void SummaryByChannel()
+    public async Task SummaryByChannel()
     {
         var chartKey = CreateTestChart();
         var channels = new List<Channel>
         {
             new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"})
         };
-        var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithChannels(channels));
+        var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithChannels(channels));
 
-        var report = Client.EventReports.SummaryByChannel(evnt.Key);
+        var report = await Client.EventReports.SummaryByChannelAsync(evnt.Key);
 
         Assert.Equal(230, report[NoChannel].Count);
         Assert.Equal(new() {{NoSection, 230}}, report[NoChannel].bySection);

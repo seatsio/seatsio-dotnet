@@ -1,4 +1,5 @@
-﻿using SeatsioDotNet.Charts;
+﻿using System.Threading.Tasks;
+using SeatsioDotNet.Charts;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Charts;
@@ -6,14 +7,14 @@ namespace SeatsioDotNet.Test.Charts;
 public class MoveChartOutOfArchiveTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var chart = Client.Charts.Create();
-        Client.Charts.MoveToArchive(chart.Key);
+        var chart = await Client.Charts.CreateAsync();
+        await Client.Charts.MoveToArchiveAsync(chart.Key);
             
-        Client.Charts.MoveOutOfArchive(chart.Key);
+        await Client.Charts.MoveOutOfArchiveAsync(chart.Key);
 
-        Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
+        Chart retrievedChart = await Client.Charts.RetrieveAsync(chart.Key);
         Assert.False(retrievedChart.Archived);
     }
 }

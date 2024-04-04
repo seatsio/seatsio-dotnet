@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using RestSharp;
 using SeatsioDotNet.ChartReports;
 using static SeatsioDotNet.Util.RestUtil;
@@ -20,52 +21,52 @@ public class ChartReports
         _restClient = restClient;
     }
 
-    public Dictionary<string, IEnumerable<ChartObjectInfo>> ByLabel(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
+    public async Task<Dictionary<string, IEnumerable<ChartObjectInfo>>> ByLabelAsync(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
     {
-        return FetchReport("byLabel", chartKey, bookWholeTablesMode, version);
+        return await FetchReportAsync("byLabel", chartKey, bookWholeTablesMode, version);
     }    
         
-    public Dictionary<string, IEnumerable<ChartObjectInfo>> ByObjectType(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
+    public async Task<Dictionary<string, IEnumerable<ChartObjectInfo>>> ByObjectTypeAsync(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
     {
-        return FetchReport("byObjectType", chartKey, bookWholeTablesMode, version);
+        return await FetchReportAsync("byObjectType", chartKey, bookWholeTablesMode, version);
     }
         
-    public Dictionary<string, ChartReportSummaryItem> SummaryByObjectType(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
+    public async Task<Dictionary<string, ChartReportSummaryItem>> SummaryByObjectTypeAsync(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
     {
-        return FetchSummaryReport("byObjectType", chartKey, bookWholeTablesMode, version);
+        return await FetchSummaryReportAsync("byObjectType", chartKey, bookWholeTablesMode, version);
     }
         
-    public Dictionary<string, IEnumerable<ChartObjectInfo>> ByCategoryKey(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
+    public async Task<Dictionary<string, IEnumerable<ChartObjectInfo>>> ByCategoryKeyAsync(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
     {
-        return FetchReport("byCategoryKey", chartKey, bookWholeTablesMode, version);
+        return await FetchReportAsync("byCategoryKey", chartKey, bookWholeTablesMode, version);
     }
         
-    public Dictionary<string, ChartReportSummaryItem> SummaryByCategoryKey(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
+    public async Task<Dictionary<string, ChartReportSummaryItem>> SummaryByCategoryKeyAsync(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
     {
-        return FetchSummaryReport("byCategoryKey", chartKey, bookWholeTablesMode, version);
+        return await FetchSummaryReportAsync("byCategoryKey", chartKey, bookWholeTablesMode, version);
     }
         
-    public Dictionary<string, IEnumerable<ChartObjectInfo>> ByCategoryLabel(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
+    public async Task<Dictionary<string, IEnumerable<ChartObjectInfo>>> ByCategoryLabelAsync(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
     {
-        return FetchReport("byCategoryLabel", chartKey, bookWholeTablesMode, version);
+        return await FetchReportAsync("byCategoryLabel", chartKey, bookWholeTablesMode, version);
     }   
         
-    public Dictionary<string, ChartReportSummaryItem> SummaryByCategoryLabel(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
+    public async Task<Dictionary<string, ChartReportSummaryItem>> SummaryByCategoryLabelAsync(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
     {
-        return FetchSummaryReport("byCategoryLabel", chartKey, bookWholeTablesMode, version);
+        return await FetchSummaryReportAsync("byCategoryLabel", chartKey, bookWholeTablesMode, version);
     }
         
-    public Dictionary<string, IEnumerable<ChartObjectInfo>> BySection(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
+    public async Task<Dictionary<string, IEnumerable<ChartObjectInfo>>> BySectionAsync(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production)
     {
-        return FetchReport("bySection", chartKey, bookWholeTablesMode, version);
+        return await FetchReportAsync("bySection", chartKey, bookWholeTablesMode, version);
     }
         
-    public Dictionary<string, ChartReportSummaryItem> SummaryBySection(string eventKey, string bookWholeTablesMode = null, Version version = Version.Production)
+    public async Task<Dictionary<string, ChartReportSummaryItem>> SummaryBySectionAsync(string eventKey, string bookWholeTablesMode = null, Version version = Version.Production)
     {
-        return FetchSummaryReport("bySection", eventKey, bookWholeTablesMode, version);
+        return await FetchSummaryReportAsync("bySection", eventKey, bookWholeTablesMode, version);
     }
 
-    private Dictionary<string, IEnumerable<ChartObjectInfo>> FetchReport(string reportType, string chartKey, string bookWholeTablesMode, Version version = Version.Production)
+    private async Task<Dictionary<string, IEnumerable<ChartObjectInfo>>> FetchReportAsync(string reportType, string chartKey, string bookWholeTablesMode, Version version = Version.Production)
     {
         var restRequest = new RestRequest("/reports/charts/{key}/{reportType}", Method.Get)
             .AddUrlSegment("key", chartKey)
@@ -80,10 +81,10 @@ public class ChartReports
             restRequest.AddQueryParameter("version", version.ToString());
         }
             
-        return AssertOk(_restClient.Execute<Dictionary<string, IEnumerable<ChartObjectInfo>>>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Dictionary<string, IEnumerable<ChartObjectInfo>>>(restRequest));
     }
         
-    private Dictionary<string, ChartReportSummaryItem> FetchSummaryReport(string reportType, string chartKey, string bookWholeTablesMode, Version version = Version.Production)
+    private async Task<Dictionary<string, ChartReportSummaryItem>> FetchSummaryReportAsync(string reportType, string chartKey, string bookWholeTablesMode, Version version = Version.Production)
     {
         var restRequest = new RestRequest("/reports/charts/{key}/{reportType}/summary", Method.Get)
             .AddUrlSegment("key", chartKey)
@@ -98,6 +99,6 @@ public class ChartReports
             restRequest.AddQueryParameter("version", version.ToString());
         }
             
-        return AssertOk(_restClient.Execute<Dictionary<string, ChartReportSummaryItem>>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Dictionary<string, ChartReportSummaryItem>>(restRequest));
     }
 }

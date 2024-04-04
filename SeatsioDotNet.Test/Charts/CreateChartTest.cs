@@ -1,4 +1,5 @@
-﻿using SeatsioDotNet.Charts;
+﻿using System.Threading.Tasks;
+using SeatsioDotNet.Charts;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Charts;
@@ -6,11 +7,11 @@ namespace SeatsioDotNet.Test.Charts;
 public class CreateChartTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var chart = Client.Charts.Create();
+        var chart = await Client.Charts.CreateAsync();
 
-        Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
+        Chart retrievedChart = await Client.Charts.RetrieveAsync(chart.Key);
 
         Assert.NotEqual(0, retrievedChart.Id);
         Assert.NotNull(retrievedChart.Key);
@@ -22,51 +23,51 @@ public class CreateChartTest : SeatsioClientTest
         Assert.Empty(retrievedChart.Tags);
         Assert.False(retrievedChart.Archived);
 
-        var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
+        var drawing = await Client.Charts.RetrievePublishedVersionAsync(chart.Key);
         Assert.Equal("MIXED", drawing.VenueType);
         Assert.Empty(drawing.Categories);
     }
 
     [Fact]
-    public void Name()
+    public async Task Name()
     {
-        var chart = Client.Charts.Create("aChart");
+        var chart = await Client.Charts.CreateAsync("aChart");
 
-        Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
+        Chart retrievedChart = await Client.Charts.RetrieveAsync(chart.Key);
 
         Assert.Equal("aChart", retrievedChart.Name);
-        var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
+        var drawing = await Client.Charts.RetrievePublishedVersionAsync(chart.Key);
         Assert.Equal("aChart", drawing.Name);
         Assert.Empty(drawing.Categories);
     }
 
     [Fact]
-    public void VenueType()
+    public async Task VenueType()
     {
-        var chart = Client.Charts.Create(null, "BOOTHS");
+        var chart = await Client.Charts.CreateAsync(null, "BOOTHS");
 
-        Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
+        Chart retrievedChart = await Client.Charts.RetrieveAsync(chart.Key);
 
         Assert.Equal("Untitled chart", retrievedChart.Name);
-        var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
+        var drawing = await Client.Charts.RetrievePublishedVersionAsync(chart.Key);
         Assert.Equal("BOOTHS", drawing.VenueType);
         Assert.Empty(drawing.Categories);
     }
 
     [Fact]
-    public void Categories()
+    public async Task Categories()
     {
-        var chart = Client.Charts.Create(null, null, new[]
+        var chart = await Client.Charts.CreateAsync(null, null, new[]
         {
             new Category(1, "Category 1", "#aaaaaa"),
             new Category(2, "Category 2", "#bbbbbb", true),
             new Category("cat-3", "Category 3", "#cccccc")
         });
 
-        Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
+        Chart retrievedChart = await Client.Charts.RetrieveAsync(chart.Key);
 
         Assert.Equal("Untitled chart", retrievedChart.Name);
-        var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
+        var drawing = await Client.Charts.RetrievePublishedVersionAsync(chart.Key);
         var actualCategories = drawing.Categories;
             
         Assert.Equal(3, actualCategories.Count);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events;
@@ -6,11 +7,11 @@ namespace SeatsioDotNet.Test.Events;
 public class UpdateHoldTokenExpirationDateTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var holdToken = Client.HoldTokens.Create();
+        var holdToken = await Client.HoldTokens.CreateAsync();
 
-        var updatedHoldToken = Client.HoldTokens.ExpiresInMinutes(holdToken.Token, 30);
+        var updatedHoldToken = await Client.HoldTokens.ExpiresInMinutesAsync(holdToken.Token, 30);
             
         Assert.Equal(updatedHoldToken.Token, holdToken.Token);
         CustomAssert.CloseTo(DateTimeOffset.Now.AddMinutes(30), updatedHoldToken.ExpiresAt);

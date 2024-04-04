@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SeatsioDotNet.Events;
 using Xunit;
 
@@ -9,35 +10,34 @@ namespace SeatsioDotNet.Test.Events;
 public class ListStatusChangesTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.ChangeObjectStatus(new[]
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.ChangeObjectStatusAsync(new[]
         {
             new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "s1"),
             new StatusChangeRequest(evnt.Key, new[] {"A-2"}, "s2"),
             new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "s3"),
         });
-        WaitForStatusChanges(Client, evnt, 3);
+        await WaitForStatusChanges(Client, evnt, 3);
 
-        var statusChanges = Client.Events.StatusChanges(evnt.Key).All();
+        var statusChanges = await Client.Events.StatusChanges(evnt.Key).AllAsync().ToListAsync();
 
         Assert.Equal(new[] {"s3", "s2", "s1"}, statusChanges.Select(s => s.Status));
     }
 
     [Fact]
-    public void PropertiesOfStatusChange()
+    public async Task PropertiesOfStatusChange()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
         var extraData = new Dictionary<string, object> {{"foo", "bar"}};
-        Client.Events.ChangeObjectStatus(evnt.Key, new[] {new ObjectProperties("A-1", extraData)}, "s1", null,
+        await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {new ObjectProperties("A-1", extraData)}, "s1", null,
             "order1");
-        WaitForStatusChanges(Client, evnt, 1);
+        await WaitForStatusChanges(Client, evnt, 1);
 
-        var statusChanges = Client.Events.StatusChanges(evnt.Key).All();
-        var statusChange = statusChanges.First();
+        var statusChange = await Client.Events.StatusChanges(evnt.Key).AllAsync().FirstAsync();
 
         Assert.NotEqual(0, statusChange.Id);
         CustomAssert.CloseTo(DateTimeOffset.Now, statusChange.Date);
@@ -50,135 +50,133 @@ public class ListStatusChangesTest : SeatsioClientTest
         Assert.NotNull(statusChange.Origin.Ip);
         Assert.True(statusChange.IsPresentOnChart);
         Assert.Null(statusChange.NotPresentOnChartReason);
-    }   
-        
+    }
+
     [Fact]
-    public void PropertiesOfStatusChange_HoldToken()
+    public async Task PropertiesOfStatusChange_HoldToken()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        var holdToken = Client.HoldTokens.Create();
-        Client.Events.Hold(evnt.Key, new[] {"A-1"}, holdToken.Token);
-        WaitForStatusChanges(Client, evnt, 1);
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        var holdToken = await Client.HoldTokens.CreateAsync();
+        await Client.Events.HoldAsync(evnt.Key, new[] {"A-1"}, holdToken.Token);
+        await WaitForStatusChanges(Client, evnt, 1);
 
-        var statusChanges = Client.Events.StatusChanges(evnt.Key).All();
-        var statusChange = statusChanges.First();
+        var statusChange = await Client.Events.StatusChanges(evnt.Key).AllAsync().FirstAsync();
 
         Assert.Equal(holdToken.Token, statusChange.HoldToken);
     }
 
     [Fact]
-    public void NotPresentOnChartAnymore()
+    public async Task NotPresentOnChartAnymore()
     {
         var chartKey = CreateTestChartWithTables();
-        var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithTableBookingConfig(TableBookingConfig.AllByTable()));
-        Client.Events.Book(evnt.Key, new[] {"T1"});
-        Client.Events.Update(evnt.Key, new UpdateEventParams().WithTableBookingConfig(TableBookingConfig.AllBySeat()));
-        WaitForStatusChanges(Client, evnt, 1);
+        var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithTableBookingConfig(TableBookingConfig.AllByTable()));
+        await Client.Events.BookAsync(evnt.Key, new[] {"T1"});
+        await Client.Events.UpdateAsync(evnt.Key, new UpdateEventParams().WithTableBookingConfig(TableBookingConfig.AllBySeat()));
+        await WaitForStatusChanges(Client, evnt, 1);
 
-        var statusChanges = Client.Events.StatusChanges(evnt.Key).All();
-        var statusChange = statusChanges.First();
+        var statusChange = await Client.Events.StatusChanges(evnt.Key).AllAsync().FirstAsync();
 
         Assert.False(statusChange.IsPresentOnChart);
         Assert.Equal("SWITCHED_TO_BOOK_BY_SEAT", statusChange.NotPresentOnChartReason);
     }
 
     [Fact]
-    public void Filter()
+    public async Task Filter()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.ChangeObjectStatus(new[]
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.ChangeObjectStatusAsync(new[]
         {
             new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"A-2"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
         });
-        WaitForStatusChanges(Client, evnt, 4);
+        await WaitForStatusChanges(Client, evnt, 4);
 
-        var statusChanges = Client.Events.StatusChanges(evnt.Key, filter: "A-").All();
+        var statusChanges = await Client.Events.StatusChanges(evnt.Key, filter: "A-").AllAsync().ToListAsync();
 
         Assert.Equal(new[] {"A-3", "A-2", "A-1"}, statusChanges.Select(s => s.ObjectLabel));
     }
 
     [Fact]
-    public void SortAsc()
+    public async Task SortAsc()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.ChangeObjectStatus(new[]
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.ChangeObjectStatusAsync(new[]
         {
             new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"A-2"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
         });
-        WaitForStatusChanges(Client, evnt, 4);
+       await WaitForStatusChanges(Client, evnt, 4);
 
-        var statusChanges = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel").All();
+        var statusChanges = await Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel").AllAsync().ToListAsync();
 
         Assert.Equal(new[] {"A-1", "A-2", "A-3", "B-1"}, statusChanges.Select(s => s.ObjectLabel));
     }
 
     [Fact]
-    public void SortAscPageBefore()
+    public async Task SortAscPageBefore()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.ChangeObjectStatus(new[]
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.ChangeObjectStatusAsync(new[]
         {
             new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"A-2"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
         });
-        WaitForStatusChanges(Client, evnt, 4);
+        await WaitForStatusChanges(Client, evnt, 4);
 
         var statusChangeLister = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel");
-        var statusChangeA3 = statusChangeLister.All().ToList()[2];
-        var statusChanges = statusChangeLister.PageBefore(statusChangeA3.Id, 2).Items;
+        var statusChangeA3 = (await statusChangeLister.AllAsync().ToListAsync())[2];
+        var statusChanges = (await statusChangeLister.PageBeforeAsync(statusChangeA3.Id, 2)).Items;
 
         Assert.Equal(new[] {"A-1", "A-2"}, statusChanges.Select(s => s.ObjectLabel));
     }
 
     [Fact]
-    public void SortAscPageAfter()
+    public async Task SortAscPageAfter()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.ChangeObjectStatus(new[]
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.ChangeObjectStatusAsync(new[]
         {
             new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"A-2"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
         });
-        WaitForStatusChanges(Client, evnt, 4);
+        await WaitForStatusChanges(Client, evnt, 4);
 
         var statusChangeLister = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel");
-        var statusChangeA1 = statusChangeLister.All().ToList()[0];
-        var statusChanges = statusChangeLister.PageAfter(statusChangeA1.Id, 2).Items;
+        var statusChangeA1 = await statusChangeLister.AllAsync().FirstAsync();
+        var statusChanges = (await statusChangeLister.PageAfterAsync(statusChangeA1.Id, 2)).Items;
 
         Assert.Equal(new[] {"A-2", "A-3"}, statusChanges.Select(s => s.ObjectLabel));
     }
 
     [Fact]
-    public void SortDesc()
+    public async Task SortDesc()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.ChangeObjectStatus(new[]
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.ChangeObjectStatusAsync(new[]
         {
             new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"A-2"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
         });
-        WaitForStatusChanges(Client, evnt, 4);
+        await WaitForStatusChanges(Client, evnt, 4);
 
-        var statusChanges = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel", sortDirection: "DESC")
-            .All();
+        var statusChanges = await Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel", sortDirection: "DESC")
+            .AllAsync().ToListAsync();
 
         Assert.Equal(new[] {"B-1", "A-3", "A-2", "A-1"}, statusChanges.Select(s => s.ObjectLabel));
     }

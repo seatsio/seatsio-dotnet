@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SeatsioDotNet.Util;
 
@@ -11,23 +12,23 @@ public class ParametrizedLister<T>
         _pageFetcher = pageFetcher;
     }
 
-    public IEnumerable<T> All(Dictionary<string, object> listParams = null)
+    public IAsyncEnumerable<T> All(Dictionary<string, object> listParams = null)
     {
         return new PagedEnumerable<T>(_pageFetcher, listParams);
     }
 
-    public Page<T> FirstPage(Dictionary<string, object> listParams = null, int? pageSize = null)
+    public async Task<Page<T>> FirstPage(Dictionary<string, object> listParams = null, int? pageSize = null)
     {
-        return _pageFetcher.FetchFirstPage(listParams, pageSize);
+        return await _pageFetcher.FetchFirstPageAsync(listParams, pageSize);
     }
 
-    public Page<T> PageAfter(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
+    public async Task<Page<T>> PageAfter(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
     {
-        return _pageFetcher.FetchAfter(id, listParams, pageSize);
+        return await _pageFetcher.FetchAfterAsync(id, listParams, pageSize);
     }
 
-    public Page<T> PageBefore(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
+    public async Task<Page<T>> PageBefore(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
     {
-        return _pageFetcher.FetchBefore(id, listParams, pageSize);
+        return await _pageFetcher.FetchBeforeAsync(id, listParams, pageSize);
     }
 }

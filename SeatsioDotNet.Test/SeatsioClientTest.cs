@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using RestSharp;
 using RestSharp.Authenticators;
 using SeatsioDotNet.Charts;
@@ -91,13 +92,13 @@ public class SeatsioClientTest
         return new SeatsioClient(secretKey, workspaceKey, BaseUrl);
     }
 
-    protected void WaitForStatusChanges(SeatsioClient client, Event evnt, int numStatusChanges)
+    protected async Task WaitForStatusChanges(SeatsioClient client, Event evnt, int numStatusChanges)
     {
         var start = DateTimeOffset.Now;
         while (true)
         {
-            var statusChanges = client.Events.StatusChanges(evnt.Key).All();
-            if (statusChanges.ToList().Count != numStatusChanges)
+            var statusChanges = await client.Events.StatusChanges(evnt.Key).AllAsync().ToListAsync();
+            if (statusChanges.Count != numStatusChanges)
             {
                 var duration = DateTimeOffset.Now.ToUnixTimeSeconds() - start.ToUnixTimeSeconds();
                 if (duration > 10)

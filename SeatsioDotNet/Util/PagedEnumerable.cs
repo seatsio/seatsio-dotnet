@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace SeatsioDotNet.Util;
 
-public class PagedEnumerable<T> : IEnumerable<T>
+public class PagedEnumerable<T> : IAsyncEnumerable<T>
 {
     private readonly PagedEnumerator<T> _pagedEnumerator;
 
@@ -12,13 +13,13 @@ public class PagedEnumerable<T> : IEnumerable<T>
         _pagedEnumerator = new PagedEnumerator<T>(pageFetcher, listParams);
     }
 
-    public IEnumerator<T> GetEnumerator()
+    public IAsyncEnumerator<T> GetAsyncEnumerator()
     {
         return _pagedEnumerator;
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
+    public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = new CancellationToken())
     {
-        return GetEnumerator();
+        return GetAsyncEnumerator();
     }
 }

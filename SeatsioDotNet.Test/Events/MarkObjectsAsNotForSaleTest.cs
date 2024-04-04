@@ -1,17 +1,18 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
+using Xunit;
 
 namespace SeatsioDotNet.Test.Events;
 
 public class MarkObjectsAsNotForSaleTest : SeatsioClientTest
 {
     [Fact]
-    public void ObjectsCandCategories()
+    public async Task ObjectsCandCategories()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.MarkAsNotForSale(evnt.Key, new[] {"o1", "o2"}, new() {{"GA1", 3}}, new[] {"cat1", "cat2"});
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.MarkAsNotForSaleAsync(evnt.Key, new[] {"o1", "o2"}, new() {{"GA1", 3}}, new[] {"cat1", "cat2"});
 
-        var forSaleConfig = Client.Events.Retrieve(evnt.Key).ForSaleConfig;
+        var forSaleConfig = (await Client.Events.RetrieveAsync(evnt.Key)).ForSaleConfig;
         Assert.False(forSaleConfig.ForSale);
         Assert.Equal(new[] {"o1", "o2"}, forSaleConfig.Objects);
         Assert.Equal(new() {{"GA1", 3}}, forSaleConfig.AreaPlaces);
@@ -19,13 +20,13 @@ public class MarkObjectsAsNotForSaleTest : SeatsioClientTest
     }   
         
     [Fact]
-    public void Objects()
+    public async Task Objects()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.MarkAsNotForSale(evnt.Key, new[] {"o1", "o2"}, null, null);
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.MarkAsNotForSaleAsync(evnt.Key, new[] {"o1", "o2"}, null, null);
 
-        var forSaleConfig = Client.Events.Retrieve(evnt.Key).ForSaleConfig;
+        var forSaleConfig = (await Client.Events.RetrieveAsync(evnt.Key)).ForSaleConfig;
         Assert.False(forSaleConfig.ForSale);
         Assert.Equal(new[] {"o1", "o2"}, forSaleConfig.Objects);
         Assert.Empty(forSaleConfig.AreaPlaces);
@@ -33,13 +34,13 @@ public class MarkObjectsAsNotForSaleTest : SeatsioClientTest
     }  
         
     [Fact]
-    public void Categories()
+    public async Task Categories()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.MarkAsNotForSale(evnt.Key, null, null, new[] {"cat1", "cat2"});
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.MarkAsNotForSaleAsync(evnt.Key, null, null, new[] {"cat1", "cat2"});
 
-        var forSaleConfig = Client.Events.Retrieve(evnt.Key).ForSaleConfig;
+        var forSaleConfig = (await Client.Events.RetrieveAsync(evnt.Key)).ForSaleConfig;
         Assert.False(forSaleConfig.ForSale);
         Assert.Empty(forSaleConfig.Objects);
         Assert.Empty(forSaleConfig.AreaPlaces);

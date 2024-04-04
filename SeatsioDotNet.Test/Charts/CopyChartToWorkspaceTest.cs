@@ -1,22 +1,23 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
+using Xunit;
 
 namespace SeatsioDotNet.Test.Charts;
 
 public class CopyChartToWorkspaceTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var chart = Client.Charts.Create("my chart", "BOOTHS");
-        var workspace = Client.Workspaces.Create("my ws");
+        var chart = await Client.Charts.CreateAsync("my chart", "BOOTHS");
+        var workspace = await Client.Workspaces.CreateAsync("my ws");
             
-        var copiedChart = Client.Charts.CopyToWorkspace(chart.Key, workspace.Key);
+        var copiedChart = await Client.Charts.CopyToWorkspaceAsync(chart.Key, workspace.Key);
             
         Assert.Equal("my chart", copiedChart.Name);
         var workspaceClient = CreateSeatsioClient(workspace.SecretKey);
-        var retrievedChart = workspaceClient.Charts.Retrieve(copiedChart.Key);
+        var retrievedChart = await workspaceClient.Charts.RetrieveAsync(copiedChart.Key);
         Assert.Equal("my chart", retrievedChart.Name);
-        var drawing = workspaceClient.Charts.RetrievePublishedVersion(copiedChart.Key);
+        var drawing = await workspaceClient.Charts.RetrievePublishedVersionAsync(copiedChart.Key);
         Assert.Equal("BOOTHS", drawing.VenueType);
     }
 }

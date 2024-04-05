@@ -109,7 +109,7 @@ public class SeatsioMessageHandler : HttpClientHandler
         {
             var waitTime = (int) Math.Pow(2, retryCount + 2) * 100;
             retryCount++;
-            Thread.Sleep(waitTime);
+            await Task.Delay(waitTime, cancellationToken);
             response = await base.SendAsync(request, cancellationToken);
         }
 

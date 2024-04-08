@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SeatsioDotNet.Util;
@@ -12,23 +13,23 @@ public class ParametrizedLister<T>
         _pageFetcher = pageFetcher;
     }
 
-    public IAsyncEnumerable<T> All(Dictionary<string, object> listParams = null)
+    public IAsyncEnumerable<T> AllAsync(Dictionary<string, object> listParams = null)
     {
         return new PagedEnumerable<T>(_pageFetcher, listParams);
     }
 
-    public async Task<Page<T>> FirstPage(Dictionary<string, object> listParams = null, int? pageSize = null)
+    public async Task<Page<T>> FirstPageAsync(Dictionary<string, object> listParams = null, int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await _pageFetcher.FetchFirstPageAsync(listParams, pageSize);
+        return await _pageFetcher.FetchFirstPageAsync(listParams, pageSize, cancellationToken:cancellationToken);
     }
 
-    public async Task<Page<T>> PageAfter(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
+    public async Task<Page<T>> PageAfterAsync(long id, Dictionary<string, object> listParams = null, int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await _pageFetcher.FetchAfterAsync(id, listParams, pageSize);
+        return await _pageFetcher.FetchAfterAsync(id, listParams, pageSize, cancellationToken);
     }
 
-    public async Task<Page<T>> PageBefore(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
+    public async Task<Page<T>> PageBeforeAsync(long id, Dictionary<string, object> listParams = null, int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await _pageFetcher.FetchBeforeAsync(id, listParams, pageSize);
+        return await _pageFetcher.FetchBeforeAsync(id, listParams, pageSize, cancellationToken);
     }
 }

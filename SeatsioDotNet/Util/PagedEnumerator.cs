@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SeatsioDotNet.Util;
@@ -11,22 +12,24 @@ public class PagedEnumerator<T> : IAsyncEnumerator<T>
         
     private readonly PageFetcher<T> _pageFetcher;
     private readonly Dictionary<string, object> _listParams;
+    private readonly CancellationToken _cancellationToken;
 
-    public PagedEnumerator(PageFetcher<T> pageFetcher, Dictionary<string, object> listParams)
+    public PagedEnumerator(PageFetcher<T> pageFetcher, Dictionary<string, object> listParams, CancellationToken cancellationToken = default)
     {
         _pageFetcher = pageFetcher;
         _listParams = listParams;
+        _cancellationToken = cancellationToken;
     }
 
     public async ValueTask<bool> MoveNextAsync()
     {
         if (_currentPage == null)
         {
-            _currentPage = await _pageFetcher.FetchFirstPageAsync(_listParams, null);
+            _currentPage = await _pageFetcher.FetchFirstPageAsync(_listParams, null, cancellationToken:_cancellationToken);
         }
         else if (NextPageMustBeFetched())
         {
-            _currentPage = await _pageFetcher.FetchAfterAsync(_currentPage.NextPageStartsAfter.Value, _listParams, null);
+            _currentPage = await _pageFetcher.FetchAfterAsync(_currentPage.NextPageStartsAfter.Value, _listParams, null, cancellationToken:_cancellationToken);
             _indexInCurrentPage = 0;
         }
         else

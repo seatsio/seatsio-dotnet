@@ -16,7 +16,7 @@ public class ListActiveWorkspacesTest : SeatsioClientTest
 
         await Client.Workspaces.CreateAsync("ws3");
 
-        var workspaces = Client.Workspaces.Active.All();
+        var workspaces = Client.Workspaces.Active.AllAsync();
 
         Assert.Equal(new[] {"ws3", "ws1", "Default workspace"}, workspaces.Select(e => e.Name));
     }
@@ -30,7 +30,7 @@ public class ListActiveWorkspacesTest : SeatsioClientTest
         var ws = await Client.Workspaces.CreateAsync("anoherAnotherAnotherWorkspace");
         await Client.Workspaces.DeactivateAsync(ws.Key);
 
-        var workspaces = Client.Workspaces.Active.All("another");
+        var workspaces = Client.Workspaces.Active.AllAsync("another");
 
         Assert.Equal(new[] {"anotherAnotherWorkspace", "anotherWorkspace"}, workspaces.Select(e => e.Name));
     }

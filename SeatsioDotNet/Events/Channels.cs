@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using RestSharp;
 using static SeatsioDotNet.Util.RestUtil;
@@ -14,13 +15,13 @@ public class Channels
         _restClient = restClient;
     }
 
-    public async Task ReplaceAsync(string eventKey, List<Channel> channels)
+    public async Task ReplaceAsync(string eventKey, List<Channel> channels, CancellationToken cancellationToken = default)
     {
         var requestBody = ReplaceChannelsRequest(channels);
         var restRequest = new RestRequest("/events/{key}/channels/replace", Method.Post)
             .AddUrlSegment("key", eventKey)
             .AddJsonBody(requestBody);
-        AssertOk(await _restClient.ExecuteAsync<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
     private Dictionary<string, object> ReplaceChannelsRequest(List<Channel> channels)
@@ -30,7 +31,7 @@ public class Channels
         return request;
     }
 
-    public async Task AddAsync(string eventKey, string channelKey, string name, string color, int? index, string[] objects)
+    public async Task AddAsync(string eventKey, string channelKey, string name, string color, int? index, string[] objects, CancellationToken cancellationToken = default)
     {
         var body = new Dictionary<string, object>();
         body.Add("key", channelKey);
@@ -41,10 +42,10 @@ public class Channels
         var restRequest = new RestRequest("/events/{key}/channels", Method.Post)
             .AddUrlSegment("key", eventKey)
             .AddJsonBody(body);
-        AssertOk(await _restClient.ExecuteAsync<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public async Task AddAsync(string eventKey, ChannelCreationParams[] channelCreationParams)
+    public async Task AddAsync(string eventKey, ChannelCreationParams[] channelCreationParams, CancellationToken cancellationToken = default)
     {
         var channels = new List<Dictionary<string, object>>();
         foreach (var param in channelCreationParams)
@@ -81,18 +82,18 @@ public class Channels
         var restRequest = new RestRequest("/events/{key}/channels", Method.Post)
             .AddUrlSegment("key", eventKey)
             .AddJsonBody(channels);
-        AssertOk(await _restClient.ExecuteAsync<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public async Task RemoveAsync(string eventKey, string channelKey)
+    public async Task RemoveAsync(string eventKey, string channelKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/events/{eventKey}/channels/{channelKey}", Method.Delete)
             .AddUrlSegment("eventKey", eventKey)
             .AddUrlSegment("channelKey", channelKey);
-        AssertOk(await _restClient.ExecuteAsync<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public async Task AddObjectsAsync(string eventKey, string channelKey, string[] objects)
+    public async Task AddObjectsAsync(string eventKey, string channelKey, string[] objects, CancellationToken cancellationToken = default)
     {
         var body = new Dictionary<string, object>();
         body.Add("objects", objects);
@@ -100,10 +101,10 @@ public class Channels
             .AddUrlSegment("eventKey", eventKey)
             .AddUrlSegment("channelKey", channelKey)
             .AddJsonBody(body);
-        AssertOk(await _restClient.ExecuteAsync<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public async Task RemoveObjectsAsync(string eventKey, string channelKey, string[] objects)
+    public async Task RemoveObjectsAsync(string eventKey, string channelKey, string[] objects, CancellationToken cancellationToken = default)
     {
         var body = new Dictionary<string, object>();
         body.Add("objects", objects);
@@ -111,10 +112,10 @@ public class Channels
             .AddUrlSegment("eventKey", eventKey)
             .AddUrlSegment("channelKey", channelKey)
             .AddJsonBody(body);
-        AssertOk(await _restClient.ExecuteAsync<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public async Task UpdateAsync(string eventKey, string channelKey, string channelName, string color, string[] objects)
+    public async Task UpdateAsync(string eventKey, string channelKey, string channelName, string color, string[] objects, CancellationToken cancellationToken = default)
     {
         var body = new Dictionary<string, object>();
         if (channelName != null) body.Add("name", channelName);
@@ -124,6 +125,6 @@ public class Channels
             .AddUrlSegment("eventKey", eventKey)
             .AddUrlSegment("channelKey", channelKey)
             .AddJsonBody(body);
-        AssertOk(await _restClient.ExecuteAsync<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 }

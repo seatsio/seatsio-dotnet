@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using RestSharp;
 using SeatsioDotNet.EventReports;
@@ -20,12 +21,12 @@ public class Events
         Channels = new Channels(restClient);
     }
 
-    public async Task<Event> CreateAsync(string chartKey)
+    public async Task<Event> CreateAsync(string chartKey, CancellationToken cancellationToken = default)
     {
-        return await CreateAsync(chartKey, new CreateEventParams());
+        return await CreateAsync(chartKey, new CreateEventParams(), cancellationToken);
     }
 
-    public async Task<Event> CreateAsync(string chartKey, CreateEventParams p)
+    public async Task<Event> CreateAsync(string chartKey, CreateEventParams p, CancellationToken cancellationToken = default)
     {
         var requestBody = new Dictionary<string, object>();
         requestBody.Add("chartKey", chartKey);
@@ -71,10 +72,10 @@ public class Events
         }
 
         var restRequest = new RestRequest("/events", Method.Post).AddJsonBody(requestBody);
-        return AssertOk(await _restClient.ExecuteAsync<Event>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Event>(restRequest, cancellationToken));
     }
 
-    public async Task<Event[]> CreateAsync(string chartKey, CreateEventParams[] eventCreationParams)
+    public async Task<Event[]> CreateAsync(string chartKey, CreateEventParams[] eventCreationParams, CancellationToken cancellationToken = default)
     {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
         requestBody.Add("chartKey", chartKey);
@@ -127,10 +128,10 @@ public class Events
 
         requestBody.Add("events", events.ToArray());
         var restRequest = new RestRequest("/events/actions/create-multiple", Method.Post).AddJsonBody(requestBody);
-        return AssertOk(await _restClient.ExecuteAsync<MultipleEvents>(restRequest)).events.ToArray();
+        return AssertOk(await _restClient.ExecuteAsync<MultipleEvents>(restRequest, cancellationToken)).events.ToArray();
     }
 
-    public async Task UpdateAsync(string eventKey, UpdateEventParams p)
+    public async Task UpdateAsync(string eventKey, UpdateEventParams p, CancellationToken cancellationToken = default)
     {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
 
@@ -177,30 +178,30 @@ public class Events
         var restRequest = new RestRequest("/events/{key}", Method.Post)
             .AddUrlSegment("key", eventKey)
             .AddJsonBody(requestBody);
-        AssertOk(await _restClient.ExecuteAsync<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public async Task DeleteAsync(string eventKey)
+    public async Task DeleteAsync(string eventKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/events/{key}", Method.Delete)
             .AddUrlSegment("key", eventKey);
-        AssertOk(await _restClient.ExecuteAsync<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public async Task<Event> RetrieveAsync(string eventKey)
+    public async Task<Event> RetrieveAsync(string eventKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/events/{key}")
             .AddUrlSegment("key", eventKey);
-        return AssertOk(await _restClient.ExecuteAsync<Event>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Event>(restRequest, cancellationToken));
     }
 
-    public async Task<EventObjectInfo> RetrieveObjectInfoAsync(string eventKey, string objectLabel)
+    public async Task<EventObjectInfo> RetrieveObjectInfoAsync(string eventKey, string objectLabel, CancellationToken cancellationToken = default)
     {
-        var result = await RetrieveObjectInfosAsync(eventKey, new[] {objectLabel});
+        var result = await RetrieveObjectInfosAsync(eventKey, new[] {objectLabel}, cancellationToken);
         return result[objectLabel];
     }
 
-    public async Task<Dictionary<string, EventObjectInfo>> RetrieveObjectInfosAsync(string eventKey, string[] objectLabels)
+    public async Task<Dictionary<string, EventObjectInfo>> RetrieveObjectInfosAsync(string eventKey, string[] objectLabels, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/events/{key}/objects")
             .AddUrlSegment("key", eventKey);
@@ -210,154 +211,154 @@ public class Events
             restRequest.AddQueryParameter("label", objectLabel);
         }
 
-        return AssertOk(await _restClient.ExecuteAsync<Dictionary<string, EventObjectInfo>>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Dictionary<string, EventObjectInfo>>(restRequest, cancellationToken));
     }
 
     public async Task<ChangeObjectStatusResult> BookAsync(string eventKey, IEnumerable<string> objects, string holdToken = null,
-        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKey, objects, EventObjectInfo.Booked, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys);
+            ignoreChannels, channelKeys, cancellationToken:cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> BookAsync(string[] eventKeys, IEnumerable<string> objects, string holdToken = null,
-        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKeys, objects, EventObjectInfo.Booked, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys);
+            ignoreChannels, channelKeys, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> BookAsync(string eventKey, IEnumerable<ObjectProperties> objects,
         string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null,
-        string[] channelKeys = null)
+        string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKey, objects, EventObjectInfo.Booked, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys);
+            ignoreChannels, channelKeys, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> BookAsync(string[] eventKeys, IEnumerable<ObjectProperties> objects,
         string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null,
-        string[] channelKeys = null)
+        string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKeys, objects, EventObjectInfo.Booked, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys);
+            ignoreChannels, channelKeys, cancellationToken:cancellationToken);
     }
 
     public async Task<BestAvailableResult> BookAsync(string eventKey, BestAvailable bestAvailable, string holdToken = null,
-        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKey, bestAvailable, EventObjectInfo.Booked, holdToken, orderId,
-            keepExtraData, ignoreChannels, channelKeys);
+            keepExtraData, ignoreChannels, channelKeys, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> ReleaseAsync(string eventKey, IEnumerable<string> objects, string holdToken = null,
-        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKey, objects, EventObjectInfo.Free, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys);
+            ignoreChannels, channelKeys, cancellationToken:cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> ReleaseAsync(string[] eventKeys, IEnumerable<string> objects,
         string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null,
-        string[] channelKeys = null)
+        string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKeys, objects, EventObjectInfo.Free, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys);
+            ignoreChannels, channelKeys, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> ReleaseAsync(string eventKey, IEnumerable<ObjectProperties> objects,
         string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null,
-        string[] channelKeys = null)
+        string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKey, objects, EventObjectInfo.Free, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys);
+            ignoreChannels, channelKeys, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> ReleaseAsync(string[] eventKeys, IEnumerable<ObjectProperties> objects,
         string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null,
-        string[] channelKeys = null)
+        string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKeys, objects, EventObjectInfo.Free, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys);
+            ignoreChannels, channelKeys, cancellationToken:cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> HoldAsync(string eventKey, IEnumerable<string> objects, string holdToken,
-        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKey, objects, EventObjectInfo.Held, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys);
+            ignoreChannels, channelKeys, cancellationToken:cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> HoldAsync(string[] eventKeys, IEnumerable<string> objects, string holdToken,
-        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKeys, objects, EventObjectInfo.Held, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys);
+            ignoreChannels, channelKeys, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> HoldAsync(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken,
-        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKey, objects, EventObjectInfo.Held, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys);
+            ignoreChannels, channelKeys, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> HoldAsync(string[] eventKeys, IEnumerable<ObjectProperties> objects,
         string holdToken, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null,
-        string[] channelKeys = null)
+        string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKeys, objects, EventObjectInfo.Held, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys);
+            ignoreChannels, channelKeys, cancellationToken:cancellationToken);
     }
 
     public async Task<BestAvailableResult> HoldAsync(string eventKey, BestAvailable bestAvailable, string holdToken,
-        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+        string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKey, bestAvailable, EventObjectInfo.Held, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys);
+            ignoreChannels, channelKeys, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> ChangeObjectStatusAsync(string eventKey, IEnumerable<string> objects, string status,
         string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null,
         string[] channelKeys = null, string[] allowedPreviousStatuses = null,
-        string[] rejectedPreviousStatuses = null)
+        string[] rejectedPreviousStatuses = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(new[] {eventKey}, objects.Select(o => new ObjectProperties(o)), status, holdToken,
             orderId, keepExtraData, ignoreChannels, channelKeys, allowedPreviousStatuses,
-            rejectedPreviousStatuses);
+            rejectedPreviousStatuses, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> ChangeObjectStatusAsync(string eventKey, IEnumerable<ObjectProperties> objects,
         string status, string holdToken = null, string orderId = null, bool? keepExtraData = null,
-        bool? ignoreChannels = null, string[] channelKeys = null)
+        bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(new[] {eventKey}, objects, status, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys);
+            ignoreChannels, channelKeys, cancellationToken:cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> ChangeObjectStatusAsync(IEnumerable<string> events, IEnumerable<string> objects,
         string status, string holdToken = null, string orderId = null, bool? keepExtraData = null,
-        bool? ignoreChannels = null, string[] channelKeys = null)
+        bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(events, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId,
-            keepExtraData, ignoreChannels, channelKeys);
+            keepExtraData, ignoreChannels, channelKeys, cancellationToken:cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> ChangeObjectStatusAsync(IEnumerable<string> events,
         IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null,
         bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null,
         string[] allowedPreviousStatuses = null,
-        string[] rejectedPreviousStatuses = null)
+        string[] rejectedPreviousStatuses = null, CancellationToken cancellationToken = default)
     {
         var requestBody = ChangeObjectStatusRequest(events, objects, status, holdToken, orderId, keepExtraData,
             ignoreChannels, channelKeys, allowedPreviousStatuses, rejectedPreviousStatuses);
         var restRequest = new RestRequest("/events/groups/actions/change-object-status", Method.Post)
             .AddQueryParameter("expand", "objects")
             .AddJsonBody(requestBody);
-        return AssertOk(await _restClient.ExecuteAsync<ChangeObjectStatusResult>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<ChangeObjectStatusResult>(restRequest, cancellationToken));
     }
 
-    public async Task<List<ChangeObjectStatusResult>> ChangeObjectStatusAsync(StatusChangeRequest[] requests)
+    public async Task<List<ChangeObjectStatusResult>> ChangeObjectStatusAsync(StatusChangeRequest[] requests, CancellationToken cancellationToken = default)
     {
         var serializedRequests = requests.Select(r => ChangeObjectStatusRequest(r.EventKey, r.Objects, r.Status,
             r.HoldToken, r.OrderId, r.KeepExtraData, r.IgnoreChannels, r.ChannelKeys,
@@ -365,7 +366,7 @@ public class Events
         var restRequest = new RestRequest("/events/actions/change-object-status", Method.Post)
             .AddQueryParameter("expand", "objects")
             .AddJsonBody(new Dictionary<string, object> {{"statusChanges", serializedRequests}});
-        return AssertOk(await _restClient.ExecuteAsync<ChangeObjectStatusInBatchResult>(restRequest)).Results;
+        return AssertOk(await _restClient.ExecuteAsync<ChangeObjectStatusInBatchResult>(restRequest, cancellationToken)).Results;
     }
 
     private Dictionary<string, object> ChangeObjectStatusRequest(string evnt, IEnumerable<ObjectProperties> objects,
@@ -441,7 +442,7 @@ public class Events
 
     public async Task<BestAvailableResult> ChangeObjectStatusAsync(string eventKey, BestAvailable bestAvailable, string status,
         string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null,
-        string[] channelKeys = null)
+        string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         var requestBody = new Dictionary<string, object>()
         {
@@ -477,68 +478,68 @@ public class Events
         var restRequest = new RestRequest("/events/{key}/actions/change-object-status", Method.Post)
             .AddUrlSegment("key", eventKey)
             .AddJsonBody(requestBody);
-        return AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest, cancellationToken));
     }
 
-    public async Task OverrideSeasonObjectStatusAsync(string eventKey, string[] objects)
+    public async Task OverrideSeasonObjectStatusAsync(string eventKey, string[] objects, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/events/{key}/actions/override-season-status", Method.Post)
             .AddUrlSegment("key", eventKey)
             .AddJsonBody(new {objects});
-        AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest, cancellationToken));
     }  
     
-    public async Task UseSeasonObjectStatusAsync(string eventKey, string[] objects)
+    public async Task UseSeasonObjectStatusAsync(string eventKey, string[] objects, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/events/{key}/actions/use-season-status", Method.Post)
             .AddUrlSegment("key", eventKey)
             .AddJsonBody(new {objects});
-        AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest, cancellationToken));
     }
 
-    public async Task UpdateExtraDataAsync(string eventKey, string objectLabel, Dictionary<string, object> extraData)
+    public async Task UpdateExtraDataAsync(string eventKey, string objectLabel, Dictionary<string, object> extraData, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/events/{key}/objects/{object}/actions/update-extra-data", Method.Post)
             .AddUrlSegment("key", eventKey)
             .AddUrlSegment("object", objectLabel)
             .AddJsonBody(new {extraData});
-        AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest, cancellationToken));
     }
 
-    public async Task UpdateExtraDatasAsync(string eventKey, Dictionary<string, Dictionary<string, object>> extraData)
+    public async Task UpdateExtraDatasAsync(string eventKey, Dictionary<string, Dictionary<string, object>> extraData, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/events/{key}/actions/update-extra-data", Method.Post)
             .AddUrlSegment("key", eventKey)
             .AddParameter("application/json", JsonSerializer.Serialize(new {extraData}),
                 ParameterType.RequestBody); // default serializer doesn't convert extraData to JSON properly
-        AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest, cancellationToken));
     }
 
     public async Task MarkAsForSaleAsync(string eventKey, IEnumerable<string> objects, Dictionary<string, int> areaPlaces,
-        IEnumerable<string> categories)
+        IEnumerable<string> categories, CancellationToken cancellationToken = default)
     {
         var requestBody = ForSaleRequest(objects, areaPlaces, categories);
         var restRequest = new RestRequest("/events/{key}/actions/mark-as-for-sale", Method.Post)
             .AddUrlSegment("key", eventKey)
             .AddJsonBody(requestBody);
-        AssertOk(await _restClient.ExecuteAsync<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
     public async Task MarkAsNotForSaleAsync(string eventKey, IEnumerable<string> objects, Dictionary<string, int> areaPlaces,
-        IEnumerable<string> categories)
+        IEnumerable<string> categories, CancellationToken cancellationToken = default)
     {
         var requestBody = ForSaleRequest(objects, areaPlaces, categories);
         var restRequest = new RestRequest("/events/{key}/actions/mark-as-not-for-sale", Method.Post)
             .AddUrlSegment("key", eventKey)
             .AddJsonBody(requestBody);
-        AssertOk(await _restClient.ExecuteAsync<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public async Task MarkEverythingAsForSaleAsync(string eventKey)
+    public async Task MarkEverythingAsForSaleAsync(string eventKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/events/{key}/actions/mark-everything-as-for-sale", Method.Post)
             .AddUrlSegment("key", eventKey);
-        AssertOk(await _restClient.ExecuteAsync<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
     private Dictionary<string, object> ForSaleRequest(IEnumerable<string> objects,

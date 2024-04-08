@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using RestSharp;
 using static SeatsioDotNet.Util.RestUtil;
@@ -34,22 +35,22 @@ public class PageFetcher<T>
         _queryParams = queryParams;
     }
 
-    public async Task<Page<T>> FetchFirstPageAsync(Dictionary<string, object> listParams = null, int? pageSize = null)
+    public async Task<Page<T>> FetchFirstPageAsync(Dictionary<string, object> listParams = null, int? pageSize = null, CancellationToken cancellationToken = default)
     {
         var restRequest = BuildRequest(listParams, pageSize);
-        return AssertOk(await _restClient.ExecuteAsync<Page<T>>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Page<T>>(restRequest, cancellationToken));
     }
 
-    public async Task<Page<T>> FetchAfterAsync(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
+    public async Task<Page<T>> FetchAfterAsync(long id, Dictionary<string, object> listParams = null, int? pageSize = null, CancellationToken cancellationToken = default)
     {
         var restRequest = BuildRequest(listParams, pageSize).AddQueryParameter("start_after_id", id.ToString());
-        return AssertOk(await _restClient.ExecuteAsync<Page<T>>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Page<T>>(restRequest, cancellationToken));
     }
 
-    public async Task<Page<T>> FetchBeforeAsync(long id, Dictionary<string, object> listParams = null, int? pageSize = null)
+    public async Task<Page<T>> FetchBeforeAsync(long id, Dictionary<string, object> listParams = null, int? pageSize = null, CancellationToken cancellationToken = default)
     {
         var restRequest = BuildRequest(listParams, pageSize).AddQueryParameter("end_before_id", id.ToString());
-        return AssertOk(await _restClient.ExecuteAsync<Page<T>>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Page<T>>(restRequest, cancellationToken));
     }
 
     private RestRequest BuildRequest(Dictionary<string, object> listParams, int? pageSize)

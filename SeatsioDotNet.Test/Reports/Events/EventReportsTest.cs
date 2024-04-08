@@ -295,7 +295,7 @@ public class EventReportsTest : SeatsioClientTest
         var chartKey = CreateTestChart();
         var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var report = await Client.EventReports.BySection(evnt.Key, NoSection);
+        var report = await Client.EventReports.BySectionAsync(evnt.Key, NoSection);
 
         Assert.Equal(34, report.Count());
     }

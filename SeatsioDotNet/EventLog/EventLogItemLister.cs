@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using SeatsioDotNet.Util;
 
@@ -13,23 +14,23 @@ public class EventLogItemLister
         _pageFetcher = pageFetcher;
     }
 
-    public IAsyncEnumerable<EventLogItem> All()
+    public IAsyncEnumerable<EventLogItem> AllAsync()
     {
         return new PagedEnumerable<EventLogItem>(_pageFetcher, null);
     }
 
-    public async Task<Page<EventLogItem>> FirstPage(int? pageSize = null)
+    public async Task<Page<EventLogItem>> FirstPageAsync(int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await _pageFetcher.FetchFirstPageAsync(null, pageSize);
+        return await _pageFetcher.FetchFirstPageAsync(null, pageSize, cancellationToken);
     }
 
-    public async Task<Page<EventLogItem>> PageAfter(long id, int? pageSize = null)
+    public async Task<Page<EventLogItem>> PageAfterAsync(long id, int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await _pageFetcher.FetchAfterAsync(id, null, pageSize);
+        return await _pageFetcher.FetchAfterAsync(id, null, pageSize, cancellationToken);
     }
 
-    public async Task<Page<EventLogItem>> PageBefore(long id, int? pageSize = null)
+    public async Task<Page<EventLogItem>> PageBeforeAsync(long id, int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await _pageFetcher.FetchBeforeAsync(id, null, pageSize);
+        return await _pageFetcher.FetchBeforeAsync(id, null, pageSize, cancellationToken);
     }
 }

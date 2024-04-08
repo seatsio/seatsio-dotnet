@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using RestSharp;
 using SeatsioDotNet.Util;
@@ -16,22 +17,22 @@ public class EventLog
 
     public IAsyncEnumerable<EventLogItem> ListAllAsync()
     {
-        return ParametrizedList().All();
+        return ParametrizedList().AllAsync();
     }
 
-    public async Task<Page<EventLogItem>> ListFirstPage(int? pageSize = null)
+    public async Task<Page<EventLogItem>> ListFirstPageAsync(int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await ParametrizedList().FirstPage(pageSize);
+        return await ParametrizedList().FirstPageAsync(pageSize, cancellationToken);
     }
 
-    public async Task<Page<EventLogItem>> ListPageAfter(long id, int? pageSize = null)
+    public async Task<Page<EventLogItem>> ListPageAfterAsync(long id, int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await ParametrizedList().PageAfter(id, pageSize);
+        return await ParametrizedList().PageAfterAsync(id, pageSize, cancellationToken);
     }
 
-    public async Task<Page<EventLogItem>> ListPageBefore(long id, int? pageSize = null)
+    public async Task<Page<EventLogItem>> ListPageBeforeAsync(long id, int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await ParametrizedList().PageBefore(id, pageSize);
+        return await ParametrizedList().PageBeforeAsync(id, pageSize, cancellationToken);
     }
 
     private EventLogItemLister ParametrizedList()

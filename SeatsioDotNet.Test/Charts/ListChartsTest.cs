@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using SeatsioDotNet.Charts;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Charts;
@@ -22,13 +24,16 @@ public class ListChartsTest : SeatsioClientTest
     [Fact]
     public async Task MultiplePages()
     {
-        var chartTasks = Enumerable.Repeat("", 30).Select(async _ => await Client.Charts.CreateAsync());
-        var charts = await Task.WhenAll(chartTasks);
+        var charts = new List<Chart>();
+        for (var i = 1; i <= 30; i++)
+        {
+            var chart = await Client.Charts.CreateAsync();
+            charts.Add(chart);
+        }
 
         var retrievedCharts = await Client.Charts.ListAllAsync().ToListAsync();
 
-        charts.Select(c => c.Key).Should().NotContainInConsecutiveOrder(retrievedCharts.Select(c => c.Key));
-        // Assert.Equal(charts.Reverse().Select(c => c.Key), retrievedCharts.Select(c => c.Key));
+        Assert.Equal(charts.Select(c => c.Key).Reverse(), retrievedCharts.Select(c => c.Key));
     }
 
     [Fact]

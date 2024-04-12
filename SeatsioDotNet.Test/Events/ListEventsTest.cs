@@ -14,7 +14,7 @@ public class ListEventsTest : SeatsioClientTest
         var event2 = await Client.Events.CreateAsync(chartKey);
         var event3 = await Client.Events.CreateAsync(chartKey);
 
-        var events = await Client.Events.ListAllAsync().ToListAsync();
+        var events = Client.Events.ListAllAsync();
 
         Assert.Equal(new[] {event3.Key, event2.Key, event1.Key}, events.Select(e => e.Key));
     }

@@ -22,7 +22,7 @@ public class ListStatusChangesTest : SeatsioClientTest
         });
         await WaitForStatusChanges(Client, evnt, 3);
 
-        var statusChanges = await Client.Events.StatusChanges(evnt.Key).AllAsync().ToListAsync();
+        var statusChanges = Client.Events.StatusChanges(evnt.Key).AllAsync();
 
         Assert.Equal(new[] {"s3", "s2", "s1"}, statusChanges.Select(s => s.Status));
     }
@@ -95,7 +95,7 @@ public class ListStatusChangesTest : SeatsioClientTest
         });
         await WaitForStatusChanges(Client, evnt, 4);
 
-        var statusChanges = await Client.Events.StatusChanges(evnt.Key, filter: "A-").AllAsync().ToListAsync();
+        var statusChanges = Client.Events.StatusChanges(evnt.Key, filter: "A-").AllAsync();
 
         Assert.Equal(new[] {"A-3", "A-2", "A-1"}, statusChanges.Select(s => s.ObjectLabel));
     }
@@ -114,7 +114,7 @@ public class ListStatusChangesTest : SeatsioClientTest
         });
         await WaitForStatusChanges(Client, evnt, 4);
 
-        var statusChanges = await Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel").AllAsync().ToListAsync();
+        var statusChanges = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel").AllAsync();
 
         Assert.Equal(new[] {"A-1", "A-2", "A-3", "B-1"}, statusChanges.Select(s => s.ObjectLabel));
     }
@@ -175,8 +175,7 @@ public class ListStatusChangesTest : SeatsioClientTest
         });
         await WaitForStatusChanges(Client, evnt, 4);
 
-        var statusChanges = await Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel", sortDirection: "DESC")
-            .AllAsync().ToListAsync();
+        var statusChanges = Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel", sortDirection: "DESC").AllAsync();
 
         Assert.Equal(new[] {"B-1", "A-3", "A-2", "A-1"}, statusChanges.Select(s => s.ObjectLabel));
     }

@@ -25,11 +25,11 @@ public class PagedEnumerator<T> : IAsyncEnumerator<T>
     {
         if (_currentPage == null)
         {
-            _currentPage = await _pageFetcher.FetchFirstPageAsync(_listParams, null, cancellationToken: _cancellationToken);
+            _currentPage = await _pageFetcher.FetchFirstPageAsync(_listParams, cancellationToken: _cancellationToken);
         }
         else if (NextPageMustBeFetched())
         {
-            _currentPage = await _pageFetcher.FetchAfterAsync(_currentPage.NextPageStartsAfter.Value, _listParams, null, cancellationToken: _cancellationToken);
+            _currentPage = await _pageFetcher.FetchAfterAsync(_currentPage.NextPageStartsAfter.Value, _listParams, cancellationToken: _cancellationToken);
             _indexInCurrentPage = 0;
         }
         else
@@ -44,12 +44,6 @@ public class PagedEnumerator<T> : IAsyncEnumerator<T>
     {
         return _indexInCurrentPage + 1 >= _currentPage.Items.Count &&
                _currentPage.NextPageStartsAfter != null;
-    }
-
-    public void Reset()
-    {
-        _currentPage = null;
-        _indexInCurrentPage = 0;
     }
 
     public T Current => _currentPage.Items[_indexInCurrentPage];

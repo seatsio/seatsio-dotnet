@@ -15,7 +15,7 @@ public class ListChartsTest : SeatsioClientTest
         var chart2 = await Client.Charts.CreateAsync();
         var chart3 = await Client.Charts.CreateAsync();
 
-        var charts = await Client.Charts.ListAllAsync().ToListAsync();
+        var charts = Client.Charts.ListAllAsync();
 
         Assert.Equal(new[] {chart3.Key, chart2.Key, chart1.Key}, charts.Select(c => c.Key));
     }
@@ -30,7 +30,7 @@ public class ListChartsTest : SeatsioClientTest
             charts.Add(chart);
         }
 
-        var retrievedCharts = await Client.Charts.ListAllAsync().ToListAsync();
+        var retrievedCharts = Client.Charts.ListAllAsync();
 
         Assert.Equal(charts.Select(c => c.Key).Reverse(), retrievedCharts.Select(c => c.Key));
     }
@@ -42,7 +42,7 @@ public class ListChartsTest : SeatsioClientTest
         var chart2 = await Client.Charts.CreateAsync("bar");
         var chart3 = await Client.Charts.CreateAsync("foofoo");
 
-        var charts = await Client.Charts.ListAllAsync(filter: "foo").ToListAsync();
+        var charts = Client.Charts.ListAllAsync(filter: "foo");
 
         Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
     }
@@ -58,7 +58,7 @@ public class ListChartsTest : SeatsioClientTest
         var chart3 = await Client.Charts.CreateAsync();
         await Client.Charts.AddTagAsync(chart3.Key, "foo");
 
-        var charts = await Client.Charts.ListAllAsync(tag: "foo").ToListAsync();
+        var charts = Client.Charts.ListAllAsync(tag: "foo");
 
         Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
     }

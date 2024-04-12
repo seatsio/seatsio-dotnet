@@ -17,7 +17,7 @@ public class ListChartsInArchiveTest : SeatsioClientTest
         var chart3 = await Client.Charts.CreateAsync();
         await Client.Charts.MoveToArchiveAsync(chart3.Key);
 
-        var charts = await Client.Charts.Archive.AllAsync().ToListAsync();
+        var charts = Client.Charts.Archive.AllAsync();
         Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
     }
 }

@@ -22,7 +22,7 @@ public class ListStatusChangesForObjectTest : SeatsioClientTest
         });
         await WaitForStatusChanges(Client, evnt, 5);
 
-        var statusChanges = await Client.Events.StatusChangesForObject(evnt.Key, "A-1").AllAsync().ToListAsync();
+        var statusChanges = Client.Events.StatusChangesForObject(evnt.Key, "A-1").AllAsync();
 
         Assert.Equal(new[] {"s4", "s3", "s2", "s1"}, statusChanges.Select(s => s.Status));
     }

@@ -67,8 +67,8 @@ using SeatsioDotNet.Charts;
 using SeatsioDotNet.Events;
 
 var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
-var chart = client.Charts.Create();
-var evnt = client.Events.Create(chart.Key);
+var chart = await client.Charts.CreateAsync();
+var evnt = await client.Events.CreateAsync(chart.Key);
 ```
 
 ### Booking objects
@@ -77,7 +77,7 @@ var evnt = client.Events.Create(chart.Key);
 using SeatsioDotNet;
 
 var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
-client.Events.Book(<EVENT KEY>, new [] { "A-1", "A-2"});
+await client.Events.BookAsync(<EVENT KEY>, new [] { "A-1", "A-2"});
 ```
 
 ### Releasing objects
@@ -86,7 +86,7 @@ client.Events.Book(<EVENT KEY>, new [] { "A-1", "A-2"});
 using SeatsioDotNet;
 
 var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
-client.Events.Release(<EVENT KEY>, new [] { "A-1", "A-2"});
+await client.Events.ReleaseAsync(<EVENT KEY>, new [] { "A-1", "A-2"});
 ```
 
 ### Booking objects that have been held
@@ -95,7 +95,7 @@ client.Events.Release(<EVENT KEY>, new [] { "A-1", "A-2"});
 using SeatsioDotNet;
 
 var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
-client.Events.Book(<EVENT KEY>, new [] { "A-1", "A-2"}, <A HOLD TOKEN>);
+await client.Events.BookAsync(<EVENT KEY>, new [] { "A-1", "A-2"}, <A HOLD TOKEN>);
 ```
 
 ### Changing object status
@@ -104,7 +104,7 @@ client.Events.Book(<EVENT KEY>, new [] { "A-1", "A-2"}, <A HOLD TOKEN>);
 using SeatsioDotNet;
 
 var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
-client.Events.ChangeObjectStatus(""<EVENT KEY>"", new [] { "A-1", "A-2"}, "unavailable");
+await client.Events.ChangeObjectStatusAsync(""<EVENT KEY>"", new [] { "A-1", "A-2"}, "unavailable");
 ```
 
 ### Retrieving the published version of a chart (i.e. the actual drawing, containing the venue type, categories etc.)
@@ -113,7 +113,7 @@ client.Events.ChangeObjectStatus(""<EVENT KEY>"", new [] { "A-1", "A-2"}, "unava
 using SeatsioDotNet;
 
 var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
-var drawing = client.Charts.RetrievePublishedVersion(<CHART KEY>);
+var drawing = await client.Charts.RetrievePublishedVersionAsync(<CHART KEY>);
 Console.WriteLine(drawing.VenueType);
 ```
 
@@ -123,7 +123,7 @@ Console.WriteLine(drawing.VenueType);
 using SeatsioDotNet;
 
 var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
-var objectInfos = Client.Events.RetrieveObjectInfos(evnt.Key, new string[] {"A-1", "A-2"});
+var objectInfos = await Client.Events.RetrieveObjectInfosAsync(evnt.Key, new string[] {"A-1", "A-2"});
 
 Console.WriteLine(objectInfos["A-1"].CategoryKey);
 Console.WriteLine(objectInfos["A-1"].CategoryLabel);
@@ -138,7 +138,7 @@ Console.WriteLine(objectInfos["A-2"].Status);
 
 ```csharp
 var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
-IEnumerable<Category> categoryList = client.Charts.ListCategories(<chart key>);
+IEnumerable<Category> categoryList = await client.Charts.ListCategoriesAsync(<chart key>);
 foreach (var category in categoryList)
 {
     Console.Write(category.Label);
@@ -152,14 +152,14 @@ using SeatsioDotNet;
 
 var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
 
-var charts = client.Charts.ListAll();
+var charts = await client.Charts.ListAllAsync();
 foreach (var chart in charts)
 {
   Console.WriteLine("Chart " + chart.Key);
 }
 ```
 
-Note: `listAll()` returns an IEnumerable`, which under the hood calls the seats.io API to fetch charts page by page. So multiple API calls may be done underneath to fetch all charts.
+Note: `listAllAsync()` returns an IAsyncEnumerable`, which under the hood calls the seats.io API to fetch charts page by page. So multiple API calls may be done underneath to fetch all charts.
 
 ### Listing charts page by page
 
@@ -168,7 +168,7 @@ E.g. to show charts in a paginated list on a dashboard.
 ```csharp
 // ... user initially opens the screen ...
 
-var firstPage = client.Charts.ListFirstPage();
+var firstPage = await client.Charts.ListFirstPageAsync();
 foreach (var chart in firstPage.Items)
 {
   Console.WriteLine("Chart " + chart.Key);
@@ -178,7 +178,7 @@ foreach (var chart in firstPage.Items)
 ```csharp
 // ... user clicks on 'next page' button ...
 
-var nextPage = client.Charts.ListPageAfter(firstPage.NextPageStartsAfter);
+var nextPage = await client.Charts.ListPageAfterAsync(firstPage.NextPageStartsAfter);
 foreach (var chart in nextPage.Items)
 {
   Console.WriteLine("Chart " + chart.Key);
@@ -188,7 +188,7 @@ foreach (var chart in nextPage.Items)
 ```csharp
 // ... user clicks on 'previous page' button ...
 
-var previousPage = client.Charts.ListPageBefore(nextPage.PreviousPageEndsBefore);
+var previousPage = await client.Charts.ListPageBeforeAsync(nextPage.PreviousPageEndsBefore);
 foreach (var chart in previousPage.Items)
 {
   Console.WriteLine("Chart " + chart.Key);
@@ -201,7 +201,7 @@ foreach (var chart in previousPage.Items)
 using SeatsioDotNet;
 
 var client = new SeatsioClient(Region.EU(), "<COMPANY ADMIN KEY>");
-client.Workspaces.Create("a workspace");
+await client.Workspaces.CreateAsync("a workspace");
 ```
 
 ### Creating a chart and an event with the company admin key
@@ -210,8 +210,8 @@ client.Workspaces.Create("a workspace");
 using SeatsioDotNet;
 
 var client = new SeatsioClient(Region.EU(), "<COMPANY ADMIN KEY>", "<WORKSPACE PUBLIC KEY>"); // workspace public key can be found on https://app.seats.io/workspace-settings
-var chart = client.Charts.Create();
-var evnt = client.Events.Create(chart.Key);
+var chart = await client.Charts.CreateAsync();
+var evnt = await client.Events.CreateAsync(chart.Key);
 ```
 
 ## Error handling

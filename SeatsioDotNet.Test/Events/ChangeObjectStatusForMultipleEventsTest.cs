@@ -20,8 +20,8 @@ public class ChangeObjectStatusForMultipleEventsTest : SeatsioClientTest
         Assert.Equal("foo", (await Client.Events.RetrieveObjectInfoAsync(event1.Key, "A-2")).Status);
         Assert.Equal("foo", (await Client.Events.RetrieveObjectInfoAsync(event2.Key, "A-1")).Status);
         Assert.Equal("foo", (await Client.Events.RetrieveObjectInfoAsync(event2.Key, "A-2")).Status);
-    }      
-        
+    }
+
     [Fact]
     public async Task Book()
     {
@@ -35,8 +35,8 @@ public class ChangeObjectStatusForMultipleEventsTest : SeatsioClientTest
         Assert.Equal(EventObjectInfo.Booked, (await Client.Events.RetrieveObjectInfoAsync(event1.Key, "A-2")).Status);
         Assert.Equal(EventObjectInfo.Booked, (await Client.Events.RetrieveObjectInfoAsync(event2.Key, "A-1")).Status);
         Assert.Equal(EventObjectInfo.Booked, (await Client.Events.RetrieveObjectInfoAsync(event2.Key, "A-2")).Status);
-    } 
-        
+    }
+
     [Fact]
     public async Task Hold()
     {
@@ -44,15 +44,15 @@ public class ChangeObjectStatusForMultipleEventsTest : SeatsioClientTest
         var event1 = await Client.Events.CreateAsync(chartKey);
         var event2 = await Client.Events.CreateAsync(chartKey);
         HoldToken holdToken = await Client.HoldTokens.CreateAsync();
-            
+
         await Client.Events.HoldAsync(new[] {event1.Key, event2.Key}, new[] {"A-1", "A-2"}, holdToken.Token);
 
         Assert.Equal(EventObjectInfo.Held, (await Client.Events.RetrieveObjectInfoAsync(event1.Key, "A-1")).Status);
         Assert.Equal(EventObjectInfo.Held, (await Client.Events.RetrieveObjectInfoAsync(event1.Key, "A-2")).Status);
         Assert.Equal(EventObjectInfo.Held, (await Client.Events.RetrieveObjectInfoAsync(event2.Key, "A-1")).Status);
         Assert.Equal(EventObjectInfo.Held, (await Client.Events.RetrieveObjectInfoAsync(event2.Key, "A-2")).Status);
-    }  
-        
+    }
+
     [Fact]
     public async Task Release()
     {
@@ -60,7 +60,7 @@ public class ChangeObjectStatusForMultipleEventsTest : SeatsioClientTest
         var event1 = await Client.Events.CreateAsync(chartKey);
         var event2 = await Client.Events.CreateAsync(chartKey);
         await Client.Events.BookAsync(new[] {event1.Key, event2.Key}, new[] {"A-1", "A-2"});
-            
+
         await Client.Events.ReleaseAsync(new[] {event1.Key, event2.Key}, new[] {"A-1", "A-2"});
 
         Assert.Equal(EventObjectInfo.Free, (await Client.Events.RetrieveObjectInfoAsync(event1.Key, "A-1")).Status);

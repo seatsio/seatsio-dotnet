@@ -7,11 +7,9 @@ public class Drawing
 {
     public string Name { get; set; }
     public string VenueType { get; set; }
-    [JsonIgnore]
-    public List<Category> Categories => _categories.List;
+    [JsonIgnore] public List<Category> Categories => _categories.List;
 
-    [JsonPropertyName("categories")]
-    public Categories _categories { get; set; }
+    [JsonPropertyName("categories")] public Categories _categories { get; set; }
 }
 
 public class Categories

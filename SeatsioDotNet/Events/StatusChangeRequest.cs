@@ -11,8 +11,8 @@ public class StatusChangeRequest
     public string HoldToken { get; }
     public string OrderId { get; }
     public bool? KeepExtraData { get; }
-    public bool? IgnoreChannels { get;  }
-    public string[] ChannelKeys { get;  }
+    public bool? IgnoreChannels { get; }
+    public string[] ChannelKeys { get; }
     public string[] AllowedPreviousStatuses { get; }
     public string[] RejectedPreviousStatuses { get; }
 

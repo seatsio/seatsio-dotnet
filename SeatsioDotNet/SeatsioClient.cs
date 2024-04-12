@@ -62,7 +62,7 @@ namespace SeatsioDotNet
             };
             var client = new SeatsioRestClient(options);
             client.AddDefaultHeader("X-Client-Lib", ".NET");
-            
+
             if (!string.IsNullOrEmpty(workspaceKey))
             {
                 client.AddDefaultHeader("X-Workspace-Key", workspaceKey.ToString());

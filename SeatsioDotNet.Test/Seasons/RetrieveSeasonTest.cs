@@ -15,7 +15,7 @@ public class RetrieveSeasonTest : SeatsioClientTest
         var partialSeason1 = await Client.Seasons.CreatePartialSeasonAsync(season.Key);
         var partialSeason2 = await Client.Seasons.CreatePartialSeasonAsync(season.Key);
 
-        var retrievedSeason = await  Client.Seasons.RetrieveAsync(season.Key);
+        var retrievedSeason = await Client.Seasons.RetrieveAsync(season.Key);
 
         Assert.NotNull(retrievedSeason.Key);
         Assert.NotEqual(0, retrievedSeason.Id);

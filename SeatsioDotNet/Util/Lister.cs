@@ -20,16 +20,16 @@ public class Lister<T>
 
     public async Task<Page<T>> FirstPageAsync(int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await _pageFetcher.FetchFirstPageAsync(pageSize: pageSize, cancellationToken:cancellationToken);
+        return await _pageFetcher.FetchFirstPageAsync(pageSize: pageSize, cancellationToken: cancellationToken);
     }
 
     public async Task<Page<T>> PageAfterAsync(long id, int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await _pageFetcher.FetchAfterAsync(id, pageSize: pageSize, cancellationToken:cancellationToken);
+        return await _pageFetcher.FetchAfterAsync(id, pageSize: pageSize, cancellationToken: cancellationToken);
     }
 
     public async Task<Page<T>> PageBeforeAsync(long id, int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await _pageFetcher.FetchBeforeAsync(id, pageSize: pageSize, cancellationToken:cancellationToken);
+        return await _pageFetcher.FetchBeforeAsync(id, pageSize: pageSize, cancellationToken: cancellationToken);
     }
 }

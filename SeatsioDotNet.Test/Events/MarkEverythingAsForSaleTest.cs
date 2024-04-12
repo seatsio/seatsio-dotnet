@@ -13,7 +13,7 @@ public class MarkEverythingAsForSaleTest : SeatsioClientTest
         await Client.Events.MarkAsNotForSaleAsync(evnt.Key, new[] {"o1", "o2"}, null, new[] {"cat1", "cat2"});
 
         await Client.Events.MarkEverythingAsForSaleAsync(evnt.Key);
-            
+
         Assert.Null((await Client.Events.RetrieveAsync(evnt.Key)).ForSaleConfig);
     }
 }

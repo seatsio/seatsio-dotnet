@@ -75,8 +75,8 @@ public class ChangeBestAvailableObjectStatusTest : SeatsioClientTest
         Assert.Equal(new[] {"A-4", "A-5"}, bestAvailableResult.Objects);
         Assert.Equal(new Dictionary<string, object> {{"foo", "bar"}}, (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-4")).ExtraData);
         Assert.Equal(new Dictionary<string, object> {{"foo", "baz"}}, (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-5")).ExtraData);
-    }   
-        
+    }
+
     [Fact]
     public async Task DoNotTryToPreventOrphanSeats()
     {
@@ -100,7 +100,7 @@ public class ChangeBestAvailableObjectStatusTest : SeatsioClientTest
             new Dictionary<string, object> {{"foo", "baz"}}
         };
 
-        var bestAvailableResult = await Client.Events.ChangeObjectStatusAsync(evnt.Key, new BestAvailable(2, ticketTypes: new[]{"adult", "child"}), "foo");
+        var bestAvailableResult = await Client.Events.ChangeObjectStatusAsync(evnt.Key, new BestAvailable(2, ticketTypes: new[] {"adult", "child"}), "foo");
 
         Assert.Equal(new[] {"A-4", "A-5"}, bestAvailableResult.Objects);
         Assert.Equal("adult", (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-4")).TicketType);
@@ -117,7 +117,7 @@ public class ChangeBestAvailableObjectStatusTest : SeatsioClientTest
 
         await Client.Events.ChangeObjectStatusAsync(evnt.Key, new BestAvailable(1), "someStatus", null, null, true);
 
-        Assert.Equal(extraData,(await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-5")).ExtraData);
+        Assert.Equal(extraData, (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-5")).ExtraData);
     }
 
     [Fact]
@@ -155,12 +155,12 @@ public class ChangeBestAvailableObjectStatusTest : SeatsioClientTest
             new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-6"})
         };
         var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithChannels(channels));
-            
+
         var bestAvailableResult = await Client.Events.ChangeObjectStatusAsync(evnt.Key, new BestAvailable(1), "someStatus", channelKeys: new[] {"channelKey1"});
 
         Assert.Equal(new[] {"A-6"}, bestAvailableResult.Objects);
-    }   
-        
+    }
+
     [Fact]
     public async Task IgnoreChannels()
     {

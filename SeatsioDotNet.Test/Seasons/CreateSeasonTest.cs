@@ -38,8 +38,8 @@ public class CreateSeasonTest : SeatsioClientTest
         var season = await Client.Seasons.CreateAsync(chartKey, key: "aSeason");
 
         Assert.Equal("aSeason", season.Key);
-    }    
-        
+    }
+
     [Fact]
     public async Task NumberOfEventsCanBePassedIn()
     {
@@ -48,8 +48,8 @@ public class CreateSeasonTest : SeatsioClientTest
         var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 2);
 
         Assert.Equal(2, season.Events.Count);
-    }   
-        
+    }
+
     [Fact]
     public async Task EventKeysCanBePassedIn()
     {
@@ -58,8 +58,8 @@ public class CreateSeasonTest : SeatsioClientTest
         var season = await Client.Seasons.CreateAsync(chartKey, eventKeys: new[] {"event1", "event2"});
 
         Assert.Equal(new[] {"event1", "event2"}, season.Events.Select(e => e.Key));
-    }   
-        
+    }
+
     [Fact]
     public async Task TableBookingConfigCanBePassedIn()
     {
@@ -69,7 +69,7 @@ public class CreateSeasonTest : SeatsioClientTest
 
         Assert.Equal(TableBookingConfig.AllBySeat().Mode, season.TableBookingConfig.Mode);
     }
-        
+
     [Fact]
     public async Task ChannelsCanBePassedIn()
     {
@@ -77,20 +77,20 @@ public class CreateSeasonTest : SeatsioClientTest
         var channels = new List<Channel>
         {
             new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}),
-            new("channelKey2", "channel 2", "#00FFFF", 2, new String[] {})
+            new("channelKey2", "channel 2", "#00FFFF", 2, new String[] { })
         };
-            
+
         var season = await Client.Seasons.CreateAsync(chartKey, channels: channels);
 
         Assert.Equivalent(channels, season.Channels);
     }
-        
+
     [Fact]
     public async Task ForSaleConfigCanBePassedIn()
     {
         var chartKey = CreateTestChart();
-        var forSaleConfig = new ForSaleConfig().WithForSale(false).WithObjects(new []{"A-1"}).WithAreaPlaces(new(){{"GA1", 5}}).WithCategories(new []{"Cat1"});
-            
+        var forSaleConfig = new ForSaleConfig().WithForSale(false).WithObjects(new[] {"A-1"}).WithAreaPlaces(new() {{"GA1", 5}}).WithCategories(new[] {"Cat1"});
+
         var season = await Client.Seasons.CreateAsync(chartKey, forSaleConfig: forSaleConfig);
 
         Assert.Equivalent(forSaleConfig, season.ForSaleConfig);

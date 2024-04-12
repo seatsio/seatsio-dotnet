@@ -16,6 +16,6 @@ public class PagedEnumerable<T> : IAsyncEnumerable<T>
 
     public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
     {
-        return  new PagedEnumerator<T>(_pageFetcher, _listParams, cancellationToken);
+        return new PagedEnumerator<T>(_pageFetcher, _listParams, cancellationToken);
     }
 }

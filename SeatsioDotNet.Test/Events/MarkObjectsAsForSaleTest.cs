@@ -17,8 +17,8 @@ public class MarkObjectsAsForSaleTest : SeatsioClientTest
         Assert.Equal(new[] {"o1", "o2"}, forSaleConfig.Objects);
         Assert.Equal(new() {{"GA1", 3}}, forSaleConfig.AreaPlaces);
         Assert.Equal(new[] {"cat1", "cat2"}, forSaleConfig.Categories);
-    }   
-        
+    }
+
     [Fact]
     public async Task Objects()
     {
@@ -31,8 +31,8 @@ public class MarkObjectsAsForSaleTest : SeatsioClientTest
         Assert.Equal(new[] {"o1", "o2"}, forSaleConfig.Objects);
         Assert.Empty(forSaleConfig.AreaPlaces);
         Assert.Empty(forSaleConfig.Categories);
-    }  
-        
+    }
+
     [Fact]
     public async Task Categories()
     {

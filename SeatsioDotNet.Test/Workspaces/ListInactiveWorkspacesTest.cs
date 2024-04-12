@@ -26,13 +26,13 @@ public class ListInactiveWorkspacesTest : SeatsioClientTest
     public async Task Filter()
     {
         await Client.Workspaces.CreateAsync("someWorkspace");
-            
+
         var ws1 = await Client.Workspaces.CreateAsync("anotherWorkspace");
         await Client.Workspaces.DeactivateAsync(ws1.Key);
-            
+
         var ws2 = await Client.Workspaces.CreateAsync("anotherAnotherWorkspace");
         await Client.Workspaces.DeactivateAsync(ws2.Key);
-            
+
         var ws = await Client.Workspaces.CreateAsync("anoherAnotherAnotherWorkspace");
 
         var workspaces = Client.Workspaces.Inactive.AllAsync("another");

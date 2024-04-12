@@ -15,8 +15,8 @@ public class CreateWorkspaceTest : SeatsioClientTest
         Assert.NotNull(workspace.SecretKey);
         Assert.False(workspace.IsTest);
         Assert.True(workspace.IsActive);
-    } 
-        
+    }
+
     [Fact]
     public async Task CreateTestWorkspace()
     {

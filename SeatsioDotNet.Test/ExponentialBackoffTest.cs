@@ -33,8 +33,8 @@ public class ExponentialBackoffTest : SeatsioClientTest
 
         var duration = DateTimeOffset.Now.ToUnixTimeSeconds() - start.ToUnixTimeSeconds();
         Assert.True(duration < 2);
-    }   
-        
+    }
+
     [Fact]
     public void AbortsDirectlyIfServerReturnsError429ButMaxRetries0()
     {

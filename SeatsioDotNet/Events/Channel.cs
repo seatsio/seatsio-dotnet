@@ -9,6 +9,7 @@ public class Channel
     public string Color { get; set; }
     public int Index { get; set; }
     public IEnumerable<string> Objects { get; set; }
+
     public Channel()
     {
     }

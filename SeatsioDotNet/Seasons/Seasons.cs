@@ -22,7 +22,7 @@ public class Seasons
     {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
         requestBody.Add("chartKey", chartKey);
-            
+
         if (key != null)
         {
             requestBody.Add("key", key);
@@ -32,27 +32,27 @@ public class Seasons
         {
             requestBody.Add("numberOfEvents", numberOfEvents);
         }
-            
+
         if (eventKeys != null)
         {
             requestBody.Add("eventKeys", eventKeys);
         }
-            
+
         if (tableBookingConfig != null)
         {
             requestBody.Add("tableBookingConfig", tableBookingConfig.AsJsonObject());
-        }    
-            
+        }
+
         if (channels != null)
         {
             requestBody.Add("channels", channels);
         }
-            
+
         if (forSaleConfig != null)
         {
             requestBody.Add("forSaleConfig", forSaleConfig.AsJsonObject());
         }
-            
+
         var restRequest = new RestRequest("/seasons", Method.Post).AddJsonBody(requestBody);
         return AssertOk(await _restClient.ExecuteAsync<Event>(restRequest, cancellationToken));
     }
@@ -60,12 +60,12 @@ public class Seasons
     public async Task<Event> CreatePartialSeasonAsync(string topLevelSeasonKey, string partialSeasonKey = null, IEnumerable<string> eventKeys = null, CancellationToken cancellationToken = default)
     {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
-            
+
         if (partialSeasonKey != null)
         {
             requestBody.Add("key", partialSeasonKey);
         }
-            
+
         if (eventKeys != null)
         {
             requestBody.Add("eventKeys", eventKeys);
@@ -110,12 +110,12 @@ public class Seasons
         {
             requestBody.Add("numberOfEvents", numberOfEvents);
         }
-            
+
         if (eventKeys != null)
         {
             requestBody.Add("eventKeys", eventKeys);
         }
-            
+
         var restRequest = new RestRequest("/seasons/{key}/actions/create-events", Method.Post)
             .AddUrlSegment("key", key)
             .AddJsonBody(requestBody);

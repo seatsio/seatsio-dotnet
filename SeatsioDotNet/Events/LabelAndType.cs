@@ -8,11 +8,10 @@ public class LabelAndType
     public LabelAndType()
     {
     }
-        
+
     public LabelAndType(string label = null, string type = null)
     {
         Label = label;
         Type = type;
     }
-
 }

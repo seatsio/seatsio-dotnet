@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using System.Threading.Tasks;
+using RestSharp;
 using SeatsioDotNet.Util;
 using Xunit;
 
@@ -7,7 +8,7 @@ namespace SeatsioDotNet.Test;
 public class ErrorHandlingTest : SeatsioClientTest
 {
     [Fact]
-    public async System.Threading.Tasks.Task Test4xx()
+    public async Task Test4xx()
     {
         var e = await Assert.ThrowsAsync<SeatsioException>(async () =>
             await Client.Events.RetrieveObjectInfoAsync("unexistingEvent", "unexistingObject"));
@@ -23,12 +24,12 @@ public class ErrorHandlingTest : SeatsioClientTest
         var client = new SeatsioRestClient(new RestClientOptions("https://httpbin.seatsio.net"));
 
         var e = Assert.Throws<SeatsioException>(() => RestUtil.AssertOk(client.Execute<object>(new RestRequest("/status/500"))));
-            
+
         Assert.Equal("Get https://httpbin.seatsio.net/status/500 resulted in a 500 Internal Server Error response. Body: ", e.Message);
     }
 
     [Fact]
-    public async System.Threading.Tasks.Task WeirdError()
+    public async Task WeirdError()
     {
         var e = await Assert.ThrowsAsync<SeatsioException>(() =>
             new SeatsioClient("", null, "unknownProtocol://").Events.RetrieveObjectInfoAsync("unexistingEvent", "unexistingObject"));

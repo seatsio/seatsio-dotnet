@@ -64,7 +64,7 @@ public class Charts
             .AddJsonBody(requestBody);
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
-        
+
     public async Task AddCategoryAsync(string chartKey, Category category, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{chartKey}/categories", Method.Post)
@@ -89,8 +89,7 @@ public class Charts
 
     private class CategoryList
     {
-        [JsonPropertyName("categories")]
-        public IEnumerable<Category> List { get; set; }
+        [JsonPropertyName("categories")] public IEnumerable<Category> List { get; set; }
     }
 
     public async Task<Chart> CopyAsync(string chartKey, CancellationToken cancellationToken = default)
@@ -107,7 +106,7 @@ public class Charts
             .AddUrlSegment("toWorkspaceKey", toWorkspaceKey);
         return AssertOk(await _restClient.ExecuteAsync<Chart>(restRequest, cancellationToken));
     }
-        
+
     public async Task<Chart> CopyToWorkspaceAsync(string chartKey, string fromWorkspaceKey, string toWorkspaceKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest($"/charts/{chartKey}/version/published/actions/copy/from/{fromWorkspaceKey}/to/{toWorkspaceKey}", Method.Post)
@@ -139,7 +138,7 @@ public class Charts
             .AddUrlSegment("tag", tag);
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
-        
+
     public async Task<Chart> RetrieveAsync(string chartKey, bool? expandEvents = null, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}", Method.Get)
@@ -161,8 +160,7 @@ public class Charts
 
     private class Tags
     {
-        [JsonPropertyName("tags")]
-        public IEnumerable<string> List { get; set; }
+        [JsonPropertyName("tags")] public IEnumerable<string> List { get; set; }
     }
 
     public async Task MoveToArchiveAsync(string chartKey, CancellationToken cancellationToken = default)
@@ -228,14 +226,14 @@ public class Charts
     public async Task<ChartValidationResult> ValidatePublishedVersionAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/version/published/actions/validate", Method.Post)
-            .AddUrlSegment("key",chartKey);
+            .AddUrlSegment("key", chartKey);
         return AssertOk(await _restClient.ExecuteAsync<ChartValidationResult>(restRequest, cancellationToken));
     }
 
     public async Task<ChartValidationResult> ValidateDraftVersionAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/version/draft/actions/validate", Method.Post)
-            .AddUrlSegment("key",chartKey);
+            .AddUrlSegment("key", chartKey);
         return AssertOk(await _restClient.ExecuteAsync<ChartValidationResult>(restRequest, cancellationToken));
     }
 
@@ -278,7 +276,8 @@ public class Charts
             chartListParams.Add("expand", "events");
         }
 
-        if (withValidation == true) {
+        if (withValidation == true)
+        {
             chartListParams.Add("validation", true);
         }
 

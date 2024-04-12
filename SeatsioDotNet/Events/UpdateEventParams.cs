@@ -19,8 +19,8 @@ public class UpdateEventParams
     {
         Key = key;
         return this;
-    }    
-        
+    }
+
     public UpdateEventParams WithChartKey(string chartKey)
     {
         ChartKey = chartKey;

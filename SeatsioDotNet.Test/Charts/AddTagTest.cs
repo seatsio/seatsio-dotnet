@@ -16,8 +16,8 @@ public class AddTagTest : SeatsioClientTest
 
         Chart retrievedChart = await Client.Charts.RetrieveAsync(chart.Key);
         CustomAssert.ContainsOnly(new[] {"tag1", "tag2"}, retrievedChart.Tags);
-    }   
-        
+    }
+
     [Fact]
     public async Task SpecialCharacters()
     {

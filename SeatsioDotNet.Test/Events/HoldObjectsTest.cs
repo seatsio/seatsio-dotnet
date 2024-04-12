@@ -83,8 +83,8 @@ public class HoldObjectsTest : SeatsioClientTest
         await Client.Events.HoldAsync(evnt.Key, new[] {"A-1"}, holdToken.Token, null, true, null, new[] {"channelKey1"});
 
         Assert.Equal(EventObjectInfo.Held, (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1")).Status);
-    }    
-        
+    }
+
     [Fact]
     public async Task IgnoreChannels()
     {

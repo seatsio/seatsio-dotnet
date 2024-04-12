@@ -15,5 +15,4 @@ public class RetrieveDraftVersionTest : SeatsioClientTest
         var drawing = await Client.Charts.RetrieveDraftVersionAsync(chart.Key);
         Assert.Equal("aChart", drawing.Name);
     }
-
 }

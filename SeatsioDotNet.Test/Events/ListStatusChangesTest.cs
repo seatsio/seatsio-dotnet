@@ -112,7 +112,7 @@ public class ListStatusChangesTest : SeatsioClientTest
             new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
             new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
         });
-       await WaitForStatusChanges(Client, evnt, 4);
+        await WaitForStatusChanges(Client, evnt, 4);
 
         var statusChanges = await Client.Events.StatusChanges(evnt.Key, sortField: "objectLabel").AllAsync().ToListAsync();
 

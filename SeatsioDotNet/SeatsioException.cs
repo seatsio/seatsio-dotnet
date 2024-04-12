@@ -32,7 +32,7 @@ public class SeatsioException : Exception
         var request = response.Request;
         return request.Method + " " + response.ResponseUri + " resulted in a " + (int) response.StatusCode + " " + response.StatusDescription + " response. Body: " + response.Content;
     }
-        
+
     public static SeatsioException From(RestResponse response)
     {
         if (response.ContentType != null && response.ContentType.Contains("application/json"))

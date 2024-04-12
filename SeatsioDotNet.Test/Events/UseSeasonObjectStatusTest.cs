@@ -13,7 +13,7 @@ namespace SeatsioDotNet.Test.Events
             var season = await Client.Seasons.CreateAsync(chartKey, null, null, new[] {"event1"});
             await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
             await Client.Events.OverrideSeasonObjectStatusAsync("event1", new[] {"A-1", "A-2"});
-            
+
             await Client.Events.UseSeasonObjectStatusAsync("event1", new[] {"A-1", "A-2"});
 
             Assert.Equal(EventObjectInfo.Booked, (await Client.Events.RetrieveObjectInfoAsync("event1", "A-1")).Status);

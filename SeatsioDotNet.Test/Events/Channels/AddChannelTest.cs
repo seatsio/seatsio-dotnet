@@ -46,7 +46,7 @@ public class AddChannelTest : SeatsioClientTest
                 new ChannelCreationParams("channelKey2", "channel 2", "#FFFF99", 2, new[] {"A-3"}),
             }
         );
-            
+
         var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
         Assert.Equal(2, retrievedEvent.Channels.Count);
 

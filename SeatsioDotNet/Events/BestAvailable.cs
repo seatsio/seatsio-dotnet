@@ -29,14 +29,17 @@ public class BestAvailable
         {
             dictionary.Add("categories", Categories);
         }
+
         if (ExtraData != null)
         {
             dictionary.Add("extraData", ExtraData);
         }
+
         if (TicketTypes != null)
         {
             dictionary.Add("ticketTypes", TicketTypes);
         }
+
         if (TryToPreventOrphanSeats != null)
         {
             dictionary.Add("tryToPreventOrphanSeats", TryToPreventOrphanSeats);

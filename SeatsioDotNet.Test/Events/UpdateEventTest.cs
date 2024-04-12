@@ -52,7 +52,7 @@ public class UpdateEventTest : SeatsioClientTest
         Assert.Equal("CUSTOM", retrievedEvent.TableBookingConfig.Mode);
         Assert.Equal(new() {{"T1", "BY_SEAT"}}, retrievedEvent.TableBookingConfig.Tables);
     }
-        
+
     [Fact]
     public async Task UpdateObjectCategories()
     {
@@ -113,7 +113,7 @@ public class UpdateEventTest : SeatsioClientTest
 
         var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithCategories(categories));
 
-        await Client.Events.UpdateAsync(evnt.Key, new UpdateEventParams().WithCategories(new Category[] {}));
+        await Client.Events.UpdateAsync(evnt.Key, new UpdateEventParams().WithCategories(new Category[] { }));
 
         var retrievedEvent = await Client.Events.RetrieveAsync(evnt.Key);
         Assert.Equal(TestChartCategories.Count, retrievedEvent.Categories.Count);
@@ -130,8 +130,8 @@ public class UpdateEventTest : SeatsioClientTest
 
         var retrievedEvent = await Client.Events.RetrieveAsync(evnt.Key);
         Assert.Equal("Another event", retrievedEvent.Name);
-    }  
-        
+    }
+
     [Fact]
     public async Task UpdateDate()
     {
@@ -143,7 +143,7 @@ public class UpdateEventTest : SeatsioClientTest
         var retrievedEvent = await Client.Events.RetrieveAsync(evnt.Key);
         Assert.Equal(new DateOnly(2022, 1, 10), retrievedEvent.Date);
     }
-        
+
     [Fact]
     public async Task UpdateIsInThePast()
     {

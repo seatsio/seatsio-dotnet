@@ -20,7 +20,7 @@ public class ParametrizedLister<T>
 
     public async Task<Page<T>> FirstPageAsync(Dictionary<string, object> listParams = null, int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await _pageFetcher.FetchFirstPageAsync(listParams, pageSize, cancellationToken:cancellationToken);
+        return await _pageFetcher.FetchFirstPageAsync(listParams, pageSize, cancellationToken: cancellationToken);
     }
 
     public async Task<Page<T>> PageAfterAsync(long id, Dictionary<string, object> listParams = null, int? pageSize = null, CancellationToken cancellationToken = default)

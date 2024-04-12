@@ -59,7 +59,7 @@ public class ChartReportsTest : SeatsioClientTest
 
     [Theory]
     [MemberData(nameof(ByLabelTestCases), MemberType = typeof(ChartReportsTest))]
-    public async Task ReportItemPropertiesForGA(Func<SeatsioClient, string,Task> updateChart, Func<SeatsioClient, string, Task<Dictionary<string, IEnumerable<ChartObjectInfo>>>> getReport)
+    public async Task ReportItemPropertiesForGA(Func<SeatsioClient, string, Task> updateChart, Func<SeatsioClient, string, Task<Dictionary<string, IEnumerable<ChartObjectInfo>>>> getReport)
     {
         var chartKey = CreateTestChart();
         await updateChart(Client, chartKey);

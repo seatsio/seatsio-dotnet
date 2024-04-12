@@ -9,7 +9,7 @@ public class RegenerateWorkspaceSecretKeyTest : SeatsioClientTest
     public async Task Test()
     {
         var workspace = await Client.Workspaces.CreateAsync("a ws");
-            
+
         var newSecretKey = await Client.Workspaces.RegenerateSecretKeyAsync(workspace.Key);
 
         Assert.NotNull(newSecretKey);

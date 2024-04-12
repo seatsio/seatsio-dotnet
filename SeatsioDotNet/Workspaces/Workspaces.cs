@@ -59,22 +59,22 @@ public class Workspaces
             .AddUrlSegment("key", key);
         var response = AssertOk(await _restClient.ExecuteAsync<Dictionary<string, string>>(restRequest, cancellationToken));
         return response["secretKey"];
-    }  
-        
+    }
+
     public async Task ActivateAsync(string key, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/workspaces/{key}/actions/activate", Method.Post)
             .AddUrlSegment("key", key);
         AssertOk(await _restClient.ExecuteAsync<Dictionary<string, string>>(restRequest, cancellationToken));
-    }   
-        
+    }
+
     public async Task DeactivateAsync(string key, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/workspaces/{key}/actions/deactivate", Method.Post)
             .AddUrlSegment("key", key);
         AssertOk(await _restClient.ExecuteAsync<Dictionary<string, string>>(restRequest, cancellationToken));
-    }  
-        
+    }
+
     public async Task SetDefaultAsync(string key, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/workspaces/actions/set-default/{key}", Method.Post)
@@ -89,17 +89,17 @@ public class Workspaces
 
     public async Task<Page<Workspace>> ListFirstPageAsync(int? pageSize = null, string filter = null, CancellationToken cancellationToken = default)
     {
-        return await ParametrizedList().FirstPageAsync(filter, pageSize, cancellationToken:cancellationToken);
+        return await ParametrizedList().FirstPageAsync(filter, pageSize, cancellationToken: cancellationToken);
     }
 
     public async Task<Page<Workspace>> ListPageAfterAsync(long id, int? pageSize = null, string filter = null, CancellationToken cancellationToken = default)
     {
-        return await ParametrizedList().PageAfterAsync(id, filter, pageSize, cancellationToken:cancellationToken);
+        return await ParametrizedList().PageAfterAsync(id, filter, pageSize, cancellationToken: cancellationToken);
     }
 
     public async Task<Page<Workspace>> ListPageBeforeAsync(long id, int? pageSize = null, string filter = null, CancellationToken cancellationToken = default)
     {
-        return await ParametrizedList().PageBeforeAsync(id, filter, pageSize, cancellationToken:cancellationToken);
+        return await ParametrizedList().PageBeforeAsync(id, filter, pageSize, cancellationToken: cancellationToken);
     }
 
     private WorkspaceLister ParametrizedList()

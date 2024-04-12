@@ -9,7 +9,7 @@ public class PagedEnumerator<T> : IAsyncEnumerator<T>
 {
     private Page<T> _currentPage;
     private int _indexInCurrentPage;
-        
+
     private readonly PageFetcher<T> _pageFetcher;
     private readonly Dictionary<string, object> _listParams;
     private readonly CancellationToken _cancellationToken;
@@ -25,11 +25,11 @@ public class PagedEnumerator<T> : IAsyncEnumerator<T>
     {
         if (_currentPage == null)
         {
-            _currentPage = await _pageFetcher.FetchFirstPageAsync(_listParams, null, cancellationToken:_cancellationToken);
+            _currentPage = await _pageFetcher.FetchFirstPageAsync(_listParams, null, cancellationToken: _cancellationToken);
         }
         else if (NextPageMustBeFetched())
         {
-            _currentPage = await _pageFetcher.FetchAfterAsync(_currentPage.NextPageStartsAfter.Value, _listParams, null, cancellationToken:_cancellationToken);
+            _currentPage = await _pageFetcher.FetchAfterAsync(_currentPage.NextPageStartsAfter.Value, _listParams, null, cancellationToken: _cancellationToken);
             _indexInCurrentPage = 0;
         }
         else

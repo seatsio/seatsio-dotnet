@@ -9,5 +9,4 @@ public class UsageForObjectV1
     public DateTimeOffset FirstBookingDate { get; set; }
     public int NumFirstSelections { get; set; }
     public int NumFirstBookingsOrSelections { get; set; }
-
 }

@@ -10,17 +10,17 @@ public class ListWorkspacesTest : SeatsioClientTest
     public async Task Test()
     {
         await Client.Workspaces.CreateAsync("ws1");
-            
+
         var ws2 = await Client.Workspaces.CreateAsync("ws2");
         await Client.Workspaces.DeactivateAsync(ws2.Key);
-            
+
         await Client.Workspaces.CreateAsync("ws3");
 
         var workspaces = await Client.Workspaces.ListAllAsync().ToListAsync();
 
         Assert.Equal(new[] {"ws3", "ws2", "ws1", "Default workspace"}, workspaces.Select(e => e.Name));
-    }  
-        
+    }
+
     [Fact]
     public async Task Filter()
     {

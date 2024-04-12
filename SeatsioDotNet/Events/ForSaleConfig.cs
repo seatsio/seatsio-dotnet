@@ -8,7 +8,7 @@ public class ForSaleConfig
     public IEnumerable<string> Objects { get; set; }
     public Dictionary<string, int> AreaPlaces { get; set; }
     public IEnumerable<string> Categories { get; set; }
-        
+
     public ForSaleConfig WithForSale(bool forSale)
     {
         ForSale = forSale;

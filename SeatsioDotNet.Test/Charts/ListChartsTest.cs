@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using SeatsioDotNet.Charts;
 using Xunit;
 
@@ -74,13 +73,13 @@ public class ListChartsTest : SeatsioClientTest
         var charts = await Client.Charts.ListAllAsync(expandEvents: true).ToListAsync();
 
         Assert.Equal(new[] {event2.Id, event1.Id}, charts.First().Events.Select(c => c.Id));
-    }   
-        
+    }
+
     [Fact]
     public async Task Validation()
     {
         CreateTestChartWithErrors();
-            
+
         var chart = await Client.Charts.ListAllAsync(withValidation: true).FirstAsync();
 
         Assert.NotNull(chart.Validation);

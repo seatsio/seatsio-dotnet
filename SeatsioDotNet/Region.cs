@@ -18,12 +18,12 @@ public class Region
     {
         return new Region("na");
     }
-        
+
     public static Region SA()
     {
         return new Region("sa");
-    }  
-        
+    }
+
     public static Region OC()
     {
         return new Region("oc");

@@ -22,7 +22,7 @@ public class UpdateChannelTest : SeatsioClientTest
         Assert.Equal(1, channel1.Index);
         Assert.Equal(new[] {"A-1", "A-2"}, channel1.Objects);
     }
-        
+
     [Fact]
     public async Task UpdateColor()
     {
@@ -40,14 +40,14 @@ public class UpdateChannelTest : SeatsioClientTest
         Assert.Equal(1, channel1.Index);
         Assert.Equal(new[] {"A-1", "A-2"}, channel1.Objects);
     }
-        
+
     [Fact]
     public async Task UpdateObjects()
     {
         var event1 = await Client.Events.CreateAsync(CreateTestChart());
         await Client.Events.Channels.AddAsync(event1.Key, "channelKey1", "channel 1", "#FFFF98", 1, new[] {"A-1", "A-2"});
 
-        await Client.Events.Channels.UpdateAsync(event1.Key, "channelKey1", null, null, new []{"B-1"});
+        await Client.Events.Channels.UpdateAsync(event1.Key, "channelKey1", null, null, new[] {"B-1"});
 
         var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
         Assert.Equal(1, retrievedEvent.Channels.Count);

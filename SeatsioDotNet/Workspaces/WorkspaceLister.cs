@@ -22,19 +22,19 @@ public class WorkspaceLister
 
     public async Task<Page<Workspace>> FirstPageAsync(string filter = null, int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await _pageFetcher.FetchFirstPageAsync(WorkspaceListParams(filter), pageSize, cancellationToken:cancellationToken);
+        return await _pageFetcher.FetchFirstPageAsync(WorkspaceListParams(filter), pageSize, cancellationToken: cancellationToken);
     }
 
     public async Task<Page<Workspace>> PageAfterAsync(long id, string filter = null, int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await _pageFetcher.FetchAfterAsync(id, WorkspaceListParams(filter), pageSize, cancellationToken:cancellationToken);
+        return await _pageFetcher.FetchAfterAsync(id, WorkspaceListParams(filter), pageSize, cancellationToken: cancellationToken);
     }
 
     public async Task<Page<Workspace>> PageBeforeAsync(long id, string filter = null, int? pageSize = null, CancellationToken cancellationToken = default)
     {
-        return await _pageFetcher.FetchBeforeAsync(id, WorkspaceListParams(filter), pageSize, cancellationToken:cancellationToken);
+        return await _pageFetcher.FetchBeforeAsync(id, WorkspaceListParams(filter), pageSize, cancellationToken: cancellationToken);
     }
-        
+
     private static Dictionary<string, object> WorkspaceListParams(string filter)
     {
         var workspaceListParams = new Dictionary<string, object>();

@@ -9,7 +9,7 @@ public class SetDefaultWorkspaceTest : SeatsioClientTest
     public async Task Test()
     {
         var workspace = await Client.Workspaces.CreateAsync("a ws");
-            
+
         await Client.Workspaces.SetDefaultAsync(workspace.Key);
 
         var retrievedWorkspace = await Client.Workspaces.RetrieveAsync(workspace.Key);

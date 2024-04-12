@@ -101,8 +101,8 @@ public class BookObjectsTest : SeatsioClientTest
         await Client.Events.BookAsync(evnt.Key, new[] {"A-1"}, null, null, true, null, new[] {"channelKey1"});
 
         Assert.Equal(EventObjectInfo.Booked, (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1")).Status);
-    }   
-        
+    }
+
     [Fact]
     public async Task IgnoreChannels()
     {

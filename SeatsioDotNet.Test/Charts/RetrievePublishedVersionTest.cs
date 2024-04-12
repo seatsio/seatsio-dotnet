@@ -13,5 +13,4 @@ public class RetrievePublishedVersionTest : SeatsioClientTest
         var drawing = await Client.Charts.RetrievePublishedVersionAsync(chart.Key);
         Assert.Equal("aChart", drawing.Name);
     }
-
 }

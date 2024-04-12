@@ -11,7 +11,7 @@ public class MoveChartOutOfArchiveTest : SeatsioClientTest
     {
         var chart = await Client.Charts.CreateAsync();
         await Client.Charts.MoveToArchiveAsync(chart.Key);
-            
+
         await Client.Charts.MoveOutOfArchiveAsync(chart.Key);
 
         Chart retrievedChart = await Client.Charts.RetrieveAsync(chart.Key);

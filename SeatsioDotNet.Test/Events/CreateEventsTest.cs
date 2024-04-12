@@ -82,7 +82,7 @@ public class CreateEventsTest : SeatsioClientTest
         Assert.Equal("CUSTOM", events[1].TableBookingConfig.Mode);
         Assert.Equal(new() {{"T1", "BY_SEAT"}, {"T2", "BY_TABLE"}}, events[1].TableBookingConfig.Tables);
     }
-        
+
     [Fact]
     public async Task ObjectCategoriesCanBePassedIn()
     {
@@ -157,8 +157,8 @@ public class CreateEventsTest : SeatsioClientTest
         var events = await Client.Events.CreateAsync(chartKey, eventCreationParams);
 
         Assert.Equal(new DateOnly(2022, 1, 10), events[0].Date);
-    }    
-        
+    }
+
     [Fact]
     public async Task ChannelsCanBePassedIn()
     {
@@ -166,7 +166,7 @@ public class CreateEventsTest : SeatsioClientTest
         var channels = new List<Channel>
         {
             new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}),
-            new("channelKey2", "channel 2", "#00FFFF", 2, new String[] {})
+            new("channelKey2", "channel 2", "#00FFFF", 2, new String[] { })
         };
 
         var events = await Client.Events.CreateAsync(chartKey, new[]
@@ -176,13 +176,13 @@ public class CreateEventsTest : SeatsioClientTest
 
         Assert.Equivalent(channels, events[0].Channels);
     }
-        
+
     [Fact]
     public async Task ForSaleConfigCanBePassedIn()
     {
         var chartKey = CreateTestChart();
-        var forSaleConfig1 = new ForSaleConfig().WithForSale(false).WithObjects(new []{"A-1"}).WithAreaPlaces(new(){{"GA1", 3}}).WithCategories(new []{"Cat1"});
-        var forSaleConfig2 = new ForSaleConfig().WithForSale(false).WithObjects(new []{"A-2"}).WithAreaPlaces(new(){{"GA1", 7}}).WithCategories(new []{"Cat1"});
+        var forSaleConfig1 = new ForSaleConfig().WithForSale(false).WithObjects(new[] {"A-1"}).WithAreaPlaces(new() {{"GA1", 3}}).WithCategories(new[] {"Cat1"});
+        var forSaleConfig2 = new ForSaleConfig().WithForSale(false).WithObjects(new[] {"A-2"}).WithAreaPlaces(new() {{"GA1", 7}}).WithCategories(new[] {"Cat1"});
 
         var events = await Client.Events.CreateAsync(chartKey, new[]
         {

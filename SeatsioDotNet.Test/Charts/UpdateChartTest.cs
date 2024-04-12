@@ -1,4 +1,5 @@
-﻿using SeatsioDotNet.Charts;
+﻿using System.Threading.Tasks;
+using SeatsioDotNet.Charts;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Charts;
@@ -6,29 +7,29 @@ namespace SeatsioDotNet.Test.Charts;
 public class UpdateChartTest : SeatsioClientTest
 {
     [Fact]
-    public void Name()
+    public async Task Name()
     {
-        var chart = Client.Charts.Create(null, "BOOTHS", new[] {new Category(1, "Category 1", "#aaaaaa")});
+        var chart = await Client.Charts.CreateAsync(null, "BOOTHS", new[] {new Category(1, "Category 1", "#aaaaaa")});
 
-        Client.Charts.Update(chart.Key, "aChart");
+        await Client.Charts.UpdateAsync(chart.Key, "aChart");
 
-        Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
+        Chart retrievedChart = await Client.Charts.RetrieveAsync(chart.Key);
         Assert.Equal("aChart", retrievedChart.Name);
-        var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
+        var drawing = await Client.Charts.RetrievePublishedVersionAsync(chart.Key);
         Assert.Equal("BOOTHS", drawing.VenueType);
         Assert.Single(drawing.Categories);
     }
 
     [Fact]
-    public void Categories()
+    public async Task Categories()
     {
-        var chart = Client.Charts.Create("aChart", "BOOTHS");
+        var chart = await Client.Charts.CreateAsync("aChart", "BOOTHS");
 
-        Client.Charts.Update(chart.Key, categories: new[] {new Category(1, "Category 1", "#aaaaaa"), new Category("cat-2", "Category 2", "#bbbbbb", true)});
+        await Client.Charts.UpdateAsync(chart.Key, categories: new[] {new Category(1, "Category 1", "#aaaaaa"), new Category("cat-2", "Category 2", "#bbbbbb", true)});
 
-        Chart retrievedChart = Client.Charts.Retrieve(chart.Key);
+        Chart retrievedChart = await Client.Charts.RetrieveAsync(chart.Key);
         Assert.Equal("aChart", retrievedChart.Name);
-        var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
+        var drawing = await Client.Charts.RetrievePublishedVersionAsync(chart.Key);
         Assert.Equal("BOOTHS", drawing.VenueType);
         Assert.Equal(2, drawing.Categories.Count);
     }

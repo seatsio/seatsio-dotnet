@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events;
@@ -6,9 +7,9 @@ namespace SeatsioDotNet.Test.Events;
 public class CreateHoldTokenTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var holdToken = Client.HoldTokens.Create();
+        var holdToken = await Client.HoldTokens.CreateAsync();
             
         Assert.NotNull(holdToken.Token);
         CustomAssert.CloseTo(DateTimeOffset.Now.AddMinutes(15), holdToken.ExpiresAt);
@@ -16,9 +17,9 @@ public class CreateHoldTokenTest : SeatsioClientTest
     }   
         
     [Fact]
-    public void ExpiresInMinutes()
+    public async Task ExpiresInMinutes()
     {
-        var holdToken = Client.HoldTokens.Create(5);
+        var holdToken = await Client.HoldTokens.CreateAsync(5);
             
         Assert.NotNull(holdToken.Token);
         CustomAssert.CloseTo(DateTimeOffset.Now.AddMinutes(5), holdToken.ExpiresAt);

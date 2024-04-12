@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events;
@@ -6,14 +7,14 @@ namespace SeatsioDotNet.Test.Events;
 public class DeleteEventTest : SeatsioClientTest
 {
     [Fact]
-    public void Delete()
+    public async Task Delete()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        Client.Events.Delete(evnt.Key);
+        await Client.Events.DeleteAsync(evnt.Key);
 
-        Exception ex = Assert.Throws<SeatsioException>(() => Client.Events.Retrieve(evnt.Key));
+        Exception ex = await Assert.ThrowsAsync<SeatsioException>(async () => await Client.Events.RetrieveAsync(evnt.Key));
 
         Assert.Equal("Event not found: " + evnt.Key + ".", ex.Message);
     }

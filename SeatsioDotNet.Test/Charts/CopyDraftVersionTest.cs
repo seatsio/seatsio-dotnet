@@ -1,17 +1,18 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
+using Xunit;
 
 namespace SeatsioDotNet.Test.Charts;
 
 public class CopyDraftVersionTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var chart = Client.Charts.Create();
-        Client.Events.Create(chart.Key);
-        Client.Charts.Update(chart.Key, "newname");
+        var chart = await Client.Charts.CreateAsync();
+        await Client.Events.CreateAsync(chart.Key);
+        await Client.Charts.UpdateAsync(chart.Key, "newname");
             
-        var copiedChart = Client.Charts.CopyDraftVersion(chart.Key);
+        var copiedChart = await Client.Charts.CopyDraftVersionAsync(chart.Key);
             
         Assert.Equal("newname (copy)", copiedChart.Name);
     }

@@ -1,19 +1,20 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
+using Xunit;
 
 namespace SeatsioDotNet.Test.Workspaces;
 
 public class RegenerateWorkspaceSecretKeyTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var workspace = Client.Workspaces.Create("a ws");
+        var workspace = await Client.Workspaces.CreateAsync("a ws");
             
-        var newSecretKey = Client.Workspaces.RegenerateSecretKey(workspace.Key);
+        var newSecretKey = await Client.Workspaces.RegenerateSecretKeyAsync(workspace.Key);
 
         Assert.NotNull(newSecretKey);
         Assert.NotEqual(newSecretKey, workspace.SecretKey);
-        var retrievedWorkspace = Client.Workspaces.Retrieve(workspace.Key);
+        var retrievedWorkspace = await Client.Workspaces.RetrieveAsync(workspace.Key);
         Assert.Equal(newSecretKey, retrievedWorkspace.SecretKey);
     }
 }

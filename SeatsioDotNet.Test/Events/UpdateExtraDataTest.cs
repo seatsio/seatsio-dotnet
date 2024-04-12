@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events;
@@ -6,14 +7,14 @@ namespace SeatsioDotNet.Test.Events;
 public class UpdateExtraDataTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
         var extraData = new Dictionary<string, object> {{"foo", "bar"}};
 
-        Client.Events.UpdateExtraData(evnt.Key, "A-1", extraData);
+        await Client.Events.UpdateExtraDataAsync(evnt.Key, "A-1", extraData);
 
-        Assert.Equal(extraData, Client.Events.RetrieveObjectInfo(evnt.Key, "A-1").ExtraData);
+        Assert.Equal(extraData, (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1")).ExtraData);
     }
 }

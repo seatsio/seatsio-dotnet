@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using SeatsioDotNet.Reports.Charts;
 using Xunit;
 using static SeatsioDotNet.Reports.Charts.ChartReports.Version;
@@ -15,28 +16,28 @@ public class ChartReportsSummaryTest : SeatsioClientTest
         {
             yield return new object[]
             {
-                (Action<SeatsioClient, string>) ((_, _) => { }),
-                (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>) ((client, chartKey) =>
-                    client.ChartReports.SummaryByObjectType(chartKey))
+                (Func<SeatsioClient, string, Task>) ((_, _) => Task.CompletedTask),
+                (Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>>) ((client, chartKey) =>
+                    client.ChartReports.SummaryByObjectTypeAsync(chartKey))
             };
             yield return new object[]
             {
-                (Action<SeatsioClient, string>) (CreateDraftChart),
-                (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>) ((client, chartKey) =>
-                    client.ChartReports.SummaryByObjectType(chartKey, version: Draft))
+                (Func<SeatsioClient, string, Task>) (CreateDraftChart),
+                (Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>>) ((client, chartKey) =>
+                    client.ChartReports.SummaryByObjectTypeAsync(chartKey, version: Draft))
             };
         }
     }
 
     [Theory]
     [MemberData(nameof(SummaryByObjectTypeTestCases), MemberType = typeof(ChartReportsSummaryTest))]
-    public void SummaryByObjectType(Action<SeatsioClient, string> updateChart,
-        Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>> getReport)
+    public async Task SummaryByObjectType(Func<SeatsioClient, string,Task> updateChart,
+        Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>> getReport)
     {
         var chartKey = CreateTestChart();
-        updateChart(Client, chartKey);
+        await updateChart(Client, chartKey);
 
-        var report = getReport(Client, chartKey);
+        var report = await getReport(Client, chartKey);
 
         Assert.Equal(32, report["seat"].Count);
         Assert.Equal(new() {{NoSection, 32}}, report["seat"].bySection);
@@ -57,15 +58,15 @@ public class ChartReportsSummaryTest : SeatsioClientTest
         {
             yield return new object[]
             {
-                (Action<SeatsioClient, string>) ((_, _) => { }),
-                (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>) ((client, chartKey) =>
-                    client.ChartReports.SummaryByObjectType(chartKey, bookWholeTablesMode: "true"))
+                (Func<SeatsioClient, string,Task>) ((_, _) => Task.CompletedTask),
+                (Func<SeatsioClient, string,Task<Dictionary<string, ChartReportSummaryItem>>>) ((client, chartKey) =>
+                    client.ChartReports.SummaryByObjectTypeAsync(chartKey, bookWholeTablesMode: "true"))
             };
             yield return new object[]
             {
-                (Action<SeatsioClient, string>) (CreateDraftChart),
-                (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>) ((client, chartKey) =>
-                    client.ChartReports.SummaryByObjectType(chartKey, bookWholeTablesMode: "true", version: Draft))
+                (Func<SeatsioClient, string,Task>) (CreateDraftChart),
+                (Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>>) ((client, chartKey) =>
+                    client.ChartReports.SummaryByObjectTypeAsync(chartKey, bookWholeTablesMode: "true", version: Draft))
             };
         }
     }
@@ -73,13 +74,13 @@ public class ChartReportsSummaryTest : SeatsioClientTest
     [Theory]
     [MemberData(nameof(SummaryByObjectType_BookWholeTablesTrueTestCases),
         MemberType = typeof(ChartReportsSummaryTest))]
-    public void SummaryByObjectType_BookWholeTablesTrue(Action<SeatsioClient, string> updateChart,
-        Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>> getReport)
+    public async Task SummaryByObjectType_BookWholeTablesTrue(Func<SeatsioClient, string, Task> updateChart,
+        Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>> getReport)
     {
         var chartKey = CreateTestChartWithTables();
-        updateChart(Client, chartKey);
+        await updateChart(Client, chartKey);
 
-        var report = getReport(Client, chartKey);
+        var report = await getReport(Client, chartKey);
 
         Assert.Equal(0, report["seat"].Count);
         Assert.Equal(2, report["table"].Count);
@@ -91,28 +92,28 @@ public class ChartReportsSummaryTest : SeatsioClientTest
         {
             yield return new object[]
             {
-                (Action<SeatsioClient, string>) ((_, _) => { }),
-                (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>) ((client, chartKey) =>
-                    client.ChartReports.SummaryByCategoryKey(chartKey))
+                (Func<SeatsioClient, string,Task>) ((_, _) => Task.CompletedTask),
+                (Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>>) ((client, chartKey) =>
+                    client.ChartReports.SummaryByCategoryKeyAsync(chartKey))
             };
             yield return new object[]
             {
-                (Action<SeatsioClient, string>) (CreateDraftChart),
-                (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>) ((client, chartKey) =>
-                    client.ChartReports.SummaryByCategoryKey(chartKey, version: Draft))
+                (Func<SeatsioClient, string, Task>) (CreateDraftChart),
+                (Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>>) ((client, chartKey) =>
+                    client.ChartReports.SummaryByCategoryKeyAsync(chartKey, version: Draft))
             };
         }
     }
 
     [Theory]
     [MemberData(nameof(SummaryByCategoryKeyTestCases), MemberType = typeof(ChartReportsSummaryTest))]
-    public void SummaryByCategoryKey(Action<SeatsioClient, string> updateChart,
-        Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>> getReport)
+    public async Task SummaryByCategoryKey(Func<SeatsioClient, string,Task> updateChart,
+        Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>> getReport)
     {
         var chartKey = CreateTestChart();
-        updateChart(Client, chartKey);
+        await updateChart(Client, chartKey);
 
-        var report = getReport(Client, chartKey);
+        var report = await getReport(Client, chartKey);
 
         Assert.Equal(116, report["9"].Count);
         Assert.Equal(new() {{NoSection, 116}}, report["9"].bySection);
@@ -129,28 +130,28 @@ public class ChartReportsSummaryTest : SeatsioClientTest
         {
             yield return new object[]
             {
-                (Action<SeatsioClient, string>) ((_, _) => { }),
-                (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>) ((client, chartKey) =>
-                    client.ChartReports.SummaryByCategoryLabel(chartKey))
+                (Func<SeatsioClient, string,Task>) ((_, _) => Task.CompletedTask),
+                (Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>>) ((client, chartKey) =>
+                    client.ChartReports.SummaryByCategoryLabelAsync(chartKey))
             };
             yield return new object[]
             {
-                (Action<SeatsioClient, string>) (CreateDraftChart),
-                (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>) ((client, chartKey) =>
-                    client.ChartReports.SummaryByCategoryLabel(chartKey, version: Draft))
+                (Func<SeatsioClient, string,Task>) (CreateDraftChart),
+                (Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>>) ((client, chartKey) =>
+                    client.ChartReports.SummaryByCategoryLabelAsync(chartKey, version: Draft))
             };
         }
     }
 
     [Theory]
     [MemberData(nameof(SummaryByCategoryLabelTestCases), MemberType = typeof(ChartReportsSummaryTest))]
-    public void SummaryByCategoryLabel(Action<SeatsioClient, string> updateChart,
-        Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>> getReport)
+    public async Task SummaryByCategoryLabel(Func<SeatsioClient, string, Task> updateChart,
+        Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>> getReport)
     {
         var chartKey = CreateTestChart();
-        updateChart(Client, chartKey);
+        await updateChart(Client, chartKey);
 
-        var report = getReport(Client, chartKey);
+        var report = await getReport(Client, chartKey);
 
         Assert.Equal(116, report["Cat1"].Count);
         Assert.Equal(new() {{NoSection, 116}}, report["Cat1"].bySection);
@@ -168,37 +169,37 @@ public class ChartReportsSummaryTest : SeatsioClientTest
         {
             yield return new object[]
             {
-                (Action<SeatsioClient, string>) ((_, _) => { }),
-                (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>) ((client, chartKey) =>
-                    client.ChartReports.SummaryBySection(chartKey))
+                (Func<SeatsioClient, string,Task>) ((_, _) => Task.CompletedTask),
+                (Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>>) ((client, chartKey) =>
+                    client.ChartReports.SummaryBySectionAsync(chartKey))
             };
             yield return new object[]
             {
-                (Action<SeatsioClient, string>) (CreateDraftChart),
-                (Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>>) ((client, chartKey) =>
-                    client.ChartReports.SummaryBySection(chartKey, version: Draft))
+                (Func<SeatsioClient, string,Task>) (CreateDraftChart),
+                (Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>>) ((client, chartKey) =>
+                    client.ChartReports.SummaryBySectionAsync(chartKey, version: Draft))
             };
         }
     }
 
     [Theory]
     [MemberData(nameof(SummaryBySectionTestCases), MemberType = typeof(ChartReportsSummaryTest))]
-    public void SummaryBySection(Action<SeatsioClient, string> updateChart,
-        Func<SeatsioClient, string, Dictionary<string, ChartReportSummaryItem>> getReport)
+    public async Task SummaryBySection(Func<SeatsioClient, string, Task> updateChart,
+        Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>> getReport)
     {
         var chartKey = CreateTestChart();
-        updateChart(Client, chartKey);
+        await updateChart(Client, chartKey);
 
-        var report = getReport(Client, chartKey);
+        var report = await getReport(Client, chartKey);
 
         Assert.Equal(232, report[NoSection].Count);
         Assert.Equal(new() {{"9", 116}, {"10", 116}}, report[NoSection].byCategoryKey);
         Assert.Equal(new() {{"Cat1", 116}, {"Cat2", 116}}, report[NoSection].byCategoryLabel);
     }
 
-    private static void CreateDraftChart(SeatsioClient client, string chartKey)
+    private static async Task CreateDraftChart(SeatsioClient client, string chartKey)
     {
-        client.Events.Create(chartKey);
-        client.Charts.Update(chartKey, "foo");
+        await client.Events.CreateAsync(chartKey);
+        await client.Charts.UpdateAsync(chartKey, "foo");
     }
 }

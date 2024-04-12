@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 using RestSharp;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
@@ -19,7 +21,7 @@ public class Charts
         Archive = new Lister<Chart>(new PageFetcher<Chart>(_restClient, "/charts/archive"));
     }
 
-    public Chart Create(string name = null, string venueType = null, IEnumerable<Category> categories = null)
+    public async Task<Chart> CreateAsync(string name = null, string venueType = null, IEnumerable<Category> categories = null, CancellationToken cancellationToken = default)
     {
         var requestBody = new Dictionary<string, object>();
 
@@ -40,10 +42,10 @@ public class Charts
 
         var restRequest = new RestRequest("/charts", Method.Post)
             .AddJsonBody(requestBody);
-        return AssertOk(_restClient.Execute<Chart>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Chart>(restRequest, cancellationToken));
     }
 
-    public void Update(string chartKey, string name = null, IEnumerable<Category> categories = null)
+    public async Task UpdateAsync(string chartKey, string name = null, IEnumerable<Category> categories = null, CancellationToken cancellationToken = default)
     {
         var requestBody = new Dictionary<string, object>();
 
@@ -60,29 +62,29 @@ public class Charts
         var restRequest = new RestRequest("/charts/{key}", Method.Post)
             .AddUrlSegment("key", chartKey)
             .AddJsonBody(requestBody);
-        AssertOk(_restClient.Execute<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
         
-    public void AddCategory(string chartKey, Category category)
+    public async Task AddCategoryAsync(string chartKey, Category category, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{chartKey}/categories", Method.Post)
             .AddUrlSegment("chartKey", chartKey)
             .AddJsonBody(category.AsDictionary());
-        AssertOk(_restClient.Execute<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public void RemoveCategory(string chartKey, object categoryKey)
+    public async Task RemoveCategoryAsync(string chartKey, object categoryKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{chartKey}/categories/{categoryKey}", Method.Delete)
             .AddUrlSegment("chartKey", chartKey)
             .AddUrlSegment("categoryKey", categoryKey.ToString());
-        AssertOk(_restClient.Execute<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public IEnumerable<Category> ListCategories(string chartKey)
+    public async Task<IEnumerable<Category>> ListCategoriesAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest($"/charts/{chartKey}/categories", Method.Get);
-        return _restClient.Execute<CategoryList>(restRequest).Data.List;
+        return (await _restClient.ExecuteAsync<CategoryList>(restRequest, cancellationToken)).Data.List;
     }
 
     private class CategoryList
@@ -91,54 +93,54 @@ public class Charts
         public IEnumerable<Category> List { get; set; }
     }
 
-    public Chart Copy(string chartKey)
+    public async Task<Chart> CopyAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy", Method.Post)
             .AddUrlSegment("key", chartKey);
-        return AssertOk(_restClient.Execute<Chart>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Chart>(restRequest, cancellationToken));
     }
 
-    public Chart CopyToWorkspace(string chartKey, string toWorkspaceKey)
+    public async Task<Chart> CopyToWorkspaceAsync(string chartKey, string toWorkspaceKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy-to-workspace/{toWorkspaceKey}", Method.Post)
             .AddUrlSegment("key", chartKey)
             .AddUrlSegment("toWorkspaceKey", toWorkspaceKey);
-        return AssertOk(_restClient.Execute<Chart>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Chart>(restRequest, cancellationToken));
     }
         
-    public Chart CopyToWorkspace(string chartKey, string fromWorkspaceKey, string toWorkspaceKey)
+    public async Task<Chart> CopyToWorkspaceAsync(string chartKey, string fromWorkspaceKey, string toWorkspaceKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest($"/charts/{chartKey}/version/published/actions/copy/from/{fromWorkspaceKey}/to/{toWorkspaceKey}", Method.Post)
             .AddUrlSegment("chartKey", chartKey)
             .AddUrlSegment("fromWorkspaceKey", fromWorkspaceKey)
             .AddUrlSegment("toWorkspaceKey", toWorkspaceKey);
-        return AssertOk(_restClient.Execute<Chart>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Chart>(restRequest, cancellationToken));
     }
 
-    public Chart CopyDraftVersion(string chartKey)
+    public async Task<Chart> CopyDraftVersionAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/version/draft/actions/copy", Method.Post)
             .AddUrlSegment("key", chartKey);
-        return AssertOk(_restClient.Execute<Chart>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Chart>(restRequest, cancellationToken));
     }
 
-    public void AddTag(string chartKey, string tag)
+    public async Task AddTagAsync(string chartKey, string tag, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/tags/{tag}", Method.Post)
             .AddUrlSegment("key", chartKey)
             .AddUrlSegment("tag", tag);
-        AssertOk(_restClient.Execute<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public void RemoveTag(string chartKey, string tag)
+    public async Task RemoveTagAsync(string chartKey, string tag, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/tags/{tag}", Method.Delete)
             .AddUrlSegment("key", chartKey)
             .AddUrlSegment("tag", tag);
-        AssertOk(_restClient.Execute<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
         
-    public Chart Retrieve(string chartKey, bool? expandEvents = null)
+    public async Task<Chart> RetrieveAsync(string chartKey, bool? expandEvents = null, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}", Method.Get)
             .AddUrlSegment("key", chartKey);
@@ -148,13 +150,13 @@ public class Charts
             restRequest.AddQueryParameter("expand", "events");
         }
 
-        return AssertOk(_restClient.Execute<Chart>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Chart>(restRequest, cancellationToken));
     }
 
-    public IEnumerable<string> ListAllTags()
+    public async Task<IEnumerable<string>> ListAllTagsAsync(CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/tags", Method.Get);
-        return AssertOk(_restClient.Execute<Tags>(restRequest)).List;
+        return AssertOk(await _restClient.ExecuteAsync<Tags>(restRequest, cancellationToken)).List;
     }
 
     private class Tags
@@ -163,98 +165,98 @@ public class Charts
         public IEnumerable<string> List { get; set; }
     }
 
-    public void MoveToArchive(string chartKey)
+    public async Task MoveToArchiveAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/actions/move-to-archive", Method.Post)
             .AddUrlSegment("key", chartKey);
-        AssertOk(_restClient.Execute<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public void MoveOutOfArchive(string chartKey)
+    public async Task MoveOutOfArchiveAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/actions/move-out-of-archive", Method.Post)
             .AddUrlSegment("key", chartKey);
-        AssertOk(_restClient.Execute<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public Drawing RetrievePublishedVersion(string chartKey)
+    public async Task<Drawing> RetrievePublishedVersionAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/version/published", Method.Get)
             .AddUrlSegment("key", chartKey);
-        return AssertOk(_restClient.Execute<Drawing>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Drawing>(restRequest, cancellationToken));
     }
 
-    public byte[] RetrievePublishedVersionThumbnail(string chartKey)
+    public async Task<byte[]> RetrievePublishedVersionThumbnailAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/version/published/thumbnail", Method.Get)
             .AddUrlSegment("key", chartKey);
-        var restResponse = _restClient.Execute<object>(restRequest);
+        var restResponse = await _restClient.ExecuteAsync<object>(restRequest, cancellationToken);
         AssertOk(restResponse);
         return restResponse.RawBytes;
     }
 
-    public Drawing RetrieveDraftVersion(string chartKey)
+    public async Task<Drawing> RetrieveDraftVersionAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/version/draft", Method.Get)
             .AddUrlSegment("key", chartKey);
-        return AssertOk(_restClient.Execute<Drawing>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Drawing>(restRequest, cancellationToken));
     }
 
-    public byte[] RetrieveDraftVersionThumbnail(string chartKey)
+    public async Task<byte[]> RetrieveDraftVersionThumbnailAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/version/draft/thumbnail", Method.Get)
             .AddUrlSegment("key", chartKey);
-        var restResponse = _restClient.Execute<object>(restRequest);
+        var restResponse = await _restClient.ExecuteAsync<object>(restRequest, cancellationToken);
         AssertOk(restResponse);
         return restResponse.RawBytes;
     }
 
-    public void PublishDraftVersion(string chartKey)
+    public async Task PublishDraftVersionAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/version/draft/actions/publish", Method.Post)
             .AddUrlSegment("key", chartKey);
-        AssertOk(_restClient.Execute<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public void DiscardDraftVersion(string chartKey)
+    public async Task DiscardDraftVersionAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/version/draft/actions/discard", Method.Post)
             .AddUrlSegment("key", chartKey);
-        AssertOk(_restClient.Execute<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public ChartValidationResult ValidatePublishedVersion(string chartKey)
+    public async Task<ChartValidationResult> ValidatePublishedVersionAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/version/published/actions/validate", Method.Post)
             .AddUrlSegment("key",chartKey);
-        return AssertOk(_restClient.Execute<ChartValidationResult>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<ChartValidationResult>(restRequest, cancellationToken));
     }
 
-    public ChartValidationResult ValidateDraftVersion(string chartKey)
+    public async Task<ChartValidationResult> ValidateDraftVersionAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/version/draft/actions/validate", Method.Post)
             .AddUrlSegment("key",chartKey);
-        return AssertOk(_restClient.Execute<ChartValidationResult>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<ChartValidationResult>(restRequest, cancellationToken));
     }
 
-    public IEnumerable<Chart> ListAll(string filter = null, string tag = null, bool? expandEvents = null, bool? withValidation = false)
+    public IAsyncEnumerable<Chart> ListAllAsync(string filter = null, string tag = null, bool? expandEvents = null, bool? withValidation = false)
     {
-        return List().All(ChartListParams(filter, tag, expandEvents, withValidation));
+        return List().AllAsync(ChartListParams(filter, tag, expandEvents, withValidation));
     }
 
-    public Page<Chart> ListFirstPage(string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null, bool? withValidation = false)
+    public async Task<Page<Chart>> ListFirstPageAsync(string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null, bool? withValidation = false, CancellationToken cancellationToken = default)
     {
-        return List().FirstPage(ChartListParams(filter, tag, expandEvents, withValidation), pageSize);
+        return await List().FirstPageAsync(ChartListParams(filter, tag, expandEvents, withValidation), pageSize, cancellationToken);
     }
 
-    public Page<Chart> ListPageAfter(long id, string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null, bool? withValidation = false)
+    public async Task<Page<Chart>> ListPageAfterAsync(long id, string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null, bool? withValidation = false, CancellationToken cancellationToken = default)
     {
-        return List().PageAfter(id, ChartListParams(filter, tag, expandEvents, withValidation), pageSize);
+        return await List().PageAfterAsync(id, ChartListParams(filter, tag, expandEvents, withValidation), pageSize, cancellationToken);
     }
 
-    public Page<Chart> ListPageBefore(long id, string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null, bool? withValidation = false)
+    public async Task<Page<Chart>> ListPageBeforeAsync(long id, string filter = null, string tag = null, bool? expandEvents = false, int? pageSize = null, bool? withValidation = false, CancellationToken cancellationToken = default)
     {
-        return List().PageBefore(id, ChartListParams(filter, tag, expandEvents, withValidation), pageSize);
+        return await List().PageBeforeAsync(id, ChartListParams(filter, tag, expandEvents, withValidation), pageSize, cancellationToken);
     }
 
     private Dictionary<string, object> ChartListParams(string filter, string tag, bool? expandEvents, bool? withValidation = false)

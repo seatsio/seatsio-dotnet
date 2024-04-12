@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events;
@@ -6,12 +7,12 @@ namespace SeatsioDotNet.Test.Events;
 public class RetrieveEventTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var retrievedEvent = Client.Events.Retrieve(evnt.Key);
+        var retrievedEvent = await Client.Events.RetrieveAsync(evnt.Key);
 
         Assert.NotNull(retrievedEvent.Key);
         Assert.NotEqual(0, retrievedEvent.Id);
@@ -27,15 +28,15 @@ public class RetrieveEventTest : SeatsioClientTest
     }
 
     [Fact]
-    public void RetrieveSeason()
+    public async Task RetrieveSeason()
     {
         var chartKey = CreateTestChart();
 
-        var season = Client.Seasons.Create(chartKey);
-        var partialSeason1 = Client.Seasons.CreatePartialSeason(season.Key);
-        var partialSeason2 = Client.Seasons.CreatePartialSeason(season.Key);
+        var season = await Client.Seasons.CreateAsync(chartKey);
+        var partialSeason1 = await Client.Seasons.CreatePartialSeasonAsync(season.Key);
+        var partialSeason2 = await Client.Seasons.CreatePartialSeasonAsync(season.Key);
 
-        var retrievedSeason = Client.Events.Retrieve(season.Key);
+        var retrievedSeason = await Client.Events.RetrieveAsync(season.Key);
 
         Assert.NotNull(retrievedSeason.Key);
         Assert.NotEqual(0, retrievedSeason.Id);

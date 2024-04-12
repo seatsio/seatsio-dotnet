@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
+using SeatsioDotNet.Charts;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Charts;
@@ -6,74 +10,79 @@ namespace SeatsioDotNet.Test.Charts;
 public class ListChartsTest : SeatsioClientTest
 {
     [Fact]
-    public void All()
+    public async Task All()
     {
-        var chart1 = Client.Charts.Create();
-        var chart2 = Client.Charts.Create();
-        var chart3 = Client.Charts.Create();
+        var chart1 = await Client.Charts.CreateAsync();
+        var chart2 = await Client.Charts.CreateAsync();
+        var chart3 = await Client.Charts.CreateAsync();
 
-        var charts = Client.Charts.ListAll();
+        var charts = await Client.Charts.ListAllAsync().ToListAsync();
 
         Assert.Equal(new[] {chart3.Key, chart2.Key, chart1.Key}, charts.Select(c => c.Key));
     }
 
     [Fact]
-    public void MultiplePages()
+    public async Task MultiplePages()
     {
-        var charts = Enumerable.Repeat("", 30).Select(x => Client.Charts.Create());
+        var charts = new List<Chart>();
+        for (var i = 1; i <= 30; i++)
+        {
+            var chart = await Client.Charts.CreateAsync();
+            charts.Add(chart);
+        }
 
-        var retrievedCharts = Client.Charts.ListAll();
+        var retrievedCharts = await Client.Charts.ListAllAsync().ToListAsync();
 
-        Assert.Equal(charts.Reverse().Select(c => c.Key), retrievedCharts.Select(c => c.Key));
+        Assert.Equal(charts.Select(c => c.Key).Reverse(), retrievedCharts.Select(c => c.Key));
     }
 
     [Fact]
-    public void Filter()
+    public async Task Filter()
     {
-        var chart1 = Client.Charts.Create("foo");
-        var chart2 = Client.Charts.Create("bar");
-        var chart3 = Client.Charts.Create("foofoo");
+        var chart1 = await Client.Charts.CreateAsync("foo");
+        var chart2 = await Client.Charts.CreateAsync("bar");
+        var chart3 = await Client.Charts.CreateAsync("foofoo");
 
-        var charts = Client.Charts.ListAll(filter: "foo");
+        var charts = await Client.Charts.ListAllAsync(filter: "foo").ToListAsync();
 
         Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
     }
 
     [Fact]
-    public void Tag()
+    public async Task Tag()
     {
-        var chart1 = Client.Charts.Create();
-        Client.Charts.AddTag(chart1.Key, "foo");
+        var chart1 = await Client.Charts.CreateAsync();
+        await Client.Charts.AddTagAsync(chart1.Key, "foo");
 
-        var chart2 = Client.Charts.Create();
+        var chart2 = await Client.Charts.CreateAsync();
 
-        var chart3 = Client.Charts.Create();
-        Client.Charts.AddTag(chart3.Key, "foo");
+        var chart3 = await Client.Charts.CreateAsync();
+        await Client.Charts.AddTagAsync(chart3.Key, "foo");
 
-        var charts = Client.Charts.ListAll(tag: "foo");
+        var charts = await Client.Charts.ListAllAsync(tag: "foo").ToListAsync();
 
         Assert.Equal(new[] {chart3.Key, chart1.Key}, charts.Select(c => c.Key));
     }
 
     [Fact]
-    public void Expand()
+    public async Task Expand()
     {
-        var chart = Client.Charts.Create();
-        var event1 = Client.Events.Create(chart.Key);
-        var event2 = Client.Events.Create(chart.Key);
+        var chart = await Client.Charts.CreateAsync();
+        var event1 = await Client.Events.CreateAsync(chart.Key);
+        var event2 = await Client.Events.CreateAsync(chart.Key);
 
-        var charts = Client.Charts.ListAll(expandEvents: true);
+        var charts = await Client.Charts.ListAllAsync(expandEvents: true).ToListAsync();
 
         Assert.Equal(new[] {event2.Id, event1.Id}, charts.First().Events.Select(c => c.Id));
     }   
         
     [Fact]
-    public void Validation()
+    public async Task Validation()
     {
         CreateTestChartWithErrors();
             
-        var charts = Client.Charts.ListAll(withValidation: true);
+        var chart = await Client.Charts.ListAllAsync(withValidation: true).FirstAsync();
 
-        Assert.NotNull(charts.First().Validation);
+        Assert.NotNull(chart.Validation);
     }
 }

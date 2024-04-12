@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using RestSharp;
 using SeatsioDotNet.Events;
 using SeatsioDotNet.Util;
@@ -20,12 +22,7 @@ public class Workspaces
         Inactive = new WorkspaceLister(new PageFetcher<Workspace>(_restClient, "/workspaces/inactive"));
     }
 
-    public Workspace Create(string name)
-    {
-        return Create(name, null);
-    }
-
-    public Workspace Create(string name, bool? isTest)
+    public async Task<Workspace> CreateAsync(string name, bool? isTest = null, CancellationToken cancellationToken = default)
     {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
         requestBody.Add("name", name);
@@ -36,73 +33,73 @@ public class Workspaces
         }
 
         var restRequest = new RestRequest("/workspaces", Method.Post).AddJsonBody(requestBody);
-        return AssertOk(_restClient.Execute<Workspace>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Workspace>(restRequest, cancellationToken));
     }
 
-    public Workspace Retrieve(string key)
+    public async Task<Workspace> RetrieveAsync(string key, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/workspaces/{key}", Method.Get)
             .AddUrlSegment("key", key);
-        return AssertOk(_restClient.Execute<Workspace>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Workspace>(restRequest, cancellationToken));
     }
 
-    public void Update(string key, string name)
+    public async Task UpdateAsync(string key, string name, CancellationToken cancellationToken = default)
     {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
         requestBody.Add("name", name);
 
         var restRequest = new RestRequest("/workspaces/{key}", Method.Post).AddJsonBody(requestBody)
             .AddUrlSegment("key", key);
-        AssertOk(_restClient.Execute<object>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public string RegenerateSecretKey(string key)
+    public async Task<string> RegenerateSecretKeyAsync(string key, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/workspaces/{key}/actions/regenerate-secret-key", Method.Post)
             .AddUrlSegment("key", key);
-        var response = AssertOk(_restClient.Execute<Dictionary<string, string>>(restRequest));
+        var response = AssertOk(await _restClient.ExecuteAsync<Dictionary<string, string>>(restRequest, cancellationToken));
         return response["secretKey"];
     }  
         
-    public void Activate(string key)
+    public async Task ActivateAsync(string key, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/workspaces/{key}/actions/activate", Method.Post)
             .AddUrlSegment("key", key);
-        AssertOk(_restClient.Execute<Dictionary<string, string>>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<Dictionary<string, string>>(restRequest, cancellationToken));
     }   
         
-    public void Deactivate(string key)
+    public async Task DeactivateAsync(string key, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/workspaces/{key}/actions/deactivate", Method.Post)
             .AddUrlSegment("key", key);
-        AssertOk(_restClient.Execute<Dictionary<string, string>>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<Dictionary<string, string>>(restRequest, cancellationToken));
     }  
         
-    public void SetDefault(string key)
+    public async Task SetDefaultAsync(string key, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/workspaces/actions/set-default/{key}", Method.Post)
             .AddUrlSegment("key", key);
-        AssertOk(_restClient.Execute<Dictionary<string, string>>(restRequest));
+        AssertOk(await _restClient.ExecuteAsync<Dictionary<string, string>>(restRequest, cancellationToken));
     }
 
-    public IEnumerable<Workspace> ListAll(string filter = null)
+    public IAsyncEnumerable<Workspace> ListAllAsync(string filter = null)
     {
-        return ParametrizedList().All(filter);
+        return ParametrizedList().AllAsync(filter);
     }
 
-    public Page<Workspace> ListFirstPage(int? pageSize = null, string filter = null)
+    public async Task<Page<Workspace>> ListFirstPageAsync(int? pageSize = null, string filter = null, CancellationToken cancellationToken = default)
     {
-        return ParametrizedList().FirstPage(filter, pageSize);
+        return await ParametrizedList().FirstPageAsync(filter, pageSize, cancellationToken:cancellationToken);
     }
 
-    public Page<Workspace> ListPageAfter(long id, int? pageSize = null, string filter = null)
+    public async Task<Page<Workspace>> ListPageAfterAsync(long id, int? pageSize = null, string filter = null, CancellationToken cancellationToken = default)
     {
-        return ParametrizedList().PageAfter(id, filter, pageSize);
+        return await ParametrizedList().PageAfterAsync(id, filter, pageSize, cancellationToken:cancellationToken);
     }
 
-    public Page<Workspace> ListPageBefore(long id, int? pageSize = null, string filter = null)
+    public async Task<Page<Workspace>> ListPageBeforeAsync(long id, int? pageSize = null, string filter = null, CancellationToken cancellationToken = default)
     {
-        return ParametrizedList().PageBefore(id, filter, pageSize);
+        return await ParametrizedList().PageBeforeAsync(id, filter, pageSize, cancellationToken:cancellationToken);
     }
 
     private WorkspaceLister ParametrizedList()

@@ -1,15 +1,16 @@
-﻿using Xunit;
+﻿using System.Threading.Tasks;
+using Xunit;
 
 namespace SeatsioDotNet.Test.Events;
 
 public class RetrieveHoldTokenTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var holdToken = Client.HoldTokens.Create();
+        var holdToken = await Client.HoldTokens.CreateAsync();
             
-        var retrievedHoldToken = Client.HoldTokens.Retrieve(holdToken.Token);
+        var retrievedHoldToken = await Client.HoldTokens.RetrieveAsync(holdToken.Token);
             
         Assert.Equal(holdToken.Token, retrievedHoldToken.Token);
         Assert.Equal(holdToken.ExpiresAt, retrievedHoldToken.ExpiresAt);

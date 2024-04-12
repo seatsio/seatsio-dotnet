@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Seasons;
@@ -6,15 +7,15 @@ namespace SeatsioDotNet.Test.Seasons;
 public class RetrieveSeasonTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
         var chartKey = CreateTestChart();
 
-        var season = Client.Seasons.Create(chartKey);
-        var partialSeason1 = Client.Seasons.CreatePartialSeason(season.Key);
-        var partialSeason2 = Client.Seasons.CreatePartialSeason(season.Key);
+        var season = await Client.Seasons.CreateAsync(chartKey);
+        var partialSeason1 = await Client.Seasons.CreatePartialSeasonAsync(season.Key);
+        var partialSeason2 = await Client.Seasons.CreatePartialSeasonAsync(season.Key);
 
-        var retrievedSeason = Client.Seasons.Retrieve(season.Key);
+        var retrievedSeason = await  Client.Seasons.RetrieveAsync(season.Key);
 
         Assert.NotNull(retrievedSeason.Key);
         Assert.NotEqual(0, retrievedSeason.Id);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using SeatsioDotNet.Events;
 using Xunit;
@@ -10,18 +11,18 @@ namespace SeatsioDotNet.Test.Reports.Events;
 public class EventReportsTest : SeatsioClientTest
 {
     [Fact]
-    public void ReportItemProperties()
+    public async Task ReportItemProperties()
     {
         var chartKey = CreateTestChart();
         var channels = new List<Channel>
         {
             new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"})
         };
-        var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithChannels(channels));
+        var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithChannels(channels));
         var extraData = new Dictionary<string, object> {{"foo", "bar"}};
-        Client.Events.Book(evnt.Key, new[] {new ObjectProperties("A-1", "ticketType1", extraData)}, null, "order1", null, true);
+        await Client.Events.BookAsync(evnt.Key, new[] {new ObjectProperties("A-1", "ticketType1", extraData)}, null, "order1", null, true);
 
-        var report = Client.EventReports.ByLabel(evnt.Key);
+        var report = await Client.EventReports.ByLabelAsync(evnt.Key);
 
         var reportItem = report["A-1"].First();
         Assert.Equal("A-1", reportItem.Label);
@@ -49,7 +50,7 @@ public class EventReportsTest : SeatsioClientTest
         Assert.Equal("channelKey1", reportItem.Channel);
         Assert.Null(reportItem.BookAsAWhole);
         Assert.NotNull(reportItem.DistanceToFocalPoint);
-            
+
         var gaItem = report["GA1"].First();
         Assert.True(gaItem.VariableOccupancy);
         Assert.Equal(1, gaItem.MinOccupancy);
@@ -57,29 +58,29 @@ public class EventReportsTest : SeatsioClientTest
     }
 
     [Fact]
-    public void HoldToken()
+    public async Task HoldToken()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        var holdToken = Client.HoldTokens.Create();
-        Client.Events.Hold(evnt.Key, new[] {"A-1"}, holdToken.Token);
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        var holdToken = await Client.HoldTokens.CreateAsync();
+        await Client.Events.HoldAsync(evnt.Key, new[] {"A-1"}, holdToken.Token);
 
-        var report = Client.EventReports.ByLabel(evnt.Key);
+        var report = await Client.EventReports.ByLabelAsync(evnt.Key);
 
         var reportItem = report["A-1"].First();
         Assert.Equal(holdToken.Token, reportItem.HoldToken);
     }
 
     [Fact]
-    public void ReportItemPropertiesForGA()
+    public async Task ReportItemPropertiesForGA()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.Book(evnt.Key, new[] {new ObjectProperties("GA1", 5)});
-        var holdToken = Client.HoldTokens.Create();
-        Client.Events.Hold(evnt.Key, new[] {new ObjectProperties("GA1", 3)}, holdToken.Token);
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.BookAsync(evnt.Key, new[] {new ObjectProperties("GA1", 5)});
+        var holdToken = await Client.HoldTokens.CreateAsync();
+        await Client.Events.HoldAsync(evnt.Key, new[] {new ObjectProperties("GA1", 3)}, holdToken.Token);
 
-        var report = Client.EventReports.ByLabel(evnt.Key);
+        var report = await Client.EventReports.ByLabelAsync(evnt.Key);
 
         var reportItem = report["GA1"].First();
         Assert.Equal(5, reportItem.NumBooked);
@@ -92,15 +93,15 @@ public class EventReportsTest : SeatsioClientTest
         Assert.Null(reportItem.HasRestrictedView);
         Assert.Null(reportItem.DisplayedObjectType);
         Assert.False(reportItem.BookAsAWhole);
-    }   
-        
+    }
+
     [Fact]
-    public void ReportItemPropertiesForTable()
+    public async Task ReportItemPropertiesForTable()
     {
         var chartKey = CreateTestChartWithTables();
-        var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithTableBookingConfig(TableBookingConfig.AllByTable()));
+        var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithTableBookingConfig(TableBookingConfig.AllByTable()));
 
-        var report = Client.EventReports.ByLabel(evnt.Key);
+        var report = await Client.EventReports.ByLabelAsync(evnt.Key);
 
         var reportItem = report["T1"].First();
         Assert.Equal(6, reportItem.NumSeats);
@@ -108,14 +109,14 @@ public class EventReportsTest : SeatsioClientTest
     }
 
     [Fact]
-    public void ByStatus()
+    public async Task ByStatus()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "lolzor");
-        Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-3"}, Booked);
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {"A-1", "A-2"}, "lolzor");
+        await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {"A-3"}, Booked);
 
-        var report = Client.EventReports.ByStatus(evnt.Key);
+        var report = await Client.EventReports.ByStatusAsync(evnt.Key);
 
         Assert.Equal(2, report["lolzor"].Count());
         Assert.Single(report[Booked]);
@@ -123,46 +124,46 @@ public class EventReportsTest : SeatsioClientTest
     }
 
     [Fact]
-    public void ByStatusEmptyChart()
+    public async Task ByStatusEmptyChart()
     {
-        var chartKey = Client.Charts.Create().Key;
-        var evnt = Client.Events.Create(chartKey);
+        var chartKey = (await Client.Charts.CreateAsync()).Key;
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var report = Client.EventReports.ByStatus(evnt.Key);
+        var report = await Client.EventReports.ByStatusAsync(evnt.Key);
 
         Assert.Empty(report);
     }
 
     [Fact]
-    public void BySpecificStatus()
+    public async Task BySpecificStatus()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.ChangeObjectStatus(evnt.Key, new[] {"A-1", "A-2"}, "lolzor");
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {"A-1", "A-2"}, "lolzor");
 
-        var report = Client.EventReports.ByStatus(evnt.Key, "lolzor");
+        var report = await Client.EventReports.ByStatusAsync(evnt.Key, "lolzor");
 
         Assert.Equal(2, report.Count());
     }
 
     [Fact]
-    public void BySpecificNonExistingStatus()
+    public async Task BySpecificNonExistingStatus()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var report = Client.EventReports.ByStatus(evnt.Key, "lolzor");
+        var report = await Client.EventReports.ByStatusAsync(evnt.Key, "lolzor");
 
         Assert.Empty(report);
     }
-        
+
     [Fact]
-    public void ByObjectType()
+    public async Task ByObjectType()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var report = Client.EventReports.ByObjectType(evnt.Key);
+        var report = await Client.EventReports.ByObjectTypeAsync(evnt.Key);
 
         Assert.Equal(32, report["seat"].Count());
         Assert.Equal(2, report["generalAdmission"].Count());
@@ -171,94 +172,94 @@ public class EventReportsTest : SeatsioClientTest
     }
 
     [Fact]
-    public void BySpecificObjectType()
+    public async Task BySpecificObjectType()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var report = Client.EventReports.ByObjectType(evnt.Key, "seat");
+        var report = await Client.EventReports.ByObjectTypeAsync(evnt.Key, "seat");
 
         Assert.Equal(32, report.Count());
     }
 
     [Fact]
-    public void ByCategoryLabel()
+    public async Task ByCategoryLabel()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var report = Client.EventReports.ByCategoryLabel(evnt.Key);
+        var report = await Client.EventReports.ByCategoryLabelAsync(evnt.Key);
 
         Assert.Equal(17, report["Cat1"].Count());
         Assert.Equal(17, report["Cat2"].Count());
     }
 
     [Fact]
-    public void BySpecificCategoryLabel()
+    public async Task BySpecificCategoryLabel()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var report = Client.EventReports.ByCategoryLabel(evnt.Key, "Cat1");
+        var report = await Client.EventReports.ByCategoryLabelAsync(evnt.Key, "Cat1");
 
         Assert.Equal(17, report.Count());
     }
 
     [Fact]
-    public void ByCategoryKey()
+    public async Task ByCategoryKey()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var report = Client.EventReports.ByCategoryKey(evnt.Key);
+        var report = await Client.EventReports.ByCategoryKeyAsync(evnt.Key);
 
         Assert.Equal(17, report["9"].Count());
         Assert.Equal(17, report["10"].Count());
     }
 
     [Fact]
-    public void BySpecificCategoryKey()
+    public async Task BySpecificCategoryKey()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var report = Client.EventReports.ByCategoryKey(evnt.Key, "9");
+        var report = await Client.EventReports.ByCategoryKeyAsync(evnt.Key, "9");
 
         Assert.Equal(17, report.Count());
     }
 
     [Fact]
-    public void ByLabel()
+    public async Task ByLabel()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var report = Client.EventReports.ByLabel(evnt.Key);
+        var report = await Client.EventReports.ByLabelAsync(evnt.Key);
 
         Assert.Single(report["A-1"]);
         Assert.Single(report["A-2"]);
     }
 
     [Fact]
-    public void BySpecificLabel()
+    public async Task BySpecificLabel()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var report = Client.EventReports.ByLabel(evnt.Key, "A-1");
+        var report = await Client.EventReports.ByLabelAsync(evnt.Key, "A-1");
 
         Assert.Single(report);
     }
 
     [Fact]
-    public void ByOrderId()
+    public async Task ByOrderId()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"}, null, "order1");
-        Client.Events.Book(evnt.Key, new[] {"A-3"}, null, "order2");
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.BookAsync(evnt.Key, new[] {"A-1", "A-2"}, null, "order1");
+        await Client.Events.BookAsync(evnt.Key, new[] {"A-3"}, null, "order2");
 
-        var report = Client.EventReports.ByOrderId(evnt.Key);
+        var report = await Client.EventReports.ByOrderIdAsync(evnt.Key);
 
         Assert.Equal(2, report["order1"].Count());
         Assert.Single(report["order2"]);
@@ -266,116 +267,116 @@ public class EventReportsTest : SeatsioClientTest
     }
 
     [Fact]
-    public void BySpecificOrderId()
+    public async Task BySpecificOrderId()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"}, null, "order1");
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.BookAsync(evnt.Key, new[] {"A-1", "A-2"}, null, "order1");
 
-        var report = Client.EventReports.ByOrderId(evnt.Key, "order1");
+        var report = await Client.EventReports.ByOrderIdAsync(evnt.Key, "order1");
 
         Assert.Equal(2, report.Count());
     }
 
     [Fact]
-    public void BySection()
+    public async Task BySection()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var report = Client.EventReports.BySection(evnt.Key);
+        var report = await Client.EventReports.BySectionAsync(evnt.Key);
 
         Assert.Equal(34, report[NoSection].Count());
     }
 
     [Fact]
-    public void BySpecificSection()
+    public async Task BySpecificSection()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
-        var report = Client.EventReports.BySection(evnt.Key, NoSection);
+        var report = await Client.EventReports.BySectionAsync(evnt.Key, NoSection);
 
         Assert.Equal(34, report.Count());
     }
 
     [Fact]
-    public void ByAvailability()
+    public async Task ByAvailability()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"});
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.BookAsync(evnt.Key, new[] {"A-1", "A-2"});
 
-        var report = Client.EventReports.ByAvailability(evnt.Key);
+        var report = await Client.EventReports.ByAvailabilityAsync(evnt.Key);
 
         Assert.Equal(32, report[Available].Count());
         Assert.Equal(2, report[NotAvailable].Count());
     }
 
     [Fact]
-    public void BySpecificAvailability()
+    public async Task BySpecificAvailability()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"});
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.BookAsync(evnt.Key, new[] {"A-1", "A-2"});
 
-        var report = Client.EventReports.ByAvailability(evnt.Key, NotAvailable);
+        var report = await Client.EventReports.ByAvailabilityAsync(evnt.Key, NotAvailable);
 
         Assert.Equal(2, report.Count());
     }
-        
+
     [Fact]
-    public void ByAvailabilityReason()
+    public async Task ByAvailabilityReason()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"});
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.BookAsync(evnt.Key, new[] {"A-1", "A-2"});
 
-        var report = Client.EventReports.ByAvailabilityReason(evnt.Key);
+        var report = await Client.EventReports.ByAvailabilityReasonAsync(evnt.Key);
 
         Assert.Equal(32, report[Available].Count());
         Assert.Equal(2, report[Booked].Count());
     }
 
     [Fact]
-    public void BySpecificAvailabilityReason()
+    public async Task BySpecificAvailabilityReason()
     {
         var chartKey = CreateTestChart();
-        var evnt = Client.Events.Create(chartKey);
-        Client.Events.Book(evnt.Key, new[] {"A-1", "A-2"});
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.BookAsync(evnt.Key, new[] {"A-1", "A-2"});
 
-        var report = Client.EventReports.ByAvailabilityReason(evnt.Key, Booked);
+        var report = await Client.EventReports.ByAvailabilityReasonAsync(evnt.Key, Booked);
 
         Assert.Equal(2, report.Count());
     }
 
     [Fact]
-    public void ByChannel()
+    public async Task ByChannel()
     {
         var chartKey = CreateTestChart();
         var channels = new List<Channel>
         {
             new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"})
         };
-        var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithChannels(channels));
+        var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithChannels(channels));
 
-        var report = Client.EventReports.ByChannel(evnt.Key);
+        var report = await Client.EventReports.ByChannelAsync(evnt.Key);
 
         Assert.Equal(32, report[NoChannel].Count());
         Assert.Equal(2, report["channelKey1"].Count());
     }
 
     [Fact]
-    public void BySpecificChannel()
+    public async Task BySpecificChannel()
     {
         var chartKey = CreateTestChart();
         var channels = new List<Channel>
         {
             new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"})
         };
-        var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithChannels(channels));
+        var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithChannels(channels));
 
-        var report = Client.EventReports.ByChannel(evnt.Key, "channelKey1");
+        var report = await Client.EventReports.ByChannelAsync(evnt.Key, "channelKey1");
 
         Assert.Equal(2, report.Count());
     }

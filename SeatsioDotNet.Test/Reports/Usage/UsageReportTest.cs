@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using SeatsioDotNet.Reports.Usage;
 using SeatsioDotNet.Reports.Usage.DetailsForEventInMonth;
 using Xunit;
@@ -16,7 +17,7 @@ public class UsageReportTest : SeatsioClientTest
     }
 
     [Fact]
-    public void TestUsageReportForAllMonths()
+    public async Task TestUsageReportForAllMonths()
     {
         if (!DemoCompanySecretKeySet())
         {
@@ -26,7 +27,7 @@ public class UsageReportTest : SeatsioClientTest
 
         var client = CreateSeatsioClient(DemoCompanySecretKey());
 
-        var report = client.UsageReports.SummaryForAllMonths();
+        var report = await client.UsageReports.SummaryForAllMonthsAsync();
 
         Assert.True(report.UsageCutoffDate.Year > 2000);
         Assert.True(report.Usage.Any());
@@ -35,7 +36,7 @@ public class UsageReportTest : SeatsioClientTest
     }
 
     [Fact]
-    public void TestUsageReportForMonth()
+    public async Task TestUsageReportForMonth()
     {
         if (!DemoCompanySecretKeySet())
         {
@@ -45,7 +46,7 @@ public class UsageReportTest : SeatsioClientTest
 
         var client = CreateSeatsioClient(DemoCompanySecretKey());
 
-        var report = client.UsageReports.DetailsForMonth(new UsageMonth(2021, 11));
+        var report = await client.UsageReports.DetailsForMonthAsync(new UsageMonth(2021, 11));
 
         Assert.True(report.Any());
         Assert.True(report.ElementAt(0).UsageByChart.Any());
@@ -53,7 +54,7 @@ public class UsageReportTest : SeatsioClientTest
     }
 
     [Fact]
-    public void TestUsageReportForEventInMonth()
+    public async Task TestUsageReportForEventInMonth()
     {
         if (!DemoCompanySecretKeySet())
         {
@@ -63,7 +64,7 @@ public class UsageReportTest : SeatsioClientTest
 
         var client = CreateSeatsioClient(DemoCompanySecretKey());
 
-        var report = client.UsageReports.DetailsForEventInMonth(580293, new UsageMonth(2021, 11));
+        var report = await client.UsageReports.DetailsForEventInMonthAsync(580293, new UsageMonth(2021, 11));
 
         Assert.True(report.Any());
         Assert.Equal(1, ((UsageForObjectV1) report.ElementAt(0)).NumFirstSelections);

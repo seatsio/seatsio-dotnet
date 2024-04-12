@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using SeatsioDotNet.Charts;
 using SeatsioDotNet.Events;
 using Xunit;
@@ -9,11 +10,11 @@ namespace SeatsioDotNet.Test.Events;
 public class CreateEventTest : SeatsioClientTest
 {
     [Fact]
-    public void ChartKeyIsMandatory()
+    public async Task ChartKeyIsMandatory()
     {
         var chartKey = CreateTestChart();
 
-        var evnt = Client.Events.Create(chartKey);
+        var evnt = await Client.Events.CreateAsync(chartKey);
 
         Assert.NotNull(evnt.Key);
         Assert.NotEqual(0, evnt.Id);
@@ -27,22 +28,22 @@ public class CreateEventTest : SeatsioClientTest
     }
 
     [Fact]
-    public void EventKeyIsOptional()
+    public async Task EventKeyIsOptional()
     {
         var chartKey = CreateTestChart();
 
-        var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithKey("eventje"));
+        var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithKey("eventje"));
 
         Assert.Equal("eventje", evnt.Key);
     }
 
     [Fact]
-    public void TableBookingModeCustomCanBeUsed()
+    public async Task TableBookingModeCustomCanBeUsed()
     {
         var chartKey = CreateTestChartWithTables();
         var tableBookingConfig = TableBookingConfig.Custom(new() {{"T1", "BY_TABLE"}, {"T2", "BY_SEAT"}});
 
-        var evnt = Client.Events.Create(chartKey,
+        var evnt = await Client.Events.CreateAsync(chartKey,
             new CreateEventParams().WithTableBookingConfig(tableBookingConfig));
 
         Assert.NotNull(evnt.Key);
@@ -52,11 +53,11 @@ public class CreateEventTest : SeatsioClientTest
     }
 
     [Fact]
-    public void TableBookingModeInheritCanBeUsed()
+    public async Task TableBookingModeInheritCanBeUsed()
     {
         var chartKey = CreateTestChartWithTables();
 
-        var evnt = Client.Events.Create(chartKey,
+        var evnt = await Client.Events.CreateAsync(chartKey,
             new CreateEventParams().WithTableBookingConfig(TableBookingConfig.Inherit()));
 
         Assert.NotNull(evnt.Key);
@@ -64,7 +65,7 @@ public class CreateEventTest : SeatsioClientTest
     }
 
     [Fact]
-    public void ObjectCategoriesCanBePassedIn()
+    public async Task ObjectCategoriesCanBePassedIn()
     {
         var chartKey = CreateTestChart();
 
@@ -72,45 +73,45 @@ public class CreateEventTest : SeatsioClientTest
         {
             {"A-1", 10L}
         };
-        var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithObjectCategories(objectCategories));
+        var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithObjectCategories(objectCategories));
         Assert.Equal(objectCategories, evnt.ObjectCategories);
     }
 
     [Fact]
-    public void CategoriesCanBePassedIn()
+    public async Task CategoriesCanBePassedIn()
     {
         var chartKey = CreateTestChart();
         var eventCategory = new Category("eventCategory", "event-level category", "#AAABBB");
         var categories = new[] {eventCategory};
 
-        var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithCategories(categories));
+        var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithCategories(categories));
 
         Assert.Equal(TestChartCategories.Count + categories.Length, evnt.Categories.Count);
         Assert.Contains(eventCategory, evnt.Categories);
     }
 
     [Fact]
-    public void NameCanBePassedIn()
+    public async Task NameCanBePassedIn()
     {
         var chartKey = CreateTestChart();
 
-        var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithName("My event"));
+        var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithName("My event"));
 
         Assert.Equal("My event", evnt.Name);
     }
 
     [Fact]
-    public void DateCanBePassedIn()
+    public async Task DateCanBePassedIn()
     {
         var chartKey = CreateTestChart();
 
-        var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithDate(new DateOnly(2022, 1, 10)));
+        var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithDate(new DateOnly(2022, 1, 10)));
 
         Assert.Equal(new DateOnly(2022, 1, 10), evnt.Date);
     }
 
     [Fact]
-    public void ChannelsCanBePassedIn()
+    public async Task ChannelsCanBePassedIn()
     {
         var chartKey = CreateTestChart();
         var channels = new List<Channel>
@@ -119,18 +120,18 @@ public class CreateEventTest : SeatsioClientTest
             new("channelKey2", "channel 2", "#00FFFF", 2, new String[] {})
         };
 
-        var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithChannels(channels));
+        var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithChannels(channels));
 
         Assert.Equivalent(channels, evnt.Channels);
     }
 
     [Fact]
-    public void ForSaleConfigCanBePassedIn()
+    public async Task ForSaleConfigCanBePassedIn()
     {
         var chartKey = CreateTestChart();
         var forSaleConfig = new ForSaleConfig().WithForSale(false).WithObjects(new []{"A-1"}).WithAreaPlaces(new(){{"GA1", 5}}).WithCategories(new []{"Cat1"});
 
-        var evnt = Client.Events.Create(chartKey, new CreateEventParams().WithForSaleConfig(forSaleConfig));
+        var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithForSaleConfig(forSaleConfig));
 
         Assert.Equivalent(forSaleConfig, evnt.ForSaleConfig);
     }

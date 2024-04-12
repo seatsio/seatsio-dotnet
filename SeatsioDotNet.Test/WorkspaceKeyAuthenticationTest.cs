@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Xunit;
 
 namespace SeatsioDotNet.Test;
@@ -5,12 +6,12 @@ namespace SeatsioDotNet.Test;
 public class WorkspaceKeyAuthenticationTest : SeatsioClientTest
 {
     [Fact]
-    public void Test()
+    public async Task Test()
     {
-        var workspace = Client.Workspaces.Create("some workspace");
+        var workspace = await Client.Workspaces.CreateAsync("some workspace");
 
         var workspaceClient = CreateSeatsioClient(User.SecretKey, workspace.Key);
-        var holdToken = workspaceClient.HoldTokens.Create();
+        var holdToken = await workspaceClient.HoldTokens.CreateAsync();
 
         Assert.Equal(workspace.Key, holdToken.workspaceKey);
     }

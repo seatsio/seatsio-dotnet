@@ -7,10 +7,10 @@ namespace SeatsioDotNet.Test;
 public class ErrorHandlingTest : SeatsioClientTest
 {
     [Fact]
-    public void Test4xx()
+    public async System.Threading.Tasks.Task Test4xx()
     {
-        var e = Assert.Throws<SeatsioException>(() =>
-            Client.Events.RetrieveObjectInfo("unexistingEvent", "unexistingObject"));
+        var e = await Assert.ThrowsAsync<SeatsioException>(async () =>
+            await Client.Events.RetrieveObjectInfoAsync("unexistingEvent", "unexistingObject"));
 
         Assert.Equal("Event not found: unexistingEvent.", e.Message);
         Assert.Contains(new SeatsioApiError("EVENT_NOT_FOUND", "Event not found: unexistingEvent"), e.Errors);
@@ -28,10 +28,10 @@ public class ErrorHandlingTest : SeatsioClientTest
     }
 
     [Fact]
-    public void WeirdError()
+    public async System.Threading.Tasks.Task WeirdError()
     {
-        var e = Assert.Throws<SeatsioException>(() =>
-            new SeatsioClient("", null, "unknownProtocol://").Events.RetrieveObjectInfo("unexistingEvent", "unexistingObject"));
+        var e = await Assert.ThrowsAsync<SeatsioException>(() =>
+            new SeatsioClient("", null, "unknownProtocol://").Events.RetrieveObjectInfoAsync("unexistingEvent", "unexistingObject"));
 
         Assert.Equal("Get  resulted in a 0  response. Body: ", e.Message);
         Assert.Null(e.Errors);

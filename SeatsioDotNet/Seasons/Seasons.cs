@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using RestSharp;
 using SeatsioDotNet.Events;
 using static SeatsioDotNet.Util.RestUtil;
@@ -16,7 +18,7 @@ public class Seasons
         _seatsioClient = seatsioClient;
     }
 
-    public Event Create(string chartKey, string key = null, int? numberOfEvents = null, IEnumerable<string> eventKeys = null, TableBookingConfig tableBookingConfig = null, IEnumerable<Channel> channels = null, ForSaleConfig forSaleConfig = null)
+    public async Task<Event> CreateAsync(string chartKey, string key = null, int? numberOfEvents = null, IEnumerable<string> eventKeys = null, TableBookingConfig tableBookingConfig = null, IEnumerable<Channel> channels = null, ForSaleConfig forSaleConfig = null, CancellationToken cancellationToken = default)
     {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
         requestBody.Add("chartKey", chartKey);
@@ -52,10 +54,10 @@ public class Seasons
         }
             
         var restRequest = new RestRequest("/seasons", Method.Post).AddJsonBody(requestBody);
-        return AssertOk(_restClient.Execute<Event>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Event>(restRequest, cancellationToken));
     }
 
-    public Event CreatePartialSeason(string topLevelSeasonKey, string partialSeasonKey = null, IEnumerable<string> eventKeys = null)
+    public async Task<Event> CreatePartialSeasonAsync(string topLevelSeasonKey, string partialSeasonKey = null, IEnumerable<string> eventKeys = null, CancellationToken cancellationToken = default)
     {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
             
@@ -72,15 +74,15 @@ public class Seasons
         var restRequest = new RestRequest("/seasons/{topLevelSeasonKey}/partial-seasons", Method.Post)
             .AddUrlSegment("topLevelSeasonKey", topLevelSeasonKey)
             .AddJsonBody(requestBody);
-        return AssertOk(_restClient.Execute<Event>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Event>(restRequest, cancellationToken));
     }
 
-    public Event Retrieve(string key)
+    public async Task<Event> RetrieveAsync(string key, CancellationToken cancellationToken = default)
     {
-        return _seatsioClient.Events.Retrieve(key);
+        return await _seatsioClient.Events.RetrieveAsync(key, cancellationToken);
     }
 
-    public Event AddEventsToPartialSeason(string topLevelSeasonKey, string partialSeasonKey, string[] eventKeys)
+    public async Task<Event> AddEventsToPartialSeasonAsync(string topLevelSeasonKey, string partialSeasonKey, string[] eventKeys, CancellationToken cancellationToken = default)
     {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
         requestBody.Add("eventKeys", eventKeys);
@@ -88,19 +90,19 @@ public class Seasons
             .AddUrlSegment("topLevelSeasonKey", topLevelSeasonKey)
             .AddUrlSegment("partialSeasonKey", partialSeasonKey)
             .AddJsonBody(requestBody);
-        return AssertOk(_restClient.Execute<Event>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Event>(restRequest, cancellationToken));
     }
 
-    public Event RemoveEventFromPartialSeason(string topLevelSeasonKey, string partialSeasonKey, string eventKey)
+    public async Task<Event> RemoveEventFromPartialSeasonAsync(string topLevelSeasonKey, string partialSeasonKey, string eventKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/seasons/{topLevelSeasonKey}/partial-seasons/{partialSeasonKey}/events/{eventKey}", Method.Delete)
             .AddUrlSegment("topLevelSeasonKey", topLevelSeasonKey)
             .AddUrlSegment("partialSeasonKey", partialSeasonKey)
             .AddUrlSegment("eventKey", eventKey);
-        return AssertOk(_restClient.Execute<Event>(restRequest));
+        return AssertOk(await _restClient.ExecuteAsync<Event>(restRequest, cancellationToken));
     }
 
-    public Event[] CreateEvents(string key, string[] eventKeys = null, int? numberOfEvents = null)
+    public async Task<Event[]> CreateEventsAsync(string key, string[] eventKeys = null, int? numberOfEvents = null, CancellationToken cancellationToken = default)
     {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
 
@@ -117,6 +119,6 @@ public class Seasons
         var restRequest = new RestRequest("/seasons/{key}/actions/create-events", Method.Post)
             .AddUrlSegment("key", key)
             .AddJsonBody(requestBody);
-        return AssertOk(_restClient.Execute<MultipleEvents>(restRequest)).events.ToArray();
+        return AssertOk(await _restClient.ExecuteAsync<MultipleEvents>(restRequest, cancellationToken)).events.ToArray();
     }
 }

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using SeatsioDotNet.Events;
 using Xunit;
 
@@ -6,14 +7,14 @@ namespace SeatsioDotNet.Test.Events;
 public class AddChannelTest : SeatsioClientTest
 {
     [Fact]
-    public void AddChannel()
+    public async Task AddChannel()
     {
-        var event1 = Client.Events.Create(CreateTestChart());
+        var event1 = await Client.Events.CreateAsync(CreateTestChart());
 
-        Client.Events.Channels.Add(event1.Key, "channelKey1", "channel 1", "#FFFF98", 1, new[] {"A-1", "A-2"});
-        Client.Events.Channels.Add(event1.Key, "channelKey2", "channel 2", "#FFFF99", 2, new[] {"A-3"});
+        await Client.Events.Channels.AddAsync(event1.Key, "channelKey1", "channel 1", "#FFFF98", 1, new[] {"A-1", "A-2"});
+        await Client.Events.Channels.AddAsync(event1.Key, "channelKey2", "channel 2", "#FFFF99", 2, new[] {"A-3"});
 
-        var retrievedEvent = Client.Events.Retrieve(event1.Key);
+        var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
         Assert.Equal(2, retrievedEvent.Channels.Count);
 
         var channel1 = retrievedEvent.Channels[0];
@@ -33,11 +34,11 @@ public class AddChannelTest : SeatsioClientTest
     }
 
     [Fact]
-    public void AddChannels()
+    public async Task AddChannels()
     {
-        var event1 = Client.Events.Create(CreateTestChart());
+        var event1 = await Client.Events.CreateAsync(CreateTestChart());
 
-        Client.Events.Channels.Add(
+        await Client.Events.Channels.AddAsync(
             event1.Key,
             new[]
             {
@@ -46,7 +47,7 @@ public class AddChannelTest : SeatsioClientTest
             }
         );
             
-        var retrievedEvent = Client.Events.Retrieve(event1.Key);
+        var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
         Assert.Equal(2, retrievedEvent.Channels.Count);
 
         var channel1 = retrievedEvent.Channels[0];
@@ -66,13 +67,13 @@ public class AddChannelTest : SeatsioClientTest
     }
 
     [Fact]
-    public void IndexIsOptional()
+    public async Task IndexIsOptional()
     {
-        var event1 = Client.Events.Create(CreateTestChart());
+        var event1 = await Client.Events.CreateAsync(CreateTestChart());
 
-        Client.Events.Channels.Add(event1.Key, "channelKey1", "channel 1", "#FFFF98", null, new[] {"A-1", "A-2"});
+        await Client.Events.Channels.AddAsync(event1.Key, "channelKey1", "channel 1", "#FFFF98", null, new[] {"A-1", "A-2"});
 
-        var retrievedEvent = Client.Events.Retrieve(event1.Key);
+        var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
         Assert.Equal(1, retrievedEvent.Channels.Count);
 
         var channel1 = retrievedEvent.Channels[0];
@@ -84,13 +85,13 @@ public class AddChannelTest : SeatsioClientTest
     }
 
     [Fact]
-    public void ObjectsAreOptional()
+    public async Task ObjectsAreOptional()
     {
-        var event1 = Client.Events.Create(CreateTestChart());
+        var event1 = await Client.Events.CreateAsync(CreateTestChart());
 
-        Client.Events.Channels.Add(event1.Key, "channelKey1", "channel 1", "#FFFF98", 1, null);
+        await Client.Events.Channels.AddAsync(event1.Key, "channelKey1", "channel 1", "#FFFF98", 1, null);
 
-        var retrievedEvent = Client.Events.Retrieve(event1.Key);
+        var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
         Assert.Equal(1, retrievedEvent.Channels.Count);
 
         var channel1 = retrievedEvent.Channels[0];

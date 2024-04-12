@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using SeatsioDotNet.Charts;
 using Xunit;
 
@@ -8,42 +9,42 @@ public class ManageCategoriesTest : SeatsioClientTest
 {
         
     [Fact]
-    public void AddCategory()
+    public async Task AddCategory()
     {
-        var chart = Client.Charts.Create("aChart", "BOOTHS");
+        var chart = await Client.Charts.CreateAsync("aChart", "BOOTHS");
             
-        Client.Charts.AddCategory(chart.Key, new Category(1, "cat 1", "#aaaaaa", true));
-        var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
+        await Client.Charts.AddCategoryAsync(chart.Key, new Category(1, "cat 1", "#aaaaaa", true));
+        var drawing = await Client.Charts.RetrievePublishedVersionAsync(chart.Key);
         Assert.Single(drawing.Categories);
     }
 
     [Fact]
-    public void RemoveCategory()
+    public async Task RemoveCategory()
     {
         var categories = new[]
         {
             new Category(1, "Category 1", "#aaaaaa"), 
             new Category("cat-2", "Category 2", "#bbbbbb", true)
         };
-        var chart = Client.Charts.Create("aChart", "BOOTHS", categories);
+        var chart = await Client.Charts.CreateAsync("aChart", "BOOTHS", categories);
             
-        Client.Charts.RemoveCategory(chart.Key, 1);
+        await Client.Charts.RemoveCategoryAsync(chart.Key, 1);
             
-        var drawing = Client.Charts.RetrievePublishedVersion(chart.Key);
+        var drawing = await Client.Charts.RetrievePublishedVersionAsync(chart.Key);
         Assert.Single(drawing.Categories);
     }
 
     [Fact]
-    public void ListCategories()
+    public async Task ListCategories()
     {
         var categories = new[]
         {
             new Category(1, "Category 1", "#aaaaaa"), 
             new Category("cat-2", "Category 2", "#bbbbbb", true)
         };
-        var chart = Client.Charts.Create("aChart", "BOOTHS", categories);
+        var chart = await Client.Charts.CreateAsync("aChart", "BOOTHS", categories);
             
-        IEnumerable<Category> categoryList = Client.Charts.ListCategories(chart.Key);
+        IEnumerable<Category> categoryList = await Client.Charts.ListCategoriesAsync(chart.Key);
         Assert.Equal(categories, categoryList);
     }
 }

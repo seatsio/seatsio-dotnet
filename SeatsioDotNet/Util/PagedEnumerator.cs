@@ -1,31 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SeatsioDotNet.Util;
 
-public class PagedEnumerator<T> : IEnumerator<T>
+public class PagedEnumerator<T> : IAsyncEnumerator<T>
 {
     private Page<T> _currentPage;
     private int _indexInCurrentPage;
         
     private readonly PageFetcher<T> _pageFetcher;
     private readonly Dictionary<string, object> _listParams;
+    private readonly CancellationToken _cancellationToken;
 
-    public PagedEnumerator(PageFetcher<T> pageFetcher, Dictionary<string, object> listParams)
+    public PagedEnumerator(PageFetcher<T> pageFetcher, Dictionary<string, object> listParams, CancellationToken cancellationToken = default)
     {
         _pageFetcher = pageFetcher;
         _listParams = listParams;
+        _cancellationToken = cancellationToken;
     }
 
-    public bool MoveNext()
+    public async ValueTask<bool> MoveNextAsync()
     {
         if (_currentPage == null)
         {
-            _currentPage = _pageFetcher.FetchFirstPage(_listParams, null);
+            _currentPage = await _pageFetcher.FetchFirstPageAsync(_listParams, null, cancellationToken:_cancellationToken);
         }
         else if (NextPageMustBeFetched())
         {
-            _currentPage = _pageFetcher.FetchAfter(_currentPage.NextPageStartsAfter.Value, _listParams, null);
+            _currentPage = await _pageFetcher.FetchAfterAsync(_currentPage.NextPageStartsAfter.Value, _listParams, null, cancellationToken:_cancellationToken);
             _indexInCurrentPage = 0;
         }
         else
@@ -50,9 +54,10 @@ public class PagedEnumerator<T> : IEnumerator<T>
 
     public T Current => _currentPage.Items[_indexInCurrentPage];
 
-    object IEnumerator.Current => Current;
+    T IAsyncEnumerator<T>.Current => Current;
 
-    public void Dispose()
+    public ValueTask DisposeAsync()
     {
+        return ValueTask.CompletedTask;
     }
 }

@@ -31,9 +31,9 @@ namespace SeatsioDotNet
             ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls12;
         }
 
-        public SeatsioClient(string secretKey, string workspaceKey, string baseUrl)
+        public SeatsioClient(string secretKey, string workspaceKey, string baseUrl, HttpClient httpClient = null)
         {
-            RestClient = CreateRestClient(secretKey, workspaceKey, baseUrl);
+            RestClient = CreateRestClient(secretKey, workspaceKey, baseUrl, httpClient);
             Charts = new Charts.Charts(RestClient);
             Events = new Events.Events(RestClient);
             Workspaces = new Workspaces.Workspaces(RestClient);
@@ -54,13 +54,13 @@ namespace SeatsioDotNet
         {
         }
 
-        private static SeatsioRestClient CreateRestClient(string secretKey, string workspaceKey, string baseUrl)
+        private static SeatsioRestClient CreateRestClient(string secretKey, string workspaceKey, string baseUrl, HttpClient httpClient)
         {
             var options = new RestClientOptions(baseUrl)
             {
                 Authenticator = new HttpBasicAuthenticator(secretKey, null)
             };
-            var client = new SeatsioRestClient(options);
+            var client = new SeatsioRestClient(options, httpClient: httpClient);
             client.AddDefaultHeader("X-Client-Lib", ".NET");
 
             if (!string.IsNullOrEmpty(workspaceKey))
@@ -75,8 +75,8 @@ namespace SeatsioDotNet
 
 public class SeatsioRestClient : RestClient
 {
-    public SeatsioRestClient(RestClientOptions restClientOptions, int maxRetries = 5) : base(
-        new HttpClient(new SeatsioMessageHandler(maxRetries)),
+    public SeatsioRestClient(RestClientOptions restClientOptions, int maxRetries = 5, HttpClient httpClient = null) : base(
+        httpClient ?? new HttpClient(new SeatsioMessageHandler(maxRetries)),
         restClientOptions,
         configureSerialization: s =>
             s.UseSerializer(() => new SystemTextJsonSerializer(SeatsioJsonSerializerOptions())))

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using RestSharp;
@@ -91,6 +92,9 @@ public class SeatsioClientTest
     {
         return new SeatsioClient(secretKey, workspaceKey, BaseUrl);
     }
+
+    protected SeatsioClient CreateSeatsioClient(string secretKey, HttpClient httpClient, string workspaceKey = null)
+        => new SeatsioClient(secretKey, workspaceKey, BaseUrl, httpClient);
 
     protected async Task WaitForStatusChanges(SeatsioClient client, Event evnt, int numStatusChanges)
     {

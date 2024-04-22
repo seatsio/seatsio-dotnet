@@ -240,3 +240,20 @@ var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>").SetMaxRetr
 ```
 
 Passing in 0 disables exponential backoff completely. In that case, the client will never retry a failed request.
+
+## Using a custom HttpClient
+
+You can pass in a custom `HttpClient` (e.g. one that was created by a `IHttpClientFactory`):
+
+```csharp
+var httpClient = factory.CreateClient();
+new SeatsioClient(Region.EU(), "<secret key>", httpClient);
+```
+
+To enable exponential backoff in case of rate limit exceeded errors, you'll need to pass in the `SeatsioMessageHandler` when creating the HTTP client:
+
+```csharp
+var httpClient = new HttpClient(new SeatsioMessageHandler(maxRetries));
+```
+
+Alternatively, you can implement your own retry logic. There's an example in [CustomHttpClientTest.cs](SeatsioDotNet.Test/CustomHttpClientTest.cs).

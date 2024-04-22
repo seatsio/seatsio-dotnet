@@ -45,12 +45,12 @@ namespace SeatsioDotNet
             EventLog = new EventLog.EventLog(RestClient);
         }
 
-        public SeatsioClient(Region region, string secretKey, string workspaceKey) : this(secretKey, workspaceKey,
-            region.Url())
+        public SeatsioClient(Region region, string secretKey, string workspaceKey, HttpClient httpClient = null) : this(secretKey, workspaceKey,
+            region.Url(), httpClient)
         {
         }
 
-        public SeatsioClient(Region region, string secretKey) : this(region, secretKey, null)
+        public SeatsioClient(Region region, string secretKey, HttpClient httpClient = null) : this(region, secretKey, null, httpClient)
         {
         }
 

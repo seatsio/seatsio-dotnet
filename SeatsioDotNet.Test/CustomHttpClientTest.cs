@@ -11,7 +11,7 @@ using Xunit;
 
 namespace SeatsioDotNet.Test;
 
-public class SeatsioClientHttpClientTest : SeatsioClientTest
+public class CustomHttpClientTest : SeatsioClientTest
 {
     [Fact]
     public async Task ReuseHttpClientAcrossMultipleSeatsIoClients()
@@ -31,6 +31,8 @@ public class SeatsioClientHttpClientTest : SeatsioClientTest
         using var httpClient = new HttpClient();
         var workspace1Client = CreateSeatsioClient(workspace1.SecretKey, httpClient);
         var workspace2Client = CreateSeatsioClient(workspace2.SecretKey, httpClient);
+
+        new SeatsioClient(Region.EU(), "<secret key>", httpClient);
 
         var c1w1 = retryPipeline.ExecuteAsync(async _ => await  workspace1Client.Charts.CreateAsync("chart1-workspace1"));
         var c1w2 = retryPipeline.ExecuteAsync(async _ => await workspace2Client.Charts.CreateAsync("chart1-workspace2"));

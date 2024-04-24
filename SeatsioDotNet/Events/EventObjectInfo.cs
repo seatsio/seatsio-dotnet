@@ -48,4 +48,5 @@ public class EventObjectInfo
     public bool? VariableOccupancy { get; set; }
     public int? MinOccupancy { get; set; }
     public int? MaxOccupancy { get; set; }
+    public int SeasonStatusOverriddenQuantity { get; set; }
 }

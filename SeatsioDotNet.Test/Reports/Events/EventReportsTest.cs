@@ -50,6 +50,7 @@ public class EventReportsTest : SeatsioClientTest
         Assert.Equal("channelKey1", reportItem.Channel);
         Assert.Null(reportItem.BookAsAWhole);
         Assert.NotNull(reportItem.DistanceToFocalPoint);
+        Assert.Equal(0, reportItem.SeasonStatusOverriddenQuantity);
 
         var gaItem = report["GA1"].First();
         Assert.True(gaItem.VariableOccupancy);
@@ -69,6 +70,20 @@ public class EventReportsTest : SeatsioClientTest
 
         var reportItem = report["A-1"].First();
         Assert.Equal(holdToken.Token, reportItem.HoldToken);
+    }  
+    
+    [Fact]
+    public async Task SeasonStatusOverriddenQuantity()
+    {
+        var chartKey = CreateTestChart();
+        var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 1);
+        var evnt = season.Events[0];
+        await Client.Events.OverrideSeasonObjectStatusAsync(evnt.Key, new[] {"A-1"});
+
+        var report = await Client.EventReports.ByLabelAsync(evnt.Key);
+
+        var reportItem = report["A-1"].First();
+        Assert.Equal(1, reportItem.SeasonStatusOverriddenQuantity);
     }
 
     [Fact]

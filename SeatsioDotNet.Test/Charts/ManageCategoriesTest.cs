@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using SeatsioDotNet.Charts;
 using Xunit;
@@ -45,5 +46,18 @@ public class ManageCategoriesTest : SeatsioClientTest
 
         IEnumerable<Category> categoryList = await Client.Charts.ListCategoriesAsync(chart.Key);
         Assert.Equal(categories, categoryList);
+    }
+
+    [Fact]
+    public async Task UpdateCategory()
+    {
+        var chart = await Client.Charts.CreateAsync("aChart", "BOOTHS");
+        await Client.Charts.AddCategoryAsync(chart.Key, new Category(1, "cat 1", "#aaaaaa", false));
+
+        await Client.Charts.UpdateCategoryAsync(chart.Key, 1,
+            new CategoryUpdateParams("Updated label", "#bbbbbb", true));
+        
+        IEnumerable<Category> categoryList = await Client.Charts.ListCategoriesAsync(chart.Key);
+        Assert.Equal(new Category(1, "Updated label", "#bbbbbb", true), categoryList.First());
     }
 }

@@ -145,6 +145,13 @@ foreach (var category in categoryList)
 }
 ```
 
+### Updating a category
+
+```csharp
+var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>");
+await Client.Charts.UpdateCategoryAsync(chart.Key, 1, new CategoryUpdateParams("Updated label", "#bbbbbb", true));```
+```
+
 ### Listing all charts
 
 ```csharp

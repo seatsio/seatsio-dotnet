@@ -92,6 +92,32 @@ public class Charts
         [JsonPropertyName("categories")] public IEnumerable<Category> List { get; set; }
     }
 
+    public async Task UpdateCategoryAsync(string chartKey, object categoryKey, CategoryUpdateParams categoryUpdateParams, CancellationToken cancellationToken = default)
+    {
+        var updatedValues = new Dictionary<string, object>();
+
+        if (categoryUpdateParams.Label != null)
+        {
+            updatedValues.Add("label", categoryUpdateParams.Label);
+        }
+
+        if (categoryUpdateParams.Color != null)
+        {
+            updatedValues.Add("color", categoryUpdateParams.Color);
+        }
+
+        if (categoryUpdateParams.Accessible != null)
+        {
+            updatedValues.Add("accessible", categoryUpdateParams.Accessible);
+        }
+
+        var restRequest = new RestRequest($"/charts/{chartKey}/categories/{categoryKey}", Method.Post)
+            .AddUrlSegment("chartKey", chartKey)
+            .AddUrlSegment("categoryKey", categoryKey.ToString())
+            .AddJsonBody(updatedValues);
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
+    }
+
     public async Task<Chart> CopyAsync(string chartKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/charts/{key}/version/published/actions/copy", Method.Post)

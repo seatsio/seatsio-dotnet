@@ -16,6 +16,6 @@ public class DeleteEventTest : SeatsioClientTest
 
         Exception ex = await Assert.ThrowsAsync<SeatsioException>(async () => await Client.Events.RetrieveAsync(evnt.Key));
 
-        Assert.Equal("Event not found: " + evnt.Key + ".", ex.Message);
+        Assert.StartsWith("Event not found: " + evnt.Key + " was not found in workspace", ex.Message);
     }
 }

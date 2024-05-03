@@ -13,8 +13,9 @@ public class ErrorHandlingTest : SeatsioClientTest
         var e = await Assert.ThrowsAsync<SeatsioException>(async () =>
             await Client.Events.RetrieveObjectInfoAsync("unexistingEvent", "unexistingObject"));
 
-        Assert.Equal("Event not found: unexistingEvent.", e.Message);
-        Assert.Contains(new SeatsioApiError("EVENT_NOT_FOUND", "Event not found: unexistingEvent"), e.Errors);
+        Assert.StartsWith("Event not found: unexistingEvent was not found in workspace", e.Message);
+        Assert.Equal("EVENT_NOT_FOUND", e.Errors[0].Code);
+        Assert.StartsWith("Event not found: unexistingEvent was not found in workspace", e.Errors[0].Message);
         Assert.NotNull(e.RequestId);
     }
 

@@ -8,7 +8,7 @@
         "label": "cat1",
         "color": "#AEDB54",
         "accessible": false,
-        "key": 1
+        "key": "019b4f41-9cd8-4988-9d74-308563a089a2"
       },
       {
         "label": "cat2",
@@ -59,7 +59,7 @@
         "labelRotationAngle": 0,
         "uuid": "uuid2",
         "categoryLabel": "cat1",
-        "categoryKey": 1,
+        "categoryKey": "019b4f41-9cd8-4988-9d74-308563a089a2",
         "topLeft": {
           "x": 0,
           "y": 0

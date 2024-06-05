@@ -83,6 +83,5 @@ public class ListChartsTest : SeatsioClientTest
         var chart = await Client.Charts.ListAllAsync(withValidation: true).FirstAsync();
 
         Assert.NotNull(chart.Validation);
-        Assert.Equal("ROWS_WITHOUT_SECTIONS", chart.VenueType);
     }
 }

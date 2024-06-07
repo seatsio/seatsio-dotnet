@@ -31,6 +31,7 @@ public class EventObjectInfo
     public int? NumBooked { get; set; }
     public int? NumFree { get; set; }
     public int? NumHeld { get; set; }
+    public int? NumNotForSale { get; set; }
     public int? Capacity { get; set; }
     public bool? BookAsAWhole { get; set; }
     public Dictionary<string, object> ExtraData { get; set; }

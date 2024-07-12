@@ -324,6 +324,7 @@ public class EventReportsTest : SeatsioClientTest
         var report = await Client.EventReports.ByZoneAsync(evnt.Key);
 
         Assert.Equal(6032, report["midtrack"].Count());
+        Assert.Equal("midtrack", report["midtrack"].First().Zone);
     }
 
     [Fact]

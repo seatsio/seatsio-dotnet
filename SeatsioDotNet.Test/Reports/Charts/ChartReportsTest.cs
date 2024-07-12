@@ -373,6 +373,7 @@ public class ChartReportsTest : SeatsioClientTest
         var report = await getReport(Client, chartKey);
         Assert.Equal(3, report.Count);
         Assert.Equal(6032, report["midtrack"].Count());
+        Assert.Equal("midtrack", report["midtrack"].First().Zone);
         Assert.Equal(2865, report["finishline"].Count());
         Assert.Empty(report["NO_ZONE"]);
     }

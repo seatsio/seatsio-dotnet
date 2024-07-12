@@ -51,4 +51,5 @@ public class EventObjectInfo
     public int? MinOccupancy { get; set; }
     public int? MaxOccupancy { get; set; }
     public int SeasonStatusOverriddenQuantity { get; set; }
+    public string Zone { get; set; }
 }

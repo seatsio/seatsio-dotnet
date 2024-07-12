@@ -21,4 +21,5 @@ public class ChartObjectInfo
     public bool? IsAccessible { get; set; }
     public bool? IsCompanionSeat { get; set; }
     public bool? HasRestrictedView { get; set; }
+    public string Zone { get; set; }
 }

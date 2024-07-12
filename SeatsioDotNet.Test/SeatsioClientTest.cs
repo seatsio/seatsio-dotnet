@@ -57,6 +57,11 @@ public class SeatsioClientTest
     {
         return CreateTestChartFromJson(File.ReadAllText("./resources/sampleChartWithSections.json"));
     }
+    
+    protected string CreateTestChartWithZones()
+    {
+        return CreateTestChartFromJson(File.ReadAllText("./resources/sampleChartWithZones.json"));
+    }
 
     protected string CreateTestChartWithTables()
     {

@@ -43,6 +43,7 @@ public class ChartReportsSummaryTest : SeatsioClientTest
         Assert.Equal(new() {{NoSection, 32}}, report["seat"].bySection);
         Assert.Equal(new() {{"9", 16}, {"10", 16}}, report["seat"].byCategoryKey);
         Assert.Equal(new() {{"Cat1", 16}, {"Cat2", 16}}, report["seat"].byCategoryLabel);
+        Assert.Equal(new() {{NoZone, 32}}, report["seat"].byZone);
 
         Assert.Equal(200, report["generalAdmission"].Count);
         Assert.Equal(new() {{NoSection, 200}}, report["generalAdmission"].bySection);
@@ -50,6 +51,7 @@ public class ChartReportsSummaryTest : SeatsioClientTest
             report["generalAdmission"].byCategoryKey);
         Assert.Equal(new() {{"Cat1", 100}, {"Cat2", 100}},
             report["generalAdmission"].byCategoryLabel);
+        Assert.Equal(new() {{NoZone, 200}}, report["generalAdmission"].byZone);
     }
 
     public static IEnumerable<object[]> SummaryByObjectType_BookWholeTablesTrueTestCases
@@ -195,6 +197,42 @@ public class ChartReportsSummaryTest : SeatsioClientTest
         Assert.Equal(232, report[NoSection].Count);
         Assert.Equal(new() {{"9", 116}, {"10", 116}}, report[NoSection].byCategoryKey);
         Assert.Equal(new() {{"Cat1", 116}, {"Cat2", 116}}, report[NoSection].byCategoryLabel);
+    }
+
+    public static IEnumerable<object[]> SummaryByZoneTestCases
+    {
+        get
+        {
+            yield return new object[]
+            {
+                (Func<SeatsioClient, string, Task>) ((_, _) => Task.CompletedTask),
+                (Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>>) ((client, chartKey) =>
+                    client.ChartReports.SummaryByZoneAsync(chartKey))
+            };
+            yield return new object[]
+            {
+                (Func<SeatsioClient, string, Task>) (CreateDraftChart),
+                (Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>>) ((client, chartKey) =>
+                    client.ChartReports.SummaryByZoneAsync(chartKey, version: Draft))
+            };
+        }
+    }
+
+    [Theory]
+    [MemberData(nameof(SummaryByZoneTestCases), MemberType = typeof(ChartReportsSummaryTest))]
+    public async Task SummaryByZone(Func<SeatsioClient, string, Task> updateChart,
+        Func<SeatsioClient, string, Task<Dictionary<string, ChartReportSummaryItem>>> getReport)
+    {
+        var chartKey = CreateTestChartWithZones();
+        await updateChart(Client, chartKey);
+
+        var report = await getReport(Client, chartKey);
+
+        Assert.Equal(6032, report["midtrack"].Count);
+        Assert.Equal(new() {{"2", 6032}}, report["midtrack"].byCategoryKey);
+        Assert.Equal(new() {{"Mid Track Stand", 6032}}, report["midtrack"].byCategoryLabel);
+        Assert.Equal(new() {{"seat", 6032}}, report["midtrack"].byObjectType);
+        Assert.Equal(new() {{"MT1", 2418}, {"MT3", 3614}}, report["midtrack"].bySection);
     }
 
     private static async Task CreateDraftChart(SeatsioClient client, string chartKey)

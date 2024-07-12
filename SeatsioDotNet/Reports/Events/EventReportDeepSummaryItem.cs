@@ -11,4 +11,5 @@ public class EventReportDeepSummaryItem
     public Dictionary<string, EventReportSummaryItem> bySection { get; set; }
     public Dictionary<string, EventReportSummaryItem> byAvailability { get; set; }
     public Dictionary<string, EventReportSummaryItem> byChannel { get; set; }
+    public Dictionary<string, EventReportSummaryItem> byZone { get; set; }
 }

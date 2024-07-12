@@ -314,6 +314,29 @@ public class EventReportsTest : SeatsioClientTest
 
         Assert.Equal(34, report.Count());
     }
+    
+    [Fact]
+    public async Task ByZone()
+    {
+        var chartKey = CreateTestChartWithZones();
+        var evnt = await Client.Events.CreateAsync(chartKey);
+
+        var report = await Client.EventReports.ByZoneAsync(evnt.Key);
+
+        Assert.Equal(6032, report["midtrack"].Count());
+        Assert.Equal("midtrack", report["midtrack"].First().Zone);
+    }
+
+    [Fact]
+    public async Task BySpecificZone()
+    {
+        var chartKey = CreateTestChartWithZones();
+        var evnt = await Client.Events.CreateAsync(chartKey);
+
+        var report = await Client.EventReports.ByZoneAsync(evnt.Key, "midtrack");
+
+        Assert.Equal(6032, report.Count());
+    }
 
     [Fact]
     public async Task ByAvailability()

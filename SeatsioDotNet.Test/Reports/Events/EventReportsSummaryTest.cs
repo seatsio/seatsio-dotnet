@@ -119,6 +119,19 @@ public class EventReportsSummaryTest : SeatsioClientTest
         Assert.Equal(new() {{"Cat1", 116}, {"Cat2", 116}}, report[NoSection].byCategoryLabel);
         Assert.Equal(new() {{Available, 231}, {NotAvailable, 1}}, report[NoSection].byAvailability);
         Assert.Equal(new() {{NoChannel, 232}}, report[NoSection].byChannel);
+        Assert.Equal(new() {{NoZone, 232}}, report[NoSection].byZone);
+    } 
+    
+    [Fact]
+    public async Task SummaryByZone()
+    {
+        var chartKey = CreateTestChartWithZones();
+        var evnt = await Client.Events.CreateAsync(chartKey);
+
+        var report = await Client.EventReports.SummaryByZoneAsync(evnt.Key);
+
+        Assert.Equal(6032, report["midtrack"].Count);
+        Assert.Equal(new() {{Free, 6032}}, report["midtrack"].byStatus);
     }
 
     [Fact]

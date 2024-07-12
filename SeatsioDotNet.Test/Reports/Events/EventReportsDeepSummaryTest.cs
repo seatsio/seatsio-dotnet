@@ -74,6 +74,18 @@ public class EventReportsDeepSummaryTest : SeatsioClientTest
         Assert.Equal(232, report[NoSection].Count);
         Assert.Equal(116, report[NoSection].byCategoryLabel["Cat1"].Count);
         Assert.Equal(1, report[NoSection].byCategoryLabel["Cat1"].byAvailability[NotAvailable]);
+    }  
+    
+    [Fact]
+    public async Task DeepSummaryByZone()
+    {
+        var chartKey = CreateTestChartWithZones();
+        var evnt = await Client.Events.CreateAsync(chartKey);
+
+        var report = await Client.EventReports.DeepSummaryByZoneAsync(evnt.Key);
+
+        Assert.Equal(6032, report["midtrack"].Count);
+        Assert.Equal(6032, report["midtrack"].byCategoryLabel["Mid Track Stand"].Count);
     }
 
     [Fact]

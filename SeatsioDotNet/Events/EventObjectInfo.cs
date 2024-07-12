@@ -9,6 +9,7 @@ public class EventObjectInfo
     public const string NotAvailable = "not_available";
 
     public const string NoSection = "NO_SECTION";
+    public const string NoZone = "NO_ZONE";
     public const string NoChannel = "NO_CHANNEL";
 
     public const string Free = "free";

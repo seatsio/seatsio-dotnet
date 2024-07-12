@@ -66,6 +66,16 @@ public class ChartReports
     {
         return await FetchSummaryReportAsync("bySection", eventKey, bookWholeTablesMode, version, cancellationToken);
     }
+    
+    public async Task<Dictionary<string, IEnumerable<ChartObjectInfo>>> ByZoneAsync(string chartKey, string bookWholeTablesMode = null, Version version = Version.Production, CancellationToken cancellationToken = default)
+    {
+        return await FetchReportAsync("byZone", chartKey, bookWholeTablesMode, version, cancellationToken);
+    }
+
+    public async Task<Dictionary<string, ChartReportSummaryItem>> SummaryByZoneAsync(string eventKey, string bookWholeTablesMode = null, Version version = Version.Production, CancellationToken cancellationToken = default)
+    {
+        return await FetchSummaryReportAsync("byZone", eventKey, bookWholeTablesMode, version, cancellationToken);
+    }
 
     private async Task<Dictionary<string, IEnumerable<ChartObjectInfo>>> FetchReportAsync(string reportType, string chartKey, string bookWholeTablesMode, Version version = Version.Production, CancellationToken cancellationToken = default)
     {

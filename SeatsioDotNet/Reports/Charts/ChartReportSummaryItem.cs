@@ -9,4 +9,5 @@ public class ChartReportSummaryItem
     public Dictionary<string, int> byCategoryLabel { get; set; }
     public Dictionary<string, int> bySection { get; set; }
     public Dictionary<string, int> byObjectType { get; set; }
+    public Dictionary<string, int> byZone { get; set; }
 }

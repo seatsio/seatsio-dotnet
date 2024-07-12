@@ -345,6 +345,37 @@ public class ChartReportsTest : SeatsioClientTest
 
         CustomAssert.ContainsOnly(new[] {"T1-1", "T1-2", "T1-3", "T1-4", "T1-5", "T1-6", "T2-1", "T2-2", "T2-3", "T2-4", "T2-5", "T2-6"}, report.Keys);
     }
+    
+    public static IEnumerable<object[]> ByZoneTestCases
+    {
+        get
+        {
+            yield return new object[]
+            {
+                (Func<SeatsioClient, string, Task>) ((_, _) => Task.CompletedTask),
+                (Func<SeatsioClient, string, Task<Dictionary<string, IEnumerable<ChartObjectInfo>>>>) ((client, chartKey) => client.ChartReports.ByZoneAsync(chartKey))
+            };
+            yield return new object[]
+            {
+                (Func<SeatsioClient, string, Task>) (CreateDraftChart),
+                (Func<SeatsioClient, string, Task<Dictionary<string, IEnumerable<ChartObjectInfo>>>>) ((client, chartKey) => client.ChartReports.ByZoneAsync(chartKey, version: Draft))
+            };
+        }
+    }
+
+    [Theory]
+    [MemberData(nameof(ByZoneTestCases), MemberType = typeof(ChartReportsTest))]
+    public async Task ByZone(Func<SeatsioClient, string, Task> updateChart, Func<SeatsioClient, string, Task<Dictionary<string, IEnumerable<ChartObjectInfo>>>> getReport)
+    {
+        var chartKey = CreateTestChartWithZones();
+        await updateChart(Client, chartKey);
+
+        var report = await getReport(Client, chartKey);
+        Assert.Equal(3, report.Count);
+        Assert.Equal(6032, report["midtrack"].Count());
+        Assert.Equal(2865, report["finishline"].Count());
+        Assert.Empty(report["NO_ZONE"]);
+    }
 
     private static async Task CreateDraftChart(SeatsioClient client, string chartKey)
     {

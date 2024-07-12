@@ -135,6 +135,26 @@ public class EventReports
     {
         return await FetchReport("bySection", eventKey, section, cancellationToken);
     }
+    
+    public async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> ByZoneAsync(string eventKey, CancellationToken cancellationToken = default)
+    {
+        return await FetchReportAsync("byZone", eventKey, cancellationToken);
+    }
+
+    public async Task<Dictionary<string, EventReportSummaryItem>> SummaryByZoneAsync(string eventKey, CancellationToken cancellationToken = default)
+    {
+        return await FetchSummaryReport("byZone", eventKey, cancellationToken);
+    }
+
+    public async Task<Dictionary<string, EventReportDeepSummaryItem>> DeepSummaryByZoneAsync(string eventKey, CancellationToken cancellationToken = default)
+    {
+        return await FetchDeepSummaryReport("byZone", eventKey, cancellationToken);
+    }
+
+    public async Task<IEnumerable<EventObjectInfo>> ByZoneAsync(string eventKey, string zone, CancellationToken cancellationToken = default)
+    {
+        return await FetchReport("byZone", eventKey, zone, cancellationToken);
+    }
 
     public async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> ByAvailabilityAsync(string eventKey, CancellationToken cancellationToken = default)
     {

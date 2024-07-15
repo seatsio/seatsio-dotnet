@@ -11,7 +11,7 @@ public class ManageCategoriesTest : SeatsioClientTest
     [Fact]
     public async Task AddCategory()
     {
-        var chart = await Client.Charts.CreateAsync("aChart", "BOOTHS");
+        var chart = await Client.Charts.CreateAsync("aChart", "SIMPLE");
 
         await Client.Charts.AddCategoryAsync(chart.Key, new Category(1, "cat 1", "#aaaaaa", true));
         var drawing = await Client.Charts.RetrievePublishedVersionAsync(chart.Key);
@@ -26,7 +26,7 @@ public class ManageCategoriesTest : SeatsioClientTest
             new Category(1, "Category 1", "#aaaaaa"),
             new Category("cat-2", "Category 2", "#bbbbbb", true)
         };
-        var chart = await Client.Charts.CreateAsync("aChart", "BOOTHS", categories);
+        var chart = await Client.Charts.CreateAsync("aChart", "SIMPLE", categories);
 
         await Client.Charts.RemoveCategoryAsync(chart.Key, 1);
 
@@ -42,7 +42,7 @@ public class ManageCategoriesTest : SeatsioClientTest
             new Category(1, "Category 1", "#aaaaaa"),
             new Category("cat-2", "Category 2", "#bbbbbb", true)
         };
-        var chart = await Client.Charts.CreateAsync("aChart", "BOOTHS", categories);
+        var chart = await Client.Charts.CreateAsync("aChart", "SIMPLE", categories);
 
         IEnumerable<Category> categoryList = await Client.Charts.ListCategoriesAsync(chart.Key);
         Assert.Equal(categories, categoryList);
@@ -51,7 +51,7 @@ public class ManageCategoriesTest : SeatsioClientTest
     [Fact]
     public async Task UpdateCategory()
     {
-        var chart = await Client.Charts.CreateAsync("aChart", "BOOTHS");
+        var chart = await Client.Charts.CreateAsync("aChart", "SIMPLE");
         await Client.Charts.AddCategoryAsync(chart.Key, new Category(1, "cat 1", "#aaaaaa", false));
 
         await Client.Charts.UpdateCategoryAsync(chart.Key, 1,

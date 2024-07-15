@@ -25,6 +25,17 @@ public class RetrieveChartTest : SeatsioClientTest
         Assert.Null(retrievedChart.Events);
         CustomAssert.ContainsOnly(new[] {"tag1", "tag2"}, retrievedChart.Tags);
         Assert.False(retrievedChart.Archived);
+        Assert.Null(retrievedChart.Zones);
+    } 
+    
+    [Fact]
+    public async Task WithZones()
+    {
+        var chart = CreateTestChartWithZones();
+
+        Chart retrievedChart = await Client.Charts.RetrieveAsync(chart);
+
+        Assert.Equal(new[] {new Zone("finishline", "Finish Line"), new Zone("midtrack", "Mid Track")}, retrievedChart.Zones);
     }
 
     [Fact]

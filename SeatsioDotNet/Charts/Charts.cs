@@ -263,27 +263,27 @@ public class Charts
         return AssertOk(await _restClient.ExecuteAsync<ChartValidationResult>(restRequest, cancellationToken));
     }
 
-    public IAsyncEnumerable<Chart> ListAllAsync(string filter = null, string tag = null, bool expandEvents = false, bool expandValidation = false, bool expandVenueType = false)
+    public IAsyncEnumerable<Chart> ListAllAsync(string filter = null, string tag = null, bool expandEvents = false, bool expandValidation = false, bool expandVenueType = false, bool expandZones = false)
     {
-        return List().AllAsync(ChartListParams(filter, tag, expandEvents, expandValidation, expandVenueType));
+        return List().AllAsync(ChartListParams(filter, tag, expandEvents, expandValidation, expandVenueType, expandZones));
     }
 
-    public async Task<Page<Chart>> ListFirstPageAsync(string filter = null, string tag = null, bool expandEvents = false, int? pageSize = null, bool expandValidation = false, bool expandVenueType = false, CancellationToken cancellationToken = default)
+    public async Task<Page<Chart>> ListFirstPageAsync(string filter = null, string tag = null, bool expandEvents = false, int? pageSize = null, bool expandValidation = false, bool expandVenueType = false, bool expandZones = false, CancellationToken cancellationToken = default)
     {
-        return await List().FirstPageAsync(ChartListParams(filter, tag, expandEvents, expandValidation, expandVenueType), pageSize, cancellationToken);
+        return await List().FirstPageAsync(ChartListParams(filter, tag, expandEvents, expandValidation, expandVenueType, expandZones), pageSize, cancellationToken);
     }
 
-    public async Task<Page<Chart>> ListPageAfterAsync(long id, string filter = null, string tag = null, bool expandEvents = false, int? pageSize = null, bool expandValidation = false, bool expandVenueType = false, CancellationToken cancellationToken = default)
+    public async Task<Page<Chart>> ListPageAfterAsync(long id, string filter = null, string tag = null, bool expandEvents = false, int? pageSize = null, bool expandValidation = false, bool expandVenueType = false, bool expandZones = false, CancellationToken cancellationToken = default)
     {
-        return await List().PageAfterAsync(id, ChartListParams(filter, tag, expandEvents, expandValidation, expandVenueType), pageSize, cancellationToken);
+        return await List().PageAfterAsync(id, ChartListParams(filter, tag, expandEvents, expandValidation, expandVenueType, expandZones), pageSize, cancellationToken);
     }
 
-    public async Task<Page<Chart>> ListPageBeforeAsync(long id, string filter = null, string tag = null, bool expandEvents = false, int? pageSize = null, bool expandValidation = false, bool expandVenueType = false, CancellationToken cancellationToken = default)
+    public async Task<Page<Chart>> ListPageBeforeAsync(long id, string filter = null, string tag = null, bool expandEvents = false, int? pageSize = null, bool expandValidation = false, bool expandVenueType = false,bool expandZones = false,  CancellationToken cancellationToken = default)
     {
-        return await List().PageBeforeAsync(id, ChartListParams(filter, tag, expandEvents, expandValidation, expandVenueType), pageSize, cancellationToken);
+        return await List().PageBeforeAsync(id, ChartListParams(filter, tag, expandEvents, expandValidation, expandVenueType, expandZones), pageSize, cancellationToken);
     }
 
-    private Dictionary<string, object> ChartListParams(string filter, string tag, bool expandEvents, bool expandValidation, bool expandVenueType)
+    private Dictionary<string, object> ChartListParams(string filter, string tag, bool expandEvents, bool expandValidation, bool expandVenueType, bool expandZones = false)
     {
         var chartListParams = new Dictionary<string, object>();
 
@@ -297,12 +297,12 @@ public class Charts
             chartListParams.Add("tag", tag);
         }
 
-        chartListParams.Add("expand", ChartListExpandParams(expandEvents, expandValidation, expandVenueType));
+        chartListParams.Add("expand", ChartListExpandParams(expandEvents, expandValidation, expandVenueType, expandZones));
 
         return chartListParams;
     }
 
-    private object ChartListExpandParams(bool expandEvents, bool expandValidation, bool expandVenueType)
+    private object ChartListExpandParams(bool expandEvents, bool expandValidation, bool expandVenueType, bool expandZones)
     {
         var result = new List<string>();
         
@@ -319,6 +319,11 @@ public class Charts
         if (expandVenueType)
         {
             result.Add("venueType");
+        }   
+        
+        if (expandZones)
+        {
+            result.Add("zones");
         }
 
         return result;

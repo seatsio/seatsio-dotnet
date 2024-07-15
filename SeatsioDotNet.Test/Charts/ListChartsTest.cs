@@ -64,24 +64,28 @@ public class ListChartsTest : SeatsioClientTest
     }
 
     [Fact]
-    public async Task Expand()
+    public async Task ExpandAll()
     {
         var chart = await Client.Charts.CreateAsync();
         var event1 = await Client.Events.CreateAsync(chart.Key);
         var event2 = await Client.Events.CreateAsync(chart.Key);
 
-        var charts = await Client.Charts.ListAllAsync(expandEvents: true).ToListAsync();
+        var charts = await Client.Charts.ListAllAsync(expandEvents: true, expandValidation: true, expandVenueType: true).ToListAsync();
 
         Assert.Equal(new[] {event2.Id, event1.Id}, charts.First().Events.Select(c => c.Id));
+        Assert.Equal("MIXED", charts.First().VenueType);
+        Assert.NotNull(charts.First().Validation);
     }
 
     [Fact]
-    public async Task Validation()
+    public async Task ExpandNone()
     {
-        CreateTestChartWithErrors();
+        var chart = await Client.Charts.CreateAsync();
 
-        var chart = await Client.Charts.ListAllAsync(withValidation: true).FirstAsync();
+        var charts = await Client.Charts.ListAllAsync(expandEvents: true).ToListAsync();
 
-        Assert.NotNull(chart.Validation);
+        Assert.Empty(charts.First().Events);
+        Assert.Null(charts.First().Validation);
+        Assert.Null(charts.First().VenueType);
     }
 }

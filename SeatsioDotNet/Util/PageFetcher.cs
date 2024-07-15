@@ -65,7 +65,17 @@ public class PageFetcher<T>
         {
             foreach (var param in listParams)
             {
-                restRequest.AddQueryParameter(param.Key, param.Value.ToString());
+                if (param.Value.GetType() == typeof(List<string>))
+                {
+                    foreach (var v in (List<string>)param.Value)
+                    {
+                        restRequest.AddQueryParameter(param.Key, v);
+                    }
+                }
+                else
+                {
+                    restRequest.AddQueryParameter(param.Key, param.Value.ToString());
+                }
             }
         }
 

@@ -16,4 +16,5 @@ public class Chart
     public IEnumerable<Event> Events { get; set; }
     public ChartValidationResult Validation { get; set; }
     public string VenueType { get; set; }
+    public Zone[] Zones { get; set; }
 }

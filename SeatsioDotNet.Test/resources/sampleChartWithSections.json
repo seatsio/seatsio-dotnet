@@ -30,7 +30,7 @@
     "texts": [],
     "rows": [],
     "shapes": [],
-    "booths": [],
+    "SIMPLE": [],
     "generalAdmissionAreas": [],
     "sections": [
       {
@@ -512,7 +512,7 @@
             }
           ],
           "shapes": [],
-          "booths": [],
+          "SIMPLE": [],
           "generalAdmissionAreas": []
         }
       },
@@ -1005,7 +1005,7 @@
             }
           ],
           "shapes": [],
-          "booths": [],
+          "SIMPLE": [],
           "generalAdmissionAreas": []
         }
       }

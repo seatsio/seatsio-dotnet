@@ -66,26 +66,28 @@ public class ListChartsTest : SeatsioClientTest
     [Fact]
     public async Task ExpandAll()
     {
-        var chart = await Client.Charts.CreateAsync();
-        var event1 = await Client.Events.CreateAsync(chart.Key);
-        var event2 = await Client.Events.CreateAsync(chart.Key);
+        var chart = CreateTestChartWithZones();
+        var event1 = await Client.Events.CreateAsync(chart);
+        var event2 = await Client.Events.CreateAsync(chart);
 
-        var charts = await Client.Charts.ListAllAsync(expandEvents: true, expandValidation: true, expandVenueType: true).ToListAsync();
+        var charts = await Client.Charts.ListAllAsync(expandEvents: true, expandValidation: true, expandVenueType: true, expandZones: true).ToListAsync();
 
         Assert.Equal(new[] {event2.Id, event1.Id}, charts.First().Events.Select(c => c.Id));
-        Assert.Equal("MIXED", charts.First().VenueType);
+        Assert.Equal("WITH_ZONES", charts.First().VenueType);
         Assert.NotNull(charts.First().Validation);
+        Assert.Equal(new[] {new Zone("finishline", "Finish Line"), new Zone("midtrack", "Mid Track")}, charts.First().Zones);
     }
 
     [Fact]
     public async Task ExpandNone()
     {
-        var chart = await Client.Charts.CreateAsync();
+        CreateTestChartWithZones();
 
         var charts = await Client.Charts.ListAllAsync(expandEvents: true).ToListAsync();
 
         Assert.Empty(charts.First().Events);
         Assert.Null(charts.First().Validation);
         Assert.Null(charts.First().VenueType);
+        Assert.Null(charts.First().Zones);
     }
 }

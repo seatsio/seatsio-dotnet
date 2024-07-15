@@ -24,7 +24,7 @@ public class CreateChartTest : SeatsioClientTest
         Assert.False(retrievedChart.Archived);
 
         var drawing = await Client.Charts.RetrievePublishedVersionAsync(chart.Key);
-        Assert.Equal("MIXED", drawing.VenueType);
+        Assert.Equal("SIMPLE", drawing.VenueType);
         Assert.Empty(drawing.Categories);
     }
 
@@ -44,13 +44,13 @@ public class CreateChartTest : SeatsioClientTest
     [Fact]
     public async Task VenueType()
     {
-        var chart = await Client.Charts.CreateAsync(null, "BOOTHS");
+        var chart = await Client.Charts.CreateAsync(null, "SIMPLE");
 
         Chart retrievedChart = await Client.Charts.RetrieveAsync(chart.Key);
 
         Assert.Equal("Untitled chart", retrievedChart.Name);
         var drawing = await Client.Charts.RetrievePublishedVersionAsync(chart.Key);
-        Assert.Equal("BOOTHS", drawing.VenueType);
+        Assert.Equal("SIMPLE", drawing.VenueType);
         Assert.Empty(drawing.Categories);
     }
 

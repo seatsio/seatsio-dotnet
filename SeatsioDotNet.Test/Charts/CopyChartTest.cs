@@ -8,12 +8,12 @@ public class CopyChartTest : SeatsioClientTest
     [Fact]
     public async Task Test()
     {
-        var chart = await Client.Charts.CreateAsync("my chart", "BOOTHS");
+        var chart = await Client.Charts.CreateAsync("my chart", "SIMPLE");
 
         var copiedChart = await Client.Charts.CopyAsync(chart.Key);
 
         Assert.Equal("my chart (copy)", copiedChart.Name);
         var drawing = await Client.Charts.RetrievePublishedVersionAsync(copiedChart.Key);
-        Assert.Equal("BOOTHS", drawing.VenueType);
+        Assert.Equal("SIMPLE", drawing.VenueType);
     }
 }

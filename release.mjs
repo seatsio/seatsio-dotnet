@@ -2,6 +2,7 @@
 
 $.verbose = false
 
+const semver = require('semver')
 const versionToBump = getVersionToBump()
 const latestReleaseTag = await fetchLatestReleasedVersionNumber()
 const latestVersion = removeLeadingV(latestReleaseTag)
@@ -32,7 +33,7 @@ async function fetchLatestReleasedVersionNumber() {
 }
 
 async function determineNextVersionNumber(previous) {
-    return (await $`semver bump ${versionToBump} ${previous}`).stdout.trim()
+    return semver.inc(previous, versionToBump)
 }
 
 async function bumpVersionInFiles() {

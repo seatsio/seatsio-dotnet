@@ -188,4 +188,16 @@ public class ChangeBestAvailableObjectStatusTest : SeatsioClientTest
 
         Assert.Equal(new[] {"A-5"}, bestAvailableResult.Objects);
     }
+    
+    [Fact]
+    public async Task AccessibleSeats()
+    {
+        var chartKey = CreateTestChart();
+        var evnt = await Client.Events.CreateAsync(chartKey);
+
+        var bestAvailableResult = await Client.Events.ChangeObjectStatusAsync(evnt.Key, new BestAvailable(3, accessibleSeats: 1), "foo");
+
+        Assert.True(bestAvailableResult.NextToEachOther);
+        Assert.Equal(new[] {"A-6", "A-7", "A-8"}, bestAvailableResult.Objects);
+    }
 }

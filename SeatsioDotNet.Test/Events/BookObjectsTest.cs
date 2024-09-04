@@ -25,6 +25,18 @@ public class BookObjectsTest : SeatsioClientTest
     }
 
     [Fact]
+    public async Task Floors()
+    {
+        var chartKey = CreateTestChartWithFloors();
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        
+        var result = await Client.Events.BookAsync(evnt.Key, new[] {"S1-A-1"});
+        
+        var reportItem = result.Objects["S1-A-1"];
+        reportItem.Floor.Should().BeEquivalentTo(new Floor("1", "Floor 1"));
+    }
+
+    [Fact]
     public async Task Sections()
     {
         var chartKey = CreateTestChartWithSections();
@@ -39,6 +51,7 @@ public class BookObjectsTest : SeatsioClientTest
         var reportItem = result.Objects["Section A-A-1"];
         Assert.Equal("Section A", reportItem.Section);
         Assert.Equal("Entrance 1", reportItem.Entrance);
+        Assert.Null(reportItem.Floor);
         reportItem.Labels.Should().BeEquivalentTo(new Labels("1", "seat", "A", "row", "Section A"));
         reportItem.IDs.Should().BeEquivalentTo(new IDs("1", "A", "Section A"));
     }

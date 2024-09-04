@@ -10,8 +10,10 @@ public class BestAvailable
     public IEnumerable<Dictionary<string, object>> ExtraData { get; }
     public string[] TicketTypes { get; }
     public bool? TryToPreventOrphanSeats;
+    public int? AccessibleSeats;
 
-    public BestAvailable(int number, IEnumerable<string> categories = null, IEnumerable<Dictionary<string, object>> extraData = null, string[] ticketTypes = null, bool? tryToPreventOrphanSeats = null, string zone = null)
+    public BestAvailable(int number, IEnumerable<string> categories = null, IEnumerable<Dictionary<string, object>> extraData = null,
+        string[] ticketTypes = null, bool? tryToPreventOrphanSeats = null, string zone = null, int? accessibleSeats = null)
     {
         Categories = categories;
         Number = number;
@@ -19,6 +21,7 @@ public class BestAvailable
         TicketTypes = ticketTypes;
         TryToPreventOrphanSeats = tryToPreventOrphanSeats;
         Zone = zone;
+        AccessibleSeats = accessibleSeats;
     }
 
     public Dictionary<string, object> AsDictionary()
@@ -53,6 +56,11 @@ public class BestAvailable
             dictionary.Add("tryToPreventOrphanSeats", TryToPreventOrphanSeats);
         }
 
+        if (AccessibleSeats != null)
+        {
+            dictionary.Add("accessibleSeats", AccessibleSeats);    
+        }
+        
         return dictionary;
     }
 }

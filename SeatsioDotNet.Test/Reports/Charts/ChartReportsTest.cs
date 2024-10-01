@@ -55,6 +55,7 @@ public class ChartReportsTest : SeatsioClientTest
         Assert.NotNull(reportItem.IsAccessible);
         Assert.NotNull(reportItem.IsCompanionSeat);
         Assert.NotNull(reportItem.HasRestrictedView);
+        Assert.Null(reportItem.floor);
     }
 
     [Theory]
@@ -117,6 +118,21 @@ public class ChartReportsTest : SeatsioClientTest
         Assert.Single(report["A-2"]);
     }
 
+    [Theory]
+    [MemberData(nameof(ByLabelTestCases), MemberType = typeof(ChartReportsTest))]
+    public async Task ByLabelWithFloors(Func<SeatsioClient, string, Task> updateChart, Func<SeatsioClient, string, Task<Dictionary<string, IEnumerable<ChartObjectInfo>>>> getReport)
+    {
+        var chartKey = CreateTestChartWithFloors();
+        await updateChart(Client, chartKey);
+
+        var report = await getReport(Client, chartKey);
+
+        Assert.Equivalent(new Floor("1", "Floor 1"), report["S1-A-1"].First().floor);
+        Assert.Equivalent(new Floor("1", "Floor 1"), report["S1-A-2"].First().floor);
+        Assert.Equivalent(new Floor("2", "Floor 2"), report["S2-B-1"].First().floor);
+        Assert.Equivalent(new Floor("2", "Floor 2"), report["S2-B-2"].First().floor);
+    }
+
     public static IEnumerable<object[]> ByObjectTypeTestCases
     {
         get
@@ -147,6 +163,25 @@ public class ChartReportsTest : SeatsioClientTest
         Assert.Equal(2, report["generalAdmission"].Count());
         Assert.Empty(report["booth"]);
         Assert.Empty(report["table"]);
+    }
+
+    [Theory]
+    [MemberData(nameof(ByObjectTypeTestCases), MemberType = typeof(ChartReportsTest))]
+    public async Task ByObjectTypeWithFloors(Func<SeatsioClient, string, Task> updateChart, Func<SeatsioClient, string, Task<Dictionary<string, IEnumerable<ChartObjectInfo>>>> getReport)
+    {
+        var chartKey = CreateTestChartWithFloors();
+        await updateChart(Client, chartKey);
+
+        var report = await getReport(Client, chartKey);
+
+        foreach (var chartObjectInfo in report["seat"].TakeWhile(info => info.Label.StartsWith("S1")))
+        {
+            Assert.Equivalent(new Floor("1", "Floor 1"), chartObjectInfo.floor);
+        }
+        foreach (var chartObjectInfo in report["seat"].TakeWhile(info => info.Label.StartsWith("S2")))
+        {
+            Assert.Equivalent(new Floor("2", "Floor 2"), chartObjectInfo.floor);
+        }
     }
 
     public static IEnumerable<object[]> ByCategoryKeyTestCases
@@ -181,6 +216,25 @@ public class ChartReportsTest : SeatsioClientTest
         Assert.Empty(report["NO_CATEGORY"]);
     }
 
+    [Theory]
+    [MemberData(nameof(ByCategoryKeyTestCases), MemberType = typeof(ChartReportsTest))]
+    public async Task ByCategoryKeyWithFloors(Func<SeatsioClient, string, Task> updateChart, Func<SeatsioClient, string, Task<Dictionary<string, IEnumerable<ChartObjectInfo>>>> getReport)
+    {
+        var chartKey = CreateTestChartWithFloors();
+        await updateChart(Client, chartKey);
+
+        var report = await getReport(Client, chartKey);
+        
+        foreach (var chartObjectInfo in report["1"])
+        {
+            Assert.Equivalent(new Floor("1", "Floor 1"), chartObjectInfo.floor);
+        }
+        foreach (var chartObjectInfo in report["2"])
+        {
+            Assert.Equivalent(new Floor("2", "Floor 2"), chartObjectInfo.floor);
+        }
+    }
+
     public static IEnumerable<object[]> ByCategoryLabelTestCases
     {
         get
@@ -206,11 +260,30 @@ public class ChartReportsTest : SeatsioClientTest
         await updateChart(Client, chartKey);
 
         var report = await getReport(Client, chartKey);
+        
         Assert.Equal(4, report.Count);
         Assert.Equal(17, report["Cat1"].Count());
         Assert.Equal(17, report["Cat2"].Count());
         Assert.Empty(report["Cat3"]);
         Assert.Empty(report["NO_CATEGORY"]);
+    }
+
+    [Theory]
+    [MemberData(nameof(ByCategoryLabelTestCases), MemberType = typeof(ChartReportsTest))]
+    public async Task ByCategoryLabelWithFloors(Func<SeatsioClient, string, Task> updateChart, Func<SeatsioClient, string, Task<Dictionary<string, IEnumerable<ChartObjectInfo>>>> getReport)
+    {
+        var chartKey = CreateTestChartWithFloors();
+        await updateChart(Client, chartKey);
+
+        var report = await getReport(Client, chartKey);
+        foreach (var chartObjectInfo in report["CatA"])
+        {
+            Assert.Equivalent(new Floor("1", "Floor 1"), chartObjectInfo.floor);
+        }
+        foreach (var chartObjectInfo in report["CatB"])
+        {
+            Assert.Equivalent(new Floor("2", "Floor 2"), chartObjectInfo.floor);
+        }
     }
 
     public static IEnumerable<object[]> BySectionTestCases
@@ -242,6 +315,25 @@ public class ChartReportsTest : SeatsioClientTest
         Assert.Equal(36, report["Section A"].Count());
         Assert.Equal(35, report["Section B"].Count());
         Assert.Empty(report["NO_SECTION"]);
+    }
+
+    [Theory]
+    [MemberData(nameof(BySectionTestCases), MemberType = typeof(ChartReportsTest))]
+    public async Task BySectionWithFloors(Func<SeatsioClient, string, Task> updateChart, Func<SeatsioClient, string, Task<Dictionary<string, IEnumerable<ChartObjectInfo>>>> getReport)
+    {
+        var chartKey = CreateTestChartWithFloors();
+        await updateChart(Client, chartKey);
+
+        var report = await getReport(Client, chartKey);
+        
+        foreach (var chartObjectInfo in report["S1"])
+        {
+            Assert.Equivalent(new Floor("1", "Floor 1"), chartObjectInfo.floor);
+        }
+        foreach (var chartObjectInfo in report["S2"])
+        {
+            Assert.Equivalent(new Floor("2", "Floor 2"), chartObjectInfo.floor);
+        }
     }
 
     [Theory]

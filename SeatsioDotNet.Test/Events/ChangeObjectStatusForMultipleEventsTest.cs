@@ -36,6 +36,21 @@ public class ChangeObjectStatusForMultipleEventsTest : SeatsioClientTest
         Assert.Equal(EventObjectInfo.Booked, (await Client.Events.RetrieveObjectInfoAsync(event2.Key, "A-1")).Status);
         Assert.Equal(EventObjectInfo.Booked, (await Client.Events.RetrieveObjectInfoAsync(event2.Key, "A-2")).Status);
     }
+    
+    [Fact]
+    public async Task PutUpForResale()
+    {
+        var chartKey = CreateTestChart();
+        var event1 = await Client.Events.CreateAsync(chartKey);
+        var event2 = await Client.Events.CreateAsync(chartKey);
+
+        await Client.Events.PutUpForResaleAsync(new[] {event1.Key, event2.Key}, new[] {"A-1", "A-2"});
+
+        Assert.Equal(EventObjectInfo.Resale, (await Client.Events.RetrieveObjectInfoAsync(event1.Key, "A-1")).Status);
+        Assert.Equal(EventObjectInfo.Resale, (await Client.Events.RetrieveObjectInfoAsync(event1.Key, "A-2")).Status);
+        Assert.Equal(EventObjectInfo.Resale, (await Client.Events.RetrieveObjectInfoAsync(event2.Key, "A-1")).Status);
+        Assert.Equal(EventObjectInfo.Resale, (await Client.Events.RetrieveObjectInfoAsync(event2.Key, "A-2")).Status);
+    }
 
     [Fact]
     public async Task Hold()

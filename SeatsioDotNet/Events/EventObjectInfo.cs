@@ -15,6 +15,7 @@ public class EventObjectInfo
     public const string Free = "free";
     public const string Booked = "booked";
     public const string Held = "reservedByToken";
+    public const string Resale = "resale";
 
     public string Label { get; set; }
     public Labels Labels { get; set; }

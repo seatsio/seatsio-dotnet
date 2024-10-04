@@ -251,6 +251,16 @@ public class Events
             keepExtraData, ignoreChannels, channelKeys, cancellationToken);
     }
 
+    public async Task<ChangeObjectStatusResult> PutUpForResaleAsync(string eventKey, IEnumerable<string> objects)
+    {
+        return await ChangeObjectStatusAsync(eventKey, objects, EventObjectInfo.Resale, null);
+    }
+    
+    public async Task<ChangeObjectStatusResult> PutUpForResaleAsync(string[] eventKeys, IEnumerable<string> objects)
+    {
+        return await ChangeObjectStatusAsync(eventKeys, objects, EventObjectInfo.Resale, null);
+    }
+
     public async Task<ChangeObjectStatusResult> ReleaseAsync(string eventKey, IEnumerable<string> objects, string holdToken = null,
         string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
     {

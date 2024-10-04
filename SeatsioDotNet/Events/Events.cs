@@ -254,8 +254,9 @@ public class Events
     public async Task<ChangeObjectStatusResult> ReleaseAsync(string eventKey, IEnumerable<string> objects, string holdToken = null,
         string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
-        return await ChangeObjectStatusAsync(eventKey, objects, EventObjectInfo.Free, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys, cancellationToken: cancellationToken);
+        var requestBody = ReleaseObjectsRequest(new[] {eventKey}, objects.Select(o => new ObjectProperties(o)), holdToken, orderId, keepExtraData,
+            ignoreChannels, channelKeys);
+        return await DoChangeObjectStatusAsync(requestBody, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> ReleaseAsync(string[] eventKeys, IEnumerable<string> objects,
@@ -352,6 +353,11 @@ public class Events
     {
         var requestBody = ChangeObjectStatusRequest(events, objects, status, holdToken, orderId, keepExtraData,
             ignoreChannels, channelKeys, allowedPreviousStatuses, rejectedPreviousStatuses);
+        return await DoChangeObjectStatusAsync(requestBody, cancellationToken);
+    }
+
+    private async Task<ChangeObjectStatusResult> DoChangeObjectStatusAsync(Dictionary<string, object> requestBody, CancellationToken cancellationToken)
+    {
         var restRequest = new RestRequest("/events/groups/actions/change-object-status", Method.Post)
             .AddQueryParameter("expand", "objects")
             .AddJsonBody(requestBody);
@@ -379,6 +385,15 @@ public class Events
         request.Add("event", evnt);
         return request;
     }
+    
+    private Dictionary<string, object> ReleaseObjectsRequest(IEnumerable<string> events,
+        IEnumerable<ObjectProperties> objects, string holdToken, string orderId, bool? keepExtraData,
+        bool? ignoreChannels = null, string[] channelKeys = null)
+    {
+        var request = ReleaseObjectsRequest(objects, holdToken, orderId, keepExtraData, ignoreChannels, channelKeys);
+        request.Add("events", events);
+        return request;
+    }
 
     private Dictionary<string, object> ChangeObjectStatusRequest(IEnumerable<string> events,
         IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData,
@@ -398,6 +413,7 @@ public class Events
     {
         var requestBody = new Dictionary<string, object>()
         {
+            {"type", "CHANGE_STATUS_TO"},
             {"status", status},
             {"objects", objects.Select(o => o.AsDictionary())},
         };
@@ -437,6 +453,41 @@ public class Events
             requestBody.Add("rejectedPreviousStatuses", rejectedPreviousStatuses);
         }
 
+        return requestBody;
+    }
+    
+    private Dictionary<string, object> ReleaseObjectsRequest(IEnumerable<ObjectProperties> objects, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null, string[] channelKeys = null)
+    {
+        var requestBody = new Dictionary<string, object>()
+        {
+            {"type", "RELEASE"},
+            {"objects", objects.Select(o => o.AsDictionary())},
+        };
+
+        if (holdToken != null)
+        {
+            requestBody.Add("holdToken", holdToken);
+        }
+
+        if (orderId != null)
+        {
+            requestBody.Add("orderId", orderId);
+        }
+
+        if (keepExtraData != null)
+        {
+            requestBody.Add("keepExtraData", keepExtraData);
+        }
+
+        if (ignoreChannels != null)
+        {
+            requestBody.Add("ignoreChannels", ignoreChannels);
+        }
+
+        if (channelKeys != null)
+        {
+            requestBody.Add("channelKeys", channelKeys);
+        }
         return requestBody;
     }
 

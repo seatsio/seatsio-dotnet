@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using SeatsioDotNet.EventReports;
 using SeatsioDotNet.Events;
 using Xunit;
 
@@ -17,8 +18,8 @@ public class ChangeObjectStatusInBatchTest : SeatsioClientTest
 
         var result = await Client.Events.ChangeObjectStatusAsync(new[]
         {
-            new StatusChangeRequest(evnt1.Key, new[] {"A-1"}, "lolzor"),
-            new StatusChangeRequest(evnt2.Key, new[] {"A-2"}, "lolzor")
+            new StatusChangeRequest(type: StatusChangeRequest.CHANGE_STATUS_TO, eventKey: evnt1.Key, objects: new[] {"A-1"}, status: "lolzor"),
+            new StatusChangeRequest(type: StatusChangeRequest.CHANGE_STATUS_TO,eventKey: evnt2.Key, objects: new[] {"A-2"}, status: "lolzor")
         });
 
         Assert.Equal("lolzor", result[0].Objects["A-1"].Status);
@@ -40,7 +41,7 @@ public class ChangeObjectStatusInBatchTest : SeatsioClientTest
 
         var result = await Client.Events.ChangeObjectStatusAsync(new[]
         {
-            new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "lolzor", channelKeys: new[] {"channelKey1"}),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-1"}, status: "lolzor", channelKeys: new[] {"channelKey1"}),
         });
 
         Assert.Equal("lolzor", result[0].Objects["A-1"].Status);
@@ -58,7 +59,7 @@ public class ChangeObjectStatusInBatchTest : SeatsioClientTest
 
         var result = await Client.Events.ChangeObjectStatusAsync(new[]
         {
-            new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "lolzor", ignoreChannels: true),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-1"}, status: "lolzor", ignoreChannels: true),
         });
 
         Assert.Equal("lolzor", result[0].Objects["A-1"].Status);
@@ -74,7 +75,7 @@ public class ChangeObjectStatusInBatchTest : SeatsioClientTest
         {
             await Client.Events.ChangeObjectStatusAsync(new[]
             {
-                new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "lolzor", ignoreChannels: true, allowedPreviousStatuses: new[] {"someOtherStatus"}),
+                new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-1"}, status: "lolzor", ignoreChannels: true, allowedPreviousStatuses: new[] {"someOtherStatus"}),
             });
         });
     }
@@ -89,8 +90,24 @@ public class ChangeObjectStatusInBatchTest : SeatsioClientTest
         {
             await Client.Events.ChangeObjectStatusAsync(new[]
             {
-                new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "lolzor", ignoreChannels: true, rejectedPreviousStatuses: new[] {"free"}),
+                new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-1"}, status: "lolzor", ignoreChannels: true, rejectedPreviousStatuses: new[] {"free"}),
             });
         });
+    }
+    
+    [Fact]
+    public async Task Release()
+    {
+        var chartKey = CreateTestChart();
+        var evnt = await Client.Events.CreateAsync(chartKey);
+        await Client.Events.BookAsync(evnt.Key, new[] {"A-1"});
+
+        var result = await Client.Events.ChangeObjectStatusAsync(new[]
+        {
+            new StatusChangeRequest(type: StatusChangeRequest.RELEASE, eventKey: evnt.Key, objects: new[] {"A-1"}),
+        });
+
+        Assert.Equal(EventObjectInfo.Free, result[0].Objects["A-1"].Status);
+        Assert.Equal(EventObjectInfo.Free, (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1")).Status);
     }
 }

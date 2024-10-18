@@ -16,9 +16,9 @@ public class ListStatusChangesTest : SeatsioClientTest
         var evnt = await Client.Events.CreateAsync(chartKey);
         await Client.Events.ChangeObjectStatusAsync(new[]
         {
-            new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "s1"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-2"}, "s2"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "s3"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-1"}, status: "s1"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-2"}, status: "s2"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-3"}, status: "s3"),
         });
         await WaitForStatusChanges(Client, evnt, 3);
 
@@ -88,10 +88,10 @@ public class ListStatusChangesTest : SeatsioClientTest
         var evnt = await Client.Events.CreateAsync(chartKey);
         await Client.Events.ChangeObjectStatusAsync(new[]
         {
-            new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-2"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-1"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-2"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"B-1"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-3"}, status: "booked")
         });
         await WaitForStatusChanges(Client, evnt, 4);
 
@@ -107,10 +107,10 @@ public class ListStatusChangesTest : SeatsioClientTest
         var evnt = await Client.Events.CreateAsync(chartKey);
         await Client.Events.ChangeObjectStatusAsync(new[]
         {
-            new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-2"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-1"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-2"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"B-1"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-3"}, status: "booked")
         });
         await WaitForStatusChanges(Client, evnt, 4);
 
@@ -126,10 +126,10 @@ public class ListStatusChangesTest : SeatsioClientTest
         var evnt = await Client.Events.CreateAsync(chartKey);
         await Client.Events.ChangeObjectStatusAsync(new[]
         {
-            new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-2"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-1"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-2"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"B-1"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-3"}, status: "booked")
         });
         await WaitForStatusChanges(Client, evnt, 4);
 
@@ -147,10 +147,10 @@ public class ListStatusChangesTest : SeatsioClientTest
         var evnt = await Client.Events.CreateAsync(chartKey);
         await Client.Events.ChangeObjectStatusAsync(new[]
         {
-            new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-2"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-1"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-2"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"B-1"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-3"}, status: "booked")
         });
         await WaitForStatusChanges(Client, evnt, 4);
 
@@ -168,10 +168,10 @@ public class ListStatusChangesTest : SeatsioClientTest
         var evnt = await Client.Events.CreateAsync(chartKey);
         await Client.Events.ChangeObjectStatusAsync(new[]
         {
-            new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-2"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"B-1"}, "booked"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-3"}, "booked")
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-1"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-2"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"B-1"}, status: "booked"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-3"}, status: "booked")
         });
         await WaitForStatusChanges(Client, evnt, 4);
 

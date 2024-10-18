@@ -5,6 +5,10 @@ namespace SeatsioDotNet.Events;
 
 public class StatusChangeRequest
 {
+    public const string CHANGE_STATUS_TO = "CHANGE_STATUS_TO";
+    public const string RELEASE = "RELEASE";
+
+    public string Type { get; }
     public string EventKey { get; }
     public IEnumerable<ObjectProperties> Objects { get; }
     public string Status { get; }
@@ -16,20 +20,9 @@ public class StatusChangeRequest
     public string[] AllowedPreviousStatuses { get; }
     public string[] RejectedPreviousStatuses { get; }
 
-    public StatusChangeRequest(string eventKey, IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null)
+    public StatusChangeRequest(string type = CHANGE_STATUS_TO, string eventKey = null, IEnumerable<string> objects = null, string status = null, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null)
     {
-        EventKey = eventKey;
-        Objects = objects;
-        Status = status;
-        HoldToken = holdToken;
-        OrderId = orderId;
-        KeepExtraData = keepExtraData;
-        IgnoreChannels = ignoreChannels;
-        ChannelKeys = channelKeys;
-    }
-
-    public StatusChangeRequest(string eventKey, IEnumerable<string> objects, string status, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null)
-    {
+        Type = type;
         EventKey = eventKey;
         Objects = objects.Select(o => new ObjectProperties(o));
         Status = status;

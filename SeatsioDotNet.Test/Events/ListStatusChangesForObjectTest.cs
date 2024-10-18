@@ -14,11 +14,11 @@ public class ListStatusChangesForObjectTest : SeatsioClientTest
         var evnt = await Client.Events.CreateAsync(chartKey);
         await Client.Events.ChangeObjectStatusAsync(new[]
         {
-            new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "s1"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "s2"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "s3"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-1"}, "s4"),
-            new StatusChangeRequest(evnt.Key, new[] {"A-2"}, "s5")
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-1"}, status: "s1"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-1"}, status: "s2"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-1"}, status: "s3"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-1"}, status: "s4"),
+            new StatusChangeRequest(eventKey: evnt.Key, objects: new[] {"A-2"}, status: "s5")
         });
         await WaitForStatusChanges(Client, evnt, 5);
 

@@ -10,21 +10,6 @@ namespace SeatsioDotNet.Test.Events;
 public class UpdateEventTest : SeatsioClientTest
 {
     [Fact]
-    public async Task UpdateChartKey()
-    {
-        var chartKey1 = CreateTestChart();
-        var chartKey2 = CreateTestChart();
-        var evnt = await Client.Events.CreateAsync(chartKey1);
-
-        await Client.Events.UpdateAsync(evnt.Key, new UpdateEventParams().WithChartKey(chartKey2));
-
-        var retrievedEvent = await Client.Events.RetrieveAsync(evnt.Key);
-        Assert.Equal(evnt.Key, retrievedEvent.Key);
-        Assert.Equal(chartKey2, retrievedEvent.ChartKey);
-        CustomAssert.CloseTo(DateTimeOffset.Now, retrievedEvent.UpdatedOn.Value);
-    }
-
-    [Fact]
     public async Task UpdateEventKey()
     {
         var chartKey = CreateTestChart();

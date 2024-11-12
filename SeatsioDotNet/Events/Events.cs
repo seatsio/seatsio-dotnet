@@ -135,11 +135,6 @@ public class Events
     {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
 
-        if (p.ChartKey != null)
-        {
-            requestBody.Add("chartKey", p.ChartKey);
-        }
-
         if (p.Key != null)
         {
             requestBody.Add("eventKey", p.Key);

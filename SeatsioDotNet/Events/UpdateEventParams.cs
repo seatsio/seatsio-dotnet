@@ -7,7 +7,6 @@ namespace SeatsioDotNet.Events;
 public class UpdateEventParams
 {
     public string Key { get; set; }
-    public string ChartKey { get; set; }
     public string Name { get; set; }
     public DateOnly? Date { get; set; }
     public TableBookingConfig TableBookingConfig { get; set; }
@@ -18,12 +17,6 @@ public class UpdateEventParams
     public UpdateEventParams WithKey(string key)
     {
         Key = key;
-        return this;
-    }
-
-    public UpdateEventParams WithChartKey(string chartKey)
-    {
-        ChartKey = chartKey;
         return this;
     }
 

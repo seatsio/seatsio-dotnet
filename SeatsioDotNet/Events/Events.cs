@@ -412,7 +412,7 @@ public class Events
             {"objects", objects.Select(o => o.AsDictionary())},
         };
 
-        if (type != StatusChangeRequest.RELEASE)
+        if (status != null)
         {
             requestBody.Add("status", status);
         }

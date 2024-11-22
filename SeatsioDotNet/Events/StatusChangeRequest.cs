@@ -7,6 +7,8 @@ public class StatusChangeRequest
 {
     public const string CHANGE_STATUS_TO = "CHANGE_STATUS_TO";
     public const string RELEASE = "RELEASE";
+    public const string OVERRIDE_SEASON_STATUS = "OVERRIDE_SEASON_STATUS";
+    public const string USE_SEASON_STATUS = "USE_SEASON_STATUS";
 
     public string Type { get; }
     public string EventKey { get; }

@@ -18,7 +18,7 @@ public class ListActiveWorkspacesTest : SeatsioClientTest
 
         var workspaces = Client.Workspaces.Active.AllAsync();
 
-        Assert.Equal(new[] {"ws3", "ws1", "Default workspace"}, workspaces.Select(e => e.Name));
+        Assert.Equal(new[] {"ws3", "ws1", "Production workspace"}, workspaces.Select(e => e.Name));
     }
 
     [Fact]

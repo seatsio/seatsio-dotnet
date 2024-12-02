@@ -6,13 +6,13 @@
 	<ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
 		<ProjectReference Include="..\SeatsioDotNet\SeatsioDotNet.csproj" />
-		<PackageReference Include="Polly.Core" Version="8.4.2" />
+		<PackageReference Include="Polly.Core" Version="8.5.0" />
 		<PackageReference Include="System.Linq.Async" Version="6.0.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
 		<PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="RestSharp" Version="112.1.0" />
 		<DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />

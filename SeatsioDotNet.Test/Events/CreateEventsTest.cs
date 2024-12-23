@@ -35,7 +35,7 @@ public class CreateEventsTest : SeatsioClientTest
 
         var events = await Client.Events.CreateAsync(chartKey, eventCreationParams);
 
-        Assert.Equal(1, events.Length);
+        Assert.Single(events);
         var e = events[0];
         Assert.NotNull(e.Id);
         Assert.NotNull(e.Key);

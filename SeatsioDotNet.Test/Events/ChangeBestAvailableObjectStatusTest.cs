@@ -57,8 +57,8 @@ public class ChangeBestAvailableObjectStatusTest : SeatsioClientTest
 
         Assert.True(bestAvailableResult.NextToEachOther);
         Assert.Equal(new[] {"C-4", "C-5", "C-6"}, bestAvailableResult.Objects);
-    }  
-    
+    }
+
     [Fact]
     public async Task Zone()
     {
@@ -67,7 +67,7 @@ public class ChangeBestAvailableObjectStatusTest : SeatsioClientTest
 
         var bestAvailableResultMidtrack = await Client.Events.ChangeObjectStatusAsync(evnt.Key, new BestAvailable(1, zone: "midtrack"), "foo");
         Assert.Equal(new[] {"MT3-A-139"}, bestAvailableResultMidtrack.Objects);
-        
+
         var bestAvailableResultFinishline = await Client.Events.ChangeObjectStatusAsync(evnt.Key, new BestAvailable(1, zone: "finishline"), "foo");
         Assert.Equal(new[] {"Goal Stand 4-A-1"}, bestAvailableResultFinishline.Objects);
     }
@@ -188,7 +188,7 @@ public class ChangeBestAvailableObjectStatusTest : SeatsioClientTest
 
         Assert.Equal(new[] {"A-5"}, bestAvailableResult.Objects);
     }
-    
+
     [Fact]
     public async Task AccessibleSeats()
     {
@@ -199,5 +199,34 @@ public class ChangeBestAvailableObjectStatusTest : SeatsioClientTest
 
         Assert.True(bestAvailableResult.NextToEachOther);
         Assert.Equal(new[] {"A-6", "A-7", "A-8"}, bestAvailableResult.Objects);
+    }
+
+    [Fact]
+    public async Task NotFoundThrowsBestAvailableObjectsNotFoundException()
+    {
+        var chartKey = CreateTestChart();
+        var evnt = await Client.Events.CreateAsync(chartKey);
+
+        var exception = await Assert.ThrowsAsync<BestAvailableObjectsNotFoundException>(async () =>
+        {
+            await Client.Events.ChangeObjectStatusAsync(evnt.Key, new BestAvailable(3000), "foo");
+        });
+
+        Assert.IsType<BestAvailableObjectsNotFoundException>(exception);
+        Assert.Equal("Best available objects not found.", exception.Message);
+    }
+
+    [Fact]
+    public async Task NormalSeatsioExceptionIfEventNotFound()
+    {
+        var chartKey = CreateTestChart();
+        await Client.Events.CreateAsync(chartKey);
+
+        var exception = await Assert.ThrowsAsync<SeatsioException>(async () =>
+        {
+            await Client.Events.ChangeObjectStatusAsync("unknownEvent", new BestAvailable(3), "foo");
+        });
+
+        Assert.IsNotType<BestAvailableObjectsNotFoundException>(exception);
     }
 }

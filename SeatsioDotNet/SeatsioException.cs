@@ -43,11 +43,20 @@ public class SeatsioException : Exception
             {
                 return new RateLimitExceededException(parsedException.Errors, parsedException.RequestId);
             }
+            else if (IsBestAvailableObjectsNotFound(parsedException))
+            {
+                return new BestAvailableObjectsNotFoundException(parsedException.Errors, parsedException.RequestId);
+            }
 
             return new SeatsioException(parsedException.Errors, parsedException.RequestId);
         }
 
         return new SeatsioException(response);
+    }
+
+    private static bool IsBestAvailableObjectsNotFound(SeatsioExceptionTo parsedException)
+    {
+        return parsedException.Errors.Any(e => e.Code == "BEST_AVAILABLE_OBJECTS_NOT_FOUND");
     }
 
     public struct SeatsioExceptionTo

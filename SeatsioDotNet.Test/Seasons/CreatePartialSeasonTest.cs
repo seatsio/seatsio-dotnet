@@ -18,6 +18,17 @@ public class CreatePartialSeasonTest : SeatsioClientTest
         Assert.True(partialSeason.IsPartialSeason);
         Assert.Equal(topLevelSeason.Key, partialSeason.TopLevelSeasonKey);
     }
+    
+    [Fact]
+    public async Task NameCanBePassedIn()
+    {
+        var chartKey = CreateTestChart();
+        var topLevelSeason = await Client.Seasons.CreateAsync(chartKey);
+
+        var partialSeason = await Client.Seasons.CreatePartialSeasonAsync(topLevelSeason.Key, name: "aPartialSeason");
+
+        Assert.Equal("aPartialSeason", partialSeason.Name);
+    }
 
     [Fact]
     public async Task EventKeysCanBePassedIn()

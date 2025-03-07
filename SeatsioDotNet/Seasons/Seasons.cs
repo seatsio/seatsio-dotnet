@@ -18,7 +18,7 @@ public class Seasons
         _seatsioClient = seatsioClient;
     }
 
-    public async Task<Event> CreateAsync(string chartKey, string key = null, int? numberOfEvents = null, IEnumerable<string> eventKeys = null, TableBookingConfig tableBookingConfig = null, IEnumerable<Channel> channels = null, ForSaleConfig forSaleConfig = null, CancellationToken cancellationToken = default)
+    public async Task<Event> CreateAsync(string chartKey, string key = null, string name = null, int? numberOfEvents = null, IEnumerable<string> eventKeys = null, TableBookingConfig tableBookingConfig = null, IEnumerable<Channel> channels = null, ForSaleConfig forSaleConfig = null, CancellationToken cancellationToken = default)
     {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
         requestBody.Add("chartKey", chartKey);
@@ -26,6 +26,11 @@ public class Seasons
         if (key != null)
         {
             requestBody.Add("key", key);
+        }  
+        
+        if (name != null)
+        {
+            requestBody.Add("name", name);
         }
 
         if (numberOfEvents != null)
@@ -57,13 +62,18 @@ public class Seasons
         return AssertOk(await _restClient.ExecuteAsync<Event>(restRequest, cancellationToken));
     }
 
-    public async Task<Event> CreatePartialSeasonAsync(string topLevelSeasonKey, string partialSeasonKey = null, IEnumerable<string> eventKeys = null, CancellationToken cancellationToken = default)
+    public async Task<Event> CreatePartialSeasonAsync(string topLevelSeasonKey, string partialSeasonKey = null, string name = null, IEnumerable<string> eventKeys = null, CancellationToken cancellationToken = default)
     {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
 
         if (partialSeasonKey != null)
         {
             requestBody.Add("key", partialSeasonKey);
+        }   
+        
+        if (name != null)
+        {
+            requestBody.Add("name", name);
         }
 
         if (eventKeys != null)

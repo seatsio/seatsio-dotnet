@@ -38,6 +38,16 @@ public class CreateSeasonTest : SeatsioClientTest
         var season = await Client.Seasons.CreateAsync(chartKey, key: "aSeason");
 
         Assert.Equal("aSeason", season.Key);
+    } 
+    
+    [Fact]
+    public async Task NameCanBePassedIn()
+    {
+        var chartKey = CreateTestChart();
+
+        var season = await Client.Seasons.CreateAsync(chartKey, name: "aSeason");
+
+        Assert.Equal("aSeason", season.Name);
     }
 
     [Fact]

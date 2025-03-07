@@ -10,7 +10,7 @@ namespace SeatsioDotNet.Test.Events
         public async Task Test()
         {
             var chartKey = CreateTestChart();
-            var season = await Client.Seasons.CreateAsync(chartKey, null, null, new[] {"event1"});
+            var season = await Client.Seasons.CreateAsync(chartKey, null, null, null, new[] {"event1"});
             await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
             await Client.Events.OverrideSeasonObjectStatusAsync("event1", new[] {"A-1", "A-2"});
 

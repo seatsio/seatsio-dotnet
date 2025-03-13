@@ -70,6 +70,19 @@ public class ChangeBestAvailableObjectStatusTest : SeatsioClientTest
 
         var bestAvailableResultFinishline = await Client.Events.ChangeObjectStatusAsync(evnt.Key, new BestAvailable(1, zone: "finishline"), "foo");
         Assert.Equal(new[] {"Goal Stand 4-A-1"}, bestAvailableResultFinishline.Objects);
+    }   
+    
+    [Fact]
+    public async Task Sections()
+    {
+        var chartKey = CreateTestChartWithSections();
+        var evnt = await Client.Events.CreateAsync(chartKey);
+
+        var bestAvailableResultSectionA = await Client.Events.ChangeObjectStatusAsync(evnt.Key, new BestAvailable(1, sections: new [] {"Section A"}), "foo");
+        Assert.Equal(new[] {"Section A-A-1"}, bestAvailableResultSectionA.Objects);
+
+        var bestAvailableResultSectionB = await Client.Events.ChangeObjectStatusAsync(evnt.Key, new BestAvailable(1, sections: new [] {"Section B"}), "foo");
+        Assert.Equal(new[] {"Section B-A-1"}, bestAvailableResultSectionB.Objects);
     }
 
     [Fact]

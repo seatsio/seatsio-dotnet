@@ -45,6 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ release ]
     if: failure()
-          - uses: seatsio/seatsio-github-actions/slack-notify-clientlib-release-failure@v1
-          with:
-            webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+    steps:
+      - uses: seatsio/seatsio-github-actions/slack-notify-clientlib-release-failure@v1
+        with:
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

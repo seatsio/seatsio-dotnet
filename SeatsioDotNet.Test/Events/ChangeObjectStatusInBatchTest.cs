@@ -19,7 +19,7 @@ public class ChangeObjectStatusInBatchTest : SeatsioClientTest
         var result = await Client.Events.ChangeObjectStatusAsync(new[]
         {
             new StatusChangeRequest(type: StatusChangeRequest.CHANGE_STATUS_TO, eventKey: evnt1.Key, objects: new[] {"A-1"}, status: "lolzor"),
-            new StatusChangeRequest(type: StatusChangeRequest.CHANGE_STATUS_TO,eventKey: evnt2.Key, objects: new[] {"A-2"}, status: "lolzor")
+            new StatusChangeRequest(type: StatusChangeRequest.CHANGE_STATUS_TO, eventKey: evnt2.Key, objects: new[] {"A-2"}, status: "lolzor")
         });
 
         Assert.Equal("lolzor", result[0].Objects["A-1"].Status);
@@ -94,7 +94,7 @@ public class ChangeObjectStatusInBatchTest : SeatsioClientTest
             });
         });
     }
-    
+
     [Fact]
     public async Task Release()
     {
@@ -109,8 +109,8 @@ public class ChangeObjectStatusInBatchTest : SeatsioClientTest
 
         Assert.Equal(EventObjectInfo.Free, result[0].Objects["A-1"].Status);
         Assert.Equal(EventObjectInfo.Free, (await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1")).Status);
-    }   
-    
+    }
+
     [Fact]
     public async Task OverrideSeasonStatus()
     {
@@ -125,8 +125,8 @@ public class ChangeObjectStatusInBatchTest : SeatsioClientTest
 
         Assert.Equal(EventObjectInfo.Free, result[0].Objects["A-1"].Status);
         Assert.Equal(EventObjectInfo.Free, (await Client.Events.RetrieveObjectInfoAsync("event1", "A-1")).Status);
-    }  
-    
+    }
+
     [Fact]
     public async Task UseSeasonStatus()
     {
@@ -142,5 +142,26 @@ public class ChangeObjectStatusInBatchTest : SeatsioClientTest
 
         Assert.Equal(EventObjectInfo.Booked, result[0].Objects["A-1"].Status);
         Assert.Equal(EventObjectInfo.Booked, (await Client.Events.RetrieveObjectInfoAsync("event1", "A-1")).Status);
+    }
+
+    [Fact]
+    public async Task ResaleListingId()
+    {
+        var chartKey1 = CreateTestChart();
+        var chartKey2 = CreateTestChart();
+        var evnt1 = await Client.Events.CreateAsync(chartKey1);
+        var evnt2 = await Client.Events.CreateAsync(chartKey2);
+
+        var result = await Client.Events.ChangeObjectStatusAsync(new[]
+        {
+            new StatusChangeRequest(type: StatusChangeRequest.CHANGE_STATUS_TO, eventKey: evnt1.Key, objects: new[] {"A-1"}, status: EventObjectInfo.Resale, resaleListingId: "listing1"),
+            new StatusChangeRequest(type: StatusChangeRequest.CHANGE_STATUS_TO, eventKey: evnt2.Key, objects: new[] {"A-2"}, status: EventObjectInfo.Resale, resaleListingId: "listing1")
+        });
+
+        Assert.Equal("listing1", result[0].Objects["A-1"].ResaleListingId);
+        Assert.Equal("listing1", (await Client.Events.RetrieveObjectInfoAsync(evnt1.Key, "A-1")).ResaleListingId);
+
+        Assert.Equal("listing1", result[1].Objects["A-2"].ResaleListingId);
+        Assert.Equal("listing1", (await Client.Events.RetrieveObjectInfoAsync(evnt2.Key, "A-2")).ResaleListingId);
     }
 }

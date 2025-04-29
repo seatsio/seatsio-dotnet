@@ -21,8 +21,11 @@ public class StatusChangeRequest
     public string[] ChannelKeys { get; }
     public string[] AllowedPreviousStatuses { get; }
     public string[] RejectedPreviousStatuses { get; }
+    public string ResaleListingId { get; }
 
-    public StatusChangeRequest(string type = CHANGE_STATUS_TO, string eventKey = null, IEnumerable<string> objects = null, string status = null, string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null)
+    public StatusChangeRequest(string type = CHANGE_STATUS_TO, string eventKey = null, IEnumerable<string> objects = null, string status = null,
+        string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null,
+        string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null, string resaleListingId = null)
     {
         Type = type;
         EventKey = eventKey;
@@ -35,5 +38,6 @@ public class StatusChangeRequest
         ChannelKeys = channelKeys;
         AllowedPreviousStatuses = allowedPreviousStatuses;
         RejectedPreviousStatuses = rejectedPreviousStatuses;
+        ResaleListingId = resaleListingId;
     }
 }

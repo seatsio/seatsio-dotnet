@@ -54,4 +54,5 @@ public class EventObjectInfo
     public int SeasonStatusOverriddenQuantity { get; set; }
     public string Zone { get; set; }
     public Floor Floor { get; set; }
+    public string ResaleListingId { get; set; }
 }

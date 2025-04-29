@@ -220,7 +220,7 @@ public class Events
         string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKeys, objects, EventObjectInfo.Booked, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys, cancellationToken);
+            ignoreChannels, channelKeys, null, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> BookAsync(string eventKey, IEnumerable<ObjectProperties> objects,
@@ -246,14 +246,14 @@ public class Events
             keepExtraData, ignoreChannels, channelKeys, cancellationToken);
     }
 
-    public async Task<ChangeObjectStatusResult> PutUpForResaleAsync(string eventKey, IEnumerable<string> objects)
+    public async Task<ChangeObjectStatusResult> PutUpForResaleAsync(string eventKey, IEnumerable<string> objects, string resaleListingId = null, CancellationToken cancellationToken = default)
     {
-        return await ChangeObjectStatusAsync(eventKey, objects, EventObjectInfo.Resale);
+        return await ChangeObjectStatusAsync(eventKey, objects, EventObjectInfo.Resale, resaleListingId: resaleListingId, cancellationToken: cancellationToken);
     }
     
-    public async Task<ChangeObjectStatusResult> PutUpForResaleAsync(string[] eventKeys, IEnumerable<string> objects)
+    public async Task<ChangeObjectStatusResult> PutUpForResaleAsync(string[] eventKeys, IEnumerable<string> objects, string resaleListingId = null, CancellationToken cancellationToken = default)
     {
-        return await ChangeObjectStatusAsync(eventKeys, objects, EventObjectInfo.Resale);
+        return await ChangeObjectStatusAsync(eventKeys, objects, EventObjectInfo.Resale, resaleListingId: resaleListingId, cancellationToken: cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> ReleaseAsync(string eventKey, IEnumerable<string> objects, string holdToken = null,
@@ -269,7 +269,7 @@ public class Events
         string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKeys, objects, EventObjectInfo.Free, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys, cancellationToken);
+            ignoreChannels, channelKeys, null, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> ReleaseAsync(string eventKey, IEnumerable<ObjectProperties> objects,
@@ -299,7 +299,7 @@ public class Events
         string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(eventKeys, objects, EventObjectInfo.Held, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys, cancellationToken);
+            ignoreChannels, channelKeys, null, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> HoldAsync(string eventKey, IEnumerable<ObjectProperties> objects, string holdToken,
@@ -327,11 +327,11 @@ public class Events
     public async Task<ChangeObjectStatusResult> ChangeObjectStatusAsync(string eventKey, IEnumerable<string> objects, string status,
         string holdToken = null, string orderId = null, bool? keepExtraData = null, bool? ignoreChannels = null,
         string[] channelKeys = null, string[] allowedPreviousStatuses = null,
-        string[] rejectedPreviousStatuses = null, CancellationToken cancellationToken = default)
+        string[] rejectedPreviousStatuses = null, string resaleListingId = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(new[] {eventKey}, objects.Select(o => new ObjectProperties(o)), status, holdToken,
             orderId, keepExtraData, ignoreChannels, channelKeys, allowedPreviousStatuses,
-            rejectedPreviousStatuses, cancellationToken);
+            rejectedPreviousStatuses, resaleListingId, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> ChangeObjectStatusAsync(string eventKey, IEnumerable<ObjectProperties> objects,
@@ -344,20 +344,20 @@ public class Events
 
     public async Task<ChangeObjectStatusResult> ChangeObjectStatusAsync(IEnumerable<string> events, IEnumerable<string> objects,
         string status, string holdToken = null, string orderId = null, bool? keepExtraData = null,
-        bool? ignoreChannels = null, string[] channelKeys = null, CancellationToken cancellationToken = default)
+        bool? ignoreChannels = null, string[] channelKeys = null, string resaleListingId = null, CancellationToken cancellationToken = default)
     {
         return await ChangeObjectStatusAsync(events, objects.Select(o => new ObjectProperties(o)), status, holdToken, orderId,
-            keepExtraData, ignoreChannels, channelKeys, cancellationToken: cancellationToken);
+            keepExtraData, ignoreChannels, channelKeys, null, null, resaleListingId, cancellationToken);
     }
 
     public async Task<ChangeObjectStatusResult> ChangeObjectStatusAsync(IEnumerable<string> events,
         IEnumerable<ObjectProperties> objects, string status, string holdToken = null, string orderId = null,
         bool? keepExtraData = null, bool? ignoreChannels = null, string[] channelKeys = null,
-        string[] allowedPreviousStatuses = null,
-        string[] rejectedPreviousStatuses = null, CancellationToken cancellationToken = default)
+        string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null,
+        string resaleListingId = null, CancellationToken cancellationToken = default)
     {
         var requestBody = ChangeObjectStatusRequest(StatusChangeRequest.CHANGE_STATUS_TO, events, objects, status, holdToken, orderId, keepExtraData,
-            ignoreChannels, channelKeys, allowedPreviousStatuses, rejectedPreviousStatuses);
+            ignoreChannels, channelKeys, allowedPreviousStatuses, rejectedPreviousStatuses, resaleListingId);
         return await DoChangeObjectStatusAsync(requestBody, cancellationToken);
     }
 
@@ -373,7 +373,7 @@ public class Events
     {
         var serializedRequests = requests.Select(r => ChangeObjectStatusRequest(r.Type, r.EventKey, r.Objects, r.Status,
             r.HoldToken, r.OrderId, r.KeepExtraData, r.IgnoreChannels, r.ChannelKeys,
-            r.AllowedPreviousStatuses, r.RejectedPreviousStatuses));
+            r.AllowedPreviousStatuses, r.RejectedPreviousStatuses, r.ResaleListingId));
         var restRequest = new RestRequest("/events/actions/change-object-status", Method.Post)
             .AddQueryParameter("expand", "objects")
             .AddJsonBody(new Dictionary<string, object> {{"statusChanges", serializedRequests}});
@@ -382,10 +382,10 @@ public class Events
 
     private Dictionary<string, object> ChangeObjectStatusRequest(string type, string evnt, IEnumerable<ObjectProperties> objects,
         string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null,
-        string[] channelKeys = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null)
+        string[] channelKeys = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null, string resaleListingId = null)
     {
         var request = ChangeObjectStatusRequest(type, objects, status, holdToken, orderId, keepExtraData, ignoreChannels,
-            channelKeys, allowedPreviousStatuses, rejectedPreviousStatuses);
+            channelKeys, allowedPreviousStatuses, rejectedPreviousStatuses, resaleListingId);
         request.Add("event", evnt);
         return request;
     }
@@ -393,18 +393,17 @@ public class Events
     private Dictionary<string, object> ChangeObjectStatusRequest(string type, IEnumerable<string> events,
         IEnumerable<ObjectProperties> objects, string status, string holdToken, string orderId, bool? keepExtraData,
         bool? ignoreChannels = null, string[] channelKeys = null,
-        string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null)
+        string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null, string resaleListingId = null)
     {
         var request = ChangeObjectStatusRequest(type, objects, status, holdToken, orderId, keepExtraData, ignoreChannels,
-            channelKeys, allowedPreviousStatuses, rejectedPreviousStatuses);
+            channelKeys, allowedPreviousStatuses, rejectedPreviousStatuses, resaleListingId);
         request.Add("events", events);
         return request;
     }
 
     private Dictionary<string, object> ChangeObjectStatusRequest(string type, IEnumerable<ObjectProperties> objects,
         string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null,
-        string[] channelKeys = null, string[] allowedPreviousStatuses = null,
-        string[] rejectedPreviousStatuses = null)
+        string[] channelKeys = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null, string resaleListingId = null)
     {
         var requestBody = new Dictionary<string, object>()
         {
@@ -450,6 +449,11 @@ public class Events
         if (rejectedPreviousStatuses != null)
         {
             requestBody.Add("rejectedPreviousStatuses", rejectedPreviousStatuses);
+        }
+        
+        if (resaleListingId != null)
+        {
+            requestBody.Add("resaleListingId", resaleListingId);
         }
 
         return requestBody;

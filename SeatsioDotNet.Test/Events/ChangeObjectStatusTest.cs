@@ -192,4 +192,16 @@ public class ChangeObjectStatusTest : SeatsioClientTest
             );
         });
     }
+
+    [Fact]
+    public async Task ResaleListingId()
+    {
+        var chartKey = CreateTestChart();
+        var evnt = await Client.Events.CreateAsync(chartKey);
+
+        await Client.Events.ChangeObjectStatusAsync(evnt.Key, new[] {"A-1"}, EventObjectInfo.Resale, resaleListingId: "listing1");
+
+        var objectInfo1 = await Client.Events.RetrieveObjectInfoAsync(evnt.Key, "A-1");
+        Assert.Equal("listing1", objectInfo1.ResaleListingId);
+    }
 }

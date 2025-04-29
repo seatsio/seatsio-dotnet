@@ -70,8 +70,8 @@ public class EventReportsTest : SeatsioClientTest
 
         var reportItem = report["A-1"].First();
         Assert.Equal(holdToken.Token, reportItem.HoldToken);
-    }  
-    
+    }
+
     [Fact]
     public async Task SeasonStatusOverriddenQuantity()
     {
@@ -314,7 +314,7 @@ public class EventReportsTest : SeatsioClientTest
 
         Assert.Equal(34, report.Count());
     }
-    
+
     [Fact]
     public async Task ByZone()
     {
@@ -417,5 +417,19 @@ public class EventReportsTest : SeatsioClientTest
         var report = await Client.EventReports.ByChannelAsync(evnt.Key, "channelKey1");
 
         Assert.Equal(2, report.Count());
+    }
+
+    [Fact]
+    public async Task ResaleListingId()
+    {
+        var chartKey = CreateTestChart();
+        var evnt = await Client.Events.CreateAsync(chartKey);
+
+        await Client.Events.PutUpForResaleAsync(evnt.Key, new[] {"A-1"}, "listing1");
+
+        var report = await Client.EventReports.ByLabelAsync(evnt.Key);
+
+        var reportItem = report["A-1"].First();
+        Assert.Equal("listing1", reportItem.ResaleListingId);
     }
 }

@@ -23,6 +23,7 @@ namespace SeatsioDotNet
         public UsageReports UsageReports { get; }
         public Seasons.Seasons Seasons { get; }
         public EventLog.EventLog EventLog { get; }
+        public TicketBuyers.TicketBuyers TicketBuyers { get; }
 
         private SeatsioRestClient RestClient;
 
@@ -43,6 +44,7 @@ namespace SeatsioDotNet
             UsageReports = new UsageReports(RestClient);
             Seasons = new Seasons.Seasons(RestClient, this);
             EventLog = new EventLog.EventLog(RestClient);
+            TicketBuyers = new TicketBuyers.TicketBuyers(RestClient);
         }
 
         public SeatsioClient(Region region, string secretKey, string workspaceKey, HttpClient httpClient = null) : this(secretKey, workspaceKey,

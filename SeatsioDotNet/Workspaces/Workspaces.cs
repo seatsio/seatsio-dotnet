@@ -75,6 +75,13 @@ public class Workspaces
         AssertOk(await _restClient.ExecuteAsync<Dictionary<string, string>>(restRequest, cancellationToken));
     }
 
+    public async Task DeleteAsync(string key, CancellationToken cancellationToken = default)
+    {
+        var restRequest = new RestRequest("/workspaces/{key}", Method.Delete)
+            .AddUrlSegment("key", key);
+        AssertOk(await _restClient.ExecuteAsync<Dictionary<string, string>>(restRequest, cancellationToken));
+    }
+
     public async Task SetDefaultAsync(string key, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/workspaces/actions/set-default/{key}", Method.Post)

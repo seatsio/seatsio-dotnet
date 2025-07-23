@@ -44,6 +44,7 @@ public class EventReportsTest : SeatsioClientTest
         Assert.False(reportItem.IsCompanionSeat);
         Assert.False(reportItem.HasRestrictedView);
         Assert.Null(reportItem.DisplayedObjectType);
+        Assert.Null(reportItem.ParentDisplayedObjectType);
         Assert.Null(reportItem.LeftNeighbour);
         Assert.Equal("A-2", reportItem.RightNeighbour);
         Assert.False(reportItem.IsAvailable);
@@ -107,6 +108,7 @@ public class EventReportsTest : SeatsioClientTest
         Assert.Null(reportItem.IsCompanionSeat);
         Assert.Null(reportItem.HasRestrictedView);
         Assert.Null(reportItem.DisplayedObjectType);
+        Assert.Null(reportItem.ParentDisplayedObjectType);
         Assert.False(reportItem.BookAsAWhole);
     }
 

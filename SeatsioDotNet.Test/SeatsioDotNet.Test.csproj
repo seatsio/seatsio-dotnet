@@ -6,7 +6,7 @@
 	<ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
 		<ProjectReference Include="..\SeatsioDotNet\SeatsioDotNet.csproj" />
-		<PackageReference Include="Polly.Core" Version="8.6.1" />
+		<PackageReference Include="Polly.Core" Version="8.6.3" />
 		<PackageReference Include="System.Linq.Async" Version="6.0.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
       <PrivateAssets>all</PrivateAssets>

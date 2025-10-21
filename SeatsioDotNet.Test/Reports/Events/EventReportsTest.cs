@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using SeatsioDotNet.Events;
+using SeatsioDotNet.HoldTokens;
 using Xunit;
 using static SeatsioDotNet.EventReports.EventObjectInfo;
 
@@ -21,6 +22,9 @@ public class EventReportsTest : SeatsioClientTest
         var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithChannels(channels));
         var extraData = new Dictionary<string, object> {{"foo", "bar"}};
         await Client.Events.BookAsync(evnt.Key, new[] {new ObjectProperties("A-1", "ticketType1", extraData)}, null, "order1", null, true);
+        await Client.Events.BookAsync(evnt.Key, new[] { new ObjectProperties("GA1", 5) });
+        HoldToken holdToken = await Client.HoldTokens.CreateAsync();
+        await Client.Events.HoldAsync(evnt.Key, new[] { new ObjectProperties("GA1", 3) }, holdToken.Token);
 
         var report = await Client.EventReports.ByLabelAsync(evnt.Key);
 
@@ -54,9 +58,18 @@ public class EventReportsTest : SeatsioClientTest
         Assert.Equal(0, reportItem.SeasonStatusOverriddenQuantity);
 
         var gaItem = report["GA1"].First();
-        Assert.True(gaItem.VariableOccupancy);
-        Assert.Equal(1, gaItem.MinOccupancy);
-        Assert.Equal(100, gaItem.MaxOccupancy);
+        Assert.Equal(5, gaItem.NumBooked);
+        Assert.Equal(92, gaItem.NumFree);
+        Assert.Equal(3, gaItem.NumHeld);
+        Assert.Equal(0, gaItem.NumNotForSale);
+        Assert.Equal(100, gaItem.Capacity);
+        Assert.Equal("generalAdmission", gaItem.ObjectType);
+        Assert.False(gaItem.BookAsAWhole);
+        Assert.Null(gaItem.HasRestrictedView);
+        Assert.Null(gaItem.IsAccessible);
+        Assert.Null(gaItem.IsCompanionSeat);
+        Assert.Null(gaItem.DisplayedObjectType);
+        Assert.Null(gaItem.ParentDisplayedObjectType);
     }
 
     [Fact]

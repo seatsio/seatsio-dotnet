@@ -5,13 +5,13 @@
   "categories": {
     "list": [
       {
-        "label": "CatA",
+        "label": "Foo",
         "color": "#992C4E",
         "accessible": false,
         "key": 1
       },
       {
-        "label": "CatB",
+        "label": "Bar",
         "color": "#662C4E",
         "accessible": false,
         "key": 2

@@ -635,7 +635,7 @@
         "foreground": false
       }
     ],
-    "SIMPLE": [],
+    "booths": [],
     "icons": [],
     "generalAdmissionAreas": [
       {
@@ -657,7 +657,7 @@
         "uuid": "uuid368",
         "translucent": false,
         "bookAsAWhole": false,
-        "variableOccupancy": true,
+        "variableOccupancy": false,
         "minOccupancy": 1,
         "published": true,
         "type": "circle",

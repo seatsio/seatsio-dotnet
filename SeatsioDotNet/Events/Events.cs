@@ -561,6 +561,13 @@ public class Events
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
+    public async Task<Event> MoveEventToNewChartCopy(string eventKey, CancellationToken cancellationToken = default)
+    {
+        var restRequest = new RestRequest("/events/{key}/actions/move-to-new-chart-copy", Method.Post)
+            .AddUrlSegment("key", eventKey);
+        return AssertOk(await _restClient.ExecuteAsync<Event>(restRequest, cancellationToken));
+    }
+
     private Dictionary<string, object> ForSaleRequest(IEnumerable<string> objects,
         Dictionary<string, int> areaPlaces, IEnumerable<string> categories)
     {

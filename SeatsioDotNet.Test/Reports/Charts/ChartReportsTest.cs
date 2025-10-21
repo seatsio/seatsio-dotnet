@@ -276,11 +276,11 @@ public class ChartReportsTest : SeatsioClientTest
         await updateChart(Client, chartKey);
 
         var report = await getReport(Client, chartKey);
-        foreach (var chartObjectInfo in report["CatA"])
+        foreach (var chartObjectInfo in report["Foo"])
         {
             Assert.Equivalent(new Floor("1", "Floor 1"), chartObjectInfo.floor);
         }
-        foreach (var chartObjectInfo in report["CatB"])
+        foreach (var chartObjectInfo in report["Bar"])
         {
             Assert.Equivalent(new Floor("2", "Floor 2"), chartObjectInfo.floor);
         }

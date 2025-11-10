@@ -28,4 +28,5 @@ public class Event
     public string TopLevelSeasonKey { get; set; }
     public bool IsInThePast { get; set; }
     public string[] PartialSeasonKeysForEvent { get; set; }
+    public bool? ForSalePropagated { get; set; }
 }

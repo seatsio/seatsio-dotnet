@@ -450,7 +450,7 @@ public class Events
         {
             requestBody.Add("rejectedPreviousStatuses", rejectedPreviousStatuses);
         }
-        
+
         if (resaleListingId != null)
         {
             requestBody.Add("resaleListingId", resaleListingId);
@@ -533,25 +533,59 @@ public class Events
                 ParameterType.RequestBody); // default serializer doesn't convert extraData to JSON properly
         AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest, cancellationToken));
     }
-
-    public async Task MarkAsForSaleAsync(string eventKey, IEnumerable<string> objects, Dictionary<string, int> areaPlaces,
-        IEnumerable<string> categories, CancellationToken cancellationToken = default)
+    
+    public async Task EditForSaleConfigForEventsAsync(Dictionary<string, ForSaleAndNotForSale> events, CancellationToken cancellationToken = default)
     {
-        var requestBody = ForSaleRequest(objects, areaPlaces, categories);
-        var restRequest = new RestRequest("/events/{key}/actions/mark-as-for-sale", Method.Post)
+        var requestBody = new Dictionary<string, object> { { "events", events.ToDictionary(x => x.Key, x => x.Value.AsDictionary()) } };
+        var restRequest = new RestRequest("/events/actions/edit-for-sale-config", Method.Post)
+            .AddJsonBody(requestBody);
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
+    }
+    
+    public async Task EditForSaleConfigAsync(string eventKey, ObjectAndQuantity[] forSale = null, ObjectAndQuantity[] notForSale = null, CancellationToken cancellationToken = default)
+    {
+        var requestBody = new Dictionary<string, object>();
+        if (forSale != null)
+        {
+            requestBody.Add("forSale", forSale.Select(fs => fs.AsDictionary()).ToArray());
+        }
+
+        if (notForSale != null)
+        {
+            requestBody.Add("notForSale", notForSale.Select(nfs => nfs.AsDictionary()).ToArray());
+        }
+
+        var restRequest = new RestRequest("/events/{key}/actions/edit-for-sale-config", Method.Post)
             .AddUrlSegment("key", eventKey)
             .AddJsonBody(requestBody);
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public async Task MarkAsNotForSaleAsync(string eventKey, IEnumerable<string> objects, Dictionary<string, int> areaPlaces,
-        IEnumerable<string> categories, CancellationToken cancellationToken = default)
+    public async Task ReplaceForSaleConfigAsync(string eventKey, bool forSale, IEnumerable<string> objects, Dictionary<string, int> areaPlaces, IEnumerable<string> categories, CancellationToken cancellationToken = default)
     {
+        var action = forSale ? "mark-as-for-sale" : "mark-as-not-for-sale";
         var requestBody = ForSaleRequest(objects, areaPlaces, categories);
-        var restRequest = new RestRequest("/events/{key}/actions/mark-as-not-for-sale", Method.Post)
+        var restRequest = new RestRequest("/events/{key}/actions/{action}", Method.Post)
             .AddUrlSegment("key", eventKey)
+            .AddUrlSegment("action", action)
             .AddJsonBody(requestBody);
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
+    }
+
+    /**
+     * @deprecated use {@link #replaceForSaleConfig instead
+     */
+    public async Task MarkAsForSaleAsync(string eventKey, IEnumerable<string> objects, Dictionary<string, int> areaPlaces, IEnumerable<string> categories, CancellationToken cancellationToken = default)
+    {
+        await ReplaceForSaleConfigAsync(eventKey, true, objects, areaPlaces, categories, cancellationToken);
+    }
+
+    /**
+     * @deprecated use {@link #replaceForSaleConfig instead
+     */
+    public async Task MarkAsNotForSaleAsync(string eventKey, IEnumerable<string> objects, Dictionary<string, int> areaPlaces, IEnumerable<string> categories, CancellationToken cancellationToken = default)
+    {
+        await ReplaceForSaleConfigAsync(eventKey, false, objects, areaPlaces, categories, cancellationToken);
     }
 
     public async Task MarkEverythingAsForSaleAsync(string eventKey, CancellationToken cancellationToken = default)

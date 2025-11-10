@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SeatsioDotNet.Charts;
 using SeatsioDotNet.Events;
 using Xunit;
 
@@ -104,5 +105,41 @@ public class CreateSeasonTest : SeatsioClientTest
         var season = await Client.Seasons.CreateAsync(chartKey, forSaleConfig: forSaleConfig);
 
         Assert.Equivalent(forSaleConfig, season.ForSaleConfig);
+    }  
+    
+    [Fact]
+    public async Task ObjectCategoriesCanBePassedIn()
+    {
+        var chartKey = CreateTestChart();
+
+        var objectCategories = new Dictionary<string, object>()
+        {
+            {"A-1", 10L}
+        };
+        var season = await Client.Seasons.CreateAsync(chartKey, objectCategories: objectCategories);
+        Assert.Equal(objectCategories, season.ObjectCategories);
+    }
+
+    [Fact]
+    public async Task CategoriesCanBePassedIn()
+    {
+        var chartKey = CreateTestChart();
+        var eventCategory = new Category("eventCategory", "event-level category", "#AAABBB");
+        var categories = new[] {eventCategory};
+
+        var season = await Client.Seasons.CreateAsync(chartKey, categories: categories);
+
+        Assert.Equal(TestChartCategories.Count + categories.Length, season.Categories.Count);
+        Assert.Contains(eventCategory, season.Categories);
+    }
+    
+    [Fact]
+    public async Task ForSalePropagatedCanBePassedIn()
+    {
+        var chartKey = CreateTestChart();
+
+        var season = await Client.Seasons.CreateAsync(chartKey, forSalePropagated: false);
+
+        Assert.False(season.ForSalePropagated);
     }
 }

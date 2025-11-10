@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using RestSharp;
+using SeatsioDotNet.Charts;
 using SeatsioDotNet.Events;
 using static SeatsioDotNet.Util.RestUtil;
 
@@ -18,7 +19,9 @@ public class Seasons
         _seatsioClient = seatsioClient;
     }
 
-    public async Task<Event> CreateAsync(string chartKey, string key = null, string name = null, int? numberOfEvents = null, IEnumerable<string> eventKeys = null, TableBookingConfig tableBookingConfig = null, IEnumerable<Channel> channels = null, ForSaleConfig forSaleConfig = null, CancellationToken cancellationToken = default)
+    public async Task<Event> CreateAsync(string chartKey, string key = null, string name = null, int? numberOfEvents = null, IEnumerable<string> eventKeys = null,
+        TableBookingConfig tableBookingConfig = null, IEnumerable<Channel> channels = null, ForSaleConfig forSaleConfig = null, Category[] categories = null,
+        Dictionary<string, object> objectCategories = null, bool? forSalePropagated = null, CancellationToken cancellationToken = default)
     {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
         requestBody.Add("chartKey", chartKey);
@@ -57,9 +60,64 @@ public class Seasons
         {
             requestBody.Add("forSaleConfig", forSaleConfig.AsJsonObject());
         }
+        
+        if (objectCategories != null)
+        {
+            requestBody.Add("objectCategories", objectCategories);
+        }
+
+        if (categories != null)
+        {
+            requestBody.Add("categories", categories);
+        }
+        
+        if (forSalePropagated != null)
+        {
+            requestBody.Add("forSalePropagated", forSalePropagated);
+        }
 
         var restRequest = new RestRequest("/seasons", Method.Post).AddJsonBody(requestBody);
         return AssertOk(await _restClient.ExecuteAsync<Event>(restRequest, cancellationToken));
+    }
+    
+    public async Task UpdateAsync(string eventKey, UpdateSeasonParams p, CancellationToken cancellationToken = default)
+    {
+        Dictionary<string, object> requestBody = new Dictionary<string, object>();
+
+        if (p.Key != null)
+        {
+            requestBody.Add("eventKey", p.Key);
+        }
+
+        if (p.Name != null)
+        {
+            requestBody.Add("name", p.Name);
+        }
+
+        if (p.TableBookingConfig != null)
+        {
+            requestBody.Add("tableBookingConfig", p.TableBookingConfig.AsJsonObject());
+        }
+        
+        if (p.ObjectCategories != null)
+        {
+            requestBody.Add("objectCategories", p.ObjectCategories);
+        }
+
+        if (p.Categories != null)
+        {
+            requestBody.Add("categories", p.Categories);
+        }
+
+        if (p.ForSalePropagated != null)
+        {
+            requestBody.Add("forSalePropagated", p.ForSalePropagated);
+        }
+
+        var restRequest = new RestRequest("/events/{key}", Method.Post)
+            .AddUrlSegment("key", eventKey)
+            .AddJsonBody(requestBody);
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
     public async Task<Event> CreatePartialSeasonAsync(string topLevelSeasonKey, string partialSeasonKey = null, string name = null, IEnumerable<string> eventKeys = null, CancellationToken cancellationToken = default)

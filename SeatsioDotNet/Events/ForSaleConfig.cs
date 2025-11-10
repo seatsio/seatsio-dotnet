@@ -35,12 +35,24 @@ public class ForSaleConfig
 
     public object AsJsonObject()
     {
-        return new
+        var json = new Dictionary<string, object>();
+        json.Add("forSale", ForSale);
+
+        if (Objects != null)
         {
-            forSale = ForSale,
-            objects = Objects,
-            areaPlaces = AreaPlaces,
-            categories = Categories
-        };
+            json.Add("objects", Objects);
+        } 
+        
+        if (AreaPlaces != null)
+        {
+            json.Add("areaPlaces", AreaPlaces);
+        }   
+        
+        if (Categories != null)
+        {
+            json.Add("categories", Categories);
+        }
+        
+        return json;
     }
 }

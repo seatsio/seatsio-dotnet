@@ -572,17 +572,13 @@ public class Events
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    /**
-     * @deprecated use {@link #replaceForSaleConfig instead
-     */
+    // Deprecated: use <see cref="ReplaceForSaleConfigAsync"/> instead
     public async Task MarkAsForSaleAsync(string eventKey, IEnumerable<string> objects, Dictionary<string, int> areaPlaces, IEnumerable<string> categories, CancellationToken cancellationToken = default)
     {
         await ReplaceForSaleConfigAsync(eventKey, true, objects, areaPlaces, categories, cancellationToken);
     }
 
-    /**
-     * @deprecated use {@link #replaceForSaleConfig instead
-     */
+    // Deprecated: use <see cref="ReplaceForSaleConfigAsync"/> instead
     public async Task MarkAsNotForSaleAsync(string eventKey, IEnumerable<string> objects, Dictionary<string, int> areaPlaces, IEnumerable<string> categories, CancellationToken cancellationToken = default)
     {
         await ReplaceForSaleConfigAsync(eventKey, false, objects, areaPlaces, categories, cancellationToken);

@@ -522,7 +522,7 @@ public class Events
             .AddUrlSegment("key", eventKey)
             .AddUrlSegment("object", objectLabel)
             .AddJsonBody(new {extraData});
-        AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest, cancellationToken));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
     public async Task UpdateExtraDatasAsync(string eventKey, Dictionary<string, Dictionary<string, object>> extraData, CancellationToken cancellationToken = default)
@@ -531,18 +531,18 @@ public class Events
             .AddUrlSegment("key", eventKey)
             .AddParameter("application/json", JsonSerializer.Serialize(new {extraData}),
                 ParameterType.RequestBody); // default serializer doesn't convert extraData to JSON properly
-        AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest, cancellationToken));
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
     
-    public async Task EditForSaleConfigForEventsAsync(Dictionary<string, ForSaleAndNotForSale> events, CancellationToken cancellationToken = default)
+    public async Task<Dictionary<string, EditForSaleConfigResult>> EditForSaleConfigForEventsAsync(Dictionary<string, ForSaleAndNotForSale> events, CancellationToken cancellationToken = default)
     {
         var requestBody = new Dictionary<string, object> { { "events", events.ToDictionary(x => x.Key, x => x.Value.AsDictionary()) } };
         var restRequest = new RestRequest("/events/actions/edit-for-sale-config", Method.Post)
             .AddJsonBody(requestBody);
-        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
+        return AssertOk(await _restClient.ExecuteAsync<Dictionary<string, EditForSaleConfigResult>>(restRequest, cancellationToken));
     }
     
-    public async Task EditForSaleConfigAsync(string eventKey, ObjectAndQuantity[] forSale = null, ObjectAndQuantity[] notForSale = null, CancellationToken cancellationToken = default)
+    public async Task<EditForSaleConfigResult> EditForSaleConfigAsync(string eventKey, ObjectAndQuantity[] forSale = null, ObjectAndQuantity[] notForSale = null, CancellationToken cancellationToken = default)
     {
         var requestBody = new Dictionary<string, object>();
         if (forSale != null)
@@ -558,7 +558,7 @@ public class Events
         var restRequest = new RestRequest("/events/{key}/actions/edit-for-sale-config", Method.Post)
             .AddUrlSegment("key", eventKey)
             .AddJsonBody(requestBody);
-        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
+        return AssertOk(await _restClient.ExecuteAsync<EditForSaleConfigResult>(restRequest, cancellationToken));
     }
 
     public async Task ReplaceForSaleConfigAsync(string eventKey, bool forSale, IEnumerable<string> objects, Dictionary<string, int> areaPlaces, IEnumerable<string> categories, CancellationToken cancellationToken = default)

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using SeatsioDotNet.EventReports;
+﻿using System.Threading.Tasks;
 using SeatsioDotNet.Events;
 using Xunit;
 
@@ -20,6 +18,21 @@ public class EditForSaleConfigTest : SeatsioClientTest
         var retrievedForSaleConfig = (await Client.Events.RetrieveAsync(evnt.Key)).ForSaleConfig;
         Assert.False(retrievedForSaleConfig.ForSale);
         Assert.Equal(new[] {"A-3"}, retrievedForSaleConfig.Objects);
+    } 
+        
+    
+    [Fact]
+    public async Task ReturnsResult()
+    {
+        var chartKey = CreateTestChart();
+        ForSaleConfig forSaleConfig = new ForSaleConfig().WithForSale(false).WithObjects(new [] {"A-1", "A-2", "A-3"});
+        var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithForSaleConfig(forSaleConfig));
+        
+        var result = await Client.Events.EditForSaleConfigAsync(evnt.Key, new[] {new ObjectAndQuantity("A-1"), new ObjectAndQuantity("A-2")});
+
+        Assert.False(result.ForSaleConfig.ForSale);
+        Assert.Equal(new[] {"A-3"}, result.ForSaleConfig.Objects);
+        Assert.Equal(9, result.RateLimitInfo.RateLimitRemainingCalls);
     } 
     
     [Fact]

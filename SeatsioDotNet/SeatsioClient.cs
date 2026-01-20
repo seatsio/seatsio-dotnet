@@ -61,7 +61,7 @@ namespace SeatsioDotNet
             var options = new RestClientOptions(baseUrl)
             {
                 Authenticator = new HttpBasicAuthenticator(secretKey, null),
-                MaxTimeout = 10000
+                Timeout = TimeSpan.FromSeconds(10)
             };
             var client = new SeatsioRestClient(options, httpClient: httpClient);
             client.AddDefaultHeader("X-Client-Lib", ".NET");
@@ -84,6 +84,18 @@ public class SeatsioRestClient : RestClient
         configureSerialization: s =>
             s.UseSerializer(() => new SystemTextJsonSerializer(SeatsioJsonSerializerOptions())))
     {
+    }
+
+    public override async Task<RestResponse<T>> ExecuteAsync<T>(RestRequest request, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            return await base.ExecuteAsync<T>(request, cancellationToken);
+        }
+        catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException || !cancellationToken.IsCancellationRequested)
+        {
+            throw new SeatsioTimeoutException(ex);
+        }
     }
 
     public static JsonSerializerOptions SeatsioJsonSerializerOptions()

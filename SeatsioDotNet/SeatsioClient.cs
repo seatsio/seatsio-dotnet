@@ -60,7 +60,8 @@ namespace SeatsioDotNet
         {
             var options = new RestClientOptions(baseUrl)
             {
-                Authenticator = new HttpBasicAuthenticator(secretKey, null)
+                Authenticator = new HttpBasicAuthenticator(secretKey, null),
+                MaxTimeout = 10000
             };
             var client = new SeatsioRestClient(options, httpClient: httpClient);
             client.AddDefaultHeader("X-Client-Lib", ".NET");

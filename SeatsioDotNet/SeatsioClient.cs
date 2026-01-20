@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using RestSharp;
 using RestSharp.Authenticators;
 using RestSharp.Serializers.Json;
+using SeatsioDotNet;
 using SeatsioDotNet.Reports.Usage;
 
 namespace SeatsioDotNet

@@ -86,18 +86,6 @@ public class SeatsioRestClient : RestClient
     {
     }
 
-    public override async Task<RestResponse<T>> ExecuteAsync<T>(RestRequest request, CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            return await base.ExecuteAsync<T>(request, cancellationToken);
-        }
-        catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException || !cancellationToken.IsCancellationRequested)
-        {
-            throw new SeatsioTimeoutException(ex);
-        }
-    }
-
     public static JsonSerializerOptions SeatsioJsonSerializerOptions()
     {
         var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
@@ -119,17 +107,24 @@ public class SeatsioMessageHandler : HttpClientHandler
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
-        var retryCount = 0;
-        var response = await base.SendAsync(request, cancellationToken);
-        while (retryCount < MaxRetries && (int) response.StatusCode == 429)
+        try
         {
-            var waitTime = (int) Math.Pow(2, retryCount + 2) * 100;
-            retryCount++;
-            await Task.Delay(waitTime, cancellationToken);
-            response = await base.SendAsync(request, cancellationToken);
-        }
+            var retryCount = 0;
+            var response = await base.SendAsync(request, cancellationToken);
+            while (retryCount < MaxRetries && (int) response.StatusCode == 429)
+            {
+                var waitTime = (int) Math.Pow(2, retryCount + 2) * 100;
+                retryCount++;
+                await Task.Delay(waitTime, cancellationToken);
+                response = await base.SendAsync(request, cancellationToken);
+            }
 
-        return response;
+            return response;
+        }
+        catch (TaskCanceledException ex) when (ex.InnerException is TimeoutException || !cancellationToken.IsCancellationRequested)
+        {
+            throw new SeatsioTimeoutException(ex);
+        }
     }
 }
 

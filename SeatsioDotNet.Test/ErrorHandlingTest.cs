@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 using RestSharp;
 using SeatsioDotNet.Util;
 using Xunit;
@@ -38,5 +40,21 @@ public class ErrorHandlingTest : SeatsioClientTest
         Assert.Equal("Get  resulted in a 0  response. Body: ", e.Message);
         Assert.Null(e.Errors);
         Assert.Null(e.RequestId);
+    }
+
+    [Fact]
+    public async Task TestTimeout()
+    {
+        var httpClient = new HttpClient(new SeatsioMessageHandler(0))
+        {
+            Timeout = TimeSpan.FromMilliseconds(10)
+        };
+        var client = CreateSeatsioClient(User.SecretKey, httpClient);
+
+        var e = await Assert.ThrowsAsync<SeatsioTimeoutException>(async () =>
+            await client.Charts.CreateAsync());
+
+        Assert.Equal("Request timed out", e.Message);
+        Assert.IsType<TaskCanceledException>(e.InnerException);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using RestSharp;
 using SeatsioDotNet.Util;
 using Xunit;
@@ -38,5 +39,20 @@ public class ErrorHandlingTest : SeatsioClientTest
         Assert.Equal("Get  resulted in a 0  response. Body: ", e.Message);
         Assert.Null(e.Errors);
         Assert.Null(e.RequestId);
+    }
+
+    [Fact]
+    public async Task TestTimeout()
+    {
+        var options = new RestClientOptions("https://httpbin.seatsio.net")
+        {
+            Timeout = TimeSpan.FromMilliseconds(10)
+        };
+        var client = new SeatsioRestClient(options, maxRetries: 0);
+
+        var response = await client.ExecuteAsync<object>(new RestRequest("/delay/1"));
+
+        Assert.Equal(0, (int)response.StatusCode);
+        Assert.IsType<TaskCanceledException>(response.ErrorException);
     }
 }

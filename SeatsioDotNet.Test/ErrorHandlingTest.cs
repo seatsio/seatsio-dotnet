@@ -50,9 +50,10 @@ public class ErrorHandlingTest : SeatsioClientTest
         };
         var client = new SeatsioRestClient(options, maxRetries: 0);
 
-        var response = await client.ExecuteAsync<object>(new RestRequest("/delay/1"));
+        var e = await Assert.ThrowsAsync<SeatsioTimeoutException>(async () =>
+            RestUtil.AssertOk(await client.ExecuteAsync<object>(new RestRequest("/delay/1"))));
 
-        Assert.Equal(0, (int)response.StatusCode);
-        Assert.IsType<TaskCanceledException>(response.ErrorException);
+        Assert.Equal("Request timed out", e.Message);
+        Assert.IsType<TaskCanceledException>(e.InnerException);
     }
 }

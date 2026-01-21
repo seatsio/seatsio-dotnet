@@ -22,6 +22,10 @@ public class SeatsioException : Exception
     {
     }
 
+    protected SeatsioException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
+
     private static string ExceptionMessage(List<SeatsioApiError> errors)
     {
         return String.Join(", ", errors.Select(x => x.Message)) + ".";

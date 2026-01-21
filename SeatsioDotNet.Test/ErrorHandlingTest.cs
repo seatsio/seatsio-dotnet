@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using RestSharp;
 using SeatsioDotNet.Util;
@@ -44,14 +45,14 @@ public class ErrorHandlingTest : SeatsioClientTest
     [Fact]
     public async Task TestTimeout()
     {
-        var options = new RestClientOptions("https://httpbin.seatsio.net")
+        var httpClient = new HttpClient(new SeatsioMessageHandler(0))
         {
             Timeout = TimeSpan.FromMilliseconds(10)
         };
-        var client = new SeatsioRestClient(options, maxRetries: 0);
+        var client = CreateSeatsioClient(User.SecretKey, httpClient);
 
         var e = await Assert.ThrowsAsync<SeatsioTimeoutException>(async () =>
-            RestUtil.AssertOk(await client.ExecuteAsync<object>(new RestRequest("/delay/1"))));
+            await client.Charts.CreateAsync());
 
         Assert.Equal("Request timed out", e.Message);
         Assert.IsType<TaskCanceledException>(e.InnerException);

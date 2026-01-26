@@ -38,8 +38,12 @@ public class SeatsioClientTest
 
     private TestCompany CreateTestCompany()
     {
-        var restClient = new RestClient(BaseUrl);
-        var request = new RestRequest("/system/public/users/actions/create-test-company", Method.Post);
+        var options = new RestClientOptions(BaseUrl)
+        {
+            Authenticator = new HttpBasicAuthenticator(SystemApiSecret(), null)
+        };
+        var restClient = new RestClient(options);
+        var request = new RestRequest("/system/private/create-test-company", Method.Post);
         return RestUtil.AssertOk(restClient.Execute<TestCompany>(request));
     }
 
@@ -57,7 +61,7 @@ public class SeatsioClientTest
     {
         return CreateTestChartFromJson(File.ReadAllText("./resources/sampleChartWithSections.json"));
     }
-    
+
     protected string CreateTestChartWithZones()
     {
         return CreateTestChartFromJson(File.ReadAllText("./resources/sampleChartWithZones.json"));
@@ -140,5 +144,15 @@ public class SeatsioClientTest
     {
         var demoCompanySecretKey = Environment.GetEnvironmentVariable("DEMO_COMPANY_SECRET_KEY");
         return demoCompanySecretKey != null;
+    }
+
+    protected static string SystemApiSecret()
+    {
+        var secret = Environment.GetEnvironmentVariable("CORE_V2_STAGING_EU_SYSTEM_API_SECRET");
+        if (string.IsNullOrWhiteSpace(secret))
+        {
+            throw new InvalidOperationException("Missing CORE_V2_STAGING_EU_SYSTEM_API_SECRET");
+        }
+        return secret;
     }
 }

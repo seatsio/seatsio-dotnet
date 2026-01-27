@@ -148,7 +148,7 @@ public class SeatsioClientTest
 
     protected static string SystemApiSecret()
     {
-        return Environment.GetEnvironmentVariable("CORE_V2_STAGING_EU_SYSTEM_API_SECRET")
-               ?? "superSecretSystemApi";
+        var secret = Environment.GetEnvironmentVariable("CORE_V2_STAGING_EU_SYSTEM_API_SECRET");
+        return string.IsNullOrWhiteSpace(secret) ? "superSecretSystemApi" : secret;
     }
 }

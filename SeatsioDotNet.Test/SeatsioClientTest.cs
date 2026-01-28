@@ -15,7 +15,7 @@ namespace SeatsioDotNet.Test;
 
 public class SeatsioClientTest
 {
-    protected static readonly string BaseUrl = "https://api-staging-eu.seatsio.net";
+    protected static string BaseUrl => Environment.GetEnvironmentVariable("API_URL") ?? "http://localhost:9001";
 
     protected static readonly List<Category> TestChartCategories = new List<Category>()
     {
@@ -149,10 +149,6 @@ public class SeatsioClientTest
     protected static string SystemApiSecret()
     {
         var secret = Environment.GetEnvironmentVariable("CORE_V2_STAGING_EU_SYSTEM_API_SECRET");
-        if (string.IsNullOrWhiteSpace(secret))
-        {
-            throw new InvalidOperationException("Missing CORE_V2_STAGING_EU_SYSTEM_API_SECRET");
-        }
-        return secret;
+        return string.IsNullOrWhiteSpace(secret) ? "superSecretSystemApi" : secret;
     }
 }

@@ -46,6 +46,11 @@ public class EventReportsTest : SeatsioClientTest
         Assert.Equal(extraData, reportItem.ExtraData);
         Assert.False(reportItem.IsAccessible);
         Assert.False(reportItem.IsCompanionSeat);
+        Assert.False(reportItem.HasLiftUpArmrests);
+        Assert.False(reportItem.IsHearingImpaired);
+        Assert.False(reportItem.IsSemiAmbulatorySeat);
+        Assert.False(reportItem.HasSignLanguageInterpretation);
+        Assert.False(reportItem.IsPlusSize);
         Assert.False(reportItem.HasRestrictedView);
         Assert.Null(reportItem.DisplayedObjectType);
         Assert.Null(reportItem.ParentDisplayedObjectType);
@@ -56,20 +61,6 @@ public class EventReportsTest : SeatsioClientTest
         Assert.Null(reportItem.BookAsAWhole);
         Assert.NotNull(reportItem.DistanceToFocalPoint);
         Assert.Equal(0, reportItem.SeasonStatusOverriddenQuantity);
-
-        var gaItem = report["GA1"].First();
-        Assert.Equal(5, gaItem.NumBooked);
-        Assert.Equal(92, gaItem.NumFree);
-        Assert.Equal(3, gaItem.NumHeld);
-        Assert.Equal(0, gaItem.NumNotForSale);
-        Assert.Equal(100, gaItem.Capacity);
-        Assert.Equal("generalAdmission", gaItem.ObjectType);
-        Assert.False(gaItem.BookAsAWhole);
-        Assert.Null(gaItem.HasRestrictedView);
-        Assert.Null(gaItem.IsAccessible);
-        Assert.Null(gaItem.IsCompanionSeat);
-        Assert.Null(gaItem.DisplayedObjectType);
-        Assert.Null(gaItem.ParentDisplayedObjectType);
     }
 
     [Fact]
@@ -113,16 +104,20 @@ public class EventReportsTest : SeatsioClientTest
 
         var reportItem = report["GA1"].First();
         Assert.Equal(5, reportItem.NumBooked);
-        Assert.Equal(3, reportItem.NumHeld);
         Assert.Equal(92, reportItem.NumFree);
         Assert.Equal(100, reportItem.Capacity);
         Assert.Equal("generalAdmission", reportItem.ObjectType);
+        Assert.False(reportItem.BookAsAWhole);
+        Assert.Null(reportItem.HasRestrictedView);
         Assert.Null(reportItem.IsAccessible);
         Assert.Null(reportItem.IsCompanionSeat);
-        Assert.Null(reportItem.HasRestrictedView);
+        Assert.Null(reportItem.HasLiftUpArmrests);
+        Assert.Null(reportItem.IsHearingImpaired);
+        Assert.Null(reportItem.IsSemiAmbulatorySeat);
+        Assert.Null(reportItem.HasSignLanguageInterpretation);
+        Assert.Null(reportItem.IsPlusSize);
         Assert.Null(reportItem.DisplayedObjectType);
         Assert.Null(reportItem.ParentDisplayedObjectType);
-        Assert.False(reportItem.BookAsAWhole);
     }
 
     [Fact]

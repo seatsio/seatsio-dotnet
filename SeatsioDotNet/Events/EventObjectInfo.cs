@@ -39,6 +39,11 @@ public class EventObjectInfo
     public Dictionary<string, object> ExtraData { get; set; }
     public bool? IsAccessible { get; set; }
     public bool? IsCompanionSeat { get; set; }
+    public bool? HasLiftUpArmrests { get; set; }
+    public bool? IsHearingImpaired { get; set; }
+    public bool? IsSemiAmbulatorySeat { get; set; }
+    public bool? HasSignLanguageInterpretation { get; set; }
+    public bool? IsPlusSize { get; set; }
     public bool? HasRestrictedView { get; set; }
     public string DisplayedObjectType { get; set; }
     public string ParentDisplayedObjectType { get; set; }

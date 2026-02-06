@@ -52,9 +52,14 @@ public class ChartReportsTest : SeatsioClientTest
         Assert.Equal("A-2", reportItem.RightNeighbour);
         Assert.Null(reportItem.BookAsAWhole);
         Assert.NotNull(reportItem.DistanceToFocalPoint);
-        Assert.NotNull(reportItem.IsAccessible);
-        Assert.NotNull(reportItem.IsCompanionSeat);
-        Assert.NotNull(reportItem.HasRestrictedView);
+        Assert.False(reportItem.IsAccessible);
+        Assert.False(reportItem.IsCompanionSeat);
+        Assert.False(reportItem.HasLiftUpArmrests);
+        Assert.False(reportItem.IsHearingImpaired);
+        Assert.False(reportItem.IsSemiAmbulatorySeat);
+        Assert.False(reportItem.HasSignLanguageInterpretation);
+        Assert.False(reportItem.IsPlusSize);
+        Assert.False(reportItem.HasRestrictedView);
         Assert.Null(reportItem.floor);
     }
 

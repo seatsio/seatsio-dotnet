@@ -85,7 +85,7 @@ public class SeatsioRestClient : RestClient
             s.UseSerializer(() => new SystemTextJsonSerializer(SeatsioJsonSerializerOptions())))
     {
     }
-
+    
     public static JsonSerializerOptions SeatsioJsonSerializerOptions()
     {
         var options = new JsonSerializerOptions(JsonSerializerDefaults.Web);

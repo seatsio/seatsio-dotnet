@@ -373,7 +373,7 @@ public class Events
     {
         var serializedRequests = requests.Select(r => ChangeObjectStatusRequest(r.Type, r.EventKey, r.Objects, r.Status,
             r.HoldToken, r.OrderId, r.KeepExtraData, r.IgnoreChannels, r.ChannelKeys,
-            r.AllowedPreviousStatuses, r.RejectedPreviousStatuses, r.ResaleListingId));
+            r.AllowedPreviousStatuses, r.RejectedPreviousStatuses, r.ResaleListingId, r.Season));
         var restRequest = new RestRequest("/events/actions/change-object-status", Method.Post)
             .AddQueryParameter("expand", "objects")
             .AddJsonBody(new Dictionary<string, object> {{"statusChanges", serializedRequests}});
@@ -382,10 +382,10 @@ public class Events
 
     private Dictionary<string, object> ChangeObjectStatusRequest(string type, string evnt, IEnumerable<ObjectProperties> objects,
         string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null,
-        string[] channelKeys = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null, string resaleListingId = null)
+        string[] channelKeys = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null, string resaleListingId = null, string season = null)
     {
         var request = ChangeObjectStatusRequest(type, objects, status, holdToken, orderId, keepExtraData, ignoreChannels,
-            channelKeys, allowedPreviousStatuses, rejectedPreviousStatuses, resaleListingId);
+            channelKeys, allowedPreviousStatuses, rejectedPreviousStatuses, resaleListingId, season);
         request.Add("event", evnt);
         return request;
     }
@@ -403,7 +403,7 @@ public class Events
 
     private Dictionary<string, object> ChangeObjectStatusRequest(string type, IEnumerable<ObjectProperties> objects,
         string status, string holdToken, string orderId, bool? keepExtraData, bool? ignoreChannels = null,
-        string[] channelKeys = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null, string resaleListingId = null)
+        string[] channelKeys = null, string[] allowedPreviousStatuses = null, string[] rejectedPreviousStatuses = null, string resaleListingId = null, string season = null)
     {
         var requestBody = new Dictionary<string, object>()
         {
@@ -456,6 +456,11 @@ public class Events
             requestBody.Add("resaleListingId", resaleListingId);
         }
 
+        if (season != null)
+        {
+            requestBody.Add("season", season);
+        }
+
         return requestBody;
     }
     
@@ -500,19 +505,29 @@ public class Events
         return AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest, cancellationToken));
     }
 
-    public async Task OverrideSeasonObjectStatusAsync(string eventKey, string[] objects, CancellationToken cancellationToken = default)
+    public async Task OverrideSeasonObjectStatusAsync(string eventKey, string[] objects, string season = null, CancellationToken cancellationToken = default)
     {
+        var requestBody = new Dictionary<string, object> {{"objects", objects}};
+        if (season != null)
+        {
+            requestBody.Add("season", season);
+        }
         var restRequest = new RestRequest("/events/{key}/actions/override-season-status", Method.Post)
             .AddUrlSegment("key", eventKey)
-            .AddJsonBody(new {objects});
+            .AddJsonBody(requestBody);
         AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest, cancellationToken));
     }
 
-    public async Task UseSeasonObjectStatusAsync(string eventKey, string[] objects, CancellationToken cancellationToken = default)
+    public async Task UseSeasonObjectStatusAsync(string eventKey, string[] objects, string season = null, CancellationToken cancellationToken = default)
     {
+        var requestBody = new Dictionary<string, object> {{"objects", objects}};
+        if (season != null)
+        {
+            requestBody.Add("season", season);
+        }
         var restRequest = new RestRequest("/events/{key}/actions/use-season-status", Method.Post)
             .AddUrlSegment("key", eventKey)
-            .AddJsonBody(new {objects});
+            .AddJsonBody(requestBody);
         AssertOk(await _restClient.ExecuteAsync<BestAvailableResult>(restRequest, cancellationToken));
     }
 

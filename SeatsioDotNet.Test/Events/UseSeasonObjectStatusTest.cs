@@ -19,5 +19,20 @@ namespace SeatsioDotNet.Test.Events
             Assert.Equal(EventObjectInfo.Booked, (await Client.Events.RetrieveObjectInfoAsync("event1", "A-1")).Status);
             Assert.Equal(EventObjectInfo.Booked, (await Client.Events.RetrieveObjectInfoAsync("event1", "A-2")).Status);
         }
+
+        [Fact]
+        public async Task WithSeason()
+        {
+            var chartKey = CreateTestChart();
+            var season = await Client.Seasons.CreateAsync(chartKey, null, null, null, new[] {"event1"});
+            await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
+            await Client.Events.OverrideSeasonObjectStatusAsync("event1", new[] {"A-1", "A-2"});
+
+            await Client.Events.UseSeasonObjectStatusAsync("event1", new[] {"A-1", "A-2"}, season: season.Key);
+
+            Assert.Equal(EventObjectInfo.Booked, (await Client.Events.RetrieveObjectInfoAsync("event1", "A-1")).Status);
+            Assert.Equal(EventObjectInfo.Booked, (await Client.Events.RetrieveObjectInfoAsync("event1", "A-2")).Status);
+        }
     }
 }
+

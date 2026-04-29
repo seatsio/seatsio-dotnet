@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SeatsioDotNet.Events;
 using Xunit;
@@ -100,5 +101,37 @@ public class AddChannelTest : SeatsioClientTest
         Assert.Equal("#FFFF98", channel1.Color);
         Assert.Equal(1, channel1.Index);
         Assert.Empty(channel1.Objects);
+    }
+
+    [Fact]
+    public async Task AddChannelWithAreaPlaces()
+    {
+        var event1 = await Client.Events.CreateAsync(CreateTestChart());
+
+        await Client.Events.Channels.AddAsync(event1.Key, "channelKey1", "channel 1", "#FFFF98", 1, null,
+            new Dictionary<string, int> { { "GA1", 3 } });
+
+        var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
+        var channel1 = retrievedEvent.Channels[0];
+        Assert.Equal(new Dictionary<string, int> { { "GA1", 3 } }, channel1.AreaPlaces);
+    }
+
+    [Fact]
+    public async Task AddChannelsWithAreaPlaces()
+    {
+        var event1 = await Client.Events.CreateAsync(CreateTestChart());
+
+        await Client.Events.Channels.AddAsync(
+            event1.Key,
+            new[]
+            {
+                new ChannelCreationParams("channelKey1", "channel 1", "#FFFF98", 1, null,
+                    new Dictionary<string, int> { { "GA1", 3 } }),
+            }
+        );
+
+        var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
+        var channel1 = retrievedEvent.Channels[0];
+        Assert.Equal(new Dictionary<string, int> { { "GA1", 3 } }, channel1.AreaPlaces);
     }
 }

@@ -31,7 +31,8 @@ public class Channels
         return request;
     }
 
-    public async Task AddAsync(string eventKey, string channelKey, string name, string color, int? index, string[] objects, CancellationToken cancellationToken = default)
+    public async Task AddAsync(string eventKey, string channelKey, string name, string color, int? index, string[] objects = null,
+        Dictionary<string, int> areaPlaces = null, CancellationToken cancellationToken = default)
     {
         var body = new Dictionary<string, object>();
         body.Add("key", channelKey);
@@ -39,6 +40,7 @@ public class Channels
         body.Add("color", color);
         if (index != null) body.Add("index", index);
         if (objects != null) body.Add("objects", objects);
+        if (areaPlaces != null) body.Add("areaPlaces", areaPlaces);
         var restRequest = new RestRequest("/events/{key}/channels", Method.Post)
             .AddUrlSegment("key", eventKey)
             .AddJsonBody(body);
@@ -51,31 +53,12 @@ public class Channels
         foreach (var param in channelCreationParams)
         {
             var channelToCreate = new Dictionary<string, object>();
-            if (param.Key != null)
-            {
-                channelToCreate.Add("key", param.Key);
-            }
-
-            if (param.Name != null)
-            {
-                channelToCreate.Add("name", param.Name);
-            }
-
-            if (param.Color != null)
-            {
-                channelToCreate.Add("color", param.Color);
-            }
-
-            if (param.Index != null)
-            {
-                channelToCreate.Add("index", param.Index);
-            }
-
-            if (param.Objects != null)
-            {
-                channelToCreate.Add("objects", param.Objects);
-            }
-
+            if (param.Key != null) channelToCreate.Add("key", param.Key);
+            if (param.Name != null) channelToCreate.Add("name", param.Name);
+            if (param.Color != null) channelToCreate.Add("color", param.Color);
+            if (param.Index != null) channelToCreate.Add("index", param.Index);
+            if (param.Objects != null) channelToCreate.Add("objects", param.Objects);
+            if (param.AreaPlaces != null) channelToCreate.Add("areaPlaces", param.AreaPlaces);
             channels.Add(channelToCreate);
         }
 
@@ -93,10 +76,12 @@ public class Channels
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public async Task AddObjectsAsync(string eventKey, string channelKey, string[] objects, CancellationToken cancellationToken = default)
+    public async Task AddObjectsAsync(string eventKey, string channelKey, string[] objects = null,
+        Dictionary<string, int> areaPlaces = null, CancellationToken cancellationToken = default)
     {
         var body = new Dictionary<string, object>();
-        body.Add("objects", objects);
+        if (objects != null) body.Add("objects", objects);
+        if (areaPlaces != null) body.Add("areaPlaces", areaPlaces);
         var restRequest = new RestRequest("/events/{eventKey}/channels/{channelKey}/objects", Method.Post)
             .AddUrlSegment("eventKey", eventKey)
             .AddUrlSegment("channelKey", channelKey)
@@ -104,10 +89,12 @@ public class Channels
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public async Task RemoveObjectsAsync(string eventKey, string channelKey, string[] objects, CancellationToken cancellationToken = default)
+    public async Task RemoveObjectsAsync(string eventKey, string channelKey, string[] objects = null,
+        Dictionary<string, int> areaPlaces = null, CancellationToken cancellationToken = default)
     {
         var body = new Dictionary<string, object>();
-        body.Add("objects", objects);
+        if (objects != null) body.Add("objects", objects);
+        if (areaPlaces != null) body.Add("areaPlaces", areaPlaces);
         var restRequest = new RestRequest("/events/{eventKey}/channels/{channelKey}/objects", Method.Delete)
             .AddUrlSegment("eventKey", eventKey)
             .AddUrlSegment("channelKey", channelKey)
@@ -115,12 +102,14 @@ public class Channels
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public async Task UpdateAsync(string eventKey, string channelKey, string channelName, string color, string[] objects, CancellationToken cancellationToken = default)
+    public async Task UpdateAsync(string eventKey, string channelKey, string channelName, string color, string[] objects,
+        Dictionary<string, int> areaPlaces = null, CancellationToken cancellationToken = default)
     {
         var body = new Dictionary<string, object>();
         if (channelName != null) body.Add("name", channelName);
         if (color != null) body.Add("color", color);
         if (objects != null) body.Add("objects", objects);
+        if (areaPlaces != null) body.Add("areaPlaces", areaPlaces);
         var restRequest = new RestRequest($"/events/{{eventKey}}/channels/{channelKey}", Method.Post)
             .AddUrlSegment("eventKey", eventKey)
             .AddUrlSegment("channelKey", channelKey)

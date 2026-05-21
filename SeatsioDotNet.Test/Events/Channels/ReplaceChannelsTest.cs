@@ -16,7 +16,7 @@ public class ReplaceChannelsTest : SeatsioClientTest
 
         var channels = new List<Channel>
         {
-            new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}),
+            new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int> { { "GA1", 3 } }),
             new("channelKey2", "channel 2", "#00FFFF", 2, new String[] { })
         };
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -17,5 +18,18 @@ public class AddObjectsToChannelTest : SeatsioClientTest
         var retrievedChannels = (await Client.Events.RetrieveAsync(event1.Key)).Channels;
         Assert.Equal(new[] {"A-1", "A-2", "A-3", "A-4"}, retrievedChannels[0].Objects);
         Assert.Empty(retrievedChannels[1].Objects);
+    }
+
+    [Fact]
+    public async Task AddAreaPlacesToChannel()
+    {
+        var event1 = await Client.Events.CreateAsync(CreateTestChart());
+        await Client.Events.Channels.AddAsync(event1.Key, "channelKey1", "channel 1", "#FFFF98", 1, null);
+
+        await Client.Events.Channels.AddObjectsAsync(event1.Key, "channelKey1",
+            areaPlaces: new Dictionary<string, int> { { "GA1", 3 } });
+
+        var retrievedChannels = (await Client.Events.RetrieveAsync(event1.Key)).Channels;
+        Assert.Equal(new Dictionary<string, int> { { "GA1", 3 } }, retrievedChannels[0].AreaPlaces);
     }
 }

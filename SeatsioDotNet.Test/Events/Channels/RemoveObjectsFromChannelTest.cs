@@ -29,6 +29,6 @@ public class RemoveObjectsFromChannelTest : SeatsioClientTest
             areaPlaces: new Dictionary<string, int> { { "GA1", 3 } });
 
         var retrievedChannels = (await Client.Events.RetrieveAsync(event1.Key)).Channels;
-        Assert.Null(retrievedChannels[0].AreaPlaces);
+        Assert.Empty(retrievedChannels[0].AreaPlaces);
     }
 }

@@ -31,10 +31,6 @@ public class Channels
         return request;
     }
 
-    public Task AddAsync(string eventKey, string channelKey, string name, string color, int? index, string[] objects,
-        CancellationToken cancellationToken)
-        => AddAsync(eventKey, channelKey, name, color, index, objects, null, cancellationToken);
-
     public async Task AddAsync(string eventKey, string channelKey, string name, string color, int? index, string[] objects = null,
         Dictionary<string, int> areaPlaces = null, CancellationToken cancellationToken = default)
     {
@@ -80,10 +76,6 @@ public class Channels
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public Task AddObjectsAsync(string eventKey, string channelKey, string[] objects,
-        CancellationToken cancellationToken)
-        => AddObjectsAsync(eventKey, channelKey, objects, null, cancellationToken);
-
     public async Task AddObjectsAsync(string eventKey, string channelKey, string[] objects = null,
         Dictionary<string, int> areaPlaces = null, CancellationToken cancellationToken = default)
     {
@@ -97,10 +89,6 @@ public class Channels
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
-    public Task RemoveObjectsAsync(string eventKey, string channelKey, string[] objects,
-        CancellationToken cancellationToken)
-        => RemoveObjectsAsync(eventKey, channelKey, objects, null, cancellationToken);
-
     public async Task RemoveObjectsAsync(string eventKey, string channelKey, string[] objects = null,
         Dictionary<string, int> areaPlaces = null, CancellationToken cancellationToken = default)
     {
@@ -113,10 +101,6 @@ public class Channels
             .AddJsonBody(body);
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
-
-    public Task UpdateAsync(string eventKey, string channelKey, string channelName, string color, string[] objects,
-        CancellationToken cancellationToken)
-        => UpdateAsync(eventKey, channelKey, channelName, color, objects, null, cancellationToken);
 
     public async Task UpdateAsync(string eventKey, string channelKey, string channelName, string color, string[] objects,
         Dictionary<string, int> areaPlaces = null, CancellationToken cancellationToken = default)

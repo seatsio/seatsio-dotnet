@@ -17,21 +17,8 @@ public class AddChannelTest : SeatsioClientTest
 
         var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
         Assert.Equal(2, retrievedEvent.Channels.Count);
-
-        var channel1 = retrievedEvent.Channels[0];
-        Assert.Equal("channelKey1", channel1.Key);
-        Assert.Equal("channel 1", channel1.Name);
-        Assert.Equal("#FFFF98", channel1.Color);
-        Assert.Equal(1, channel1.Index);
-        Assert.Equal(new[] {"A-1", "A-2"}, channel1.Objects);
-
-
-        var channel2 = retrievedEvent.Channels[1];
-        Assert.Equal("channelKey2", channel2.Key);
-        Assert.Equal("channel 2", channel2.Name);
-        Assert.Equal("#FFFF99", channel2.Color);
-        Assert.Equal(2, channel2.Index);
-        Assert.Equal(new[] {"A-3"}, channel2.Objects);
+        Assert.Equivalent(new Channel("channelKey1", retrievedEvent.Channels[0].Id, "channel 1", "#FFFF98", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int>()), retrievedEvent.Channels[0]);
+        Assert.Equivalent(new Channel("channelKey2", retrievedEvent.Channels[1].Id, "channel 2", "#FFFF99", 2, new[] {"A-3"}, new Dictionary<string, int>()), retrievedEvent.Channels[1]);
     }
 
     [Fact]
@@ -50,21 +37,8 @@ public class AddChannelTest : SeatsioClientTest
 
         var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
         Assert.Equal(2, retrievedEvent.Channels.Count);
-
-        var channel1 = retrievedEvent.Channels[0];
-        Assert.Equal("channelKey1", channel1.Key);
-        Assert.Equal("channel 1", channel1.Name);
-        Assert.Equal("#FFFF98", channel1.Color);
-        Assert.Equal(1, channel1.Index);
-        Assert.Equal(new[] {"A-1", "A-2"}, channel1.Objects);
-
-
-        var channel2 = retrievedEvent.Channels[1];
-        Assert.Equal("channelKey2", channel2.Key);
-        Assert.Equal("channel 2", channel2.Name);
-        Assert.Equal("#FFFF99", channel2.Color);
-        Assert.Equal(2, channel2.Index);
-        Assert.Equal(new[] {"A-3"}, channel2.Objects);
+        Assert.Equivalent(new Channel("channelKey1", retrievedEvent.Channels[0].Id, "channel 1", "#FFFF98", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int>()), retrievedEvent.Channels[0]);
+        Assert.Equivalent(new Channel("channelKey2", retrievedEvent.Channels[1].Id, "channel 2", "#FFFF99", 2, new[] {"A-3"}, new Dictionary<string, int>()), retrievedEvent.Channels[1]);
     }
 
     [Fact]
@@ -76,13 +50,7 @@ public class AddChannelTest : SeatsioClientTest
 
         var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
         Assert.Single(retrievedEvent.Channels);
-
-        var channel1 = retrievedEvent.Channels[0];
-        Assert.Equal("channelKey1", channel1.Key);
-        Assert.Equal("channel 1", channel1.Name);
-        Assert.Equal("#FFFF98", channel1.Color);
-        Assert.Equal(0, channel1.Index);
-        Assert.Equal(new[] {"A-1", "A-2"}, channel1.Objects);
+        Assert.Equivalent(new Channel("channelKey1", retrievedEvent.Channels[0].Id, "channel 1", "#FFFF98", 0, new[] {"A-1", "A-2"}, new Dictionary<string, int>()), retrievedEvent.Channels[0]);
     }
 
     [Fact]
@@ -94,13 +62,7 @@ public class AddChannelTest : SeatsioClientTest
 
         var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
         Assert.Single(retrievedEvent.Channels);
-
-        var channel1 = retrievedEvent.Channels[0];
-        Assert.Equal("channelKey1", channel1.Key);
-        Assert.Equal("channel 1", channel1.Name);
-        Assert.Equal("#FFFF98", channel1.Color);
-        Assert.Equal(1, channel1.Index);
-        Assert.Empty(channel1.Objects);
+        Assert.Equivalent(new Channel("channelKey1", retrievedEvent.Channels[0].Id, "channel 1", "#FFFF98", 1, new string[] { }, new Dictionary<string, int>()), retrievedEvent.Channels[0]);
     }
 
     [Fact]

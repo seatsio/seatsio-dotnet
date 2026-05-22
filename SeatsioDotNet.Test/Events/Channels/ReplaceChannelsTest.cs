@@ -16,29 +16,15 @@ public class ReplaceChannelsTest : SeatsioClientTest
 
         var channels = new List<Channel>
         {
-            new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int> { { "GA1", 3 } }),
-            new("channelKey2", "channel 2", "#00FFFF", 2, new String[] { })
+            new("channelKey1", null, "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int> { { "GA1", 3 } }),
+            new("channelKey2", null, "channel 2", "#00FFFF", 2, new String[] { }, new Dictionary<string, int>())
         };
 
         await Client.Events.Channels.ReplaceAsync(event1.Key, channels);
 
         var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
         Assert.Equal(2, retrievedEvent.Channels.Count);
-
-        var channel1 = retrievedEvent.Channels[0];
-        Assert.Equal("channelKey1", channel1.Key);
-        Assert.Equal("channel 1", channel1.Name);
-        Assert.Equal("#FFFF00", channel1.Color);
-        Assert.Equal(1, channel1.Index);
-        Assert.Equal(new[] {"A-1", "A-2"}, channel1.Objects);
-        Assert.Equal(new Dictionary<string, int> { { "GA1", 3 } }, channel1.AreaPlaces);
-        Assert.NotNull(channel1.Id);
-
-        var channel2 = retrievedEvent.Channels[1];
-        Assert.Equal("channelKey2", channel2.Key);
-        Assert.Equal("channel 2", channel2.Name);
-        Assert.Equal("#00FFFF", channel2.Color);
-        Assert.Equal(2, channel2.Index);
-        Assert.NotNull(channel2.Id);
+        Assert.Equivalent(new Channel("channelKey1", retrievedEvent.Channels[0].Id, "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int> { { "GA1", 3 } }), retrievedEvent.Channels[0]);
+        Assert.Equivalent(new Channel("channelKey2", retrievedEvent.Channels[1].Id, "channel 2", "#00FFFF", 2, new String[] { }, new Dictionary<string, int>()), retrievedEvent.Channels[1]);
     }
 }

@@ -16,9 +16,10 @@ public class Channel
     {
     }
 
-    public Channel(string key, string name, string color, int index, IEnumerable<string> objects, Dictionary<string, int> areaPlaces = null)
+    public Channel(string key, string id, string name, string color, int index, IEnumerable<string> objects, Dictionary<string, int> areaPlaces)
     {
         Key = key;
+        Id = id;
         Name = name;
         Color = color;
         Index = index;
@@ -34,12 +35,12 @@ public class Channel
     public Dictionary<string, object> ToJsonObject()
     {
         var dict = new Dictionary<string, object>();
-        if (Key != null) dict.Add("key", Key);
-        if (Name != null) dict.Add("name", Name);
-        if (Color != null) dict.Add("color", Color);
+        dict.Add("key", Key);
+        dict.Add("name", Name);
+        dict.Add("color", Color);
         dict.Add("index", Index);
-        if (Objects != null) dict.Add("objects", Objects);
-        if (AreaPlaces != null && AreaPlaces.Count > 0) dict.Add("areaPlaces", AreaPlaces);
+        dict.Add("objects", Objects);
+        dict.Add("areaPlaces", AreaPlaces);
         return dict;
     }
 }

@@ -178,7 +178,7 @@ public class ChangeBestAvailableObjectStatusTest : SeatsioClientTest
         var chartKey = CreateTestChart();
         var channels = new List<Channel>
         {
-            new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-6"})
+            new("channelKey1", null, "channel 1", "#FFFF00", 1, new[] {"A-6"}, new Dictionary<string, int>())
         };
         var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithChannels(channels));
 
@@ -193,7 +193,7 @@ public class ChangeBestAvailableObjectStatusTest : SeatsioClientTest
         var chartKey = CreateTestChart();
         var channels = new List<Channel>
         {
-            new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-5"})
+            new("channelKey1", null, "channel 1", "#FFFF00", 1, new[] {"A-5"}, new Dictionary<string, int>())
         };
         var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithChannels(channels));
 

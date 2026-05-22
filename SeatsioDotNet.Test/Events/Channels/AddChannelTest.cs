@@ -96,4 +96,17 @@ public class AddChannelTest : SeatsioClientTest
         var channel1 = retrievedEvent.Channels[0];
         Assert.Equal(new Dictionary<string, int> { { "GA1", 3 } }, channel1.AreaPlaces);
     }
+
+    [Fact]
+    public async Task ChannelIdIsReceivedFromServer()
+    {
+        var event1 = await Client.Events.CreateAsync(CreateTestChart());
+
+        await Client.Events.Channels.AddAsync(event1.Key, "channelKey1", "channel 1", "#FFFF98", 1, new[] {"A-1"});
+
+        var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
+        var channel1 = retrievedEvent.Channels[0];
+        Assert.NotNull(channel1.Id);
+        Assert.NotEmpty(channel1.Id);
+    }
 }

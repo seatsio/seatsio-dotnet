@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using RestSharp;
@@ -27,7 +28,7 @@ public class Channels
     private Dictionary<string, object> ReplaceChannelsRequest(List<Channel> channels)
     {
         var request = new Dictionary<string, object>();
-        request.Add("channels", channels);
+        request.Add("channels", channels.Select(c => c.ToJsonObject()).ToList());
         return request;
     }
 

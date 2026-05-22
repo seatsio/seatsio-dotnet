@@ -63,7 +63,7 @@ public class Events
 
         if (p.Channels != null)
         {
-            requestBody.Add("channels", p.Channels);
+            requestBody.Add("channels", p.Channels.Select(c => c.ToJsonObject()).ToList());
         }
 
         if (p.ForSaleConfig != null)
@@ -115,7 +115,7 @@ public class Events
 
             if (param.Channels != null)
             {
-                e.Add("channels", param.Channels);
+                e.Add("channels", param.Channels.Select(c => c.ToJsonObject()).ToList());
             }
 
             if (param.ForSaleConfig != null)

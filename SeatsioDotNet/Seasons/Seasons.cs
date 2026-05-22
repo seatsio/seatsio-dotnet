@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using RestSharp;
@@ -53,7 +54,7 @@ public class Seasons
 
         if (channels != null)
         {
-            requestBody.Add("channels", channels);
+            requestBody.Add("channels", channels.Select(c => c.ToJsonObject()).ToList());
         }
 
         if (forSaleConfig != null)

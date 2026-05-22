@@ -174,7 +174,24 @@ public class CreateEventsTest : SeatsioClientTest
             new CreateEventParams().WithChannels(channels)
         });
 
-        Assert.Equivalent(channels, events[0].Channels);
+        var retrievedChannels = events[0].Channels;
+        Assert.Equal(2, retrievedChannels.Count);
+
+        var channel1 = retrievedChannels[0];
+        Assert.Equal("channelKey1", channel1.Key);
+        Assert.Equal("channel 1", channel1.Name);
+        Assert.Equal("#FFFF00", channel1.Color);
+        Assert.Equal(1, channel1.Index);
+        Assert.Equal(new[] {"A-1", "A-2"}, channel1.Objects);
+        Assert.Equal(new Dictionary<string, int> { { "GA1", 3 } }, channel1.AreaPlaces);
+        Assert.NotNull(channel1.Id);
+
+        var channel2 = retrievedChannels[1];
+        Assert.Equal("channelKey2", channel2.Key);
+        Assert.Equal("channel 2", channel2.Name);
+        Assert.Equal("#00FFFF", channel2.Color);
+        Assert.Equal(2, channel2.Index);
+        Assert.NotNull(channel2.Id);
     }
 
     [Fact]

@@ -93,7 +93,22 @@ public class CreateSeasonTest : SeatsioClientTest
 
         var season = await Client.Seasons.CreateAsync(chartKey, channels: channels);
 
-        Assert.Equivalent(channels, season.Channels);
+        Assert.Equal(2, season.Channels.Count);
+
+        var channel1 = season.Channels[0];
+        Assert.Equal("channelKey1", channel1.Key);
+        Assert.Equal("channel 1", channel1.Name);
+        Assert.Equal("#FFFF00", channel1.Color);
+        Assert.Equal(1, channel1.Index);
+        Assert.Equal(new[] {"A-1", "A-2"}, channel1.Objects);
+        Assert.NotNull(channel1.Id);
+
+        var channel2 = season.Channels[1];
+        Assert.Equal("channelKey2", channel2.Key);
+        Assert.Equal("channel 2", channel2.Name);
+        Assert.Equal("#00FFFF", channel2.Color);
+        Assert.Equal(2, channel2.Index);
+        Assert.NotNull(channel2.Id);
     }
 
     [Fact]

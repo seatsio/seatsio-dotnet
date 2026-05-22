@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SeatsioDotNet.Events;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Events;
@@ -16,12 +17,7 @@ public class UpdateChannelTest : SeatsioClientTest
 
         var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
         Assert.Equal(1, retrievedEvent.Channels.Count);
-        var channel1 = retrievedEvent.Channels[0];
-        Assert.Equal("channelKey1", channel1.Key);
-        Assert.Equal("new channel name", channel1.Name);
-        Assert.Equal("#FFFF98", channel1.Color);
-        Assert.Equal(1, channel1.Index);
-        Assert.Equal(new[] {"A-1", "A-2"}, channel1.Objects);
+        Assert.Equivalent(new Channel("channelKey1", retrievedEvent.Channels[0].Id, "new channel name", "#FFFF98", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int>()), retrievedEvent.Channels[0]);
     }
 
     [Fact]
@@ -34,12 +30,7 @@ public class UpdateChannelTest : SeatsioClientTest
 
         var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
         Assert.Equal(1, retrievedEvent.Channels.Count);
-        var channel1 = retrievedEvent.Channels[0];
-        Assert.Equal("channelKey1", channel1.Key);
-        Assert.Equal("channel 1", channel1.Name);
-        Assert.Equal("red", channel1.Color);
-        Assert.Equal(1, channel1.Index);
-        Assert.Equal(new[] {"A-1", "A-2"}, channel1.Objects);
+        Assert.Equivalent(new Channel("channelKey1", retrievedEvent.Channels[0].Id, "channel 1", "red", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int>()), retrievedEvent.Channels[0]);
     }
 
     [Fact]
@@ -52,12 +43,7 @@ public class UpdateChannelTest : SeatsioClientTest
 
         var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
         Assert.Equal(1, retrievedEvent.Channels.Count);
-        var channel1 = retrievedEvent.Channels[0];
-        Assert.Equal("channelKey1", channel1.Key);
-        Assert.Equal("channel 1", channel1.Name);
-        Assert.Equal("#FFFF98", channel1.Color);
-        Assert.Equal(1, channel1.Index);
-        Assert.Equal(new[] {"B-1"}, channel1.Objects);
+        Assert.Equivalent(new Channel("channelKey1", retrievedEvent.Channels[0].Id, "channel 1", "#FFFF98", 1, new[] {"B-1"}, new Dictionary<string, int>()), retrievedEvent.Channels[0]);
     }
 
     [Fact]

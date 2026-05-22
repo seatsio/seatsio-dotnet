@@ -116,13 +116,15 @@ public class CreateEventTest : SeatsioClientTest
         var chartKey = CreateTestChart();
         var channels = new List<Channel>
         {
-            new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int> { { "GA1", 3 } }),
-            new("channelKey2", "channel 2", "#00FFFF", 2, new String[] { })
+            new("channelKey1", null, "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int> { { "GA1", 3 } }),
+            new("channelKey2", null, "channel 2", "#00FFFF", 2, new String[] { }, new Dictionary<string, int>())
         };
 
         var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithChannels(channels));
 
-        Assert.Equivalent(channels, evnt.Channels);
+        Assert.Equal(2, evnt.Channels.Count);
+        Assert.Equivalent(new Channel("channelKey1", evnt.Channels[0].Id, "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int> { { "GA1", 3 } }), evnt.Channels[0]);
+        Assert.Equivalent(new Channel("channelKey2", evnt.Channels[1].Id, "channel 2", "#00FFFF", 2, new String[] { }, new Dictionary<string, int>()), evnt.Channels[1]);
     }
 
     [Fact]

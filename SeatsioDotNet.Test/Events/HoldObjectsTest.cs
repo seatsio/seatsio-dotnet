@@ -75,7 +75,7 @@ public class HoldObjectsTest : SeatsioClientTest
         var chartKey = CreateTestChart();
         var channels = new List<Channel>
         {
-            new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"})
+            new("channelKey1", null, "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int>())
         };
         var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithChannels(channels));
         HoldToken holdToken = await Client.HoldTokens.CreateAsync();
@@ -91,7 +91,7 @@ public class HoldObjectsTest : SeatsioClientTest
         var chartKey = CreateTestChart();
         var channels = new List<Channel>
         {
-            new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"})
+            new("channelKey1", null, "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int>())
         };
         var evnt = await Client.Events.CreateAsync(chartKey, new CreateEventParams().WithChannels(channels));
         HoldToken holdToken = await Client.HoldTokens.CreateAsync();

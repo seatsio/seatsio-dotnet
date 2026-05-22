@@ -87,13 +87,15 @@ public class CreateSeasonTest : SeatsioClientTest
         var chartKey = CreateTestChart();
         var channels = new List<Channel>
         {
-            new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}),
-            new("channelKey2", "channel 2", "#00FFFF", 2, new String[] { })
+            new("channelKey1", null, "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int>()),
+            new("channelKey2", null, "channel 2", "#00FFFF", 2, new String[] { }, new Dictionary<string, int>())
         };
 
         var season = await Client.Seasons.CreateAsync(chartKey, channels: channels);
 
-        Assert.Equivalent(channels, season.Channels);
+        Assert.Equal(2, season.Channels.Count);
+        Assert.Equivalent(new Channel("channelKey1", season.Channels[0].Id, "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int>()), season.Channels[0]);
+        Assert.Equivalent(new Channel("channelKey2", season.Channels[1].Id, "channel 2", "#00FFFF", 2, new String[] { }, new Dictionary<string, int>()), season.Channels[1]);
     }
 
     [Fact]

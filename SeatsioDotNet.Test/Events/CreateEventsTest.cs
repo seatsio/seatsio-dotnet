@@ -165,8 +165,8 @@ public class CreateEventsTest : SeatsioClientTest
         var chartKey = CreateTestChart();
         var channels = new List<Channel>
         {
-            new("channelKey1", "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int> { { "GA1", 3 } }),
-            new("channelKey2", "channel 2", "#00FFFF", 2, new String[] { })
+            new("channelKey1", null, "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int> { { "GA1", 3 } }),
+            new("channelKey2", null, "channel 2", "#00FFFF", 2, new String[] { }, new Dictionary<string, int>())
         };
 
         var events = await Client.Events.CreateAsync(chartKey, new[]
@@ -174,7 +174,10 @@ public class CreateEventsTest : SeatsioClientTest
             new CreateEventParams().WithChannels(channels)
         });
 
-        Assert.Equivalent(channels, events[0].Channels);
+        var retrievedChannels = events[0].Channels;
+        Assert.Equal(2, retrievedChannels.Count);
+        Assert.Equivalent(new Channel("channelKey1", retrievedChannels[0].Id, "channel 1", "#FFFF00", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int> { { "GA1", 3 } }), retrievedChannels[0]);
+        Assert.Equivalent(new Channel("channelKey2", retrievedChannels[1].Id, "channel 2", "#00FFFF", 2, new String[] { }, new Dictionary<string, int>()), retrievedChannels[1]);
     }
 
     [Fact]

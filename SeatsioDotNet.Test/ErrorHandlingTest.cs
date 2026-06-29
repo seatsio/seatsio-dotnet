@@ -24,11 +24,11 @@ public class ErrorHandlingTest : SeatsioClientTest
     [Fact]
     public void Test5xx()
     {
-        var client = new SeatsioRestClient(new RestClientOptions("https://httpbin.seatsio.net"));
+        var client = new SeatsioRestClient(new RestClientOptions("https://httpbingo.org"));
 
         var e = Assert.Throws<SeatsioException>(() => RestUtil.AssertOk(client.Execute<object>(new RestRequest("/status/500"))));
 
-        Assert.Equal("Get https://httpbin.seatsio.net/status/500 resulted in a 500 Internal Server Error response. Body: ", e.Message);
+        Assert.Equal("Get https://httpbingo.org/status/500 resulted in a 500 Internal Server Error response. Body: ", e.Message);
     }
 
     [Fact]

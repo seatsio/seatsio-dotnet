@@ -10,7 +10,7 @@ public class ExponentialBackoffTest : SeatsioClientTest
     public void AbortsEventuallyIfServerKeepsReturning429()
     {
         var start = DateTimeOffset.Now;
-        var client = new SeatsioRestClient(new RestClientOptions("https://httpbin.seatsio.net"));
+        var client = new SeatsioRestClient(new RestClientOptions("https://httpbingo.org"));
 
         var response = client.Execute<object>(new RestRequest("/status/429", Method.Get));
 
@@ -25,7 +25,7 @@ public class ExponentialBackoffTest : SeatsioClientTest
     public void AbortsDirectlyIfServerReturnsOtherErrorThan429()
     {
         var start = DateTimeOffset.Now;
-        var client = new SeatsioRestClient(new RestClientOptions("https://httpbin.seatsio.net"));
+        var client = new SeatsioRestClient(new RestClientOptions("https://httpbingo.org"));
 
         var response = client.Execute<object>(new RestRequest("/status/400", Method.Get));
 
@@ -39,7 +39,7 @@ public class ExponentialBackoffTest : SeatsioClientTest
     public void AbortsDirectlyIfServerReturnsError429ButMaxRetries0()
     {
         var start = DateTimeOffset.Now;
-        var client = new SeatsioRestClient(new RestClientOptions("https://httpbin.seatsio.net"), 0);
+        var client = new SeatsioRestClient(new RestClientOptions("https://httpbingo.org"), 0);
 
         var response = client.Execute<object>(new RestRequest("/status/429", Method.Get));
 
@@ -52,7 +52,7 @@ public class ExponentialBackoffTest : SeatsioClientTest
     [Fact]
     public void ReturnsSuccessfullyWhenTheServerSendsA429FirstAndThenASuccessfulResponse()
     {
-        var client = new SeatsioRestClient(new RestClientOptions("https://httpbin.seatsio.net"));
+        var client = new SeatsioRestClient(new RestClientOptions("https://httpbingo.org"));
         for (var i = 0; i < 10; ++i)
         {
             var response = client.Execute<object>(new RestRequest("/status/429:0.25,204:0.75", Method.Get));

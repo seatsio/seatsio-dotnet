@@ -277,7 +277,8 @@ public class EventReports
     {
         var restRequest = new RestRequest("/reports/events/{key}.csv", Method.Get)
             .AddUrlSegment("key", eventKey);
-        return AssertOk(await _restClient.ExecuteAsync<string>(restRequest, cancellationToken));
+        var response = await _restClient.ExecuteAsync(restRequest, cancellationToken);
+        return AssertOkString(response);
     }
 }
 

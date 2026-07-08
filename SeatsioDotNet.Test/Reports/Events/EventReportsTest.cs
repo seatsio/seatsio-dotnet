@@ -430,6 +430,31 @@ public class EventReportsTest : SeatsioClientTest
     }
 
     [Fact]
+    public async Task FlatList()
+    {
+        var chartKey = CreateTestChart();
+        var evnt = await Client.Events.CreateAsync(chartKey);
+
+        var report = (await Client.EventReports.FlatListAsync(evnt.Key)).ToList();
+
+        Assert.Equal(34, report.Count);
+        Assert.True(report.Select(item => item.Label).SequenceEqual(report.Select(item => item.Label).OrderBy(label => label)));
+        Assert.Equal("A-1", report.First().Label);
+    }
+
+    [Fact]
+    public async Task FlatListCsv()
+    {
+        var chartKey = CreateTestChart();
+        var evnt = await Client.Events.CreateAsync(chartKey);
+
+        var report = await Client.EventReports.FlatListCsvAsync(evnt.Key);
+
+        Assert.False(string.IsNullOrWhiteSpace(report));
+        Assert.Contains("A-1", report);
+    }
+
+    [Fact]
     public async Task ResaleListingId()
     {
         var chartKey = CreateTestChart();

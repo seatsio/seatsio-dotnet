@@ -216,6 +216,16 @@ public class EventReports
         return await FetchReport("byChannel", eventKey, channelKey, cancellationToken);
     }
 
+    public async Task<IEnumerable<EventObjectInfo>> FlatListAsync(string eventKey, CancellationToken cancellationToken = default)
+    {
+        return await FetchFlatListAsync(eventKey, cancellationToken);
+    }
+
+    public async Task<string> FlatListCsvAsync(string eventKey, CancellationToken cancellationToken = default)
+    {
+        return await FetchFlatListCsvAsync(eventKey, cancellationToken);
+    }
+
     private async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> FetchReportAsync(string reportType, string eventKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/reports/events/{key}/{reportType}", Method.Get)
@@ -255,4 +265,20 @@ public class EventReports
 
         return new List<EventObjectInfo>();
     }
+
+    private async Task<IEnumerable<EventObjectInfo>> FetchFlatListAsync(string eventKey, CancellationToken cancellationToken = default)
+    {
+        var restRequest = new RestRequest("/reports/events/{key}", Method.Get)
+            .AddUrlSegment("key", eventKey);
+        return AssertOk(await _restClient.ExecuteAsync<List<EventObjectInfo>>(restRequest, cancellationToken));
+    }
+
+    private async Task<string> FetchFlatListCsvAsync(string eventKey, CancellationToken cancellationToken = default)
+    {
+        var restRequest = new RestRequest("/reports/events/{key}.csv", Method.Get)
+            .AddUrlSegment("key", eventKey);
+        var response = await _restClient.ExecuteAsync(restRequest, cancellationToken);
+        return AssertOkString(response);
+    }
 }
+

@@ -1,4 +1,6 @@
-﻿namespace SeatsioDotNet.Events;
+﻿using System.Collections.Generic;
+
+namespace SeatsioDotNet.Events;
 
 public class Workspace
 {
@@ -8,4 +10,5 @@ public class Workspace
     public bool IsTest { get; set; }
     public bool IsActive { get; set; }
     public bool IsDefault { get; set; }
+    public List<string> secretKeys { get; set; }
 }

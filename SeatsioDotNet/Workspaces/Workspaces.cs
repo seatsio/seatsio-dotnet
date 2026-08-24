@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using RestSharp;
@@ -53,12 +54,32 @@ public class Workspaces
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
+    [Obsolete("Use AddSecretKeyAsync and RemoveSecretKeyAsync instead")]
     public async Task<string> RegenerateSecretKeyAsync(string key, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/workspaces/{key}/actions/regenerate-secret-key", Method.Post)
             .AddUrlSegment("key", key);
         var response = AssertOk(await _restClient.ExecuteAsync<Dictionary<string, string>>(restRequest, cancellationToken));
         return response["secretKey"];
+    }
+
+    public async Task<string> AddSecretKeyAsync(string key, CancellationToken cancellationToken = default)
+    {
+        var restRequest = new RestRequest("/workspaces/{key}/actions/add-secret-key", Method.Post)
+            .AddUrlSegment("key", key);
+        var response = AssertOk(await _restClient.ExecuteAsync<Dictionary<string, string>>(restRequest, cancellationToken));
+        return response["secretKey"];
+    }
+
+    public async Task RemoveSecretKeyAsync(string key, string secretKeyToRemove, CancellationToken cancellationToken = default)
+    {
+        Dictionary<string, object> requestBody = new Dictionary<string, object>();
+        requestBody.Add("secretKey", secretKeyToRemove);
+
+        var restRequest = new RestRequest("/workspaces/{key}/actions/remove-secret-key", Method.Post)
+            .AddUrlSegment("key", key)
+            .AddJsonBody(requestBody);
+        AssertOk(await _restClient.ExecuteAsync<Dictionary<string, string>>(restRequest, cancellationToken));
     }
 
     public async Task ActivateAsync(string key, CancellationToken cancellationToken = default)

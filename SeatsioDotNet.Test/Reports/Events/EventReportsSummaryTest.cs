@@ -9,6 +9,19 @@ namespace SeatsioDotNet.Test.Reports.Events;
 public class EventReportsSummaryTest : SeatsioClientTest
 {
     [Fact]
+    public async Task WithSeasonBookingsNotPropagatedCanBeUsedToFetchAReportForAnEventInASeason()
+    {
+        var chartKey = CreateTestChart();
+        var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 1);
+        var evnt = season.Events[0];
+        await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
+
+        var report = await Client.EventReports.WithSeasonBookingsNotPropagated().SummaryByStatusAsync(evnt.Key);
+
+        Assert.Equal(232, report[Free].Count);
+    }
+
+    [Fact]
     public async Task SummaryByStatus()
     {
         var chartKey = CreateTestChart();
@@ -120,8 +133,8 @@ public class EventReportsSummaryTest : SeatsioClientTest
         Assert.Equal(new() {{Available, 231}, {NotAvailable, 1}}, report[NoSection].byAvailability);
         Assert.Equal(new() {{NoChannel, 232}}, report[NoSection].byChannel);
         Assert.Equal(new() {{NoZone, 232}}, report[NoSection].byZone);
-    } 
-    
+    }
+
     [Fact]
     public async Task SummaryByZone()
     {

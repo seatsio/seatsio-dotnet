@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using SeatsioDotNet.EventReports;
 using SeatsioDotNet.Events;
 using SeatsioDotNet.HoldTokens;
 using Xunit;
@@ -11,6 +12,35 @@ namespace SeatsioDotNet.Test.Reports.Events;
 
 public class EventReportsTest : SeatsioClientTest
 {
+    [Fact]
+    public async Task WithSeasonBookingsNotPropagatedReturnsANewInstanceRatherThanMutatingTheOriginal()
+    {
+        var withoutPropagation = Client.EventReports.WithSeasonBookingsNotPropagated();
+
+        Assert.NotSame(Client.EventReports, withoutPropagation);
+
+        var chartKey = CreateTestChart();
+        var evnt = await Client.Events.CreateAsync(chartKey);
+
+        var reportFromOriginal = await Client.EventReports.ByLabelAsync(evnt.Key);
+        Assert.Single(reportFromOriginal["A-1"]);
+    }
+
+    [Fact]
+    public async Task WithSeasonBookingsNotPropagatedCanBeUsedToFetchAReportForAnEventInASeason()
+    {
+        var chartKey = CreateTestChart();
+        var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 1);
+        var evnt = season.Events[0];
+        await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
+        await Client.Events.BookAsync(evnt.Key, new[] {"A-3"});
+
+        var report = await Client.EventReports.WithSeasonBookingsNotPropagated().ByLabelAsync(evnt.Key);
+
+        Assert.NotEqual(Booked, report["A-1"].First().Status);
+        Assert.Equal(Booked, report["A-3"].First().Status);
+    }
+
     [Fact]
     public async Task ReportItemProperties()
     {
@@ -192,8 +222,8 @@ public class EventReportsTest : SeatsioClientTest
 
         Assert.Equal(32, report["seat"].Count());
         Assert.Equal(2, report["generalAdmission"].Count());
-        Assert.Equal(0, report["booth"].Count());
-        Assert.Equal(0, report["table"].Count());
+        Assert.Empty(report["booth"]);
+        Assert.Empty(report["table"]);
     }
 
     [Fact]
@@ -443,6 +473,22 @@ public class EventReportsTest : SeatsioClientTest
     }
 
     [Fact]
+    public async Task FlatListWithSeasonBookingsNotPropagated()
+    {
+        var chartKey = CreateTestChart();
+        var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 1);
+        var evnt = season.Events[0];
+        await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
+        await Client.Events.BookAsync(evnt.Key, new[] {"A-3"});
+
+        var reportWithPropagation = (await Client.EventReports.FlatListAsync(season.Key)).ToList();
+        var reportWithoutPropagation = (await Client.EventReports.WithSeasonBookingsNotPropagated().FlatListAsync(season.Key)).ToList();
+
+        Assert.Equal(Booked, FindByLabel(reportWithPropagation, "A-3").Status);
+        Assert.NotEqual(Booked, FindByLabel(reportWithoutPropagation, "A-3").Status);
+    }
+
+    [Fact]
     public async Task FlatListCsv()
     {
         var chartKey = CreateTestChart();
@@ -466,5 +512,10 @@ public class EventReportsTest : SeatsioClientTest
 
         var reportItem = report["A-1"].First();
         Assert.Equal("listing1", reportItem.ResaleListingId);
+    }
+
+    private static EventObjectInfo FindByLabel(IEnumerable<EventObjectInfo> report, string label)
+    {
+        return report.First(item => item.Label == label);
     }
 }

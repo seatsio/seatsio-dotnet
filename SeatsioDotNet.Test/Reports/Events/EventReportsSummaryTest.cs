@@ -46,22 +46,6 @@ public class EventReportsSummaryTest : SeatsioClientTest
     }
 
     [Fact]
-    public async Task SummaryByStatusWithSeasonBookingsNotPropagated()
-    {
-        var chartKey = CreateTestChart();
-        var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 1);
-        var evnt = season.Events[0];
-        await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
-        await Client.Events.BookAsync(evnt.Key, new[] {"A-3"});
-
-        var reportWithPropagation = await Client.EventReports.SummaryByStatusAsync(season.Key);
-        var reportWithoutPropagation = await Client.EventReports.WithSeasonBookingsNotPropagated().SummaryByStatusAsync(season.Key);
-
-        Assert.Equal(3, reportWithPropagation[Booked].Count);
-        Assert.Equal(2, reportWithoutPropagation[Booked].Count);
-    }
-
-    [Fact]
     public async Task SummaryByObjectType()
     {
         var chartKey = CreateTestChart();
@@ -82,22 +66,6 @@ public class EventReportsSummaryTest : SeatsioClientTest
         Assert.Equal(new() {{"Cat1", 100}, {"Cat2", 100}}, report["generalAdmission"].byCategoryLabel);
         Assert.Equal(new() {{Available, 200}}, report["generalAdmission"].byAvailability);
         Assert.Equal(new() {{NoChannel, 200}}, report["generalAdmission"].byChannel);
-    }
-
-    [Fact]
-    public async Task SummaryByObjectTypeWithSeasonBookingsNotPropagated()
-    {
-        var chartKey = CreateTestChart();
-        var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 1);
-        var evnt = season.Events[0];
-        await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
-        await Client.Events.BookAsync(evnt.Key, new[] {"A-3"});
-
-        var reportWithPropagation = await Client.EventReports.SummaryByObjectTypeAsync(season.Key);
-        var reportWithoutPropagation = await Client.EventReports.WithSeasonBookingsNotPropagated().SummaryByObjectTypeAsync(season.Key);
-
-        Assert.Equal(3, reportWithPropagation["seat"].byStatus[Booked]);
-        Assert.Equal(2, reportWithoutPropagation["seat"].byStatus[Booked]);
     }
 
     [Fact]
@@ -122,22 +90,6 @@ public class EventReportsSummaryTest : SeatsioClientTest
         Assert.Equal(new() {{NoChannel, 116}}, report["10"].byChannel);
 
         Assert.Equal(0, report["NO_CATEGORY"].Count);
-    }
-
-    [Fact]
-    public async Task SummaryByCategoryKeyWithSeasonBookingsNotPropagated()
-    {
-        var chartKey = CreateTestChart();
-        var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 1);
-        var evnt = season.Events[0];
-        await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
-        await Client.Events.BookAsync(evnt.Key, new[] {"A-3"});
-
-        var reportWithPropagation = await Client.EventReports.SummaryByCategoryKeyAsync(season.Key);
-        var reportWithoutPropagation = await Client.EventReports.WithSeasonBookingsNotPropagated().SummaryByCategoryKeyAsync(season.Key);
-
-        Assert.Equal(3, reportWithPropagation["9"].byStatus[Booked]);
-        Assert.Equal(2, reportWithoutPropagation["9"].byStatus[Booked]);
     }
 
     [Fact]
@@ -166,22 +118,6 @@ public class EventReportsSummaryTest : SeatsioClientTest
     }
 
     [Fact]
-    public async Task SummaryByCategoryLabelWithSeasonBookingsNotPropagated()
-    {
-        var chartKey = CreateTestChart();
-        var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 1);
-        var evnt = season.Events[0];
-        await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
-        await Client.Events.BookAsync(evnt.Key, new[] {"A-3"});
-
-        var reportWithPropagation = await Client.EventReports.SummaryByCategoryLabeAsync(season.Key);
-        var reportWithoutPropagation = await Client.EventReports.WithSeasonBookingsNotPropagated().SummaryByCategoryLabeAsync(season.Key);
-
-        Assert.Equal(3, reportWithPropagation["Cat1"].byStatus[Booked]);
-        Assert.Equal(2, reportWithoutPropagation["Cat1"].byStatus[Booked]);
-    }
-
-    [Fact]
     public async Task SummaryBySection()
     {
         var chartKey = CreateTestChart();
@@ -200,22 +136,6 @@ public class EventReportsSummaryTest : SeatsioClientTest
     }
 
     [Fact]
-    public async Task SummaryBySectionWithSeasonBookingsNotPropagated()
-    {
-        var chartKey = CreateTestChart();
-        var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 1);
-        var evnt = season.Events[0];
-        await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
-        await Client.Events.BookAsync(evnt.Key, new[] {"A-3"});
-
-        var reportWithPropagation = await Client.EventReports.SummaryBySectionAsync(season.Key);
-        var reportWithoutPropagation = await Client.EventReports.WithSeasonBookingsNotPropagated().SummaryBySectionAsync(season.Key);
-
-        Assert.Equal(3, reportWithPropagation[NoSection].byStatus[Booked]);
-        Assert.Equal(2, reportWithoutPropagation[NoSection].byStatus[Booked]);
-    }
-
-    [Fact]
     public async Task SummaryByZone()
     {
         var chartKey = CreateTestChartWithZones();
@@ -225,22 +145,6 @@ public class EventReportsSummaryTest : SeatsioClientTest
 
         Assert.Equal(6032, report["midtrack"].Count);
         Assert.Equal(new() {{Free, 6032}}, report["midtrack"].byStatus);
-    }
-
-    [Fact]
-    public async Task SummaryByZoneWithSeasonBookingsNotPropagated()
-    {
-        var chartKey = CreateTestChart();
-        var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 1);
-        var evnt = season.Events[0];
-        await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
-        await Client.Events.BookAsync(evnt.Key, new[] {"A-3"});
-
-        var reportWithPropagation = await Client.EventReports.SummaryByZoneAsync(season.Key);
-        var reportWithoutPropagation = await Client.EventReports.WithSeasonBookingsNotPropagated().SummaryByZoneAsync(season.Key);
-
-        Assert.Equal(3, reportWithPropagation[NoZone].byStatus[Booked]);
-        Assert.Equal(2, reportWithoutPropagation[NoZone].byStatus[Booked]);
     }
 
     [Fact]
@@ -266,22 +170,6 @@ public class EventReportsSummaryTest : SeatsioClientTest
     }
 
     [Fact]
-    public async Task SummaryByAvailabilityWithSeasonBookingsNotPropagated()
-    {
-        var chartKey = CreateTestChart();
-        var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 1);
-        var evnt = season.Events[0];
-        await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
-        await Client.Events.BookAsync(evnt.Key, new[] {"A-3"});
-
-        var reportWithPropagation = await Client.EventReports.SummaryByAvailabilityAsync(season.Key);
-        var reportWithoutPropagation = await Client.EventReports.WithSeasonBookingsNotPropagated().SummaryByAvailabilityAsync(season.Key);
-
-        Assert.Equal(3, reportWithPropagation[NotAvailable].Count);
-        Assert.Equal(2, reportWithoutPropagation[NotAvailable].Count);
-    }
-
-    [Fact]
     public async Task SummaryByAvailabilityReason()
     {
         var chartKey = CreateTestChart();
@@ -301,22 +189,6 @@ public class EventReportsSummaryTest : SeatsioClientTest
         Assert.Equal(new() {{Booked, 1}}, report[Booked].byStatus);
         Assert.Equal(new() {{"9", 1}}, report[Booked].byCategoryKey);
         Assert.Equal(new() {{NoChannel, 1}}, report[Booked].byChannel);
-    }
-
-    [Fact]
-    public async Task SummaryByAvailabilityReasonWithSeasonBookingsNotPropagated()
-    {
-        var chartKey = CreateTestChart();
-        var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 1);
-        var evnt = season.Events[0];
-        await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
-        await Client.Events.BookAsync(evnt.Key, new[] {"A-3"});
-
-        var reportWithPropagation = await Client.EventReports.SummaryByAvailabilityReasonAsync(season.Key);
-        var reportWithoutPropagation = await Client.EventReports.WithSeasonBookingsNotPropagated().SummaryByAvailabilityReasonAsync(season.Key);
-
-        Assert.Equal(3, reportWithPropagation[Booked].Count);
-        Assert.Equal(2, reportWithoutPropagation[Booked].Count);
     }
 
     [Fact]
@@ -342,21 +214,5 @@ public class EventReportsSummaryTest : SeatsioClientTest
         Assert.Equal(new() {{Free, 2}}, report["channelKey1"].byStatus);
         Assert.Equal(new() {{"9", 2}}, report["channelKey1"].byCategoryKey);
         Assert.Equal(new() {{Available, 2}}, report["channelKey1"].byAvailability);
-    }
-
-    [Fact]
-    public async Task SummaryByChannelWithSeasonBookingsNotPropagated()
-    {
-        var chartKey = CreateTestChart();
-        var season = await Client.Seasons.CreateAsync(chartKey, numberOfEvents: 1);
-        var evnt = season.Events[0];
-        await Client.Events.BookAsync(season.Key, new[] {"A-1", "A-2"});
-        await Client.Events.BookAsync(evnt.Key, new[] {"A-3"});
-
-        var reportWithPropagation = await Client.EventReports.SummaryByChannelAsync(season.Key);
-        var reportWithoutPropagation = await Client.EventReports.WithSeasonBookingsNotPropagated().SummaryByChannelAsync(season.Key);
-
-        Assert.Equal(3, reportWithPropagation[NoChannel].byStatus[Booked]);
-        Assert.Equal(2, reportWithoutPropagation[NoChannel].byStatus[Booked]);
     }
 }

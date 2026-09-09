@@ -10,10 +10,22 @@ namespace SeatsioDotNet.Reports.Events;
 public class EventReports
 {
     private readonly RestClient _restClient;
+    private readonly bool _seasonBookingsPropagated;
 
     public EventReports(RestClient restClient)
+        : this(restClient, true)
+    {
+    }
+
+    private EventReports(RestClient restClient, bool seasonBookingsPropagated)
     {
         _restClient = restClient;
+        _seasonBookingsPropagated = seasonBookingsPropagated;
+    }
+
+    public EventReports WithSeasonBookingsNotPropagated()
+    {
+        return new EventReports(_restClient, false);
     }
 
     public async Task<Dictionary<string, IEnumerable<EventObjectInfo>>> ByLabelAsync(string eventKey, CancellationToken cancellationToken = default)
@@ -231,6 +243,7 @@ public class EventReports
         var restRequest = new RestRequest("/reports/events/{key}/{reportType}", Method.Get)
             .AddUrlSegment("key", eventKey)
             .AddUrlSegment("reportType", reportType);
+        AddSeasonBookingsPropagatedQueryParam(restRequest);
         return AssertOk(await _restClient.ExecuteAsync<Dictionary<string, IEnumerable<EventObjectInfo>>>(restRequest, cancellationToken));
     }
 
@@ -239,6 +252,7 @@ public class EventReports
         var restRequest = new RestRequest("/reports/events/{key}/{reportType}/summary", Method.Get)
             .AddUrlSegment("key", eventKey)
             .AddUrlSegment("reportType", reportType);
+        AddSeasonBookingsPropagatedQueryParam(restRequest);
         return AssertOk(await _restClient.ExecuteAsync<Dictionary<string, EventReportSummaryItem>>(restRequest, cancellationToken));
     }
 
@@ -248,6 +262,7 @@ public class EventReports
         var restRequest = new RestRequest("/reports/events/{key}/{reportType}/summary/deep", Method.Get)
             .AddUrlSegment("key", eventKey)
             .AddUrlSegment("reportType", reportType);
+        AddSeasonBookingsPropagatedQueryParam(restRequest);
         return AssertOk(await _restClient.ExecuteAsync<Dictionary<string, EventReportDeepSummaryItem>>(restRequest, cancellationToken));
     }
 
@@ -257,6 +272,7 @@ public class EventReports
             .AddUrlSegment("key", eventKey)
             .AddUrlSegment("reportType", reportType)
             .AddUrlSegment("filter", filter);
+        AddSeasonBookingsPropagatedQueryParam(restRequest);
         var report = AssertOk(await _restClient.ExecuteAsync<Dictionary<string, IEnumerable<EventObjectInfo>>>(restRequest, cancellationToken));
         if (report.ContainsKey(filter))
         {
@@ -270,6 +286,7 @@ public class EventReports
     {
         var restRequest = new RestRequest("/reports/events/{key}", Method.Get)
             .AddUrlSegment("key", eventKey);
+        AddSeasonBookingsPropagatedQueryParam(restRequest);
         return AssertOk(await _restClient.ExecuteAsync<List<EventObjectInfo>>(restRequest, cancellationToken));
     }
 
@@ -277,8 +294,17 @@ public class EventReports
     {
         var restRequest = new RestRequest("/reports/events/{key}.csv", Method.Get)
             .AddUrlSegment("key", eventKey);
+        AddSeasonBookingsPropagatedQueryParam(restRequest);
         var response = await _restClient.ExecuteAsync(restRequest, cancellationToken);
         return AssertOkString(response);
+    }
+
+    private void AddSeasonBookingsPropagatedQueryParam(RestRequest restRequest)
+    {
+        if (!_seasonBookingsPropagated)
+        {
+            restRequest.AddQueryParameter("seasonBookingsPropagated", "false");
+        }
     }
 }
 

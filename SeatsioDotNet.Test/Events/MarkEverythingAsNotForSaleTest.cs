@@ -15,10 +15,10 @@ public class MarkEverythingAsNotForSaleTest : SeatsioClientTest
 
         var forSaleConfig = (await Client.Events.RetrieveAsync(evnt.Key)).ForSaleConfig;
         Assert.NotNull(forSaleConfig);
-        Assert.False(forSaleConfig.ForSale);
-        Assert.Null(forSaleConfig.Objects);
-        Assert.Null(forSaleConfig.AreaPlaces);
-        Assert.Null(forSaleConfig.Categories);
+        Assert.True(forSaleConfig.ForSale);
+        Assert.Empty(forSaleConfig.Objects);
+        Assert.Empty(forSaleConfig.AreaPlaces);
+        Assert.Empty(forSaleConfig.Categories);
     }
 }
 

@@ -606,6 +606,13 @@ public class Events
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
     }
 
+    public async Task MarkEverythingAsNotForSaleAsync(string eventKey, CancellationToken cancellationToken = default)
+    {
+        var restRequest = new RestRequest("/events/{key}/actions/mark-everything-as-not-for-sale", Method.Post)
+            .AddUrlSegment("key", eventKey);
+        AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
+    }
+
     public async Task<Event> MoveEventToNewChartCopy(string eventKey, CancellationToken cancellationToken = default)
     {
         var restRequest = new RestRequest("/events/{key}/actions/move-to-new-chart-copy", Method.Post)

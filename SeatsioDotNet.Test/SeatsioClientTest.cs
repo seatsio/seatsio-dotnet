@@ -17,6 +17,8 @@ public class SeatsioClientTest
 {
     protected static string BaseUrl => Environment.GetEnvironmentVariable("API_URL") ?? "http://localhost:9001";
 
+    protected static string HttpBinUrl => (Environment.GetEnvironmentVariable("HTTPBIN_URL") ?? "http://localhost:8080").TrimEnd('/');
+
     protected static readonly List<Category> TestChartCategories = new List<Category>()
     {
         new Category(9, "Cat1", "#87A9CD", false),

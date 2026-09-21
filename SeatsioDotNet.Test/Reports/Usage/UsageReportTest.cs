@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using SeatsioDotNet.Reports.Usage;
@@ -7,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace SeatsioDotNet.Test.Reports.Usage;
 
-public class UsageReportTest : SeatsioClientTest
+public class UsageReportTest
 {
     private readonly ITestOutputHelper TestOutputHelper;
 
@@ -19,13 +20,13 @@ public class UsageReportTest : SeatsioClientTest
     [Fact]
     public async Task TestUsageReportForAllMonths()
     {
-        if (!DemoCompanySecretKeySet())
+        if (!IsConfigured())
         {
-            warnAboutDemoCompanySecretKeyNotSet();
+            warnAboutNotConfigured();
             return;
         }
 
-        var client = CreateSeatsioClient(DemoCompanySecretKey());
+        var client = UsageReportingClient();
 
         var report = await client.UsageReports.SummaryForAllMonthsAsync();
 
@@ -38,13 +39,13 @@ public class UsageReportTest : SeatsioClientTest
     [Fact]
     public async Task TestUsageReportForMonth()
     {
-        if (!DemoCompanySecretKeySet())
+        if (!IsConfigured())
         {
-            warnAboutDemoCompanySecretKeyNotSet();
+            warnAboutNotConfigured();
             return;
         }
 
-        var client = CreateSeatsioClient(DemoCompanySecretKey());
+        var client = UsageReportingClient();
 
         var report = await client.UsageReports.DetailsForMonthAsync(new UsageMonth(2021, 11));
 
@@ -56,13 +57,13 @@ public class UsageReportTest : SeatsioClientTest
     [Fact]
     public async Task TestUsageReportForEventInMonth()
     {
-        if (!DemoCompanySecretKeySet())
+        if (!IsConfigured())
         {
-            warnAboutDemoCompanySecretKeyNotSet();
+            warnAboutNotConfigured();
             return;
         }
 
-        var client = CreateSeatsioClient(DemoCompanySecretKey());
+        var client = UsageReportingClient();
 
         var report = await client.UsageReports.DetailsForEventInMonthAsync(580293, new UsageMonth(2021, 11));
 
@@ -70,8 +71,29 @@ public class UsageReportTest : SeatsioClientTest
         Assert.Equal(1, ((UsageForObjectV1) report.ElementAt(0)).NumFirstSelections);
     }
 
-    private void warnAboutDemoCompanySecretKeyNotSet()
+    private static SeatsioClient UsageReportingClient()
     {
-        TestOutputHelper.WriteLine("DEMO_COMPANY_SECRET_KEY environment variable not set. Skipping test.");
+        return new SeatsioClient(SecretKey(), null, ApiUrl());
+    }
+
+    private static string ApiUrl()
+    {
+        return Environment.GetEnvironmentVariable("USAGE_REPORTING_TESTS_API_URL");
+    }
+
+    private static string SecretKey()
+    {
+        return Environment.GetEnvironmentVariable("USAGE_REPORTING_TESTS_SECRET_KEY");
+    }
+
+    private static bool IsConfigured()
+    {
+        return !string.IsNullOrWhiteSpace(ApiUrl()) && !string.IsNullOrWhiteSpace(SecretKey());
+    }
+
+    private void warnAboutNotConfigured()
+    {
+        TestOutputHelper.WriteLine(
+            "USAGE_REPORTING_TESTS_API_URL and/or USAGE_REPORTING_TESTS_SECRET_KEY environment variables not set. Skipping test.");
     }
 }

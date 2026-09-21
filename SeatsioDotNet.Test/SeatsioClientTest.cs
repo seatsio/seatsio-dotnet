@@ -137,20 +137,9 @@ public class SeatsioClientTest
         }
     }
 
-    protected string DemoCompanySecretKey()
-    {
-        return Environment.GetEnvironmentVariable("DEMO_COMPANY_SECRET_KEY");
-    }
-
-    protected bool DemoCompanySecretKeySet()
-    {
-        var demoCompanySecretKey = Environment.GetEnvironmentVariable("DEMO_COMPANY_SECRET_KEY");
-        return demoCompanySecretKey != null;
-    }
-
     protected static string SystemApiSecret()
     {
-        var secret = Environment.GetEnvironmentVariable("CORE_V2_STAGING_EU_SYSTEM_API_SECRET");
+        var secret = Environment.GetEnvironmentVariable("CORE_V2_API_SECRET");
         return string.IsNullOrWhiteSpace(secret) ? "superSecretSystemApi" : secret;
     }
 }

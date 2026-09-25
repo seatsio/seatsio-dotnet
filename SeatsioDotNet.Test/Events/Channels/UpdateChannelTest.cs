@@ -16,7 +16,7 @@ public class UpdateChannelTest : SeatsioClientTest
         await Client.Events.Channels.UpdateAsync(event1.Key, "channelKey1", "new channel name", null, null);
 
         var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
-        Assert.Equal(1, retrievedEvent.Channels.Count);
+        Assert.Single(retrievedEvent.Channels);
         Assert.Equivalent(new Channel("channelKey1", retrievedEvent.Channels[0].Id, "new channel name", "#FFFF98", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int>()), retrievedEvent.Channels[0]);
     }
 
@@ -29,7 +29,7 @@ public class UpdateChannelTest : SeatsioClientTest
         await Client.Events.Channels.UpdateAsync(event1.Key, "channelKey1", null, "red", null);
 
         var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
-        Assert.Equal(1, retrievedEvent.Channels.Count);
+        Assert.Single(retrievedEvent.Channels);
         Assert.Equivalent(new Channel("channelKey1", retrievedEvent.Channels[0].Id, "channel 1", "red", 1, new[] {"A-1", "A-2"}, new Dictionary<string, int>()), retrievedEvent.Channels[0]);
     }
 
@@ -42,7 +42,7 @@ public class UpdateChannelTest : SeatsioClientTest
         await Client.Events.Channels.UpdateAsync(event1.Key, "channelKey1", null, null, new[] {"B-1"});
 
         var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
-        Assert.Equal(1, retrievedEvent.Channels.Count);
+        Assert.Single(retrievedEvent.Channels);
         Assert.Equivalent(new Channel("channelKey1", retrievedEvent.Channels[0].Id, "channel 1", "#FFFF98", 1, new[] {"B-1"}, new Dictionary<string, int>()), retrievedEvent.Channels[0]);
     }
 

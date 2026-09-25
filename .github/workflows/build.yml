@@ -19,16 +19,14 @@ jobs:
           - 8080:8080
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-dotnet@v1
+    - uses: actions/checkout@v5
+    - uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 8.x
     - run: dotnet restore
-    - uses: zcong1993/setup-timezone@master
-      with:
-        timezone: Europe/Brussels
     - run: dotnet test SeatsioDotNet.Test --verbosity normal
       env:
+        TZ: Europe/Brussels
         API_URL: https://api-staging-na.seatsio.net
         HTTPBIN_URL: http://localhost:${{ job.services.httpbin.ports['8080'] }}
         CORE_V2_API_SECRET: ${{ secrets.CORE_V2_STAGING_NA_SYSTEM_API_SECRET }}

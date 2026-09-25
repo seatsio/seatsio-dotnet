@@ -26,4 +26,9 @@ public class Zone
         return Key.Equals(zone.Key) &&
                Label.Equals(zone.Label);
     }
+
+    public override int GetHashCode()
+    {
+        return System.HashCode.Combine(Key, Label);
+    }
 }

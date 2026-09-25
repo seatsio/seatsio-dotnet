@@ -37,7 +37,6 @@ public class CreateEventsTest : SeatsioClientTest
 
         Assert.Single(events);
         var e = events[0];
-        Assert.NotNull(e.Id);
         Assert.NotNull(e.Key);
         Assert.Equal(chartKey, e.ChartKey);
         Assert.Equal("INHERIT", e.TableBookingConfig.Mode);
@@ -113,7 +112,7 @@ public class CreateEventsTest : SeatsioClientTest
         };
         var events = await Client.Events.CreateAsync(chartKey, eventCreationParams);
 
-        Assert.Equal(1, events.Length);
+        Assert.Single(events);
         Assert.Equal(TestChartCategories.Count + categories.Length, events[0].Categories.Count);
         Assert.Contains(eventCategory, events[0].Categories);
     }

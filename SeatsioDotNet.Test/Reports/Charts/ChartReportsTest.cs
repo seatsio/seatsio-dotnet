@@ -410,7 +410,7 @@ public class ChartReportsTest : SeatsioClientTest
         var chartKey = CreateTestChartWithTables();
         await updateChart(Client, chartKey);
 
-        var report = await Client.ChartReports.ByLabelAsync(chartKey, "true");
+        var report = await getReport(Client, chartKey);
 
         CustomAssert.ContainsOnly(new[] {"T1", "T2"}, report.Keys);
     }

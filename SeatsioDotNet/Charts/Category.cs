@@ -69,4 +69,9 @@ public class Category
                Color.Equals(cat.Color) &&
                Accessible.Equals(cat.Accessible);
     }
+
+    public override int GetHashCode()
+    {
+        return System.HashCode.Combine(Key, Label, Color, Accessible);
+    }
 }

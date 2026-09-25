@@ -20,11 +20,11 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - uses: fregante/setup-git-user@v2
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org/
@@ -35,9 +35,9 @@ jobs:
         env:
           VERSION_TO_BUMP: ${{ inputs.versionToBump }}
           GH_TOKEN: ${{ github.token }}
-      - uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: 6.x
+          dotnet-version: 8.x
       - run: dotnet pack --configuration Release SeatsioDotNet/SeatsioDotNet.csproj -o SeatsioDotNet
       - run: dotnet nuget push SeatsioDotNet/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_API_KEY}}
 

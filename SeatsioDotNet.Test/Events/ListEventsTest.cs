@@ -24,8 +24,8 @@ public class ListEventsTest : SeatsioClientTest
     {
         var chartKey = CreateTestChart();
         var season1 = await Client.Seasons.CreateAsync(chartKey);
-        var season2 = await Client.Seasons.CreateAsync(chartKey).ConfigureAwait(false);
-        var season3 = await Client.Seasons.CreateAsync(chartKey).ConfigureAwait(false);
+        var season2 = await Client.Seasons.CreateAsync(chartKey);
+        var season3 = await Client.Seasons.CreateAsync(chartKey);
 
         var seasons = Client.Events.ListAllAsync();
 

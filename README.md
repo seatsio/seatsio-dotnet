@@ -3,7 +3,7 @@
 [![Build](https://github.com/seatsio/seatsio-dotnet/workflows/Build/badge.svg)](https://github.com/seatsio/seatsio-dotnet/actions/workflows/build.yml)
 [![NuGet version](https://badge.fury.io/nu/seatsiodotnet.svg)](https://badge.fury.io/nu/seatsiodotnet)
 
-The official Seats.io library, supporting .NET 6 and newer.
+The official Seats.io library, supporting .NET 8 and newer.
 
 ## Installing seatsio-dotnet
 

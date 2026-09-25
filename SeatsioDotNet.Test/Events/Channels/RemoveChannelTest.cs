@@ -15,7 +15,7 @@ public class RemoveChannelTest : SeatsioClientTest
         await Client.Events.Channels.RemoveAsync(event1.Key, "channelKey2");
 
         var retrievedEvent = await Client.Events.RetrieveAsync(event1.Key);
-        Assert.Equal(1, retrievedEvent.Channels.Count);
+        Assert.Single(retrievedEvent.Channels);
 
         var channel1 = retrievedEvent.Channels[0];
         Assert.Equal("channelKey1", channel1.Key);

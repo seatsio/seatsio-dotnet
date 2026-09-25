@@ -9,7 +9,7 @@
     <PackageProjectUrl>https://github.com/seatsio/seatsio-dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/seatsio/seatsio-dotnet</RepositoryUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/seatsio/seatsio-dotnet/master/LICENSE</PackageLicenseUrl>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />

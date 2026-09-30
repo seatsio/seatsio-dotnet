@@ -46,6 +46,7 @@ public class ChartReportsTest : SeatsioClientTest
         Assert.Equal("9", reportItem.CategoryKey);
         Assert.Equal("seat", reportItem.ObjectType);
         Assert.Null(reportItem.AreaType);
+        Assert.Null(reportItem.TableType);
         Assert.Null(reportItem.Section);
         Assert.Null(reportItem.Entrance);
         Assert.Null(reportItem.Capacity);
@@ -77,6 +78,7 @@ public class ChartReportsTest : SeatsioClientTest
         Assert.Equal(100, reportItem.Capacity);
         Assert.Equal("generalAdmission", reportItem.ObjectType);
         Assert.Equal("generalAdmission", reportItem.AreaType);
+        Assert.Null(reportItem.TableType);
         Assert.False(reportItem.BookAsAWhole);
     }
 
@@ -109,6 +111,7 @@ public class ChartReportsTest : SeatsioClientTest
 
         var reportItem = report["T1"].First();
         Assert.Equal(6, reportItem.NumSeats);
+        Assert.Equal("bookBySeat", reportItem.TableType);
         Assert.False(reportItem.BookAsAWhole);
     }
 

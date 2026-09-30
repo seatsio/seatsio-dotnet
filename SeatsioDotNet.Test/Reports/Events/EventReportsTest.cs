@@ -69,6 +69,7 @@ public class EventReportsTest : SeatsioClientTest
         Assert.Equal("order1", reportItem.OrderId);
         Assert.Equal("seat", reportItem.ObjectType);
         Assert.Null(reportItem.AreaType);
+        Assert.Null(reportItem.TableType);
         Assert.True(reportItem.ForSale);
         Assert.Null(reportItem.Section);
         Assert.Null(reportItem.Entrance);
@@ -139,6 +140,7 @@ public class EventReportsTest : SeatsioClientTest
         Assert.Equal(100, reportItem.Capacity);
         Assert.Equal("generalAdmission", reportItem.ObjectType);
         Assert.Equal("generalAdmission", reportItem.AreaType);
+        Assert.Null(reportItem.TableType);
         Assert.False(reportItem.BookAsAWhole);
         Assert.Null(reportItem.HasRestrictedView);
         Assert.Null(reportItem.IsAccessible);
@@ -162,6 +164,7 @@ public class EventReportsTest : SeatsioClientTest
 
         var reportItem = report["T1"].First();
         Assert.Equal(6, reportItem.NumSeats);
+        Assert.Equal("bookByTable", reportItem.TableType);
         Assert.False(reportItem.BookAsAWhole);
     }
 

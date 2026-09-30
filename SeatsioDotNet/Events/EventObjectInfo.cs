@@ -26,6 +26,7 @@ public class EventObjectInfo
     public string TicketType { get; set; }
     public string ObjectType { get; set; }
     public string AreaType { get; set; }
+    public string TableType { get; set; }
     public string OrderId { get; set; }
     public bool ForSale { get; set; }
     public string HoldToken { get; set; }

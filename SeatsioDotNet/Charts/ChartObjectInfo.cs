@@ -11,6 +11,7 @@ public class ChartObjectInfo
     public string CategoryKey { get; set; }
     public string ObjectType { get; set; }
     public string AreaType { get; set; }
+    public string TableType { get; set; }
     public string Section { get; set; }
     public string Entrance { get; set; }
     public int? Capacity { get; set; }

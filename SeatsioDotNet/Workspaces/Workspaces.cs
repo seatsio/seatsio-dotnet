@@ -25,12 +25,22 @@ public class Workspaces
 
     public async Task<Workspace> CreateAsync(string name, bool? isTest = null, CancellationToken cancellationToken = default)
     {
+        return await CreateAsync(name, isTest, null, cancellationToken);
+    }
+
+    public async Task<Workspace> CreateAsync(string name, bool? isTest, ForSaleMode? forSaleMode, CancellationToken cancellationToken = default)
+    {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
         requestBody.Add("name", name);
 
         if (isTest != null)
         {
             requestBody.Add("isTest", isTest);
+        }
+
+        if (forSaleMode != null)
+        {
+            requestBody.Add("forSaleMode", forSaleMode.ToString());
         }
 
         var restRequest = new RestRequest("/workspaces", Method.Post).AddJsonBody(requestBody);
@@ -46,8 +56,18 @@ public class Workspaces
 
     public async Task UpdateAsync(string key, string name, CancellationToken cancellationToken = default)
     {
+        await UpdateAsync(key, name, null, cancellationToken);
+    }
+
+    public async Task UpdateAsync(string key, string name, ForSaleMode? forSaleMode, CancellationToken cancellationToken = default)
+    {
         Dictionary<string, object> requestBody = new Dictionary<string, object>();
         requestBody.Add("name", name);
+
+        if (forSaleMode != null)
+        {
+            requestBody.Add("forSaleMode", forSaleMode.ToString());
+        }
 
         var restRequest = new RestRequest("/workspaces/{key}", Method.Post).AddJsonBody(requestBody)
             .AddUrlSegment("key", key);

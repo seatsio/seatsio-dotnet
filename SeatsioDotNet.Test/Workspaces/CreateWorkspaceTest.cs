@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using SeatsioDotNet.Workspaces;
 using Xunit;
 
 namespace SeatsioDotNet.Test.Workspaces;
@@ -26,6 +27,16 @@ public class CreateWorkspaceTest : SeatsioClientTest
         Assert.NotNull(workspace.Key);
         Assert.NotNull(workspace.SecretKey);
         Assert.True(workspace.IsTest);
+        Assert.True(workspace.IsActive);
+    }
+
+    [Fact]
+    public async Task CreateWorkspaceWithForSaleMode()
+    {
+        var workspace = await Client.Workspaces.CreateAsync("my workspace", null, ForSaleMode.UNLIMITED_BILLABLE);
+
+        Assert.Equal("my workspace", workspace.Name);
+        Assert.NotNull(workspace.Key);
         Assert.True(workspace.IsActive);
     }
 }

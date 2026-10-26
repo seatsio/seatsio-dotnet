@@ -248,6 +248,18 @@ var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>").SetMaxRetr
 
 Passing in 0 disables exponential backoff completely. In that case, the client will never retry a failed request.
 
+## Timeouts
+
+By default, a request times out after 30 seconds, and establishing the connection times out after 10 seconds. When a request times out, a `SeatsioTimeoutException` is thrown. Timed out requests are not retried.
+
+To change the request timeout, pass it when creating the `SeatsioClient`. This also works when you pass in your own `HttpClient`:
+
+```csharp
+var client = new SeatsioClient(Region.EU(), "<WORKSPACE SECRET KEY>", timeout: TimeSpan.FromSeconds(60));
+```
+
+The connect timeout is only applied to the `HttpClient` the library creates itself (or one wrapping a `SeatsioMessageHandler`). Note that a custom `HttpClient` has its own `Timeout` (100 seconds by default) which also applies.
+
 ## Using a custom HttpClient
 
 You can pass in a custom `HttpClient` (e.g. one that was created by a `IHttpClientFactory`):

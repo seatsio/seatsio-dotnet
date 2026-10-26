@@ -25,6 +25,8 @@ namespace SeatsioDotNet
         public EventLog.EventLog EventLog { get; }
         public TicketBuyers.TicketBuyers TicketBuyers { get; }
 
+        public static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);
+
         private SeatsioRestClient RestClient;
 
         static SeatsioClient()
@@ -32,9 +34,9 @@ namespace SeatsioDotNet
             ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | SecurityProtocolType.Tls12;
         }
 
-        public SeatsioClient(string secretKey, string workspaceKey, string baseUrl, HttpClient httpClient = null)
+        public SeatsioClient(string secretKey, string workspaceKey, string baseUrl, HttpClient httpClient = null, TimeSpan? timeout = null)
         {
-            RestClient = CreateRestClient(secretKey, workspaceKey, baseUrl, httpClient);
+            RestClient = CreateRestClient(secretKey, workspaceKey, baseUrl, httpClient, timeout);
             Charts = new Charts.Charts(RestClient);
             Events = new Events.Events(RestClient);
             Workspaces = new Workspaces.Workspaces(RestClient);
@@ -47,21 +49,21 @@ namespace SeatsioDotNet
             TicketBuyers = new TicketBuyers.TicketBuyers(RestClient);
         }
 
-        public SeatsioClient(Region region, string secretKey, string workspaceKey, HttpClient httpClient = null) : this(secretKey, workspaceKey,
-            region.Url(), httpClient)
+        public SeatsioClient(Region region, string secretKey, string workspaceKey, HttpClient httpClient = null, TimeSpan? timeout = null) : this(secretKey, workspaceKey,
+            region.Url(), httpClient, timeout)
         {
         }
 
-        public SeatsioClient(Region region, string secretKey, HttpClient httpClient = null) : this(region, secretKey, null, httpClient)
+        public SeatsioClient(Region region, string secretKey, HttpClient httpClient = null, TimeSpan? timeout = null) : this(region, secretKey, null, httpClient, timeout)
         {
         }
 
-        private static SeatsioRestClient CreateRestClient(string secretKey, string workspaceKey, string baseUrl, HttpClient httpClient)
+        private static SeatsioRestClient CreateRestClient(string secretKey, string workspaceKey, string baseUrl, HttpClient httpClient, TimeSpan? timeout)
         {
             var options = new RestClientOptions(baseUrl)
             {
                 Authenticator = new HttpBasicAuthenticator(secretKey, null),
-                Timeout = TimeSpan.FromSeconds(10)
+                Timeout = timeout ?? DefaultTimeout
             };
             var client = new SeatsioRestClient(options, httpClient: httpClient);
             client.AddDefaultHeader("X-Client-Lib", ".NET");
@@ -95,11 +97,11 @@ public class SeatsioRestClient : RestClient
     }
 }
 
-public class SeatsioMessageHandler : HttpClientHandler
+public class SeatsioMessageHandler : DelegatingHandler
 {
     private int MaxRetries;
 
-    public SeatsioMessageHandler(int maxRetries)
+    public SeatsioMessageHandler(int maxRetries) : base(new SocketsHttpHandler { ConnectTimeout = TimeSpan.FromSeconds(10) })
     {
         MaxRetries = maxRetries;
     }

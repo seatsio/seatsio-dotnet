@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using RestSharp;
+using SeatsioDotNet.Events;
 using SeatsioDotNet.Util;
 using static SeatsioDotNet.Util.RestUtil;
 
@@ -201,6 +202,15 @@ public class Charts
         var restRequest = new RestRequest("/charts/{key}/actions/move-out-of-archive", Method.Post)
             .AddUrlSegment("key", chartKey);
         AssertOk(await _restClient.ExecuteAsync<object>(restRequest, cancellationToken));
+    }
+
+    public Lister<Event> Events(string chartKey)
+    {
+        return new Lister<Event>(new PageFetcher<Event>(
+            _restClient,
+            "/charts/{key}/events",
+            request => request.AddUrlSegment("key", chartKey)
+        ));
     }
 
     public async Task<Drawing> RetrievePublishedVersionAsync(string chartKey, CancellationToken cancellationToken = default)

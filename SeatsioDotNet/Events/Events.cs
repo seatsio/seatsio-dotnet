@@ -620,6 +620,13 @@ public class Events
         return AssertOk(await _restClient.ExecuteAsync<Event>(restRequest, cancellationToken));
     }
 
+    public async Task<Event[]> MoveEventsToNewChartCopy(IEnumerable<string> eventKeys, CancellationToken cancellationToken = default)
+    {
+        var restRequest = new RestRequest("/events/actions/move-to-new-chart-copy", Method.Post)
+            .AddJsonBody(new Dictionary<string, object> { { "events", eventKeys.ToArray() } });
+        return AssertOk(await _restClient.ExecuteAsync<MultipleEvents>(restRequest, cancellationToken)).events.ToArray();
+    }
+
     private Dictionary<string, object> ForSaleRequest(IEnumerable<string> objects,
         Dictionary<string, int> areaPlaces, IEnumerable<string> categories)
     {
